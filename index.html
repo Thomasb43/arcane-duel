@@ -124,20 +124,26 @@ document.addEventListener("pointerup",e=>{
    $("attack").click();return;
   }
  }
- if(!z)return;
- const type=z.dataset.zone,index=+z.dataset.index;
+ const myField=document.elementFromPoint(e.clientX,e.clientY)?.closest("#myMon");
+ if(!z&&!(start.kind==="hand"&&myField))return;
+ const type=z?.dataset.zone,index=z?+z.dataset.index:-1;
  if(start.kind==="hand"){
   if(start.index>=hand.length)return;
   selected=start.index;const card=hand[selected];
-  if(card.kind==="monster"&&type==="myMon"&&!myMon[index]){
+  if(card.kind==="monster"&&myField){
    if(!isMainPhase()){log("Monster können nur in einer Hauptphase beschworen werden.");return;}
    if(normalSummonUsed){log("Deine Normalbeschwörung für diesen Zug ist bereits verbraucht.");return;}
    const required=card.level>=7?2:card.level>=5?1:0;
-   if(required>0){if(myMon.filter(Boolean).length<required){log("Für "+card.name+" brauchst du "+required+" Tribut(e). Du hast nicht genügend Monster auf dem Feld.");return;}pendingTribute={handIndex:start.index,zoneIndex:index,card,required,selected:[]};render();log("Wähle "+required+" eigenes Monster als Tribut aus.");return;}
+   if(required>0){
+    if(myMon.filter(Boolean).length<required){log("Für "+card.name+" brauchst du "+required+" Tribut(e). Du hast nicht genügend Monster auf dem Feld.");return;}
+    pendingTribute={handIndex:start.index,zoneIndex:type==="myMon"?index:-1,card,required,selected:[]};render();log("Tippe jetzt das Monster bzw. die Monster an, die du als Tribut anbieten möchtest.");return;
+   }
+   if(type!=="myMon"||index<0||myMon[index]){log("Für diese Beschwörung benötigst du eine freie Monsterzone.");return;}
    pendingSwipeSummon={handIndex:start.index,zoneIndex:index};
    render();
    log("Wähle direkt an der Karte: Offen oder Verdeckt.");return;
   }
+  if(!z)return;
   if((card.kind==="spell"||card.kind==="trap")&&type==="mySpell"&&!mySpell[index]){
    if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return;}
    card.setTurn=turn;mySpell[index]=hand.splice(selected,1)[0];selected=-1;pendingPlacement=null;chosenSpell=index;render();
@@ -154,7 +160,7 @@ document.addEventListener("pointerup",e=>{
  }
 });
 
-function completeTributeSummon(){if(!pendingTribute)return;const p=pendingTribute;if(p.selected.length!==p.required)return;const card=hand[p.handIndex];if(!card||myMon[p.zoneIndex]){pendingTribute=null;render();log("Beschwörung nicht mehr möglich.");return;}p.selected.forEach(i=>myMon[i]=null);pendingTribute=null;pendingSwipeSummon={handIndex:p.handIndex,zoneIndex:p.zoneIndex};render();log("Tribut(e) gewählt. Wähle jetzt Offen oder Verdeckt direkt an deiner Handkarte.");}
+function completeTributeSummon(){if(!pendingTribute)return;const p=pendingTribute;if(p.selected.length!==p.required)return;const card=hand[p.handIndex];if(!card){pendingTribute=null;render();log("Beschwörung nicht mehr möglich.");return;}p.selected.forEach(i=>myMon[i]=null);const destination=p.zoneIndex>=0&&!myMon[p.zoneIndex]?p.zoneIndex:myMon.findIndex(x=>!x);pendingTribute=null;if(destination<0){render();log("Es ist keine freie Monsterzone verfügbar.");return;}pendingSwipeSummon={handIndex:p.handIndex,zoneIndex:destination};render();log("Tribut(e) gewählt. Wähle jetzt Offen oder Verdeckt direkt an deiner Handkarte.");}
 $("confirmTribute").onclick=()=>{if(!pendingTribute)return;if(pendingTribute.selected.length!==pendingTribute.required){log("Bitte wähle genau "+pendingTribute.required+" Tribut(e) aus.");return;}completeTributeSummon();};
 $("cancelTribute").onclick=()=>{pendingTribute=null;render();log("Tributbeschwörung abgebrochen.");};
 function finishSwipeSummon(position){
