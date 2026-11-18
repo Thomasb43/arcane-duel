@@ -10,7 +10,7 @@ header{padding:16px;text-align:center;border-bottom:1px solid #59658a;background
 main{max-width:850px;margin:auto;padding:12px;display:grid;gap:12px}.status{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#18213a;border:1px solid var(--line);border-radius:12px;padding:10px}.lp{font-size:21px;font-weight:800;color:#f5d77f}.board{background:linear-gradient(135deg,#26395a,#17243c);border:2px solid #7181a7;border-radius:16px;padding:10px;box-shadow:0 8px 30px #0008}.board h2{font-size:13px;color:#d8c58e;margin:0 0 8px;letter-spacing:1px}.zones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.zone{touch-action:none;min-height:76px;border:1px dashed #8290ae88;border-radius:8px;background:#0d173b77;display:flex;align-items:center;justify-content:center;padding:3px;color:#aab6d3;font-size:10px;text-align:center}.zone.filled{border:1px solid #d8bd70;background:#283653}.zone.placement-target{border:2px solid #ffe28b;background:#66552f88;box-shadow:inset 0 0 12px #ffe28b55}.zone .mini{font-size:25px}.middle{display:flex;justify-content:center;align-items:center;gap:12px;color:#c7d3ef;padding:4px}.hand{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 12px;scroll-snap-type:x mandatory}.card{touch-action:none;flex:0 0 112px;min-height:164px;border:2px solid #b7a16a;border-radius:10px;background:linear-gradient(160deg,#384a70,#18213a 60%,#11172a);padding:6px;display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 12px #0008;scroll-snap-align:start;cursor:pointer;text-align:left;color:white}.card.selected{outline:3px solid #ffe28b;transform:translateY(-4px)}.card .art{height:78px;border-radius:6px;display:grid;place-items:center;font-size:43px;background:radial-gradient(circle at 50% 40%,#e9a34d88,#6b2c4d 55%,#17213d)}.card.ice .art{background:radial-gradient(circle at 50% 40%,#a7f3ff,#2875a5 60%,#17213d)}.card.shadow .art{background:radial-gradient(circle at 50% 40%,#b69aff,#512d75 60%,#11172a)}.card.spell .art{background:radial-gradient(circle at 50% 40%,#fff0a8,#b77b2f 60%,#17213d)}.card strong{font-size:11px;line-height:1.15}.card small{font-size:9px;color:#d4d9e7}.stats{margin-top:auto;font-weight:800;color:#f4d88a;font-size:10px}.controls{display:flex;flex-wrap:wrap;gap:8px}.controls button,.action{border:1px solid #c4a85f;background:linear-gradient(#66552f,#3b3020);color:#fff3c8;padding:10px 13px;border-radius:10px;font-weight:700;cursor:pointer}.controls button:disabled{opacity:.4}.hint{color:#c0cce4;font-size:12px;line-height:1.5}.log{background:#0c1328;border:1px solid #384769;border-radius:10px;padding:10px;min-height:44px;color:#d7e0f5}.handtitle{display:flex;justify-content:space-between;align-items:center;margin:2px 0}.handtitle h2{font-size:14px;color:var(--gold);margin:0}@media(min-width:650px){.card{flex-basis:130px;min-height:180px}.card .art{height:92px}.zone{min-height:94px}}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · PROTOTYP 0.7</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · PROTOTYP 0.9</small></header>
 <main>
 <div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><small id="phase">Du bist am Zug</small><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -48,7 +48,7 @@ $("myMon").addEventListener('click',e=>{if(pendingPlacement==="monster"&&!isMain
 $("mySpell").addEventListener('click',e=>{if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;render();log(mySpell[i].name+' ausgewählt.')}}); 
 $("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(z&&oppMon[+z.dataset.index]){chosenTarget=+z.dataset.index;render();log('Angriffsziel ausgewählt: '+(oppMon[chosenTarget].faceDown?'verdecktes Monster':oppMon[chosenTarget].name)+'.')}});
 // Einheitliche Wischsteuerung für Handkarten und Angriffe.
-let swipeStart=null,suppressNextCardClick=false;
+let swipeStart=null,suppressNextCardClick=false,pendingSwipeSummon=null;
 function zoneAtPoint(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest("[data-zone]"):null;}
 document.addEventListener("pointerdown",e=>{
  const handCard=e.target.closest&&e.target.closest("#hand [data-card]");
@@ -70,9 +70,9 @@ document.addEventListener("pointerup",e=>{
   if(card.kind==="monster"&&type==="myMon"&&!myMon[index]){
    if(!isMainPhase()){log("Monster können nur in einer Hauptphase beschworen werden.");return;}
    if(normalSummonUsed){log("Deine Normalbeschwörung für diesen Zug ist bereits verbraucht.");return;}
-   card.position=pendingPlacementPosition==="defense"?"defense":"attack";card.faceDown=card.position==="defense";
-   myMon[index]=hand.splice(selected,1)[0];normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();
-   log(myMon[index].name+" wurde durch Wischen in die Monsterzone gelegt.");return;
+   pendingSwipeSummon={handIndex:start.index,zoneIndex:index};
+   $("swipeSummonChoice").style.display="flex";
+   log("Monster ausgewählt. Entscheide jetzt zwischen offener Angriffsposition und verdeckter Verteidigungsposition.");return;
   }
   if((card.kind==="spell"||card.kind==="trap")&&type==="mySpell"&&!mySpell[index]){
    if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return;}
@@ -87,6 +87,21 @@ document.addEventListener("pointerup",e=>{
   chosenMonster=start.index;chosenTarget=oppMon[index]?index:-1;$("attack").click();
  }
 });
+
+function finishSwipeSummon(position){
+ if(!pendingSwipeSummon)return;
+ const p=pendingSwipeSummon;pendingSwipeSummon=null;
+ const card=hand[p.handIndex];
+ if(!card||card.kind!=="monster"||myMon[p.zoneIndex]){$("swipeSummonChoice").style.display="none";log("Platzierung nicht mehr möglich. Bitte versuche es erneut.");return;}
+ card.position=position;card.faceDown=position==="defense";
+ myMon[p.zoneIndex]=hand.splice(p.handIndex,1)[0];
+ normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;
+ $("swipeSummonChoice").style.display="none";render();
+ log(myMon[p.zoneIndex].name+(position==="attack"?" wurde offen in Angriffsposition beschworen.":" wurde verdeckt in Verteidigungsposition gesetzt."));
+}
+$("swipeAttackPosition").onclick=()=>finishSwipeSummon("attack");
+$("swipeDefensePosition").onclick=()=>finishSwipeSummon("defense");
+$("cancelSwipeSummon").onclick=()=>{pendingSwipeSummon=null;$("swipeSummonChoice").style.display="none";log("Platzierung abgebrochen. Deine Monsterkarte bleibt auf der Hand.");};
 
 let pendingPlacementPosition='attack';
 function summonMonster(position){if(!isMainPhase()){log("Beschwörungen sind nur in einer Hauptphase möglich.");return}if(selected<0||!hand[selected]||hand[selected].kind!=='monster'){log('Bitte wähle zuerst ein Monster aus.');return}if(normalSummonUsed){log('Du hast deine Normalbeschwörung für diesen Zug bereits verwendet.');return}if(!myMon.some(x=>!x)){log('Alle Monsterzonen sind belegt.');return}pendingPlacement='monster';pendingPlacementPosition=position;render();log('Tippe jetzt auf eine freie Monsterzone deiner Wahl.');}
