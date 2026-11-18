@@ -122,7 +122,7 @@ function finishSwipeSummon(position){
  if(!pendingSwipeSummon)return;
  const p=pendingSwipeSummon;pendingSwipeSummon=null;
  const card=hand[p.handIndex];
- if(!card||card.kind!=="monster"||myMon[p.zoneIndex]){$("swipeSummonChoice").style.display="none";log("Platzierung nicht mehr möglich. Bitte versuche es erneut.");return;}
+ if(!card||card.kind!=="monster"||myMon[p.zoneIndex]){pendingSwipeSummon=null;render();log("Platzierung nicht mehr möglich. Bitte versuche es erneut.");return;}
  card.position=position;card.faceDown=position==="defense";
  myMon[p.zoneIndex]=hand.splice(p.handIndex,1)[0];
  normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;
