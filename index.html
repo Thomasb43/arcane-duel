@@ -27,7 +27,7 @@ const deck=[
 {name:"Flammenstoß",kind:"spell",emoji:"🔥",skin:"spell",desc:"Ein glühender Zauber"},
 {name:"Kristallschild",kind:"trap",emoji:"💠",skin:"ice",desc:"Eine schützende Falle"}
 ];
-let hand=deck.slice(0,5),myMon=[],mySpell=[],oppMon=[],oppSpell=[],myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1;
+let hand=deck.slice(0,5),myMon=Array(4).fill(null),mySpell=Array(4).fill(null),oppMon=Array(4).fill(null),oppSpell=Array(4).fill(null),myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1;
 const $=id=>document.getElementById(id);
 function log(t){$("log").textContent=t}
 function cardHTML(c,i){return '<button class="card '+(c.skin||'')+(selected===i?' selected':'')+'" data-card="'+i+'"><div class="art">'+c.emoji+'</div><strong>'+c.name+'</strong><small>'+(c.kind==="monster"?'Monster · Level '+c.level:c.kind==="spell"?'Zauberkarte':'Fallenkarte')+'</small><div class="stats">'+(c.kind==="monster"?'ATK '+c.atk+' / DEF '+c.def:c.desc||'Spezialkarte')+'</div></button>'}
