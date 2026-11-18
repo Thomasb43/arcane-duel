@@ -128,19 +128,18 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 }
 
 
-/* Verdeckte Handkarten des Gegners */
-.opponent-hand-wrap{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;margin:0 1px 7px;padding:2px 5px;border-bottom:1px solid #aab9d433}
-.opponent-hand-wrap>span{font-size:9px;font-weight:800;letter-spacing:.7px;color:#d8c58e;white-space:nowrap}
-.opponent-hand{display:flex;align-items:center;justify-content:flex-end;min-width:0;overflow:hidden;padding:3px 4px 3px 16px}
-.opponent-card-back{flex:0 0 29px;width:29px;height:40px;margin-left:-10px;border:1px solid #d7c18a;border-radius:4px;background:repeating-linear-gradient(135deg,#26395d 0 4px,#17243e 4px 8px);box-shadow:0 2px 5px #0009;display:grid;place-items:center;color:#e9c879;font-size:16px;position:relative}
+/* Gegnerhand: gleiche Kartengröße und Fächerform wie die eigene Hand */
+.opponent-hand-wrap{display:block;min-height:0;margin:0 1px 5px;padding:0 3px 3px;border-bottom:1px solid #aab9d433}
+.opponent-hand-wrap>span{display:none}
+.opponent-hand{display:flex;align-items:flex-end;justify-content:center;width:100%;min-width:0;height:180px;overflow-x:auto;overflow-y:hidden;padding:18px 8px 8px;overscroll-behavior-x:contain}
+.opponent-card-back{flex:0 0 104px;width:104px;height:164px;margin-left:-48px;border:1px solid #d7c18a;border-radius:9px;background:repeating-linear-gradient(135deg,#26395d 0 7px,#17243e 7px 14px);box-shadow:0 4px 12px #0009;display:grid;place-items:center;color:#e9c879;font-size:32px;position:relative;transform:translateY(var(--back-lift,0px)) rotate(var(--back-angle,0deg));transform-origin:bottom center}
 .opponent-card-back:first-child{margin-left:0}
-.opponent-card-back:after{content:"";position:absolute;inset:3px;border:1px solid #c5a96b88;border-radius:2px}
+.opponent-card-back:after{content:"";position:absolute;inset:7px;border:1px solid #c5a96b88;border-radius:4px}
 @media(max-width:649px){
- .opponent-hand-wrap{min-height:31px;margin-bottom:3px;padding:1px 3px}
- .opponent-hand-wrap>span{font-size:7px}
- .opponent-hand{padding:2px 3px 2px 12px}
- .opponent-card-back{flex-basis:21px;width:21px;height:28px;margin-left:-8px;font-size:12px;border-radius:3px}
- .opponent-card-back:after{inset:2px}
+ .opponent-hand-wrap{margin-bottom:3px;padding:0 2px 2px}
+ .opponent-hand{height:126px;padding:9px 5px 7px;justify-content:flex-start}
+ .opponent-card-back{flex-basis:79px;width:79px;height:112px;margin-left:-36px;border-radius:7px;font-size:24px}
+ .opponent-card-back:after{inset:4px;border-radius:3px}
 }
 
 
@@ -174,7 +173,7 @@ header .brand small{display:block;font-size:8px}
 
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.22</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.23</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -258,7 +257,7 @@ function renderGraveyards(){
  $("oppGraveButton").innerHTML=draw(oppGraveyard);
  $("myGraveButton").innerHTML=draw(myGraveyard);
 }
-function render(){$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=n*10,lift=-10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten · Deck: '+drawPile.length;$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;}
+function render(){$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=n*10,lift=-10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;}
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
 $("hand").addEventListener('animationend',e=>{if(e.target.classList&&e.target.classList.contains('new-card')){e.target.classList.remove('new-card');newlyDrawnCard=null;} });
