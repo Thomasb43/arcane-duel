@@ -127,13 +127,29 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
  .grave-pile{height:35px}
 }
 
+
+/* Verdeckte Handkarten des Gegners */
+.opponent-hand-wrap{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;margin:0 1px 7px;padding:2px 5px;border-bottom:1px solid #aab9d433}
+.opponent-hand-wrap>span{font-size:9px;font-weight:800;letter-spacing:.7px;color:#d8c58e;white-space:nowrap}
+.opponent-hand{display:flex;align-items:center;justify-content:flex-end;min-width:0;overflow:hidden;padding:3px 4px 3px 16px}
+.opponent-card-back{flex:0 0 29px;width:29px;height:40px;margin-left:-10px;border:1px solid #d7c18a;border-radius:4px;background:repeating-linear-gradient(135deg,#26395d 0 4px,#17243e 4px 8px);box-shadow:0 2px 5px #0009;display:grid;place-items:center;color:#e9c879;font-size:16px;position:relative}
+.opponent-card-back:first-child{margin-left:0}
+.opponent-card-back:after{content:"";position:absolute;inset:3px;border:1px solid #c5a96b88;border-radius:2px}
+@media(max-width:649px){
+ .opponent-hand-wrap{min-height:31px;margin-bottom:3px;padding:1px 3px}
+ .opponent-hand-wrap>span{font-size:7px}
+ .opponent-hand{padding:2px 3px 2px 12px}
+ .opponent-card-back{flex-basis:21px;width:21px;height:28px;margin-left:-8px;font-size:12px;border-radius:3px}
+ .opponent-card-back:after{inset:2px}
+}
+
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.20</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.21</small></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <div class="status"><div style="text-align:center;width:100%">ZUG <b id="turn">1</b><br><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Du bist am Zug ↻</button><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div></div>
-<section class="board"><h2>GEGNERISCHES FELD</h2><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
+<section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
@@ -142,7 +158,7 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.20';
+const APP_VERSION = '1.21';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -214,7 +230,7 @@ function renderGraveyards(){
  $("oppGraveButton").innerHTML=draw(oppGraveyard);
  $("myGraveButton").innerHTML=draw(myGraveyard);
 }
-function render(){$("hand").innerHTML=hand.map(cardHTML).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten · Deck: '+drawPile.length;$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;$("aiInfo").textContent='KI-Hand: '+aiHand.length+' · Deck: '+aiDeck.length}
+function render(){$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map(()=>'<div class="opponent-card-back" aria-hidden="true">✦</div>').join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten · Deck: '+drawPile.length;$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;$("aiInfo").textContent='KI-Hand: '+aiHand.length+' · Deck: '+aiDeck.length}
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
 $("hand").addEventListener('animationend',e=>{if(e.target.classList&&e.target.classList.contains('new-card')){e.target.classList.remove('new-card');newlyDrawnCard=null;} });
