@@ -218,7 +218,7 @@ header .brand small{display:block;font-size:8px}
 }
 
 
-/* v1.28 – erste vollständig ausgearbeitete Monsterkarte */
+/* v1.29 – erste vollständig ausgearbeitete Monsterkarte */
 .card.illustrated{border:2px solid #f1c36d;background:linear-gradient(155deg,#593329,#241b2b 58%,#11182b);box-shadow:0 0 12px #f28b3270,inset 0 0 10px #ffcf6b20}
 .card.illustrated .art{height:62px;min-height:62px;overflow:hidden;background:radial-gradient(ellipse at 55% 55%,#ffb84d 0%,#a93b26 48%,#321b31 100%);border:1px solid #ffd58a88}
 .card .art svg{display:block;width:100%;height:100%}
@@ -232,21 +232,33 @@ header .brand small{display:block;font-size:8px}
  .card-effect{display:none}
 }
 
+
+/* v1.29 – Karteninfo vor Auswahl und Effektaktivierung */
+.card-info-overlay{position:fixed;inset:0;z-index:1000;background:#050711d9;display:none;align-items:center;justify-content:center;padding:20px}
+.card-info-overlay.visible{display:flex}
+.card-info-panel{width:min(360px,100%);background:linear-gradient(155deg,#28243a,#111522);border:1px solid #d6a94e;border-radius:16px;padding:18px;box-shadow:0 12px 45px #000b;color:#fff;text-align:center}
+.card-info-panel h3{margin:0 0 10px;color:#ffd987;font-size:21px}
+.card-info-panel .info-type{color:#b9bfd3;font-size:12px;margin-bottom:12px}
+.card-info-panel .info-effect{background:#0b1020;border:1px solid #554b39;border-radius:10px;padding:14px;margin:12px 0 16px;text-align:left;line-height:1.5;font-size:14px}
+.card-info-panel .info-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.card-info-panel button{border:1px solid #d6a94e;border-radius:9px;padding:10px 14px;background:#65451f;color:#fff;font-weight:700}
+.card-info-panel button.secondary{background:#252b3d;border-color:#68718a}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.28</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.29</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
+<div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
 <div id="battleFx" aria-hidden="true"><span>✨</span></div>
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.28';
+const APP_VERSION = '1.29';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -323,9 +335,24 @@ function render(){$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").i
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
 $("hand").addEventListener('animationend',e=>{if(e.target.classList&&e.target.classList.contains('new-card')){e.target.classList.remove('new-card');newlyDrawnCard=null;} });
-$("hand").addEventListener('click',e=>{const choice=e.target.closest('[data-choice]');if(choice){e.stopPropagation();finishSwipeSummon(choice.dataset.choice);return;}let b=e.target.closest('[data-card]');if(!b)return;if(suppressNextCardClick){suppressNextCardClick=false;e.preventDefault();return;}selected=+b.dataset.card;render();log(hand[selected].name+' ausgewählt.')});
-$("myMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){let c=hand.splice(selected,1)[0];c.position=pendingPlacementPosition;c.faceDown=pendingPlacementPosition==='defense';myMon[i]=c;normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();log(c.name+' wurde in deiner gewählten Monsterzone platziert.');return}if(myMon[i]){chosenMonster=i;log((myMon[i].faceDown?'Verdecktes Monster':myMon[i].name)+' ausgewählt.')}}); 
-$("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;render();log(mySpell[i].name+' ausgewählt. Tippe auf „Effekt aktivieren“, sobald es leuchtet.')}}); 
+let cardInfoAction=null;
+function showCardInfo(card,type,action){
+ if(!card)return;
+ const effect=card.effectText||(card.name==="Flammenstoß"?"Verursacht 500 LP Schaden beim Gegner.":card.name==="Kristallschild"?"Verhindert einmalig den nächsten Kampfschaden an deinen Lebenspunkten.":card.name==="Frostwächter"?"+500 DEF bis zum Ende des Zuges.":card.name==="Schattenwolf"?"+400 ATK und darf in diesem Zug bis zu zweimal angreifen.":"Für diese Karte ist derzeit kein Effekttext hinterlegt.");
+ $("cardInfoName").textContent=card.name;
+ $("cardInfoType").textContent=(card.kind==="monster"?"Monsterkarte":card.kind==="spell"?"Zauberkarte":"Fallenkarte")+(card.kind==="monster"?" · ATK "+card.atk+" / DEF "+card.def:"");
+ $("cardInfoEffect").textContent=effect;
+ $("cardInfoPrimary").textContent=type==="hand"?"Karte auswählen":type==="monster"?"Effekt aktivieren":"Karte aktivieren";
+ cardInfoAction=action;
+ $("cardInfo").classList.add("visible");
+}
+function closeCardInfo(){$("cardInfo").classList.remove("visible");cardInfoAction=null;}
+$("cardInfoClose").onclick=closeCardInfo;
+$("cardInfo").addEventListener("click",e=>{if(e.target.id==="cardInfo")closeCardInfo()});
+$("cardInfoPrimary").onclick=()=>{const action=cardInfoAction;closeCardInfo();if(action)action();};
+$("hand").addEventListener('click',e=>{const choice=e.target.closest('[data-choice]');if(choice){e.stopPropagation();finishSwipeSummon(choice.dataset.choice);return;}let b=e.target.closest('[data-card]');if(!b)return;if(suppressNextCardClick){suppressNextCardClick=false;e.preventDefault();return;}const i=+b.dataset.card;showCardInfo(hand[i],"hand",()=>{selected=i;render();log(hand[i].name+" ausgewählt.");});});
+$("myMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){let c=hand.splice(selected,1)[0];c.position=pendingPlacementPosition;c.faceDown=pendingPlacementPosition==='defense';myMon[i]=c;normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();log(c.name+' wurde in deiner gewählten Monsterzone platziert.');return}if(myMon[i]){chosenMonster=i;const c=myMon[i];if(!c.faceDown)showCardInfo(c,"monster",()=>{chosenMonster=i;$("effect").click();});else log("Verdecktes Monster ausgewählt.");}}); 
+$("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;const c=mySpell[i];showCardInfo(c,"spell",()=>{chosenSpell=i;$("activate").click();});}}); 
 $("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(z&&oppMon[+z.dataset.index]){chosenTarget=+z.dataset.index;render();log('Angriffsziel ausgewählt: '+(oppMon[chosenTarget].faceDown?'verdecktes Monster':oppMon[chosenTarget].name)+'.')}});
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
