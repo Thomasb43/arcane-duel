@@ -13,7 +13,8 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 #tributePanel{display:none;background:#202b49;border:1px solid #e9c879;border-radius:12px;padding:10px;gap:8px}#tributePanel.visible{display:grid}#tributePanel button{border:1px solid #c4a85f;background:linear-gradient(#66552f,#3b3020);color:#fff3c8;padding:9px;border-radius:8px;font-weight:800}.end-turn{border:1px solid #c4a85f;background:linear-gradient(#66552f,#3b3020);color:#fff3c8;padding:7px 10px;border-radius:9px;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}@media(min-width:650px){.card{flex-basis:130px;margin-left:-58px;min-height:180px}.card .art{height:92px}.zone{min-height:94px}}
 
 /* Kampf- und Beschwörungseffekte */
-.zone.summon-pop{animation:summonPop .62s cubic-bezier(.2,.85,.25,1);border-color:#ffe28b;box-shadow:0 0 22px #ffd76b,inset 0 0 18px #ffdc8055}
+.zone.summon-impact{position:relative;z-index:8;overflow:visible;animation:summonSlam .72s cubic-bezier(.16,.88,.24,1);border-color:#fff0a8;box-shadow:0 0 30px #ffd76b,inset 0 0 22px #ffdc8077}
+.zone.summon-impact::after{content:"";position:absolute;inset:-7px;z-index:5;pointer-events:none;border:2px solid #ffe8a0;border-radius:10px;opacity:0;background:linear-gradient(28deg,transparent 46%,#fff0ad 47%,#fff0ad 48%,transparent 49%) 12% 15%/38% 55% no-repeat,linear-gradient(112deg,transparent 46%,#fff0ad 47%,#fff0ad 48%,transparent 49%) 88% 10%/42% 62% no-repeat,linear-gradient(155deg,transparent 46%,#fff0ad 47%,#fff0ad 48%,transparent 49%) 4% 90%/48% 48% no-repeat,linear-gradient(72deg,transparent 46%,#fff0ad 47%,#fff0ad 48%,transparent 49%) 96% 88%/42% 52% no-repeat;filter:drop-shadow(0 0 5px #ffc94d);animation:crackReveal .95s ease-out forwards}
 .zone.attack-lunge{animation:attackLunge .42s ease-in-out}
 .zone.impact-hit{animation:impactHit .48s ease-out;border-color:#fff0a8;box-shadow:0 0 24px #ffb94d}
 .zone.effect-ready{border:1px solid #ffe27a;box-shadow:0 0 9px #ffd65a99,inset 0 0 12px #ffd65a33;animation:readyGlow 1.8s ease-in-out infinite}
@@ -23,7 +24,8 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 #battleFx.active{animation:fxFlash .62s ease-out}
 #battleFx span{font-size:clamp(42px,13vw,100px);filter:drop-shadow(0 0 18px #ffd66b);transform:scale(.5)}
 #battleFx.active span{animation:fxBurst .62s cubic-bezier(.15,.8,.25,1)}
-@keyframes summonPop{0%{transform:scale(.55) translateY(22px);filter:brightness(2.5);opacity:.25}65%{transform:scale(1.12);filter:brightness(1.7)}100%{transform:scale(1);filter:brightness(1);opacity:1}}
+@keyframes summonSlam{0%{transform:scale(.28) translateY(-58px) rotate(-9deg);filter:brightness(3);opacity:.2}38%{transform:scale(1.24) translateY(5px) rotate(2deg);filter:brightness(2.8)}55%{transform:scale(.91) translateY(-3px) rotate(-1deg)}72%{transform:scale(1.08) translateY(1px)}100%{transform:scale(1);filter:brightness(1);opacity:1}}
+@keyframes crackReveal{0%{opacity:0;transform:scale(.72)}24%{opacity:1;transform:scale(1.04)}55%{opacity:.95;transform:scale(1)}100%{opacity:.68;transform:scale(1)}}
 @keyframes attackLunge{0%{transform:translateX(0) scale(1)}45%{transform:translateX(24px) scale(1.12)}100%{transform:translateX(0) scale(1)}}
 @keyframes impactHit{0%{transform:scale(1)}35%{transform:scale(1.13);filter:brightness(2.4)}100%{transform:scale(1);filter:brightness(1)}}
 @keyframes fxFlash{0%{opacity:0}18%{opacity:1}65%{opacity:.9}100%{opacity:0}}
@@ -360,7 +362,7 @@ function finishSwipeSummon(position){
  card.position=position;card.faceDown=position==="defense";
  myMon[p.zoneIndex]=hand.splice(p.handIndex,1)[0];
  normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;
- render();animateZone('myMon',p.zoneIndex,'summon-pop');playBattleFx('myMon',p.zoneIndex,'myMon',-1,'⚡');
+ render();animateZone('myMon',p.zoneIndex,'summon-impact');playBattleFx('myMon',p.zoneIndex,'myMon',-1,'💥');
  const summoned=myMon[p.zoneIndex];
  log("✨ "+summoned.name+" erscheint in einem magischen Beschwörungsblitz! "+(position==="attack"?"Offen in Angriffsposition beschworen.":"Verdeckt in Verteidigungsposition gesetzt.")+(summoned.level>=5?" (Tributbeschwörung)":""));
 }
