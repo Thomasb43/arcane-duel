@@ -173,9 +173,53 @@ header .brand small{display:block;font-size:8px}
  .opponent-card-back{flex-basis:30px;width:30px;height:41px}
 }
 
+
+/* v1.27 – größere Duellansicht: vorhandenen Smartphone-Platz besser nutzen */
+@media (max-width:649px) and (min-height:741px){
+ main{padding:7px 9px;gap:7px}
+ .board{padding:8px 9px}
+ .board .zones{gap:6px;padding:5px 2px}
+ .board .zone{min-height:66px;padding:4px;font-size:10px;border-radius:7px}
+ .board .zone .mini{font-size:27px}
+ .opponent-hand-wrap{min-height:0;margin-bottom:5px;padding:0 3px 4px}
+ .opponent-hand{height:148px;padding:8px 7px 9px}
+ .opponent-card-back{flex-basis:45px;width:45px;height:63px;margin-left:-13px;font-size:21px;border-radius:6px}
+ .opponent-card-back:after{inset:4px}
+ .lp-row{margin:3px 2px 0;padding:5px 9px;font-size:11px;border-radius:7px}
+ .lp-row .lp{font-size:19px}
+ .grave-pile{height:44px;padding-left:23px}
+ .grave-card{flex-basis:39px;height:39px;margin-left:-23px;border-radius:5px}
+ .grave-card span{font-size:18px}
+ .handtitle{margin:0 0 3px}
+ .handtitle h2{font-size:13px}
+ .handtitle small{font-size:11px}
+ .end-turn{padding:7px 10px;font-size:11px;border-radius:7px}
+ .hand{height:158px;padding:11px 7px 9px}
+ .card{flex-basis:99px;margin-left:-43px;min-height:140px;height:140px;padding:5px;gap:3px;border-radius:8px}
+ .hand .card:first-child{margin-left:0}
+ .card .art{height:61px;min-height:61px;font-size:36px}
+ .card strong{font-size:10px}
+ .card small{font-size:8px}
+ .stats{font-size:9px}
+ .log{padding:5px 8px;font-size:10px;line-height:1.25;max-height:36px}
+ #tributePanel{padding:8px;gap:6px}
+ #tributePanel button{padding:7px 9px;font-size:11px}
+}
+@media (max-width:649px) and (max-height:740px){
+ .board .zone{min-height:46px}
+ .board .zone .mini{font-size:22px}
+ .opponent-hand{height:112px}
+ .opponent-card-back{flex-basis:34px;width:34px;height:47px}
+ .hand{height:118px}
+ .card{flex-basis:76px;min-height:103px;height:103px;margin-left:-33px}
+ .card .art{height:43px;min-height:43px;font-size:26px}
+ .card strong{font-size:8px}
+ .card small,.stats{font-size:7px}
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.26</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.27</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -187,7 +231,7 @@ header .brand small{display:block;font-size:8px}
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.26';
+const APP_VERSION = '1.27';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
