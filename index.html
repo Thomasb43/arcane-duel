@@ -189,7 +189,7 @@ function opponentTurn(){
  if(spellIndex>=0&&myLP>0){aiHand.splice(spellIndex,1);myLP=Math.max(0,myLP-500);log("Die gegnerische KI aktiviert Flammenstoß: Du verlierst 500 LP!");}
  const free=oppMon.findIndex(x=>!x);
  if(free>=0){
-  const monsterIndex=aiHand.reduce((best,x,i)=>x.kind==="monster"&&(best<0||x.atk>aiHand[best].atk)?i:best,-1);
+  const monsterIndex=aiHand.reduce((best,x,i)=>x.kind==="monster"&&x.level<=4&&(best<0||x.atk>aiHand[best].atk)?i:best,-1);
   if(monsterIndex>=0){
    const card=aiHand.splice(monsterIndex,1)[0];
    const strongest=myMon.filter(Boolean).reduce((best,x)=>Math.max(best,x.position==="defense"?effectiveDef(x):effectiveAtk(x)),0);
