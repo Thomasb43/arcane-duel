@@ -218,7 +218,7 @@ header .brand small{display:block;font-size:8px}
 }
 
 
-/* v1.29 – erste vollständig ausgearbeitete Monsterkarte */
+/* v1.30 – erste vollständig ausgearbeitete Monsterkarte */
 .card.illustrated{border:2px solid #f1c36d;background:linear-gradient(155deg,#593329,#241b2b 58%,#11182b);box-shadow:0 0 12px #f28b3270,inset 0 0 10px #ffcf6b20}
 .card.illustrated .art{height:62px;min-height:62px;overflow:hidden;background:radial-gradient(ellipse at 55% 55%,#ffb84d 0%,#a93b26 48%,#321b31 100%);border:1px solid #ffd58a88}
 .card .art svg{display:block;width:100%;height:100%}
@@ -233,7 +233,7 @@ header .brand small{display:block;font-size:8px}
 }
 
 
-/* v1.29 – Karteninfo vor Auswahl und Effektaktivierung */
+/* v1.30 – Karteninfo vor Auswahl und Effektaktivierung */
 .card-info-overlay{position:fixed;inset:0;z-index:1000;background:#050711d9;display:none;align-items:center;justify-content:center;padding:20px}
 .card-info-overlay.visible{display:flex}
 .card-info-panel{width:min(360px,100%);background:linear-gradient(155deg,#28243a,#111522);border:1px solid #d6a94e;border-radius:16px;padding:18px;box-shadow:0 12px 45px #000b;color:#fff;text-align:center}
@@ -245,7 +245,7 @@ header .brand small{display:block;font-size:8px}
 .card-info-panel button.secondary{background:#252b3d;border-color:#68718a}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.29</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.30</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -258,7 +258,7 @@ header .brand small{display:block;font-size:8px}
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.29';
+const APP_VERSION = '1.30';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -280,10 +280,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUp
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
 const deck=[
 {name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,element:"Feuer",race:"Drache",effectText:"Einmal pro Duellzug: +500 ATK bis zum Ende des Zuges.",skin:"fire",artwork:"flame-dragon"},
-{name:"Frostwächter",kind:"monster",emoji:"🧊",atk:1400,def:1900,level:4,skin:"ice"},
-{name:"Schattenwolf",kind:"monster",emoji:"🐺",atk:1600,def:1000,level:4,skin:"shadow"},
-{name:"Flammenstoß",kind:"spell",emoji:"🔥",skin:"spell",desc:"500 LP Schaden"},
-{name:"Kristallschild",kind:"trap",emoji:"💠",skin:"ice",desc:"Verhindert einmalig Kampfschaden"},
+{name:"Frostwächter",kind:"monster",emoji:"🧊",atk:1400,def:1900,level:4,effectText:"Einmal pro Duellzug: +500 DEF bis zum Ende des Zuges.",skin:"ice"},
+{name:"Schattenwolf",kind:"monster",emoji:"🐺",atk:1600,def:1000,level:4,effectText:"Einmal pro Duellzug: +400 ATK und darf in diesem Zug bis zu zweimal angreifen.",skin:"shadow"},
+{name:"Flammenstoß",kind:"spell",emoji:"🔥",effectText:"Verursacht 500 LP Schaden beim Gegner.",skin:"spell",desc:"500 LP Schaden"},
+{name:"Kristallschild",kind:"trap",emoji:"💠",effectText:"Verhindert einmalig den nächsten Kampfschaden an deinen Lebenspunkten.",skin:"ice",desc:"Verhindert einmalig Kampfschaden"},
 {name:"Arkaner Magier",kind:"monster",emoji:"🧙",atk:1200,def:1500,level:3,skin:"shadow"},
 {name:"Donnerfalke",kind:"monster",emoji:"🦅",atk:1500,def:1100,level:4,skin:"ice"},
 {name:"Erdwächter",kind:"monster",emoji:"🗿",atk:1000,def:1800,level:4,skin:"fire"},
