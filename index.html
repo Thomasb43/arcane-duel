@@ -27,7 +27,7 @@ main{max-width:850px;margin:auto;padding:12px;display:grid;gap:12px}.status{disp
 @keyframes fxBurst{0%{transform:scale(.35) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1.8);opacity:0}}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.8 · TRIBUTBESCHWÖRUNG</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.10 · KI-TRIBUTBESCHWÖRUNG</small></header>
 <main>
 <div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><small id="phase">Du bist am Zug</small><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -200,15 +200,29 @@ function opponentTurn(){
  log("Der Gegner ist am Zug.");
  const spellIndex=aiHand.findIndex(x=>x.name==="Flammenstoß");
  if(spellIndex>=0&&myLP>0){aiHand.splice(spellIndex,1);myLP=Math.max(0,myLP-500);log("Die gegnerische KI aktiviert Flammenstoß: Du verlierst 500 LP!");}
- const free=oppMon.findIndex(x=>!x);
- if(free>=0){
-  const monsterIndex=aiHand.reduce((best,x,i)=>x.kind==="monster"&&x.level<=4&&(best<0||x.atk>aiHand[best].atk)?i:best,-1);
-  if(monsterIndex>=0){
-   const card=aiHand.splice(monsterIndex,1)[0];
+ const monsterIndex=aiHand.reduce((best,x,i)=>{
+  if(x.kind!=="monster")return best;
+  const tributes=x.level>=7?2:x.level>=5?1:0;
+  if(oppMon.filter(Boolean).length<tributes)return best;
+  return best<0||x.atk>aiHand[best].atk?i:best;
+ },-1);
+ if(monsterIndex>=0){
+  const card=aiHand[monsterIndex];
+  const tributeCount=card.level>=7?2:card.level>=5?1:0;
+  const tributeCandidates=oppMon.map((m,i)=>({m,i})).filter(x=>x.m);
+  tributeCandidates.sort((a,b)=>(a.m.atk+a.m.def)-(b.m.atk+b.m.def));
+  for(let n=0;n<tributeCount;n++){
+   const tribute=tributeCandidates[n];
+   oppMon[tribute.i]=null;
+   log("Die KI opfert "+tribute.m.name+" als Tribut für "+card.name+".");
+  }
+  const free=oppMon.findIndex(x=>!x);
+  if(free>=0){
+   aiHand.splice(monsterIndex,1);
    const strongest=myMon.filter(Boolean).reduce((best,x)=>Math.max(best,x.position==="defense"?effectiveDef(x):effectiveAtk(x)),0);
    const useDefense=strongest>card.atk&&card.def>=strongest;
    card.position=useDefense?"defense":"attack";card.faceDown=useDefense;card.summonedTurn=aiTurn;card.attacksThisTurn=0;oppMon[free]=card;
-   log("Die KI beschwört "+card.name+(useDefense?" verdeckt in Verteidigungsposition.":" im Angriffsmodus."));
+   log("Die KI beschwört "+card.name+(tributeCount?" durch "+tributeCount+" Tribut(e)":"")+(useDefense?" verdeckt in Verteidigungsposition.":" im Angriffsmodus."));
   }
  }
  const attackers=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&x.m.position!=="defense"&&x.m.summonedTurn!==aiTurn);
