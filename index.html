@@ -217,9 +217,24 @@ header .brand small{display:block;font-size:8px}
  .card small,.stats{font-size:7px}
 }
 
+
+/* v1.28 – erste vollständig ausgearbeitete Monsterkarte */
+.card.illustrated{border:2px solid #f1c36d;background:linear-gradient(155deg,#593329,#241b2b 58%,#11182b);box-shadow:0 0 12px #f28b3270,inset 0 0 10px #ffcf6b20}
+.card.illustrated .art{height:62px;min-height:62px;overflow:hidden;background:radial-gradient(ellipse at 55% 55%,#ffb84d 0%,#a93b26 48%,#321b31 100%);border:1px solid #ffd58a88}
+.card .art svg{display:block;width:100%;height:100%}
+.card-effect{margin-top:2px;padding:3px 4px;border-top:1px solid #e7b95b88;color:#ffe5ad;font-size:7px;line-height:1.15;text-align:left}
+@media (max-width:649px) and (min-height:741px){
+ .card.illustrated .art{height:64px;min-height:64px}
+ .card-effect{font-size:7.5px;line-height:1.15;padding:3px}
+}
+@media (max-width:649px) and (max-height:740px){
+ .card.illustrated .art{height:43px;min-height:43px}
+ .card-effect{display:none}
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.27</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.28</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -231,7 +246,7 @@ header .brand small{display:block;font-size:8px}
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.27';
+const APP_VERSION = '1.28';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -252,7 +267,7 @@ setInterval(checkForUpdates,45000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdates();});
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
 const deck=[
-{name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,skin:"fire"},
+{name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,element:"Feuer",race:"Drache",effectText:"Einmal pro Duellzug: +500 ATK bis zum Ende des Zuges.",skin:"fire",artwork:"flame-dragon"},
 {name:"Frostwächter",kind:"monster",emoji:"🧊",atk:1400,def:1900,level:4,skin:"ice"},
 {name:"Schattenwolf",kind:"monster",emoji:"🐺",atk:1600,def:1000,level:4,skin:"shadow"},
 {name:"Flammenstoß",kind:"spell",emoji:"🔥",skin:"spell",desc:"500 LP Schaden"},
@@ -281,7 +296,8 @@ $("phase").addEventListener("click",()=>{
 });
 function effectiveAtk(c){return c?c.atk+(c.tempAtkBonus||0):0}
 function effectiveDef(c){return c?c.def+(c.tempDefBonus||0):0}
-function cardHTML(c,i){const choice=pendingSwipeSummon&&pendingSwipeSummon.handIndex===i?'<div class="mini-options"><button type="button" data-choice="attack">Offen</button><button type="button" data-choice="defense">Verdeckt</button></div>':'';const mid=(hand.length-1)/2;const spread=Math.max(1,mid);const normalized=(i-mid)/spread;const angle=normalized*10;const lift=-14*(1-Math.abs(normalized));return '<div class="card '+(c.skin||'')+(selected===i?' selected':'')+(c===newlyDrawnCard?' new-card':'')+'" style="--fan-angle:'+angle.toFixed(1)+'deg;--fan-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'"><div class="art">'+c.emoji+'</div><strong>'+c.name+'</strong><small>'+(c.kind==="monster"?'Monster · Level '+c.level:c.kind==="spell"?'Zauberkarte':'Fallenkarte')+'</small><div class="stats">'+(c.kind==="monster"?'ATK '+c.atk+' / DEF '+c.def:c.desc||'Spezialkarte')+'</div>'+choice+'</div>'}
+const flameDragonArt='<svg viewBox="0 0 240 150" role="img" aria-label="Flammendrache"><defs><radialGradient id="fdGlow"><stop offset="0" stop-color="#fff4b0"/><stop offset=".38" stop-color="#ff9d32"/><stop offset="1" stop-color="#8d1e13" stop-opacity="0"/></radialGradient><linearGradient id="fdScale" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe69a"/><stop offset=".35" stop-color="#e85a24"/><stop offset="1" stop-color="#65152a"/></linearGradient><linearGradient id="fdWing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbd55"/><stop offset="1" stop-color="#8f1b25"/></linearGradient></defs><circle cx="120" cy="75" r="90" fill="url(#fdGlow)"/><path d="M110 92 Q50 18 18 28 Q38 61 47 100 Q65 80 91 116Z" fill="url(#fdWing)" stroke="#ffd477" stroke-width="3"/><path d="M128 88 Q177 8 222 23 Q198 59 194 102 Q168 78 145 117Z" fill="url(#fdWing)" stroke="#ffd477" stroke-width="3"/><path d="M70 108 Q88 73 124 72 Q154 67 174 96 L161 121 Q132 143 94 124Z" fill="url(#fdScale)" stroke="#ffdc8a" stroke-width="3"/><path d="M143 82 Q157 48 190 49 L215 67 195 91 167 99Z" fill="url(#fdScale)" stroke="#ffdc8a" stroke-width="3"/><path d="M179 52 L188 29 198 50 M195 55 L213 39 208 64" fill="#f7a43d" stroke="#ffe39a" stroke-width="3"/><path d="M209 70 L231 78 208 88Z" fill="#ffdb8b"/><path d="M190 65 L197 63" stroke="#fff6c9" stroke-width="5" stroke-linecap="round"/><circle cx="195" cy="65" r="2.7" fill="#29101a"/><path d="M96 117 Q72 139 57 132 M131 123 Q145 143 161 139" fill="none" stroke="#ffbd55" stroke-width="7" stroke-linecap="round"/><path d="M44 122 Q29 137 40 145 M180 112 Q205 128 198 143" fill="none" stroke="#ff8a32" stroke-width="5" stroke-linecap="round"/><path d="M18 83 Q4 66 17 54 M225 111 Q239 97 230 84" fill="none" stroke="#fff0a6" stroke-width="4" stroke-linecap="round"/></svg>';
+function cardHTML(c,i){const choice=pendingSwipeSummon&&pendingSwipeSummon.handIndex===i?'<div class="mini-options"><button type="button" data-choice="attack">Offen</button><button type="button" data-choice="defense">Verdeckt</button></div>':'';const mid=(hand.length-1)/2;const spread=Math.max(1,mid);const normalized=(i-mid)/spread;const angle=normalized*10;const lift=-14*(1-Math.abs(normalized));const art=c.artwork==='flame-dragon'?flameDragonArt:c.emoji;const meta=c.element&&c.race?c.element+' · '+c.race:'';const effect=c.effectText?'<div class="card-effect">'+c.effectText+'</div>':'';return '<div class="card '+(c.skin||'')+(c.artwork?' illustrated':'')+(selected===i?' selected':'')+(c===newlyDrawnCard?' new-card':'')+'" style="--fan-angle:'+angle.toFixed(1)+'deg;--fan-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'"><div class="art">'+art+'</div><strong>'+c.name+'</strong><small>'+(c.kind==="monster"?'Monster · Level '+c.level:c.kind==="spell"?'Zauberkarte':'Fallenkarte')+(meta?' · '+meta:'')+'</small><div class="stats">'+(c.kind==="monster"?'ATK '+c.atk+' / DEF '+c.def:c.desc||'Spezialkarte')+'</div>'+effect+choice+'</div>'}
 function zoneHTML(arr,type){return Array.from({length:4},(_,i)=>{let c=arr[i],hidden=c&&c.kind==='monster'&&c.faceDown;let monsterReady=type==='myMon'&&c&&c.kind==='monster'&&!hidden&&c.effectUsedTurn!==turn&&['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name);let spellReady=type==='mySpell'&&c&&(c.kind==='spell'||(c.kind==='trap'&&turn>c.setTurn));let ready=monsterReady||spellReady;let action=ready?'<span class="effect-prompt" data-zone-action="'+(monsterReady?'monster':'spell')+'">Effekt aktivieren</span>':'';let classes='zone '+(c?'filled':'')+(pendingTribute&&pendingTribute.selected.includes(i)&&type==='myMon'?' tribute-selected':'')+(ready?' effect-ready':'')+(!c&&((type==='myMon'&&pendingPlacement==='monster')||(type==='mySpell'&&pendingPlacement==='spell'))?' placement-target':'')+(type==='oppMon'&&i===chosenTarget?' selected':'')+(type==='mySpell'&&i===chosenSpell?' selected':'');let inside=c?(hidden?'<div><div class="mini">🂠</div><b>Verdecktes Monster</b></div>':'<div><div class="mini">'+c.emoji+'</div><b>'+c.name+'</b>'+(c.kind==='monster'?'<br>'+(c.position==='defense'?'DEF '+c.def:'ATK '+effectiveAtk(c)):'')+action+'</div>'):(type.includes('Mon')?'Monsterzone':'Zauber/Falle');return '<div class="'+classes+'" data-zone="'+type+'" data-index="'+i+'">'+inside+'</div>'}).join('')}
 
 function animateZone(type,index,cls){
