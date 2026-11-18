@@ -27,7 +27,7 @@ main{max-width:850px;margin:auto;padding:12px;display:grid;gap:12px}.status{disp
 @keyframes fxBurst{0%{transform:scale(.35) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1.8);opacity:0}}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.5 · DIREKTANGRIFF</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.7 · DIREKTANGRIFF</small></header>
 <main>
 <div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><small id="phase">Du bist am Zug</small><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -79,6 +79,22 @@ $("hand").addEventListener('click',e=>{const choice=e.target.closest('[data-choi
 $("myMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){let c=hand.splice(selected,1)[0];c.position=pendingPlacementPosition;c.faceDown=pendingPlacementPosition==='defense';myMon[i]=c;normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();log(c.name+' wurde in deiner gewählten Monsterzone platziert.');return}if(myMon[i]){chosenMonster=i;log((myMon[i].faceDown?'Verdecktes Monster':myMon[i].name)+' ausgewählt.')}}); 
 $("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;render();log(mySpell[i].name+' ausgewählt. Tippe auf „Effekt aktivieren“, sobald es leuchtet.')}}); 
 $("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(z&&oppMon[+z.dataset.index]){chosenTarget=+z.dataset.index;render();log('Angriffsziel ausgewählt: '+(oppMon[chosenTarget].faceDown?'verdecktes Monster':oppMon[chosenTarget].name)+'.')}});
+// Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
+function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
+ const attacker=myMon[monsterIndex];
+ if(!attacker){log("Dein angreifendes Monster wurde nicht gefunden.");return;}
+ if(phase!=="battle"){phase="battle";render();}
+ if(attacker.position==="defense"||attacker.faceDown){log("Nur ein offenes Monster in Angriffsposition kann direkt angreifen.");return;}
+ if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log("Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.");return;}
+ const damage=effectiveAtk(attacker);
+ attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
+ oppLP=Math.max(0,oppLP-damage);
+ chosenMonster=-1;chosenTarget=-1;
+ render();playBattleFx('myMon',monsterIndex,'oppMon',emptyZoneIndex,'💥');
+ log(attacker.name+" greift durch die leere gegnerische Monsterzone direkt an: "+damage+" Schaden! Der Gegner hat noch "+oppLP+" LP.");
+ if(oppLP<=0)log("Du hast das Testduell gewonnen!");
+}
+
 // Einheitliche Wischsteuerung für Handkarten und Angriffe.
 let swipeStart=null,suppressNextCardClick=false,pendingSwipeSummon=null;
 function zoneAtPoint(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest("[data-zone]"):null;}
@@ -126,10 +142,11 @@ document.addEventListener("pointerup",e=>{
   log(card.kind==="monster"?"Wische ein Monster auf eine freie eigene Monsterzone.":"Wische die Zauber- oder Fallenkarte auf eine freie eigene Zauber-/Fallenzone.");return;
  }
  if(start.kind==="attack"){
-  if(type!=="oppMon"){log("Wische dein Monster auf die gegnerische Feldseite.");return;}
+  if(type!=="oppMon"){log("Wische dein Monster auf eine gegnerische Monsterzone.");return;}
   if(phase==="main1"){phase="battle";render();}
-  if(oppMon.some(Boolean)&&!oppMon[index]){log("Wische direkt auf ein gegnerisches Monster.");return;}
-  chosenMonster=start.index;chosenTarget=oppMon[index]?index:-1;$("attack").click();
+  chosenMonster=start.index;
+  if(!oppMon[index]){directAttackFromSwipe(start.index,index);return;}
+  chosenTarget=index;$("attack").click();
  }
 });
 
