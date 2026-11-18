@@ -124,22 +124,28 @@ document.addEventListener("pointerup",e=>{
    $("attack").click();return;
   }
  }
- const myField=document.elementFromPoint(e.clientX,e.clientY)?.closest("#myMon");
- if(!z&&!(start.kind==="hand"&&myField))return;
- const type=z?.dataset.zone,index=z?+z.dataset.index:-1;
+ const pointElement=document.elementFromPoint(e.clientX,e.clientY);
+ const myFieldElement=document.getElementById("myMon");
+ const fieldRect=myFieldElement.getBoundingClientRect();
+ const droppedOnMyMonsterField=e.clientX>=fieldRect.left&&e.clientX<=fieldRect.right&&e.clientY>=fieldRect.top&&e.clientY<=fieldRect.bottom;
+ const targetMonsterZone=pointElement?.closest('[data-zone="myMon"]');
+ const type=targetMonsterZone?.dataset.zone||z?.dataset.zone;
+ const index=targetMonsterZone?+targetMonsterZone.dataset.index:(z?+z.dataset.index:-1);
+ if(!z&&!(start.kind==="hand"&&droppedOnMyMonsterField))return;
  if(start.kind==="hand"){
   if(start.index>=hand.length)return;
   selected=start.index;const card=hand[selected];
-  if(card.kind==="monster"&&myField){
+  if(card.kind==="monster"&&(type==="myMon"||droppedOnMyMonsterField)){
    if(!isMainPhase()){log("Monster können nur in einer Hauptphase beschworen werden.");return;}
    if(normalSummonUsed){log("Deine Normalbeschwörung für diesen Zug ist bereits verbraucht.");return;}
    const required=card.level>=7?2:card.level>=5?1:0;
    if(required>0){
     if(myMon.filter(Boolean).length<required){log("Für "+card.name+" brauchst du "+required+" Tribut(e). Du hast nicht genügend Monster auf dem Feld.");return;}
-    pendingTribute={handIndex:start.index,zoneIndex:type==="myMon"?index:-1,card,required,selected:[]};render();log("Tippe jetzt das Monster bzw. die Monster an, die du als Tribut anbieten möchtest.");return;
+    pendingTribute={handIndex:start.index,zoneIndex:-1,card,required,selected:[]};render();log("Tippe das Monster bzw. die Monster direkt auf dem Feld an – die Zone darf besetzt sein.");return;
    }
-   if(type!=="myMon"||index<0||myMon[index]){log("Für diese Beschwörung benötigst du eine freie Monsterzone.");return;}
-   pendingSwipeSummon={handIndex:start.index,zoneIndex:index};
+   let destination=index>=0&&!myMon[index]?index:myMon.findIndex(x=>!x);
+   if(destination<0){log("Alle Monsterzonen sind belegt.");return;}
+   pendingSwipeSummon={handIndex:start.index,zoneIndex:destination};
    render();
    log("Wähle direkt an der Karte: Offen oder Verdeckt.");return;
   }
