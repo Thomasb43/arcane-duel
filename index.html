@@ -30,12 +30,14 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 @keyframes fxBurst{0%{transform:scale(.35) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1.8);opacity:0}}
 
 #updateNotice{display:none;position:sticky;top:0;z-index:30;background:#3b3020;border-bottom:1px solid #e9c879;padding:10px 14px;text-align:center;color:#fff1c2}#updateNotice button{margin-left:8px;border:1px solid #e9c879;border-radius:8px;background:#66552f;color:#fff3c8;padding:7px 11px;font-weight:800}
+
+.phase-button{border:1px solid #c4a85f;background:#34304a;color:#ffe7a1;padding:5px 9px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;margin-top:4px}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.15 · FRIEDHOF</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.16 · FRIEDHOF</small></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
-<div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><small id="phase">Du bist am Zug</small><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
+<div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Du bist am Zug ↻</button><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div></section>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
@@ -45,7 +47,7 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.15';
+const APP_VERSION = '1.16';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -86,6 +88,13 @@ let pendingTribute=null,phase="main1",hand=drawPile.splice(0,5),myMon=Array(4).f
 const $=id=>document.getElementById(id);
 function log(t){$("log").textContent=t}
 function isMainPhase(){return phase==="main1"||phase==="main2"}
+$("phase").addEventListener("click",()=>{
+ if(pendingTribute||pendingSwipeSummon||pendingPlacement){log("Schließe zuerst deine aktuelle Kartenaktion ab.");return;}
+ if(phase==="main1"){phase="battle";log("Kampfphase gestartet. Du kannst jetzt mit deinen offenen Monstern angreifen.");}
+ else if(phase==="battle"){phase="main2";log("Hauptphase 2 gestartet. Du kannst noch Karten spielen und Effekte aktivieren.");}
+ else{log("Du bist bereits in Hauptphase 2. Beende deinen Zug mit dem Zug-beenden-Button.");}
+ render();
+});
 function effectiveAtk(c){return c?c.atk+(c.tempAtkBonus||0):0}
 function effectiveDef(c){return c?c.def+(c.tempDefBonus||0):0}
 function cardHTML(c,i){const choice=pendingSwipeSummon&&pendingSwipeSummon.handIndex===i?'<div class="mini-options"><button type="button" data-choice="attack">Offen</button><button type="button" data-choice="defense">Verdeckt</button></div>':'';const mid=(hand.length-1)/2;const spread=Math.max(1,mid);const normalized=(i-mid)/spread;const angle=normalized*10;const lift=-14*(1-Math.abs(normalized));return '<div class="card '+(c.skin||'')+(selected===i?' selected':'')+(c===newlyDrawnCard?' new-card':'')+'" style="--fan-angle:'+angle.toFixed(1)+'deg;--fan-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'"><div class="art">'+c.emoji+'</div><strong>'+c.name+'</strong><small>'+(c.kind==="monster"?'Monster · Level '+c.level:c.kind==="spell"?'Zauberkarte':'Fallenkarte')+'</small><div class="stats">'+(c.kind==="monster"?'ATK '+c.atk+' / DEF '+c.def:c.desc||'Spezialkarte')+'</div>'+choice+'</div>'}
