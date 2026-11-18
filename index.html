@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10152b"><title>Arcane Duel – Testarena</title>
+<meta name="theme-color" content="#10152b"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#26365f 0,#11172d 55%,#090d1c 100%);color:#f5f1e7;font:14px system-ui,-apple-system,sans-serif;min-height:100vh}
@@ -28,9 +28,12 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 @keyframes impactHit{0%{transform:scale(1)}35%{transform:scale(1.13);filter:brightness(2.4)}100%{transform:scale(1);filter:brightness(1)}}
 @keyframes fxFlash{0%{opacity:0}18%{opacity:1}65%{opacity:.9}100%{opacity:0}}
 @keyframes fxBurst{0%{transform:scale(.35) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1.8);opacity:0}}
+
+#updateNotice{display:none;position:sticky;top:0;z-index:30;background:#3b3020;border-bottom:1px solid #e9c879;padding:10px 14px;text-align:center;color:#fff1c2}#updateNotice button{margin-left:8px;border:1px solid #e9c879;border-radius:8px;background:#66552f;color:#fff3c8;padding:7px 11px;font-weight:800}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.14 · FRIEDHOF</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.15 · FRIEDHOF</small></header>
+<div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <div class="status"><div>GEGNER<br><span class="lp" id="oppLP">4000 LP</span></div><div style="text-align:center">ZUG <b id="turn">1</b><br><small id="phase">Du bist am Zug</small><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div><div style="text-align:right">DU<br><span class="lp" id="myLP">4000 LP</span></div></div>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -42,6 +45,25 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
+const APP_VERSION = '1.15';
+let latestVersion = APP_VERSION;
+async function checkForUpdates(){
+ try{
+  const response = await fetch(location.pathname + '?update-check=' + Date.now(), {cache:'no-store'});
+  if(!response.ok)return;
+  const html = await response.text();
+  const match = html.match(/VERSION\s+([0-9.]+)/);
+  if(match && match[1] !== APP_VERSION){
+   latestVersion = match[1];
+   document.getElementById('updateNotice').style.display='block';
+  }
+ }catch(error){}
+}
+document.getElementById('reloadUpdate').addEventListener('click',()=>{
+ location.replace(location.pathname + '?v=' + encodeURIComponent(latestVersion));
+});
+setInterval(checkForUpdates,45000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdates();});
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
 const deck=[
 {name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,skin:"fire"},
