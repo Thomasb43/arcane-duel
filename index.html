@@ -33,23 +33,23 @@ main{max-width:850px;width:100%;min-width:0;margin:auto;padding:12px;display:gri
 
 .phase-button{border:1px solid #c4a85f;background:#34304a;color:#ffe7a1;padding:5px 9px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;margin-top:4px}
 
-.lp-row{display:flex;align-items:center;justify-content:space-between;margin:6px 2px 2px;padding:6px 10px;border:1px solid #8e7a50;border-radius:9px;background:linear-gradient(100deg,#171d31,#2b2b43);color:#d8c58e;font-size:11px;font-weight:800;letter-spacing:.7px}.lp-row .lp{font-size:20px}.opponent-lp{flex-direction:row-reverse}.grave-piles{display:grid;gap:5px;min-height:24px}.grave-pile{display:flex;gap:5px;overflow-x:auto;min-height:8px;padding:2px 0;scrollbar-width:thin}.grave-card{flex:0 0 48px;height:58px;border:1px solid #9c8756;border-radius:6px;background:linear-gradient(145deg,#283858,#11182c);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 5px #0008;color:#f1dfad;overflow:hidden}.grave-card span{font-size:22px;line-height:1.2}.grave-card small{font-size:7px;max-width:44px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.grave-pile:empty{display:none}
+.lp-row{display:flex;align-items:center;justify-content:space-between;margin:6px 2px 2px;padding:6px 10px;border:1px solid #8e7a50;border-radius:9px;background:linear-gradient(100deg,#171d31,#2b2b43);color:#d8c58e;font-size:11px;font-weight:800;letter-spacing:.7px}.lp-row .lp{font-size:20px}.opponent-lp{flex-direction:row-reverse}.field-topline,.field-bottomline{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}.field-topline{margin-bottom:7px}.field-bottomline{margin-top:7px}.grave-pile{display:flex;align-items:center;flex:0 1 48%;min-width:0;overflow:visible;padding:2px 0 2px 30px;height:62px}.grave-card{position:relative;flex:0 0 48px;margin-left:-30px;height:58px;border:1px solid #9c8756;border-radius:6px;background:linear-gradient(145deg,#283858,#11182c);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 5px #0008;color:#f1dfad;overflow:hidden}.grave-card span{font-size:22px;line-height:1.2}.grave-card small{font-size:7px;max-width:44px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.grave-pile:empty{visibility:hidden}.grave-card:first-child{margin-left:0}.grave-card small{display:none}.opponent-pile{justify-content:flex-end}.player-pile{justify-content:flex-start}.lp-row{flex:1;min-width:0}.lp-row .lp{white-space:nowrap}
 </style></head>
 <body>
-<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.17</small></header>
+<header><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.18</small></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <div class="status"><div style="text-align:center;width:100%">ZUG <b id="turn">1</b><br><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Du bist am Zug ↻</button><br><small id="aiInfo">KI-Hand: 5 · Deck: 15</small></div></div>
-<section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
-<section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div></section>
+<section class="board"><h2>GEGNERISCHES FELD</h2><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
+<section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
-<section class="grave-piles"><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></section>
+
 <div id="battleFx" aria-hidden="true"><span>✨</span></div>
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-const APP_VERSION = '1.17';
+const APP_VERSION = '1.18';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
