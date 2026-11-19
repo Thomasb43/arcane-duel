@@ -788,9 +788,18 @@ main{position:relative!important;overflow:hidden}
 @keyframes cathedralSparks188{from{background-position:16px 40px,70px 120px,125px 60px;opacity:.24}50%{opacity:.6}to{background-position:25px -143px,60px -103px,138px -197px;opacity:.3}}
 @keyframes cathedralGlow188{from{opacity:.35;transform:scale(.92)}to{opacity:.8;transform:scale(1.12)}}
 @media(prefers-reduced-motion:reduce){.cathedral-ambience *{animation:none!important;opacity:.3!important}}
+/* v1.89 – deutlich sichtbare, gerichtete Fensterstrahlen und leuchtender Arkankristall. */
+.cathedral-ambience .cathedral-rays{inset:-5% -18%!important;background:linear-gradient(111deg,transparent 17%,rgba(243,189,255,.05) 20%,rgba(var(--arena-primary),.46) 24%,rgba(255,221,255,.22) 26%,rgba(var(--arena-primary),.09) 33%,transparent 39%),linear-gradient(70deg,transparent 51%,rgba(176,222,255,.08) 54%,rgba(var(--arena-secondary),.49) 59%,rgba(226,248,255,.23) 61%,rgba(var(--arena-secondary),.08) 68%,transparent 73%)!important;background-size:100% 100%!important;filter:blur(7px)!important;mix-blend-mode:screen!important;opacity:.85!important;transform-origin:50% 12%;animation:cathedralRays189 7s ease-in-out infinite alternate!important}
+.cathedral-ambience .cathedral-glow{left:36%!important;top:37%!important;width:28%!important;height:18%!important;background:radial-gradient(ellipse,rgba(255,255,255,.8) 0%,rgba(182,233,255,.6) 7%,rgba(var(--arena-secondary),.56) 20%,rgba(var(--arena-primary),.33) 42%,transparent 75%)!important;filter:blur(9px)!important;mix-blend-mode:screen!important;opacity:.9!important;animation:cathedralCrystal189 3.2s ease-in-out infinite alternate!important}
+.cathedral-ambience .cathedral-glow::before{content:"";position:absolute;left:calc(50% - 19px);top:calc(50% - 31px);width:38px;height:62px;background:radial-gradient(ellipse,white 0%,rgba(216,246,255,.95) 20%,rgba(var(--arena-secondary),.75) 42%,transparent 74%);clip-path:polygon(50% 0,88% 35%,65% 78%,50% 100%,35% 78%,12% 35%);filter:drop-shadow(0 0 16px rgba(140,215,255,.95));animation:cathedralCrystalCore189 3.2s ease-in-out infinite alternate}
+.cathedral-ambience .cathedral-glow::after{content:"";position:absolute;inset:-28%;background:linear-gradient(90deg,transparent 49.5%,rgba(227,250,255,.65) 50%,transparent 50.5%),linear-gradient(0deg,transparent 49.6%,rgba(227,250,255,.42) 50%,transparent 50.4%);mask-image:radial-gradient(ellipse,black 0%,transparent 53%);animation:cathedralCrystalCore189 3.2s ease-in-out infinite alternate}
+@keyframes cathedralRays189{0%{opacity:.42;transform:translateX(-5%) rotate(-3deg)}100%{opacity:1;transform:translateX(5%) rotate(3deg)}}
+@keyframes cathedralCrystal189{0%{opacity:.38;transform:scale(.72)}100%{opacity:1;transform:scale(1.18)}}
+@keyframes cathedralCrystalCore189{0%{opacity:.5;transform:scale(.82)}100%{opacity:1;transform:scale(1.15)}}
+@media(prefers-reduced-motion:reduce){.cathedral-ambience .cathedral-rays,.cathedral-ambience .cathedral-glow,.cathedral-ambience .cathedral-glow::before,.cathedral-ambience .cathedral-glow::after{animation:none!important;opacity:.65!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.88</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.89</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -811,7 +820,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.88';
+const APP_VERSION = '1.89';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
