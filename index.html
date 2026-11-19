@@ -887,9 +887,17 @@ main{position:relative!important;overflow:hidden}
 .monster-effect-indicator-201.is-ready{animation:effectBadge201 1.7s ease-in-out infinite}
 .monster-effect-indicator-201.is-used{background:#25354b;border-color:#8092a8;color:#d3dce8;box-shadow:none;opacity:.88}
 @keyframes effectBadge201{0%,100%{box-shadow:0 0 5px #b38aff,0 0 4px #ffdc79}50%{box-shadow:0 0 16px #d7a9ff,0 0 12px #ffe57b}}
+/* v2.02 – Hand unterhalb der drei eigenen Stapelfelder halten. */
+@media(max-width:649px){
+ .player-fixed-ui{min-height:clamp(130px,16svh,155px)!important}
+ .player-fixed-ui .player-sidezones{top:54px!important;z-index:72!important}
+ .hand{bottom:calc(env(safe-area-inset-bottom,0px) + 2px)!important;height:clamp(108px,13svh,122px)!important;padding:5px 8px 2px!important;z-index:64!important}
+ .hand .card{height:clamp(101px,12svh,114px)!important;flex-basis:clamp(75px,20vw,94px)!important}
+ .player-fixed-ui .player-sidezones .sidezone{height:clamp(48px,5.8svh,56px)!important;min-height:0!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.01</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.02</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -910,7 +918,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '2.01';
+const APP_VERSION = '2.02';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
