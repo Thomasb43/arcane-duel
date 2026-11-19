@@ -267,9 +267,20 @@ header .brand small{display:block;font-size:8px}
 .field-card-back{display:grid;place-items:center;flex:1;border:1px solid #d7c18a;border-radius:4px;background:repeating-linear-gradient(135deg,#26395d 0 7px,#17243e 7px 14px);font-size:25px;color:#e9c879}
 .field-card.field-defense{transform:rotate(90deg) scale(.75);transform-origin:center center}
 .zone .zone-options{position:relative;z-index:2}
+/* v1.43 – Feldkarten kompakter als Handkarten, alle vier Zonen bleiben sichtbar. */
+.zone.filled{min-height:0;align-items:center;justify-content:center}
+.zone.filled>div{display:flex;flex-direction:column;align-items:center}
+.field-card{width:min(100%,64px);max-height:101px;aspect-ratio:104/164;padding:2px;border-width:1px;border-radius:5px;gap:1px}
+.field-card-front{gap:1px}
+.field-card .art{flex-basis:58%;border-radius:3px}
+.field-card strong{font-size:7px;line-height:1}
+.field-card small{font-size:5px;line-height:1}
+.field-card .stats{font-size:6px;line-height:1}
+.field-card-back{font-size:18px}
+@media(max-width:649px){.field-card{width:min(100%,56px);max-height:89px}.zone.filled{padding:1px}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.32</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.43</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -283,7 +294,7 @@ header .brand small{display:block;font-size:8px}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.42';
+const APP_VERSION = '1.43';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
