@@ -770,9 +770,15 @@ main::before{display:block!important;content:"";position:absolute;inset:0;pointe
 main::before{background:radial-gradient(ellipse 24% 15% at 12% 26%,rgba(var(--arena-primary),.19),transparent 90%),radial-gradient(ellipse 25% 16% at 89% 72%,rgba(var(--arena-secondary),.16),transparent 90%),radial-gradient(circle at 12% 21%,rgba(241,198,255,.8) 0 1px,transparent 2px),radial-gradient(circle at 82% 38%,rgba(155,199,255,.8) 0 1px,transparent 2px),radial-gradient(circle at 42% 68%,rgba(215,163,255,.7) 0 1px,transparent 2px)!important;background-size:100% 100%,100% 100%,130px 170px,190px 210px,155px 240px!important;animation:cathedralParticles186 13s ease-in-out infinite alternate!important;opacity:.62!important}
 @keyframes cathedralParticles186{0%{background-position:center,center,0 0,0 0,0 0;opacity:.4}100%{background-position:center,center,8px -65px,-13px -85px,12px -55px;opacity:.72}}
 @media(prefers-reduced-motion:reduce){main::before{animation:none!important}}
+/* v1.87 – hellere Kartenfelder; 3D-Spielerperspektive wieder aktiv, UI bleibt fest. */
+#oppSpell .zone,#oppMon .zone{background:linear-gradient(145deg,rgba(67,34,106,.65),rgba(22,19,65,.71))!important;backdrop-filter:blur(1.5px)!important}
+#mySpell .zone,#myMon .zone{background:linear-gradient(145deg,rgba(22,70,126,.62),rgba(12,28,74,.70))!important;backdrop-filter:blur(1.5px)!important}
+.arena-stage{perspective:720px!important;perspective-origin:50% 50%!important}
+.arena-world{transform:rotateX(var(--view-tilt,18deg))!important;transform-origin:50% 50%!important;transform-style:preserve-3d!important}
+@media(max-width:649px){.arena-stage{perspective:850px!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.86</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.87</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -792,7 +798,7 @@ main::before{background:radial-gradient(ellipse 24% 15% at 12% 26%,rgba(var(--ar
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.86';
+const APP_VERSION = '1.87';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -1118,7 +1124,7 @@ $("end").onclick=()=>{
 render();
 
 /* Kamerastandpunkt ändern: Beide Felder behalten dieselbe feste Geometrie. */
-let arenaTilt=35,arenaTurn=0;
+let arenaTilt=18,arenaTurn=0;
 const arenaMain=document.querySelector('main');
 function applyArenaCamera(){
  // Perspektivzentrum verschieben statt die Spielfelder zu drehen.
@@ -1132,7 +1138,7 @@ function applyArenaCamera(){
 document.getElementById('cameraTilt').addEventListener('input',e=>{arenaTilt=Number(e.target.value);applyArenaCamera()});
 document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Math.max(-28,arenaTurn-7);applyArenaCamera()});
 document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
-document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=35;arenaTurn=0;applyArenaCamera()});
+document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=18;arenaTurn=0;applyArenaCamera()});
 applyArenaCamera();
 let arenaGesture=null;
 document.querySelectorAll('.arena-world>section.board').forEach(board=>{
