@@ -776,12 +776,25 @@ main::before{background:radial-gradient(ellipse 24% 15% at 12% 26%,rgba(var(--ar
 .arena-stage{perspective:720px!important;perspective-origin:50% 50%!important}
 .arena-world{transform:rotateX(var(--view-tilt,18deg))!important;transform-origin:50% 50%!important;transform-style:preserve-3d!important}
 @media(max-width:649px){.arena-stage{perspective:850px!important}}
+/* v1.88 – lebendige Kathedrale: bewegte Fensterstrahlen, magischer Bodennebel und aufsteigende Lichtfunken. */
+main{position:relative!important;overflow:hidden}
+.cathedral-ambience{position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none!important;overflow:hidden!important;isolation:isolate}
+.cathedral-ambience .cathedral-rays{position:absolute;inset:0;background:linear-gradient(108deg,transparent 21%,rgba(var(--arena-primary),.15) 34%,transparent 46%),linear-gradient(74deg,transparent 43%,rgba(var(--arena-secondary),.12) 55%,transparent 68%);background-size:145% 100%;filter:blur(13px);mix-blend-mode:screen;transform-origin:50% 0;animation:cathedralRays188 11s ease-in-out infinite alternate}
+.cathedral-ambience .cathedral-mist{position:absolute;left:-25%;right:-25%;top:51%;height:48%;background:radial-gradient(ellipse 55% 17% at 35% 40%,rgba(var(--arena-primary),.20),transparent 95%),radial-gradient(ellipse 55% 17% at 65% 74%,rgba(var(--arena-secondary),.18),transparent 95%);filter:blur(18px);animation:cathedralMist188 16s ease-in-out infinite alternate}
+.cathedral-ambience .cathedral-sparks{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 2px),radial-gradient(circle,rgba(231,163,255,.85) 0 1.5px,transparent 3px),radial-gradient(circle,rgba(126,219,255,.9) 0 1px,transparent 2.5px);background-size:107px 183px,157px 223px,211px 257px;background-position:16px 40px,70px 120px,125px 60px;opacity:.52;filter:drop-shadow(0 0 4px rgba(var(--arena-primary),.65));animation:cathedralSparks188 18s linear infinite}
+.cathedral-ambience .cathedral-glow{position:absolute;left:29%;top:19%;width:42%;height:33%;background:radial-gradient(ellipse,rgba(var(--arena-primary),.18),transparent 72%);filter:blur(17px);mix-blend-mode:screen;animation:cathedralGlow188 5s ease-in-out infinite alternate}
+@keyframes cathedralRays188{from{opacity:.35;transform:translateX(-3%) rotate(-2deg)}to{opacity:.8;transform:translateX(3%) rotate(2deg)}}
+@keyframes cathedralMist188{from{opacity:.38;transform:translateX(-6%) translateY(8px)}to{opacity:.78;transform:translateX(6%) translateY(-10px)}}
+@keyframes cathedralSparks188{from{background-position:16px 40px,70px 120px,125px 60px;opacity:.24}50%{opacity:.6}to{background-position:25px -143px,60px -103px,138px -197px;opacity:.3}}
+@keyframes cathedralGlow188{from{opacity:.35;transform:scale(.92)}to{opacity:.8;transform:scale(1.12)}}
+@media(prefers-reduced-motion:reduce){.cathedral-ambience *{animation:none!important;opacity:.3!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.87</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.88</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
+<div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
 
 <div class="arena-fixed-ui opponent-fixed-ui"><div class="duel-sidezones opponent-sidezones"><div class="sidezone grave-sidezone" id="oppGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><button type="button" class="sidezone extra-sidezone" id="oppExtraDeck" aria-label="Extra-Deck des Gegners"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp"><span class="lp" id="oppLP">4000 LP</span></div></div></div>
 <div class="arena-stage"><div class="arena-world">
@@ -798,7 +811,7 @@ main::before{background:radial-gradient(ellipse 24% 15% at 12% 26%,rgba(var(--ar
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.87';
+const APP_VERSION = '1.88';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
