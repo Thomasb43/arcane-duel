@@ -3,35 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-card-eisiger-rueckstoss">
-<script>
-/* Automatische Test-App-Aktualisierung – funktioniert auch im iOS-Home-Bildschirm-Modus. */
-(function(){
- const build='20261119-card-eisiger-rueckstoss';
- let checking=false,lastCheck=0;
- async function checkForUpdate(){
-  if(checking||Date.now()-lastCheck<20000)return;
-  checking=true;lastCheck=Date.now();
-  try{
-   const url=new URL('./index.html',location.href);
-   url.searchParams.set('_arcane_check',String(Date.now()));
-   const response=await fetch(url.toString(),{cache:'no-store',redirect:'follow'});
-   if(!response.ok)return;
-   const html=await response.text();
-   const found=html.match(/<meta\s+name=["']arcane-build["']\s+content=["']([^"']+)/i);
-   if(!found||found[1]===build)return;
-   const target=new URL(location.href);
-   target.searchParams.set('_arcane_build',found[1]);
-   location.replace(target.toString());
-  }catch(err){/* Offline: aktuelle Version weiterspielen. */}
-  finally{checking=false;}
- }
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdate();});
- window.addEventListener('pageshow',()=>checkForUpdate());
- window.addEventListener('focus',()=>checkForUpdate());
- setInterval(()=>{if(!document.hidden)checkForUpdate();},60000);
-})();
-</script><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
+<meta name="arcane-build" content="20261119-manual-update-1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#26365f 0,#11172d 55%,#090d1c 100%);color:#f5f1e7;font:14px system-ui,-apple-system,sans-serif;min-height:100vh}
@@ -949,7 +922,7 @@ main{position:relative!important;overflow:hidden}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.36</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
-<div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
+<div id="updateNotice" style="display:block"><button id="reloadUpdate" type="button">↻ Aktualisieren</button><span id="updateStatus" aria-live="polite"></span></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -970,24 +943,25 @@ main{position:relative!important;overflow:hidden}
 <script>
 // VERSION 1.42
 const APP_VERSION = '2.36';
-let latestVersion = APP_VERSION;
-async function checkForUpdates(){
+document.getElementById('reloadUpdate').addEventListener('click',async()=>{
+ const button=document.getElementById('reloadUpdate');
+ const status=document.getElementById('updateStatus');
+ button.disabled=true;status.textContent=' Prüfe neue Version …';
  try{
-  const response = await fetch(location.pathname + '?update-check=' + Date.now(), {cache:'no-store'});
-  if(!response.ok)return;
-  const html = await response.text();
-  const match = html.match(/VERSION\s+([0-9.]+)/);
-  if(match && match[1] !== APP_VERSION){
-   latestVersion = match[1];
-   document.getElementById('updateNotice').style.display='block';
-  }
- }catch(error){}
-}
-document.getElementById('reloadUpdate').addEventListener('click',()=>{
- location.replace(location.pathname + '?v=' + encodeURIComponent(latestVersion));
+  const url=new URL('./index.html',location.href);
+  url.searchParams.set('_arcane_check',String(Date.now()));
+  const response=await fetch(url.toString(),{cache:'no-store'});
+  if(!response.ok)throw Error('Abruf fehlgeschlagen');
+  const html=await response.text();
+  const match=html.match(/<meta\\s+name=["']arcane-build["']\\s+content=["']([^"']+)/i);
+  const current=document.querySelector('meta[name="arcane-build"]')?.content;
+  if(match&&match[1]===current){status.textContent=' Bereits aktuell';return;}
+  const target=new URL(location.href);
+  target.searchParams.set('_arcane_build',match?match[1]:String(Date.now()));
+  location.replace(target.toString());
+ }catch(e){status.textContent=' Aktualisierung fehlgeschlagen – erneut versuchen';}
+ finally{button.disabled=false;}
 });
-setInterval(checkForUpdates,45000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdates();});
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
 const deck=[
 {name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,element:"Feuer",race:"Drache",effectText:"Einmal pro Duellzug: +500 ATK bis zum Ende des Zuges.",skin:"fire",artwork:"flame-dragon"},
