@@ -826,9 +826,17 @@ main{position:relative!important;overflow:hidden}
 .combat-element-burst{position:fixed;z-index:999;pointer-events:none;font-size:62px;line-height:1;filter:drop-shadow(0 0 14px white) drop-shadow(0 0 25px #866bff);animation:combatBurst193 .9s cubic-bezier(.12,.7,.25,1) forwards}
 @keyframes combatBurst193{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-15deg)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.45) rotate(5deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1) rotate(15deg)}}
 @media(prefers-reduced-motion:reduce){.combat-element-burst,.combat-damage-number{animation:none!important}}
+/* v1.94 – zerstörte Monster zerfallen vor dem optischen Friedhof-Einschlag. */
+.monster-destruction{position:fixed;z-index:980;pointer-events:none;isolation:isolate;--shard-color:#c47cff}
+.monster-destruction-fire{--shard-color:#ff8a39}.monster-destruction-ice{--shard-color:#86eaff}.monster-destruction-lightning{--shard-color:#ffe67b}.monster-destruction-shadow{--shard-color:#a780f8}.monster-destruction-nature{--shard-color:#80ec9b}
+.monster-destruction-card{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;transform-origin:center!important;animation:monsterDissolve194 .8s ease-in forwards!important;box-shadow:0 0 17px var(--shard-color)!important}
+.monster-shard{position:absolute;left:50%;top:50%;width:5px;height:7px;border-radius:2px;background:var(--shard-color);box-shadow:0 0 9px var(--shard-color);animation:monsterShard194 .82s ease-out var(--delay) forwards;opacity:0}
+@keyframes monsterDissolve194{0%{opacity:1;transform:scale(1);filter:brightness(1)}30%{opacity:1;transform:scale(1.12);filter:brightness(2.1)}100%{opacity:0;transform:scale(.68) rotate(8deg);filter:brightness(3) blur(8px)}}
+@keyframes monsterShard194{0%{opacity:0;transform:translate(0,0) scale(.3)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(190deg) scale(.3)}}
+@media(prefers-reduced-motion:reduce){.monster-destruction-card,.monster-shard{animation-duration:.1s!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.93</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.94</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -849,7 +857,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.93';
+const APP_VERSION = '1.94';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -933,7 +941,29 @@ function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥'){
  if(targetZone){const rect=targetZone.getBoundingClientRect();const burst=document.createElement('div');burst.className='combat-element-burst';burst.textContent=emoji;burst.style.left=(rect.left+rect.width/2)+'px';burst.style.top=(rect.top+rect.height/2)+'px';document.body.appendChild(burst);setTimeout(()=>burst.remove(),950);}
 }
 
-function sendToGraveyard(card,owner="player"){if(!card)return;(owner==="opponent"?oppGraveyard:myGraveyard).push({...card});if(card.kind==="monster"){const zoneId=owner==="opponent"?"oppGraveZone":"myGraveZone";const zone=$(zoneId);if(zone){zone.classList.remove("grave-receive-fx");void zone.offsetWidth;zone.classList.add("grave-receive-fx");setTimeout(()=>zone.classList.remove("grave-receive-fx"),700);}}}
+function monsterDestructionFx(card,owner){
+ const boardId=owner==="opponent"?"oppMon":"myMon";
+ const cards=[...document.querySelectorAll('#'+boardId+' .zone')];
+ const matching=cards.find(z=>{const name=z.querySelector('.field-card');return name&&name.textContent.includes(card.name)});
+ if(!matching)return;
+ const rect=matching.getBoundingClientRect();
+ if(!rect.width||!rect.height)return;
+ const n=String(card.name||'').toLowerCase();
+ const element=/flamm|glut|feuer/.test(n)?'fire':/frost|eis/.test(n)?'ice':/donner|blitz/.test(n)?'lightning':/schatten/.test(n)?'shadow':/erd|natur/.test(n)?'nature':'arcane';
+ const shell=document.createElement('div');shell.className='monster-destruction monster-destruction-'+element;
+ shell.style.cssText='left:'+rect.left+'px;top:'+rect.top+'px;width:'+rect.width+'px;height:'+rect.height+'px';
+ const original=matching.querySelector('.field-card');
+ if(original){const ghost=original.cloneNode(true);ghost.classList.add('monster-destruction-card');ghost.removeAttribute('id');shell.appendChild(ghost);}
+ for(let i=0;i<12;i++){const shard=document.createElement('i');shard.className='monster-shard';shard.style.setProperty('--dx',((i%4)-1.5)*27+'px');shard.style.setProperty('--dy',(Math.floor(i/4)-1)*37+'px');shard.style.setProperty('--delay',(i%4)*35+'ms');shell.appendChild(shard);}
+ document.body.appendChild(shell);
+ setTimeout(()=>shell.remove(),1000);
+}
+function sendToGraveyard(card,owner="player"){
+ if(!card)return;
+ if(card.kind==="monster")monsterDestructionFx(card,owner);
+ (owner==="opponent"?oppGraveyard:myGraveyard).push({...card});
+ if(card.kind==="monster"){const zoneId=owner==="opponent"?"oppGraveZone":"myGraveZone";setTimeout(()=>{const zone=$(zoneId);if(zone){zone.classList.remove("grave-receive-fx");void zone.offsetWidth;zone.classList.add("grave-receive-fx");setTimeout(()=>zone.classList.remove("grave-receive-fx"),700);}},650);}
+}
 function renderGraveyards(){
  const draw=(list)=>list.length?'<div class="grave-card" title="'+list[list.length-1].name+'"><span>'+(list[list.length-1].emoji||'✦')+'</span></div>':'';
  $("oppGraveButton").innerHTML=draw(oppGraveyard);
