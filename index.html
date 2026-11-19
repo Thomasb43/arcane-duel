@@ -429,19 +429,63 @@ main{position:relative;isolation:isolate}
 .duelist-player{bottom:clamp(65px,9vh,120px)!important}
 @media(max-width:649px){.duelist-player{bottom:clamp(65px,9vh,110px)!important;right:-12px!important}}
 @media(min-width:420px) and (max-width:649px){.duelist-player{bottom:80px!important}}
+/* v1.64 – kompakte mobile Arena mit Figuren an den LP-HUDs statt an der gesamten Seitenhöhe. */
+main{gap:5px!important;padding:5px 8px 10px!important}
+.opponent-fixed-ui,.player-fixed-ui{position:relative!important;isolation:isolate;overflow:visible!important}
+.opponent-fixed-ui{min-height:165px;display:flex;flex-direction:column;justify-content:flex-end}
+.player-fixed-ui{min-height:120px;display:flex;align-items:flex-start}
+.duelist-portrait{position:absolute!important;width:clamp(145px,29vw,220px)!important;height:clamp(170px,35vw,260px)!important;max-width:none!important;animation:none!important;translate:none!important;pointer-events:none!important;overflow:visible!important;z-index:1!important}
+.duelist-opponent{left:-8px!important;right:auto!important;top:-10px!important;bottom:auto!important}
+.duelist-player{right:-8px!important;left:auto!important;top:-32px!important;bottom:auto!important}
+.duelist-portrait img{object-fit:contain!important}
+.opponent-fixed-ui .opponent-hand-wrap{position:relative;z-index:2;align-self:center;width:64%;margin:0 0 8px 27%!important}
+.opponent-fixed-ui .opponent-hand-wrap>span{display:none!important}
+.opponent-fixed-ui .field-topline,.player-fixed-ui .field-bottomline{position:relative;z-index:2;width:100%;margin:0!important}
+.lp-row{min-width:0;min-height:44px;max-width:46%;width:46%;background:linear-gradient(100deg,#151d33ed,#26344de8)!important;box-shadow:0 2px 12px #0003}
+.opponent-lp{margin-left:auto!important;margin-right:0!important;justify-content:flex-end!important}
+.player-lp{margin-left:0!important;justify-content:flex-start!important}
+.lp-row .lp{font-size:clamp(20px,4.8vw,28px)!important}
+.arena-stage{margin:0!important}
+.arena-world{gap:4px!important}
+.arena-world>section.board{padding:1px 0!important}
+.arena-world .board h2,.arena-world .middle{display:none!important}
+.arena-world .zones{gap:5px!important}
+.arena-world .zone{border-color:#6b7da499!important;background:linear-gradient(150deg,#293b6844,#101b3844)!important}
+.handtitle{display:grid!important;grid-template-columns:auto 1fr;gap:2px 10px!important;align-items:center!important}
+.handtitle .end-turn{grid-row:1 / 3;align-self:center}
+.handtitle h2{font-size:13px!important;letter-spacing:.3px}
+.handtitle small{grid-column:2}
+.hand{padding-top:9px!important;padding-bottom:8px!important}
+.log{margin-top:0!important}
+@media(max-width:649px){
+.opponent-fixed-ui{min-height:164px!important}
+.player-fixed-ui{min-height:126px!important}
+.duelist-portrait{width:170px!important;height:194px!important}
+.duelist-opponent{top:-7px!important;left:-12px!important}
+.duelist-player{top:-24px!important;right:-9px!important}
+.opponent-fixed-ui .opponent-hand-wrap{width:64%!important;margin-left:30%!important}
+.lp-row{width:47%!important;max-width:47%!important}
+.arena-world .zone{min-height:68px!important}
+}
+@media(min-width:420px) and (max-width:649px){
+.duelist-portrait{width:190px!important;height:213px!important}
+.opponent-fixed-ui{min-height:180px!important}
+.player-fixed-ui{min-height:135px!important}
+.duelist-player{top:-31px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.63</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.64</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
-<div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div>
-<div class="arena-fixed-ui"><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp"><span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div></div>
+
+<div class="arena-fixed-ui opponent-fixed-ui"><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp"><span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div></div>
 <div class="arena-stage"><div class="arena-world">
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div></section>
 </div></div>
-<div class="arena-fixed-ui player-fixed-ui"><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div>
+<div class="arena-fixed-ui player-fixed-ui"><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
@@ -451,7 +495,7 @@ main{position:relative;isolation:isolate}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.63';
+const APP_VERSION = '1.64';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
