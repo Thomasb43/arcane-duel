@@ -674,9 +674,18 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 .arena-world::after{content:"";position:absolute;top:50%;left:0;right:0;height:2px;z-index:0;pointer-events:none;background:linear-gradient(90deg,transparent,#775aff 10%,#4dbbff 37%,#e7fbff 50%,#4dbbff 63%,#775aff 90%,transparent);box-shadow:0 0 8px #5a9dff,0 0 19px #5867ff}
 .arena-world>section.board{position:relative;z-index:1}
 @media(max-width:649px){.arena-stage::before{width:90vw!important;height:90vw!important}}
+/* v1.71 – LP-Anzeigen nach Original Design 2: schlankes Goldornament, dunkles Zentrum, Edelstein. */
+.lp-row{position:relative!important;isolation:isolate!important;width:clamp(176px,46vw,250px)!important;max-width:unset!important;min-width:0!important;height:47px!important;min-height:47px!important;padding:2px!important;border:0!important;border-radius:0!important;background:linear-gradient(115deg,#ffe6a1 0%,#c68b36 19%,#ffe5a2 43%,#a76b26 70%,#ffdf8c 100%)!important;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)!important;filter:drop-shadow(0 0 6px #ffc35c77)!important;box-shadow:none!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
+.lp-row::before{content:""!important;position:absolute!important;inset:2px!important;z-index:0!important;padding:0!important;background:linear-gradient(100deg,#0b0d25,#141a37 52%,#090e27)!important;clip-path:polygon(7.5% 0,92.5% 0,100% 50%,92.5% 100%,7.5% 100%,0 50%)!important;-webkit-mask:none!important;mask:none!important}
+.lp-row .lp{position:relative!important;z-index:2!important;width:100%!important;font-family:inherit!important;font-size:clamp(21px,5.5vw,28px)!important;font-weight:900!important;letter-spacing:1px!important;line-height:1!important;text-align:center!important;color:#ffdc89!important;text-shadow:0 1px 2px #000,0 0 7px #e4a74855!important}
+.lp-row::after{content:"◆"!important;position:absolute!important;left:50%!important;bottom:-12px!important;transform:translateX(-50%)!important;z-index:5!important;font-size:20px!important;line-height:1!important;color:#d78aff!important;text-shadow:0 0 3px #fff,0 0 9px #ad54ff!important}
+.player-lp::after{color:#7cddff!important;text-shadow:0 0 3px #fff,0 0 9px #42aaff!important}
+.opponent-lp{margin:0!important}
+.player-lp{margin:0!important}
+@media(max-width:649px){.lp-row{width:clamp(172px,44vw,230px)!important;max-width:unset!important;height:44px!important;min-height:44px!important}.lp-row .lp{font-size:clamp(21px,5.5vw,27px)!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.70</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.71</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -696,7 +705,7 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.67';
+const APP_VERSION = '1.71';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
