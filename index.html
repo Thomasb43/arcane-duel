@@ -820,9 +820,15 @@ main{position:relative!important;overflow:hidden}
 @keyframes graveImpact192{0%{filter:brightness(1)}30%{filter:brightness(2.4) drop-shadow(0 0 13px #b9a0ff);transform:scale(1.08)}100%{filter:brightness(1);transform:scale(1)}}
 #battleFx.active span{filter:drop-shadow(0 0 14px #fff) drop-shadow(0 0 20px #a873ff)!important}
 @media(prefers-reduced-motion:reduce){.combat-damage-number,.grave-receive-fx{animation:none!important}}
+/* v1.93 – Schaden nach LP-Render anzeigen und Einschlag direkt an der Zielzone. */
+.combat-damage-number{position:fixed!important;z-index:1000!important;left:50%;top:50%;font-size:32px!important;animation:combatDamage193 1.3s ease-out forwards!important}
+@keyframes combatDamage193{0%{opacity:0;transform:translate(-50%,0) scale(.6)}18%{opacity:1;transform:translate(-50%,-15px) scale(1.35)}65%{opacity:1;transform:translate(-50%,-35px) scale(1)}100%{opacity:0;transform:translate(-50%,-70px) scale(.85)}}
+.combat-element-burst{position:fixed;z-index:999;pointer-events:none;font-size:62px;line-height:1;filter:drop-shadow(0 0 14px white) drop-shadow(0 0 25px #866bff);animation:combatBurst193 .9s cubic-bezier(.12,.7,.25,1) forwards}
+@keyframes combatBurst193{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-15deg)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.45) rotate(5deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1) rotate(15deg)}}
+@media(prefers-reduced-motion:reduce){.combat-element-burst,.combat-damage-number{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.92</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.93</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -843,7 +849,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.92';
+const APP_VERSION = '1.93';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -923,6 +929,8 @@ function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥'){
  if(toIndex>=0)animateZone(toType,toIndex,'impact-hit');
  const fx=$('battleFx'),span=fx&&fx.querySelector('span');
  if(fx&&span){span.textContent=emoji;fx.classList.remove('active');void fx.offsetWidth;fx.classList.add('active');}
+ const targetZone=toIndex>=0?document.querySelector('#'+toType+' [data-index="'+toIndex+'"]'):null;
+ if(targetZone){const rect=targetZone.getBoundingClientRect();const burst=document.createElement('div');burst.className='combat-element-burst';burst.textContent=emoji;burst.style.left=(rect.left+rect.width/2)+'px';burst.style.top=(rect.top+rect.height/2)+'px';document.body.appendChild(burst);setTimeout(()=>burst.remove(),950);}
 }
 
 function sendToGraveyard(card,owner="player"){if(!card)return;(owner==="opponent"?oppGraveyard:myGraveyard).push({...card});if(card.kind==="monster"){const zoneId=owner==="opponent"?"oppGraveZone":"myGraveZone";const zone=$(zoneId);if(zone){zone.classList.remove("grave-receive-fx");void zone.offsetWidth;zone.classList.add("grave-receive-fx");setTimeout(()=>zone.classList.remove("grave-receive-fx"),700);}}}
@@ -941,8 +949,8 @@ document.getElementById('oppExtraDeck').addEventListener('click',()=>alert('Extr
 document.getElementById('myGraveZone').addEventListener('click',()=>alert(myGraveyard.length?myGraveyard.map(c=>c.name).join('\\n'):'Dein Friedhof ist leer.'));
 document.getElementById('oppGraveZone').addEventListener('click',()=>alert(oppGraveyard.length?oppGraveyard.map(c=>c.name).join('\\n'):'Der gegnerische Friedhof ist leer.'));
 let lastShownMyLP=4000,lastShownOppLP=4000,lpFeedbackInitialized=false;
-function showCombatNumber(id,amount){if(amount<=0)return;const target=$(id);if(!target)return;const bubble=document.createElement("span");bubble.className="combat-damage-number";bubble.textContent="−"+amount;target.appendChild(bubble);setTimeout(()=>bubble.remove(),1150);}
-function render(){if(lpFeedbackInitialized){showCombatNumber("myLP",lastShownMyLP-myLP);showCombatNumber("oppLP",lastShownOppLP-oppLP);}lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;}
+function showCombatNumber(id,amount){if(amount<=0)return;const target=$(id);if(!target)return;const rect=target.getBoundingClientRect();const bubble=document.createElement('span');bubble.className='combat-damage-number';bubble.textContent='−'+amount;bubble.style.left=(rect.left+rect.width/2)+'px';bubble.style.top=(rect.top-6)+'px';document.body.appendChild(bubble);setTimeout(()=>bubble.remove(),1350);}
+function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
 $("hand").addEventListener('animationend',e=>{if(e.target.classList&&e.target.classList.contains('new-card')){e.target.classList.remove('new-card');newlyDrawnCard=null;} });
