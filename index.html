@@ -698,9 +698,19 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 .player-fixed-ui .field-bottomline{padding-left:75px!important}
 }
 @media(max-width:380px){.opponent-fixed-ui .lp-row,.player-fixed-ui .lp-row{flex-basis:180px!important;width:180px!important;max-width:180px!important;min-width:180px!important}}
+/* v1.73 – Feinschliff der LP-Plaketten: Goldgravur, Endornamente, kleinere Edelsteine. */
+.lp-row{filter:drop-shadow(0 0 3px #dca34e88)!important}
+.lp-row::before{background:linear-gradient(110deg,#ffe9a7 0%,#9f6525 14%,#f4d68b 32%,#fff0bb 50%,#bd8738 72%,#ffe5a0 100%)!important}
+.lp-row .lp{background:radial-gradient(ellipse 85% 110% at 50% 50%,#1c2446,#090d26 78%)!important;letter-spacing:.65px!important;text-shadow:0 1px 2px #000,0 0 5px #e4b75b44!important}
+.lp-row::after{content:"◆"!important;font-size:13px!important;bottom:-8px!important;color:#c88aff!important;text-shadow:0 0 2px #fff,0 0 5px #9b4dfb!important}
+.player-lp::after{color:#7fd9ff!important;text-shadow:0 0 2px #fff,0 0 5px #37aaff!important}
+.lp-row .lp::before,.lp-row .lp::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);font-size:10px;line-height:1;color:#f8cf75;text-shadow:0 0 4px #f8b74c;opacity:.9}
+.lp-row .lp::before{left:13px}
+.lp-row .lp::after{right:13px}
+@media(max-width:649px){.lp-row .lp::before{left:10px}.lp-row .lp::after{right:10px}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.72</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.73</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -720,7 +730,7 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.72';
+const APP_VERSION = '1.73';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
