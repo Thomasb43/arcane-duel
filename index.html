@@ -758,9 +758,14 @@ main{background-image:url("artwork/arcane-cathedral.svg?v=1.84")!important;backg
 main::before{display:block!important;background:radial-gradient(ellipse 35% 26% at 16% 25%,rgba(var(--arena-primary),.48),transparent 88%),radial-gradient(ellipse 40% 28% at 85% 70%,rgba(var(--arena-secondary),.45),transparent 88%),radial-gradient(ellipse 50% 16% at 50% 51%,rgba(var(--arena-secondary),.25),transparent 90%)!important;animation:cathedralBreath 8s ease-in-out infinite alternate!important;mix-blend-mode:screen;pointer-events:none}
 @keyframes cathedralBreath{0%{opacity:.45;transform:translate3d(-5px,3px,0) scale(1)}100%{opacity:.8;transform:translate3d(5px,-4px,0) scale(1.025)}}
 @media(prefers-reduced-motion:reduce){main::before{animation:none!important}}
+/* v1.85 – echte hochauflösende Kathedralengrafik statt SVG-Zeichnung. */
+main{background-color:#090920!important;background-image:linear-gradient(180deg,rgba(6,5,27,.12),rgba(6,7,28,.16)),url("artwork/arcane-cathedral-background.png?v=1.85")!important;background-size:100% 100%,cover!important;background-position:center,center top!important;background-repeat:no-repeat!important}
+main::before{display:block!important;content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 35% 27% at 12% 28%,rgba(var(--arena-primary),.27),transparent 90%),radial-gradient(ellipse 37% 25% at 86% 70%,rgba(var(--arena-secondary),.24),transparent 90%),linear-gradient(115deg,transparent 40%,rgba(var(--arena-primary),.07) 52%,transparent 64%)!important;mix-blend-mode:screen;animation:cathedralLight185 9s ease-in-out infinite alternate!important}
+@keyframes cathedralLight185{0%{opacity:.38;transform:translate3d(-3px,3px,0)}100%{opacity:.82;transform:translate3d(3px,-3px,0)}}
+@media(prefers-reduced-motion:reduce){main::before{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.84</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.85</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -780,7 +785,7 @@ main::before{display:block!important;background:radial-gradient(ellipse 35% 26% 
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.84';
+const APP_VERSION = '1.85';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
