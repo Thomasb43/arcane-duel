@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-hand-sidezones-fix-v4">
+<meta name="arcane-build" content="20261119-opponent-row-hand-v5">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -941,6 +941,23 @@ main{position:relative!important;overflow:hidden}
  #hand{position:relative!important;z-index:5!important;transform:none!important;margin-top:0!important;max-height:159px!important;overflow-x:auto!important;overflow-y:hidden!important;isolation:isolate!important}
  #hand .card{transform:translateY(0) rotate(var(--fan-angle,0deg))!important;transform-origin:50% 100%!important}
  #hand .card.selected{transform:translateY(-6px) rotate(var(--fan-angle,0deg))!important}
+}
+
+/* v2.38: Gegner-Stapel oben rechts nebeneinander; Hand ohne Abschneiden. */
+@media(max-width:649px){
+ .opponent-fixed-ui .opponent-sidezones{
+  position:absolute!important;right:8px!important;left:auto!important;top:8px!important;bottom:auto!important;
+  display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-end!important;
+  gap:5px!important;width:max-content!important;max-width:calc(100vw - 16px)!important;z-index:30!important;
+ }
+ .opponent-fixed-ui .opponent-sidezones #oppExtraDeck{order:1!important}
+ .opponent-fixed-ui .opponent-sidezones #oppGraveZone{order:2!important}
+ .opponent-fixed-ui .opponent-sidezones #oppDeckZone{order:3!important}
+ .opponent-fixed-ui .opponent-sidezones .sidezone{flex:0 0 58px!important;width:58px!important;min-width:58px!important;height:64px!important;min-height:64px!important}
+ main>section:has(#hand){overflow:visible!important;z-index:8!important}
+ #hand{overflow-x:auto!important;overflow-y:visible!important;height:clamp(178px,23svh,215px)!important;max-height:none!important;padding:12px 10px 26px!important;align-items:flex-start!important;isolation:auto!important}
+ #hand .card{height:clamp(145px,18svh,174px)!important;min-height:145px!important;overflow:hidden!important;flex-shrink:0!important;transform:translateY(0) rotate(var(--fan-angle,0deg))!important}
+ #hand .card.selected{transform:translateY(-5px) rotate(var(--fan-angle,0deg))!important}
 }
 </style></head>
 <body>
