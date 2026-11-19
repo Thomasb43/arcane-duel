@@ -245,6 +245,13 @@ header .brand small{display:block;font-size:8px}
 .card-info-panel button.secondary{background:#252b3d;border-color:#68718a}
 /* v1.39 – Gegner hält seine Handkarten gegenüberliegend, um 180 Grad gedreht und spiegelverkehrt gefächert. */
 .opponent-card-back{transform:translateY(var(--back-lift,0px)) rotate(180deg) rotate(var(--back-angle,0deg));transform-origin:50% 50%}
+/* v1.40 – Kartenillustrationen sichtbar in den belegten Spielfeldzonen. */
+.zone.filled>div{width:100%;min-width:0}
+.zone .mini.field-art{display:block;width:100%;height:clamp(40px,8vw,78px);margin:0 auto 3px;overflow:hidden;border-radius:5px;font-size:0;line-height:0;background:#14213b}
+.zone .mini.field-art .card-art-loader{width:100%;height:100%}
+.zone .mini.field-art img{display:block;width:100%;height:100%;object-fit:cover}
+.zone .mini.field-art svg{display:block;width:100%;height:100%}
+.zone.filled b{display:block;line-height:1.15;overflow-wrap:anywhere}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.32</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
@@ -260,8 +267,8 @@ header .brand small{display:block;font-size:8px}
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
-// VERSION 1.39
-const APP_VERSION = '1.39';
+// VERSION 1.40
+const APP_VERSION = '1.40';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
