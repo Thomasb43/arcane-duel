@@ -848,9 +848,19 @@ main{position:relative!important;overflow:hidden}
  .handtitle .end-turn{max-width:148px!important;white-space:nowrap!important}
  .handtitle h2,.handtitle small{position:relative!important;z-index:2!important}
 }
+/* v1.97 – LP leicht nach rechts, Zug beenden unter linker Zauberzone. */
+@media(max-width:649px){
+ .handtitle{display:none!important}
+ .player-fixed-ui .field-bottomline{padding-left:94px!important}
+ .player-fixed-ui .field-end-turn{position:absolute!important;left:8px!important;top:-48px!important;bottom:auto!important;right:auto!important;z-index:20!important;display:block!important;width:auto!important;max-width:145px!important;min-height:34px!important;padding:7px 10px!important;font-size:12px!important;white-space:nowrap!important}
+}
+@media(min-width:650px){
+ .player-fixed-ui .field-end-turn{position:absolute;left:10px;top:-42px;z-index:20}
+ .handtitle{display:none!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.96</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.97</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -861,8 +871,8 @@ main{position:relative!important;overflow:hidden}
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div></section>
 </div></div>
-<div class="arena-fixed-ui player-fixed-ui"><div class="duel-sidezones player-sidezones"><div class="sidezone deck-sidezone" id="myDeckZone" aria-label="Verbleibende Karten in deinem Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="myDeckCount">0</span><span class="sidezone-label">Deck</span></div><button type="button" class="sidezone extra-sidezone" id="myExtraDeck" aria-label="Dein Extra-Deck"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button><div class="sidezone grave-sidezone" id="myGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div></div></div>
-<section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
+<div class="arena-fixed-ui player-fixed-ui"><div class="duel-sidezones player-sidezones"><div class="sidezone deck-sidezone" id="myDeckZone" aria-label="Verbleibende Karten in deinem Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="myDeckCount">0</span><span class="sidezone-label">Deck</span></div><button type="button" class="sidezone extra-sidezone" id="myExtraDeck" aria-label="Dein Extra-Deck"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button><div class="sidezone grave-sidezone" id="myGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><button id="end" class="end-turn field-end-turn">Zug beenden</button><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div></div></div>
+<section><div class="handtitle"><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
 <div id="battleFx" aria-hidden="true"><span>✨</span></div>
@@ -871,7 +881,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.96';
+const APP_VERSION = '1.97';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
