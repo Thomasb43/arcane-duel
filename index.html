@@ -394,9 +394,20 @@ main{position:relative;isolation:isolate}
 @keyframes duelist-glow{from{opacity:.45;scale:.92}to{opacity:1;scale:1.12}}
 @media(max-width:649px){.duelist-portrait{width:clamp(70px,22vw,118px);height:clamp(100px,31vw,165px)}.duelist-player{left:-16px;bottom:130px}.duelist-opponent{right:-16px;top:105px}}
 @media(prefers-reduced-motion:reduce){.duelist-portrait,.duelist-aura{animation:none}}
+/* v1.60 – Charakterseiten tauschen und beide Figuren innerhalb des Bildschirms halten. */
+.duelist-player{left:auto!important;right:0!important;bottom:clamp(165px,29vh,310px)!important}
+.duelist-opponent{right:auto!important;left:0!important;top:clamp(145px,19vh,245px)!important}
+.duelist-portrait{width:clamp(100px,18vw,190px)!important;height:clamp(150px,25vw,270px)!important;max-width:28%;overflow:hidden!important}
+.duelist-player img{object-position:right bottom}
+.duelist-opponent img{object-position:left bottom}
+@media(max-width:649px){
+.duelist-portrait{width:clamp(82px,19vw,125px)!important;height:clamp(115px,26vw,170px)!important;max-width:22%!important}
+.duelist-opponent{left:0!important;top:175px!important}
+.duelist-player{right:0!important;bottom:240px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.59</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.60</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -416,7 +427,7 @@ main{position:relative;isolation:isolate}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.59';
+const APP_VERSION = '1.60';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
