@@ -309,9 +309,20 @@ header .brand small{display:block;font-size:8px}
 .board .zone.drop-impact::after{content:"";position:absolute;inset:-6px;pointer-events:none;border:2px solid #ffe8a0;border-radius:10px;background:linear-gradient(35deg,transparent 47%,#ffefb0 49%,transparent 51%) 10% 20%/58% 65% no-repeat,linear-gradient(150deg,transparent 47%,#ffefb0 49%,transparent 51%) 85% 75%/65% 55% no-repeat;animation:crackReveal .8s ease-out both;z-index:10}
 @keyframes arcaneDrop{0%{transform:translateY(-25px) scale(.84);filter:brightness(2);opacity:.7}55%{transform:translateY(3px) scale(1.08);filter:brightness(1.5)}100%{transform:none;filter:none;opacity:1}}
 @media(prefers-reduced-motion:reduce){.board .zone.drop-impact,.board .zone.summon-impact{animation:none!important}}
+
+/* v1.47 – animierter magischer Hintergrund über die gesamte Spielansicht. */
+html{min-height:100%;background:#080e23}
+body{position:relative;isolation:isolate;background:transparent!important;min-height:100vh}
+body::before,body::after{content:"";position:fixed;inset:-25%;pointer-events:none;z-index:-2;will-change:transform}
+body::before{background:radial-gradient(ellipse 44% 37% at 24% 32%,#6950bd65,transparent 72%),radial-gradient(ellipse 40% 42% at 76% 66%,#176caa55,transparent 75%),radial-gradient(ellipse 30% 30% at 55% 12%,#9d6fd72c,transparent 80%),linear-gradient(135deg,#080d21,#142144 52%,#080c1e);animation:arcaneSkyDrift 22s ease-in-out infinite alternate}
+body::after{inset:0;z-index:-1;opacity:.58;background-image:radial-gradient(circle,#fff4d6 1px,transparent 1.8px),radial-gradient(circle,#8cbcff 1px,transparent 1.8px),radial-gradient(circle,#d4a9ff .8px,transparent 1.7px);background-size:127px 151px,193px 211px,79px 113px;background-position:13px 27px,65px 88px,20px 42px;animation:arcaneStars 30s linear infinite}
+@keyframes arcaneSkyDrift{0%{transform:translate3d(-3%,-2%,0) rotate(-4deg) scale(1)}50%{transform:translate3d(3%,2%,0) rotate(2deg) scale(1.05)}100%{transform:translate3d(-1%,4%,0) rotate(5deg) scale(1.08)}}
+@keyframes arcaneStars{0%{background-position:13px 27px,65px 88px,20px 42px;opacity:.32}50%{opacity:.7}100%{background-position:76px 178px,-28px 299px,61px 155px;opacity:.32}}
+header,main{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){body::before,body::after{animation:none!important;will-change:auto}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.46</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.47</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -325,7 +336,7 @@ header .brand small{display:block;font-size:8px}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.46';
+const APP_VERSION = '1.47';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
