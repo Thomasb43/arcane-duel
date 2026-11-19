@@ -536,9 +536,29 @@ radial-gradient(circle,transparent 35%,#547ce050 35.3%,transparent 36%,transpare
 .opponent-lp::after{color:#cf7bff;text-shadow:0 0 8px #ac50ff}
 .lp-row .lp{color:#ffdf8b!important;font-size:clamp(22px,5.1vw,31px)!important;letter-spacing:1px;text-shadow:0 0 11px #e1a54444}
 @media(max-width:649px){.lp-row{min-height:48px!important;padding:6px 12px!important}.lp-row .lp{font-size:clamp(20px,5vw,27px)!important}}
+/* v1.67 – Design 2 sichtbar umsetzen: echte Goldkonturen, kräftiges Runensiegel, klare Feldtrennung. */
+.lp-row{background:linear-gradient(125deg,#ffe5a0 0%,#9b6625 25%,#fff3c0 53%,#b5782b 77%,#ffdf83 100%)!important;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)!important;padding:3px!important;min-height:58px!important;display:flex!important;align-items:stretch!important;justify-content:stretch!important;filter:drop-shadow(0 0 8px #e7ae4866)!important}
+.lp-row::before{content:"";position:absolute!important;inset:3px!important;background:linear-gradient(110deg,#080e24,#18274b 53%,#0b142e)!important;clip-path:polygon(7% 0,93% 0,100% 50%,93% 100%,7% 100%,0 50%)!important;mask:none!important;-webkit-mask:none!important;z-index:0!important;padding:0!important}
+.lp-row .lp{position:relative!important;z-index:2!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;text-align:center!important;color:#ffe19b!important;text-shadow:0 1px 3px #000,0 0 9px #e1a53e66!important}
+.lp-row::after{z-index:3!important;bottom:-9px!important}
+.opponent-lp{filter:drop-shadow(0 0 9px #bd60e566)!important}
+.player-lp{filter:drop-shadow(0 0 9px #4fafff66)!important}
+.arena-stage::before{z-index:-1!important;opacity:.95!important;width:min(94vw,690px)!important;height:min(94vw,690px)!important;background:
+repeating-conic-gradient(from 0deg,#557aff00 0deg 10deg,#76a9ff77 10.3deg 10.65deg,#557aff00 11deg 30deg),
+radial-gradient(circle,transparent 31%,#6398f755 31.3%,#649cffaa 31.7%,transparent 32.2%,transparent 43%,#9079f8aa 43.4%,transparent 44%,transparent 49%,#67b6ffbb 49.5%,transparent 50.3%,transparent 53%,#7b63ec88 53.5%,transparent 54%)!important;filter:drop-shadow(0 0 17px #4d9fff99)!important}
+.arena-stage::after{font-size:47px!important;color:#d8f7ff!important;text-shadow:0 0 9px #4acfff,0 0 23px #368cff,0 0 38px #368cff!important}
+.arena-world::before{display:none!important}
+.arena-world>section.board:first-child{position:relative}
+.arena-world>section.board:first-child::after{content:"";position:absolute;bottom:-3px;left:0;right:0;height:2px;border-radius:0!important;background:linear-gradient(90deg,transparent,#7b9eff 17%,#ffe2a0 50%,#7b9eff 83%,transparent)!important;box-shadow:0 0 11px #6ba6ff!important;opacity:1!important;pointer-events:none;animation:none!important;transform:none!important}
+#oppSpell .zone,#oppMon .zone{border:1.5px solid #a77bff!important;box-shadow:inset 0 0 13px #8e54e633,0 0 6px #9c66e477!important;background:linear-gradient(135deg,#3a255b80,#101b3a99)!important}
+#mySpell .zone,#myMon .zone{border:1.5px solid #65baff!important;box-shadow:inset 0 0 13px #438fff33,0 0 6px #499eff66!important;background:linear-gradient(135deg,#123e6880,#101b3a99)!important}
+.sidezone{border-width:2px!important;box-shadow:inset 0 0 14px #9064dd44,0 0 11px #a064ee66!important}
+.player-sidezones .sidezone{box-shadow:inset 0 0 14px #298bff44,0 0 11px #298bff77!important}
+body::before{background:radial-gradient(ellipse 70% 46% at 12% 28%,#54228c8a,transparent 75%),radial-gradient(ellipse 65% 50% at 83% 72%,#0865b88a,transparent 80%),radial-gradient(ellipse 85% 70% at 50% 50%,#163c8b7a,transparent 80%),linear-gradient(155deg,#060b20,#0b1c49 50%,#060d25)!important}
+@media(max-width:649px){.lp-row{min-height:54px!important}.arena-stage::before{width:95vw!important;height:95vw!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.66</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.67</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -558,7 +578,7 @@ radial-gradient(circle,transparent 35%,#547ce050 35.3%,transparent 36%,transpare
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.66';
+const APP_VERSION = '1.67';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
