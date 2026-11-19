@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-full-hand-cards">
+<meta name="arcane-build" content="20261119-hand-fix-update-check">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -925,8 +925,8 @@ main{position:relative!important;overflow:hidden}
 #log{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
 #hand .card{overflow:hidden!important;box-sizing:border-box!important}
 @media(max-width:649px){
- #hand{height:clamp(166px,21svh,195px)!important;padding:19px 22px 16px!important;overflow-x:auto!important;overflow-y:hidden!important;align-items:flex-end!important;scroll-padding-inline:22px!important}
- #hand .card{height:clamp(132px,17svh,158px)!important;min-height:132px!important;flex-basis:clamp(88px,24vw,108px)!important;overflow:hidden!important}
+ #hand{height:clamp(143px,17.5svh,159px)!important;padding:13px 12px 10px!important;overflow-x:auto!important;overflow-y:hidden!important;align-items:flex-end!important;scroll-padding-inline:12px!important}
+ #hand .card{height:clamp(118px,14svh,132px)!important;min-height:118px!important;flex-basis:clamp(78px,21vw,96px)!important;overflow:hidden!important}
  #hand .card:first-child{margin-left:0!important}
  #hand .card strong{font-size:clamp(10px,2.9vw,13px)!important;line-height:1.15!important;overflow-wrap:anywhere!important}
 }
@@ -965,7 +965,7 @@ async function checkForUpdates(){
   const response=await fetch(url.toString(),{cache:'no-store'});
   if(!response.ok)return;
   const html=await response.text();
-  const match=html.match(/<meta\\s+name=["']arcane-build["']\\s+content=["']([^"']+)/i);
+  const match=html.match(/<meta\s+name=["']arcane-build["']\s+content=["']([^"']+)/i);
   if(!match)return;
   availableBuild=match[1]!==CURRENT_BUILD?match[1]:null;
   document.getElementById('updateNotice').style.display=availableBuild?'block':'none';
