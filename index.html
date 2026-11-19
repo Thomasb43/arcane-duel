@@ -473,19 +473,63 @@ main{gap:5px!important;padding:5px 8px 10px!important}
 .player-fixed-ui{min-height:135px!important}
 .duelist-player{top:-31px!important}
 }
+/* v1.65 – Designvariante 2: violette Gegnerzonen, blaue Spielerzonen, vertikale Friedhof-/Extra-Deck-Stapel. */
+body{background:radial-gradient(ellipse at 48% 42%,#182f67 0%,#0b1737 58%,#080e24 100%)!important}
+header{background:linear-gradient(90deg,#0c1230,#101934,#0c1230)!important}
+.arena-world{position:relative}
+.arena-world:before{content:"✧";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:42px;color:#8bd4ff99;text-shadow:0 0 22px #458eff;z-index:0;pointer-events:none}
+#oppSpell .zone,#oppMon .zone{border:1px solid #a978e4cc!important;background:linear-gradient(140deg,#47265c50,#111b3a80)!important;box-shadow:inset 0 0 9px #9559d322,0 0 5px #a35dcd44}
+#mySpell .zone,#myMon .zone{border:1px solid #6eb5ffbb!important;background:linear-gradient(140deg,#153f6950,#111c4280)!important;box-shadow:inset 0 0 9px #3998ff22,0 0 5px #2b8fff33}
+.arena-world .zone.placement-target,.arena-world .zone.tribute-selected{border:2px solid #ffe28b!important}
+.arena-fixed-ui{overflow:visible!important}
+.duel-sidezones{position:absolute;display:flex;flex-direction:column;gap:7px;z-index:5;pointer-events:auto}
+.opponent-sidezones{right:1px;top:7px}
+.player-sidezones{left:1px;top:5px}
+.sidezone{width:69px;height:65px;border:1px solid #8e67cf;border-radius:9px;background:linear-gradient(145deg,#26244aee,#101a39ee);box-shadow:inset 0 0 10px #8d4ed733,0 0 8px #733bd533;color:#e9dcff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:3px;position:relative;text-align:center;font:inherit;cursor:pointer}
+.player-sidezones .sidezone{border-color:#4d9fea;box-shadow:inset 0 0 10px #298bff33,0 0 8px #298bff33;color:#d5efff}
+.sidezone-symbol{font-size:23px;line-height:1;opacity:.9}
+.sidezone-label{font-size:9px;line-height:1.05;font-weight:800}
+.sidezone-count{position:absolute;right:3px;top:2px;font-size:9px;opacity:.8}
+.sidezone .grave-pile{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;padding:0!important;display:flex!important;align-items:center;justify-content:center;pointer-events:none}
+.sidezone .grave-pile:empty{visibility:hidden!important}
+.sidezone .grave-card{flex:0 0 36px!important;width:36px!important;height:48px!important;margin:0!important;border-color:#c7adf6!important;opacity:.94}
+.sidezone .grave-card span{font-size:17px!important}
+.grave-sidezone:has(.grave-card)>.sidezone-symbol{visibility:hidden}
+.grave-sidezone:has(.grave-card)>.sidezone-label{position:absolute;bottom:2px;z-index:2;background:#111a33e9;padding:1px 3px;border-radius:4px}
+.opponent-fixed-ui .opponent-hand-wrap{width:55%!important;margin-left:21%!important;align-self:center!important}
+.opponent-fixed-ui .field-topline{padding-right:75px}
+.player-fixed-ui .field-bottomline{padding-left:76px}
+.lp-row{border-color:#d6b45f!important;background:linear-gradient(105deg,#101a36ef,#253658ee)!important}
+.opponent-lp{margin-left:0!important;justify-content:center!important}
+.player-lp{margin-left:0!important;justify-content:center!important}
+.duelist-opponent{left:-12px!important;top:-8px!important}
+.duelist-player{right:-9px!important;top:-22px!important}
+@media(max-width:649px){
+.opponent-fixed-ui{min-height:185px!important}
+.player-fixed-ui{min-height:140px!important}
+.duel-sidezones{gap:5px}
+.sidezone{width:60px;height:61px}
+.opponent-sidezones{top:10px;right:2px}
+.player-sidezones{top:2px;left:1px}
+.opponent-fixed-ui .field-topline{padding-right:62px}
+.player-fixed-ui .field-bottomline{padding-left:62px}
+.lp-row{width:56%!important;max-width:56%!important}
+.opponent-fixed-ui .opponent-hand-wrap{width:52%!important;margin-left:23%!important}
+.arena-world .zone{min-height:68px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.64</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.65</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
 
-<div class="arena-fixed-ui opponent-fixed-ui"><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp"><span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div></div>
+<div class="arena-fixed-ui opponent-fixed-ui"><div class="duel-sidezones opponent-sidezones"><div class="sidezone grave-sidezone" id="oppGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><button type="button" class="sidezone extra-sidezone" id="oppExtraDeck" aria-label="Extra-Deck des Gegners"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp"><span class="lp" id="oppLP">4000 LP</span></div></div></div>
 <div class="arena-stage"><div class="arena-world">
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div></section>
 </div></div>
-<div class="arena-fixed-ui player-fixed-ui"><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div>
+<div class="arena-fixed-ui player-fixed-ui"><div class="duel-sidezones player-sidezones"><button type="button" class="sidezone extra-sidezone" id="myExtraDeck" aria-label="Dein Extra-Deck"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button><div class="sidezone grave-sidezone" id="myGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="field-bottomline"><div class="lp-row player-lp"><span class="lp" id="myLP">4000 LP</span></div></div></div>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
@@ -495,7 +539,7 @@ main{gap:5px!important;padding:5px 8px 10px!important}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.64';
+const APP_VERSION = '1.65';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -577,10 +621,19 @@ function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥'){
 
 function sendToGraveyard(card,owner="player"){if(!card)return;(owner==="opponent"?oppGraveyard:myGraveyard).push({...card});}
 function renderGraveyards(){
- const draw=(list)=>list.map((c,i)=>'<div class="grave-card" title="'+c.name+'"><span>'+c.emoji+'</span><small>'+c.name+'</small></div>').join('');
+ const draw=(list)=>list.length?'<div class="grave-card" title="'+list[list.length-1].name+'"><span>'+(list[list.length-1].emoji||'✦')+'</span></div>':'';
  $("oppGraveButton").innerHTML=draw(oppGraveyard);
  $("myGraveButton").innerHTML=draw(myGraveyard);
+ document.querySelectorAll('.grave-sidezone').forEach(zone=>{
+  const list=zone.id==='oppGraveZone'?oppGraveyard:myGraveyard;
+  zone.querySelector('.sidezone-symbol').textContent=list.length?'✦':'♰';
+  zone.querySelector('.sidezone-label').textContent='Friedhof'+(list.length?' · '+list.length:'');
+ });
 }
+document.getElementById('myExtraDeck').addEventListener('click',()=>alert('Extra-Deck: Hier werden später deine Fusionsmonster angezeigt. Noch keine Fusionskarten enthalten.'));
+document.getElementById('oppExtraDeck').addEventListener('click',()=>alert('Extra-Deck des Gegners: Noch keine Fusionskarten enthalten.'));
+document.getElementById('myGraveZone').addEventListener('click',()=>alert(myGraveyard.length?myGraveyard.map(c=>c.name).join('\\n'):'Dein Friedhof ist leer.'));
+document.getElementById('oppGraveZone').addEventListener('click',()=>alert(oppGraveyard.length?oppGraveyard.map(c=>c.name).join('\\n'):'Der gegnerische Friedhof ist leer.'));
 function render(){$("hand").innerHTML=hand.map(cardHTML).join('');$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;}
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
