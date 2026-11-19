@@ -919,7 +919,7 @@ main{position:relative!important;overflow:hidden}
 .shadow-chain-label-213{font-size:clamp(8px,1.4vw,12px);font-weight:900;letter-spacing:.07em;color:#f4e8ff;background:#32135ec9;border:1px solid #c99dff;border-radius:5px;padding:2px 5px;text-shadow:0 0 5px #d5a4ff}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.25</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.26</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -940,7 +940,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '2.25';
+const APP_VERSION = '2.26';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -1358,6 +1358,23 @@ async function opponentTurn(){
  aiTurn++;
  const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn);
  log("Der Gegner ist am Zug.");
+ // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
+ // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
+ const freeAiSpellZone=oppSpell.findIndex(x=>!x);
+ if(freeAiSpellZone>=0){
+  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&x.name!=="Flammenstoß"));
+  if(setIndex<0){
+   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&x.name!=="Flammenstoß"));
+   if(deckIndex>=0){aiHand.push(aiDeck.splice(deckIndex,1)[0]);setIndex=aiHand.length-1;}
+  }
+  if(setIndex>=0){
+   const setCard=aiHand.splice(setIndex,1)[0];
+   setCard.faceDown=true;setCard.setTurn=aiTurn;
+   oppSpell[freeAiSpellZone]=setCard;
+   log("Die KI setzt eine Zauber- oder Fallenkarte verdeckt.");
+  }
+ }
+
  const spellIndex=aiHand.findIndex(x=>x.name==="Flammenstoß");
  if(spellIndex>=0&&myLP>0){sendToGraveyard(aiHand[spellIndex],"opponent");aiHand.splice(spellIndex,1);myLP=Math.max(0,myLP-500);log("Die gegnerische KI aktiviert Flammenstoß: Du verlierst 500 LP!");}
  const monsterIndex=aiHand.reduce((best,x,i)=>{
