@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-test-aschenritter">
+<meta name="arcane-build" content="20261119-starterdeck-feuer-arkan-v1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1015,27 +1015,29 @@ const deck=[
 {name:"Aschenritter",kind:"monster",emoji:"⚔️",atk:1400,def:1200,level:4,skin:"fire",effectText:"Wenn diese Karte offen beschworen wird: Füge deinem Gegner 300 LP Schaden zu."}
 ];
 function shuffleCards(cards){for(let i=cards.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}return cards}
-// Testmodus: Nur die neueste Karte ist garantiert auf der Starthand.
-// Bei jeder neuen Karte lediglich diesen Namen aktualisieren.
-const latestTestCardName="Aschenritter";
-// Ein Duell-Deck hat exakt 30 Karten. Jede verfügbare Karte ist einmal enthalten;
-// zusätzliche Plätze werden mit Monstern aufgefüllt (maximal 3 Exemplare je Karte).
+// Starterdeck 01: Feuer & Arkan — feste 30 Karten, keine garantierte Testkarte.
+const starterDeckList=[
+ ["Flammendrache",3],["Aschenritter",3],["Schattenwolf",2],
+ ["Frostwächter",2],["Arkaner Magier",2],["Donnerfalke",2],
+ ["Erdwächter",1],["Glutkoloss",1],
+ ["Flammenstoß",1],["Arkaner Segen",1],["Arkaner Wissensstrom",1],
+ ["Geisterruf",1],["Drachenatem",1],["Arkane Ernte",1],
+ ["Arkaner Sturm",1],["Seelenbergung",1],["Eisiger Rückstoß",1],
+ ["Heilende Quelle",1],["Arkaner Zerstörungsstrahl",1],
+ ["Schattenfessel",1],["Kristallschild",1],["Arkaner Rückschlag",1]
+];
 function createDuelDeck(){
- // Für den Test wird aus der gesamten Kartensammlung ein Deck mit maximal 30 Karten erstellt.
- // Die neueste Karte muss enthalten sein, damit sie auf der Starthand erscheinen kann.
- const selected=shuffleCards(deck.filter(c=>c.name!==latestTestCardName).slice()).slice(0,29);
- const newest=deck.find(c=>c.name===latestTestCardName);
- if(newest)selected.push(newest);
- const cards=selected.map(c=>({...c}));
- const monsters=shuffleCards(deck.filter(c=>c.kind==="monster").slice());
- let i=0;
- while(cards.length<30){cards.push({...monsters[i%monsters.length]});i++;}
+ const cards=[];
+ for(const [name,count] of starterDeckList){
+  const original=deck.find(c=>c.name===name);
+  if(!original)throw new Error("Starterdeck-Karte fehlt: "+name);
+  for(let i=0;i<count;i++)cards.push({...original});
+ }
+ if(cards.length!==30)throw new Error("Starterdeck muss 30 Karten enthalten: "+cards.length);
  return shuffleCards(cards);
 }
 let drawPile=createDuelDeck();
-const latestTestCardIndex=drawPile.findIndex(c=>c.name===latestTestCardName);
-const latestTestCard=latestTestCardIndex>=0?drawPile.splice(latestTestCardIndex,1)[0]:null;
-const testOpeningHand=latestTestCard?[latestTestCard,...drawPile.splice(0,4)]:drawPile.splice(0,5);
+const testOpeningHand=drawPile.splice(0,5);
 
 let aiDeck=createDuelDeck();
 let aiHand=aiDeck.splice(0,5),aiTurn=0;
