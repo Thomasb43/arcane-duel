@@ -351,9 +351,12 @@ main>section.board{transform:rotateX(var(--arena-tilt,13deg)) rotateY(var(--aren
 main>section.board{touch-action:pan-y}
 main>section.board h2,main>section.board .middle{touch-action:none;user-select:none;-webkit-user-select:none}
 main>section.board:active{cursor:grabbing}
+/* v1.52 – alle freien Spielfeldzonen dienen als 3D-Steuerfläche. */
+main>section.board.camera-dragging{transition:none!important}
+main>section.board .zone:not(.filled){touch-action:none}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.51</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.52</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="35" value="13" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -368,7 +371,7 @@ main>section.board:active{cursor:grabbing}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.51';
+const APP_VERSION = '1.52';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -705,8 +708,13 @@ let arenaGesture=null;
 document.querySelectorAll('main>section.board').forEach(board=>{
  board.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0)return;
-  if(e.target.closest('.zone,.zones,.field-card,.opponent-hand,.grave-pile,button,input,a,[role="button"]'))return;
+  if(e.target.closest('.field-card,.opponent-hand,.grave-pile,button,input,a,[role="button"]'))return;
+  const zone=e.target.closest('.zone');
+  // Leere Monster-/Zauberzonen dürfen die Kamera steuern; belegte eigene Monster bleiben für Angriffe reserviert.
+  if(zone&&zone.closest('#myMon')&&myMon[Number(zone.dataset.index)])return;
+  if(zone&&zone.querySelector('.field-card'))return;
   arenaGesture={id:e.pointerId,board,x:e.clientX,y:e.clientY,turn:arenaTurn,tilt:arenaTilt};
+  board.classList.add('camera-dragging');
   board.setPointerCapture(e.pointerId);
  },{passive:true});
  board.addEventListener('pointermove',e=>{
@@ -718,7 +726,7 @@ document.querySelectorAll('main>section.board').forEach(board=>{
   arenaTilt=Math.max(0,Math.min(35,arenaGesture.tilt-dy*.16));
   applyArenaCamera();
  },{passive:false});
- const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board)arenaGesture=null};
+ const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board){arenaGesture=null;board.classList.remove('camera-dragging')}};
  board.addEventListener('pointerup',stop);
  board.addEventListener('pointercancel',stop);
  board.addEventListener('lostpointercapture',stop);
