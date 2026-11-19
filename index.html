@@ -617,9 +617,37 @@ main{position:relative;isolation:isolate}
  .hand{height:104px!important}.hand .card{height:94px!important}
 }
 
+
+/* v1.69 – proportionale Korrektur anhand der Originalvorlage: keine Hand-Überlappung. */
+@media(max-width:649px){
+ main{gap:3px!important;padding-top:4px!important}
+ .arena-world{gap:2px!important;transform:rotateX(0deg)!important}
+ .arena-stage{perspective:none!important}
+ .arena-world>section.board{padding:0!important}
+ .arena-world .zones{gap:5px!important;padding:3px 0!important}
+ .arena-world .zone{min-height:clamp(52px,7.1svh,69px)!important;border-radius:8px!important}
+ .arena-stage::before{width:78vw!important;height:78vw!important;opacity:.73!important}
+ .opponent-fixed-ui{min-height:clamp(170px,22svh,205px)!important}
+ .player-fixed-ui{min-height:clamp(128px,16svh,155px)!important}
+ .duelist-opponent{top:-12px!important;left:-10px!important;width:clamp(135px,38vw,175px)!important;height:clamp(155px,20svh,185px)!important}
+ .duelist-player{top:-4px!important;right:-8px!important;bottom:auto!important;width:clamp(135px,38vw,175px)!important;height:clamp(125px,16svh,150px)!important}
+ .duelist-portrait img{object-position:center bottom!important}
+ .opponent-fixed-ui .field-topline{padding-right:66px!important}
+ .player-fixed-ui .field-bottomline{padding-left:66px!important}
+ .lp-row{width:58%!important;max-width:58%!important;min-height:clamp(49px,6svh,56px)!important}
+ .lp-row .lp{font-size:clamp(21px,5.5vw,28px)!important}
+ .sidezone{width:clamp(54px,13.5vw,64px)!important;height:clamp(55px,7svh,67px)!important}
+ .handtitle{position:relative!important;z-index:5!important}
+ .hand{position:relative!important;z-index:5!important}
+ .duelist-player{z-index:1!important}
+}
+@media(min-width:650px){
+ .arena-world{transform:rotateX(0deg)!important}
+ .duelist-player{top:-10px!important;bottom:auto!important;height:160px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.68</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.69</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
