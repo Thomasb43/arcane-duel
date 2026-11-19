@@ -744,9 +744,18 @@ main{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fw
 .arena-stage::after{opacity:1!important;text-shadow:0 0 8px #fff,0 0 20px #54cfff,0 0 38px #5075ff!important}
 .arena-world::after{box-shadow:0 0 12px #7bc9ff,0 0 28px #7c65ff!important}
 body::before{background:radial-gradient(ellipse 65% 35% at 10% 23%,#862bc87c,transparent 85%),radial-gradient(ellipse 65% 48% at 88% 69%,#2368d57b,transparent 85%),linear-gradient(165deg,#08091f,#170d3b 29%,#0a1641 60%,#080d24)!important}
+/* v1.83 – Arkane Kathedrale: echtes Architekturmotiv mit animierbarer Charakter-Farbpalette. */
+main{--arena-primary:156,67,255;--arena-secondary:48,151,255;background-image:url("artwork/arcane-cathedral.svg")!important;background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;isolation:isolate}
+main::before{display:block!important;content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.75;background:radial-gradient(ellipse 42% 25% at 10% 22%,rgba(var(--arena-primary),.42),transparent 90%),radial-gradient(ellipse 48% 33% at 90% 74%,rgba(var(--arena-secondary),.34),transparent 90%),linear-gradient(115deg,transparent 35%,rgba(var(--arena-primary),.12) 50%,transparent 65%);animation:cathedralBreath 9s ease-in-out infinite alternate!important}
+main>.arena-fixed-ui,main>.arena-stage,main>section{position:relative;z-index:1}
+.arena-stage::before{opacity:.09!important}
+.arena-stage::after{animation:cathedralCrystal 3.8s ease-in-out infinite alternate!important}
+@keyframes cathedralBreath{0%{opacity:.48;filter:hue-rotate(0deg);transform:translateY(0)}100%{opacity:.92;filter:hue-rotate(7deg);transform:translateY(-5px)}}
+@keyframes cathedralCrystal{0%{opacity:.6;filter:drop-shadow(0 0 4px rgba(var(--arena-secondary),.5))}100%{opacity:1;filter:drop-shadow(0 0 15px rgba(var(--arena-secondary),.95))}}
+@media(prefers-reduced-motion:reduce){main::before,.arena-stage::after{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.82</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.83</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -766,7 +775,7 @@ body::before{background:radial-gradient(ellipse 65% 35% at 10% 23%,#862bc87c,tra
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.82';
+const APP_VERSION = '1.83';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -1133,4 +1142,24 @@ document.querySelectorAll('.arena-world>section.board').forEach(board=>{
  board.addEventListener('pointercancel',stop);
  board.addEventListener('lostpointercapture',stop);
 });
+
+// Charakterabhängige Arena-Farben: bei späterer Charakterauswahl setArenaCharacterTheme(name) aufrufen.
+const arenaCharacterPalettes={
+ magierin:['156,67,255','48,151,255'],
+ krieger:['255,159,51','255,76,55'],
+ feuer:['255,82,40','255,180,53'],
+ eis:['55,185,255','123,231,255'],
+ natur:['53,207,126','151,239,95'],
+ schatten:['169,65,232','83,72,190']
+};
+window.setArenaCharacterTheme=function(name){
+ const key=String(name||'magierin').toLowerCase();
+ const palette=arenaCharacterPalettes[key]||arenaCharacterPalettes.magierin;
+ const arena=document.querySelector('main');
+ if(!arena)return;
+ arena.style.setProperty('--arena-primary',palette[0]);
+ arena.style.setProperty('--arena-secondary',palette[1]);
+ arena.dataset.characterTheme=key;
+};
+window.setArenaCharacterTheme('magierin');
 </script></body></html>
