@@ -895,9 +895,20 @@ main{position:relative!important;overflow:hidden}
  .hand .card{height:clamp(101px,12svh,114px)!important;flex-basis:clamp(75px,20vw,94px)!important}
  .player-fixed-ui .player-sidezones .sidezone{height:clamp(48px,5.8svh,56px)!important;min-height:0!important}
 }
+/* v2.05 – Angriff unterbrechen und Kristallschild direkt als Reaktion wählen. */
+.trap-choice-overlay[hidden]{display:none!important}
+.trap-choice-overlay{position:fixed;inset:0;z-index:2000;background:rgba(7,7,25,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.trap-choice-panel{width:min(92vw,370px);border:2px solid #b6eaff;border-radius:17px;background:linear-gradient(155deg,#253c73,#17152f 80%);box-shadow:0 0 35px #6ecfff88;padding:22px 18px;text-align:center;color:#f8faff}
+.trap-choice-icon{font-size:52px;filter:drop-shadow(0 0 16px #8deaff)}
+.trap-choice-panel h3{margin:8px 0;color:#b9eaff;font-size:22px}
+.trap-choice-panel p{line-height:1.5}
+.trap-choice-actions{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.trap-choice-actions button{flex:1;padding:12px 7px;font-size:13px;font-weight:800;border-radius:9px}
+#trapYes205{background:linear-gradient(135deg,#7bdcff,#5279df);color:#08142b}
+#trapNo205{background:#333c5a;color:#f5f5ff;border:1px solid #8c9bc1}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.04</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.05</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -912,13 +923,13 @@ main{position:relative!important;overflow:hidden}
 <section><div class="handtitle"><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
-<div id="battleFx" aria-hidden="true"><span>✨</span></div>
+<div class="trap-choice-overlay" id="trapChoice205" role="dialog" aria-modal="true" aria-labelledby="trapChoiceTitle205" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">💠</div><h3 id="trapChoiceTitle205">Kristallschild</h3><p>Der Gegner greift an! Möchtest du Kristallschild aktivieren und den nächsten Kampfschaden an deinen LP verhindern?</p><div class="trap-choice-actions"><button id="trapYes205" type="button">Aktivieren</button><button id="trapNo205" type="button">Nicht aktivieren</button></div></div></div><div id="battleFx" aria-hidden="true"><span>✨</span></div>
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '2.04';
+const APP_VERSION = '2.05';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -1248,8 +1259,24 @@ $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in e
 $("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
+let trapDecisionPending205=false;
+function offerCrystalShield205(){
+ const i=mySpell.findIndex(c=>c&&c.name==="Kristallschild"&&c.kind==="trap"&&turn>c.setTurn);
+ if(i<0||crystalShield)return Promise.resolve(false);
+ trapDecisionPending205=true;const overlay=$("trapChoice205");overlay.hidden=false;$("end").disabled=true;
+ return new Promise(resolve=>{
+  function choose(yes){
+   overlay.hidden=true;trapDecisionPending205=false;$("end").disabled=false;
+   $("trapYes205").removeEventListener("click",accept);$("trapNo205").removeEventListener("click",decline);
+   if(yes){const card=mySpell[i];if(card&&card.name==="Kristallschild"){sendToGraveyard(card);mySpell[i]=null;crystalShield=true;log("💠 Kristallschild als Reaktion auf den Angriff aktiviert!");render();}}
+   resolve(yes);
+  }
+  const accept=()=>choose(true),decline=()=>choose(false);
+  $("trapYes205").addEventListener("click",accept);$("trapNo205").addEventListener("click",decline);
+ });
+}
 let aiFxQueue=[];
-function opponentTurn(){
+async function opponentTurn(){
  aiTurn++;
  const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn);
  log("Der Gegner ist am Zug.");
@@ -1285,6 +1312,7 @@ function opponentTurn(){
   const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;
   const targets=myMon.map((m,i)=>({m,i})).filter(x=>x.m);
   if(!targets.length){
+   await offerCrystalShield205();
    if(crystalShield){crystalShield=false;log("Dein Kristallschild blockiert den direkten KI-Angriff!");}
    else{myLP=Math.max(0,myLP-effectiveAtk(a));log("Die KI greift direkt an! Du verlierst "+effectiveAtk(a)+" LP.");}
    a.attacksThisTurn=1;continue;
@@ -1292,7 +1320,10 @@ function opponentTurn(){
   let target=targets.filter(x=>x.m.position!=="defense"&&effectiveAtk(a)>=effectiveAtk(x.m)).sort((x,y)=>effectiveAtk(x.m)-effectiveAtk(y.m))[0];
   if(!target)target=targets.filter(x=>effectiveAtk(a)>effectiveDef(x.m)).sort((x,y)=>effectiveDef(x.m)-effectiveDef(y.m))[0];
   if(!target)target=targets.sort((x,y)=>(x.m.position==="defense"?effectiveDef(x.m):effectiveAtk(x.m))-(y.m.position==="defense"?effectiveDef(y.m):effectiveAtk(y.m)))[0];
-  const d=target.m,di=target.i;aiFxQueue.push({from:entry.i,to:di,card:{...a},defending:d.position==='defense'});
+  const d=target.m,di=target.i;
+  const expectedDamage=d.position==="defense"?Math.max(0,effectiveDef(d)-effectiveAtk(a)):Math.max(0,effectiveAtk(a)-effectiveAtk(d));
+  if(expectedDamage>0)await offerCrystalShield205();
+  aiFxQueue.push({from:entry.i,to:di,card:{...a},defending:d.position==='defense'});
   if(d.faceDown){d.faceDown=false;triggerMonsterEvent(d,"flip","player",di);log("Dein verdecktes Monster wird durch den KI-Angriff aufgedeckt!");}
   if(d.position==="defense"){
    if(effectiveAtk(a)>effectiveDef(d)){sendToGraveyard(d);myMon[di]=null;log("Die KI zerstört "+d.name+" in Verteidigungsposition.");}
@@ -1308,12 +1339,12 @@ function opponentTurn(){
  }
  render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending),n*520));aiFxQueue=[];if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
 }
-$("end").onclick=()=>{
+$("end").onclick=async()=>{if(trapDecisionPending205)return;
  myMon.forEach(m=>{if(m){m.tempAtkBonus=0;m.tempDefBonus=0;m.maxAttacksPerTurn=1;m.attacksThisTurn=0}});
  turn++;phase="main1";normalSummonUsed=false;
  let drawn=drawPile.shift();if(drawn){hand.push(drawn);newlyDrawnCard=drawn;}
  if(drawn)log("Du ziehst "+drawn.name+". Die gegnerische KI bereitet ihren Zug vor.");else log("Dein Deck ist leer. Die gegnerische KI ist am Zug.");
- render();if(myLP>0&&oppLP>0)opponentTurn();
+ render();if(myLP>0&&oppLP>0)await opponentTurn();
 };
 render();
 
