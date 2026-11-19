@@ -2,7 +2,36 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10152b"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
+<meta name="theme-color" content="#10152b">
+<meta name="arcane-build" content="20261119-auto-update-1">
+<script>
+/* Automatische Test-App-Aktualisierung – funktioniert auch im iOS-Home-Bildschirm-Modus. */
+(function(){
+ const build='20261119-auto-update-1';
+ let checking=false,lastCheck=0;
+ async function checkForUpdate(){
+  if(checking||Date.now()-lastCheck<20000)return;
+  checking=true;lastCheck=Date.now();
+  try{
+   const url=new URL('./index.html',location.href);
+   url.searchParams.set('_arcane_check',String(Date.now()));
+   const response=await fetch(url.toString(),{cache:'no-store',redirect:'follow'});
+   if(!response.ok)return;
+   const html=await response.text();
+   const found=html.match(/<meta\s+name=["']arcane-build["']\s+content=["']([^"']+)/i);
+   if(!found||found[1]===build)return;
+   const target=new URL(location.href);
+   target.searchParams.set('_arcane_build',found[1]);
+   location.replace(target.toString());
+  }catch(err){/* Offline: aktuelle Version weiterspielen. */}
+  finally{checking=false;}
+ }
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdate();});
+ window.addEventListener('pageshow',()=>checkForUpdate());
+ window.addEventListener('focus',()=>checkForUpdate());
+ setInterval(()=>{if(!document.hidden)checkForUpdate();},60000);
+})();
+</script><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#26365f 0,#11172d 55%,#090d1c 100%);color:#f5f1e7;font:14px system-ui,-apple-system,sans-serif;min-height:100vh}
