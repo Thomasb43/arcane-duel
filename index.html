@@ -868,9 +868,17 @@ main{position:relative!important;overflow:hidden}
  .player-fixed-ui .field-end-turn{left:12px!important;top:6px!important}
  .player-fixed-ui .field-bottomline{padding-left:145px!important}
 }
+/* v1.99 – sichtbare Flugbahn zum Ziel, magischer Schild und LP-Einschlag. */
+.battle-travel-199{position:fixed;z-index:1001;pointer-events:none;font-size:38px;line-height:1;filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 18px #a981ff);animation:battleTravel199 .65s cubic-bezier(.25,.4,.2,1) forwards}
+@keyframes battleTravel199{0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}18%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--travel-x)),calc(-50% + var(--travel-y))) scale(1.65)}}
+.battle-shield-199{position:fixed;z-index:1000;pointer-events:none;width:86px;height:86px;border:3px solid #a5eaff;border-radius:50%;background:radial-gradient(circle,rgba(136,225,255,.35),rgba(81,119,255,.1) 65%,transparent);box-shadow:0 0 22px #8adfff,inset 0 0 19px #a5eaff;animation:battleShield199 .65s ease-out forwards}
+@keyframes battleShield199{0%{opacity:0;transform:translate(-50%,-50%) scale(.45)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
+.lp-impact-199{animation:lpImpact199 .55s ease-out!important}
+@keyframes lpImpact199{0%,100%{filter:brightness(1)}35%{filter:brightness(2.5) drop-shadow(0 0 18px #ff6767)}}
+@media(prefers-reduced-motion:reduce){.battle-travel-199,.battle-shield-199,.lp-impact-199{animation-duration:.1s!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.98</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.99</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -891,7 +899,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.98';
+const APP_VERSION = '1.99';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -964,15 +972,34 @@ function animateZone(type,index,cls){
  zone.classList.remove(cls);void zone.offsetWidth;zone.classList.add(cls);
  zone.addEventListener('animationend',()=>zone.classList.remove(cls),{once:true});
 }
-function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥'){
- const source=(fromType==='myMon'?myMon:oppMon)[fromIndex];
+function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥',attackingCard=null,defending=false){
+ const source=attackingCard||(fromType==='myMon'?myMon:oppMon)[fromIndex];
  if(source){const n=String(source.name||'').toLowerCase();emoji=/flamm|glut|feuer/.test(n)?'🔥':/frost|eis/.test(n)?'❄️':/donner|blitz/.test(n)?'⚡':/schatten/.test(n)?'🌑':/erd|natur/.test(n)?'🌿':emoji;}
+ const sourceZone=document.querySelector('#'+fromType+' [data-index="'+fromIndex+'"]');
+ const direct=toIndex<0;
+ const targetZone=direct?$(toType==='oppMon'?'oppLP':'myLP'):document.querySelector('#'+toType+' [data-index="'+toIndex+'"]');
+ if(sourceZone&&targetZone){
+  const from=sourceZone.getBoundingClientRect(),to=targetZone.getBoundingClientRect();
+  const trail=document.createElement('div');trail.className='battle-travel-199';trail.textContent=emoji;
+  trail.style.left=(from.left+from.width/2)+'px';trail.style.top=(from.top+from.height/2)+'px';
+  trail.style.setProperty('--travel-x',(to.left+to.width/2-from.left-from.width/2)+'px');
+  trail.style.setProperty('--travel-y',(to.top+to.height/2-from.top-from.height/2)+'px');
+  document.body.appendChild(trail);setTimeout(()=>trail.remove(),850);
+ }
  animateZone(fromType,fromIndex,'attack-lunge');
- if(toIndex>=0)animateZone(toType,toIndex,'impact-hit');
+ if(!direct)animateZone(toType,toIndex,'impact-hit');
  const fx=$('battleFx'),span=fx&&fx.querySelector('span');
  if(fx&&span){span.textContent=emoji;fx.classList.remove('active');void fx.offsetWidth;fx.classList.add('active');}
- const targetZone=toIndex>=0?document.querySelector('#'+toType+' [data-index="'+toIndex+'"]'):null;
- if(targetZone){const rect=targetZone.getBoundingClientRect();const burst=document.createElement('div');burst.className='combat-element-burst';burst.textContent=emoji;burst.style.left=(rect.left+rect.width/2)+'px';burst.style.top=(rect.top+rect.height/2)+'px';document.body.appendChild(burst);setTimeout(()=>burst.remove(),950);}
+ if(targetZone){
+  const rect=targetZone.getBoundingClientRect();
+  setTimeout(()=>{
+   const burst=document.createElement('div');burst.className='combat-element-burst';burst.textContent=defending?'🛡️':emoji;
+   burst.style.left=(rect.left+rect.width/2)+'px';burst.style.top=(rect.top+rect.height/2)+'px';
+   document.body.appendChild(burst);setTimeout(()=>burst.remove(),950);
+   if(defending){const shield=document.createElement('div');shield.className='battle-shield-199';shield.style.left=(rect.left+rect.width/2)+'px';shield.style.top=(rect.top+rect.height/2)+'px';document.body.appendChild(shield);setTimeout(()=>shield.remove(),700);}
+   if(direct){targetZone.classList.remove('lp-impact-199');void targetZone.offsetWidth;targetZone.classList.add('lp-impact-199');setTimeout(()=>targetZone.classList.remove('lp-impact-199'),600);}
+  },330);
+ }
 }
 
 function monsterDestructionFx(card,owner){
@@ -1048,7 +1075,7 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
  chosenMonster=-1;chosenTarget=-1;
- render();playBattleFx('myMon',monsterIndex,'oppMon',emptyZoneIndex,'💥');
+ render();playBattleFx('myMon',monsterIndex,'oppMon',-1,'💥',attacker);
  log(attacker.name+" greift durch die leere gegnerische Monsterzone direkt an: "+damage+" Schaden! Der Gegner hat noch "+oppLP+" LP.");
  if(oppLP<=0)log("Du hast das Testduell gewonnen!");
 }
@@ -1172,7 +1199,7 @@ $("position").onclick=()=>{if(!isMainPhase()){log("Die Position kann nur in eine
 $("effect").onclick=()=>{if(!isMainPhase()){log("Monstereffekte können in einer Hauptphase aktiviert werden.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Wähle zuerst ein eigenes Monster aus.');return}let c=myMon[chosenMonster];if(c.faceDown){log('Ein verdecktes Monster kann seinen Effekt nicht aktivieren. Es muss zuerst aufgedeckt werden.');return}if(c.effectUsedTurn===turn){log('Der Effekt dieses Monsters wurde in diesem Zug bereits verwendet.');return}if(c.name==='Flammendrache'){c.tempAtkBonus=500;c.effectUsedTurn=turn;render();log('Flammendrache aktiviert seinen Effekt: +500 ATK bis zum Ende deines Zuges!');return}if(c.name==='Frostwächter'){c.tempDefBonus=500;c.effectUsedTurn=turn;render();log('Frostwächter aktiviert seinen Effekt: +500 DEF bis zum Ende deines Zuges!');return}if(c.name==='Schattenwolf'){c.tempAtkBonus=400;c.maxAttacksPerTurn=2;c.effectUsedTurn=turn;render();log('Schattenwolf aktiviert seinen Effekt: +400 ATK und darf in diesem Zug bis zu zweimal angreifen!');return}log('Dieses Monster besitzt in der aktuellen Testversion noch keinen aktivierbaren Effekt.')};
 $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase aktiviert werden.");return}if(chosenSpell<0||!mySpell[chosenSpell]){log('Wähle zuerst eine gesetzte Zauber- oder Fallenkarte auf deinem Feld.');return}let c=mySpell[chosenSpell];if(c.kind==='spell'){if(c.name==='Flammenstoß'){oppLP=Math.max(0,oppLP-500);sendToGraveyard(c);mySpell[chosenSpell]=null;log('Flammenstoß entfesselt eine Feuerwelle! Der Gegner verliert 500 LP.')}else{log('Dieser Zauber hat noch keinen programmierten Effekt.');return}}else if(c.kind==='trap'){if(turn<=c.setTurn){log('Eine Falle kann erst ab deinem nächsten Zug aktiviert werden.');return}if(c.name==='Kristallschild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}let target=chosenTarget;if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',attackTo,'💥');if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let aiFxQueue=[];
@@ -1219,7 +1246,7 @@ function opponentTurn(){
   let target=targets.filter(x=>x.m.position!=="defense"&&effectiveAtk(a)>=effectiveAtk(x.m)).sort((x,y)=>effectiveAtk(x.m)-effectiveAtk(y.m))[0];
   if(!target)target=targets.filter(x=>effectiveAtk(a)>effectiveDef(x.m)).sort((x,y)=>effectiveDef(x.m)-effectiveDef(y.m))[0];
   if(!target)target=targets.sort((x,y)=>(x.m.position==="defense"?effectiveDef(x.m):effectiveAtk(x.m))-(y.m.position==="defense"?effectiveDef(y.m):effectiveAtk(y.m)))[0];
-  const d=target.m,di=target.i;aiFxQueue.push({from:entry.i,to:di});
+  const d=target.m,di=target.i;aiFxQueue.push({from:entry.i,to:di,card:{...a},defending:d.position==='defense'});
   if(d.faceDown){d.faceDown=false;log("Dein verdecktes Monster wird durch den KI-Angriff aufgedeckt!");}
   if(d.position==="defense"){
    if(effectiveAtk(a)>effectiveDef(d)){sendToGraveyard(d);myMon[di]=null;log("Die KI zerstört "+d.name+" in Verteidigungsposition.");}
@@ -1233,7 +1260,7 @@ function opponentTurn(){
   else{sendToGraveyard(a,"opponent");sendToGraveyard(d);oppMon[entry.i]=null;myMon[di]=null;log("Beide Monster werden im Kampf zerstört!");}
   a.attacksThisTurn=1;if(myLP<=0)break;
  }
- render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥'),n*520));aiFxQueue=[];if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
+ render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending),n*520));aiFxQueue=[];if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
 }
 $("end").onclick=()=>{
  myMon.forEach(m=>{if(m){m.tempAtkBonus=0;m.tempDefBonus=0;m.maxAttacksPerTurn=1;m.attacksThisTurn=0}});
