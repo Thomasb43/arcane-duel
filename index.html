@@ -683,9 +683,24 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 .opponent-lp{margin:0!important}
 .player-lp{margin:0!important}
 @media(max-width:649px){.lp-row{width:clamp(172px,44vw,230px)!important;max-width:unset!important;height:44px!important;min-height:44px!important}.lp-row .lp{font-size:clamp(21px,5.5vw,27px)!important}}
+/* v1.72 – LP wie in Design 2: kurze Plaketten statt bildschirmbreiter Balken. */
+.opponent-fixed-ui .field-topline,.player-fixed-ui .field-bottomline{display:flex!important;align-items:center!important;justify-content:flex-start!important;overflow:visible!important}
+.opponent-fixed-ui .field-topline{padding:0!important;margin:0!important}
+.player-fixed-ui .field-bottomline{padding:0 0 0 78px!important;margin:0!important}
+.opponent-fixed-ui .lp-row,.player-fixed-ui .lp-row{flex:0 0 215px!important;width:215px!important;max-width:215px!important;min-width:215px!important;height:44px!important;min-height:44px!important;margin:0!important;padding:2px!important;align-self:flex-start!important}
+.lp-row{clip-path:none!important;overflow:visible!important;background:transparent!important;filter:drop-shadow(0 0 5px #e9a84777)!important}
+.lp-row::before{inset:0!important;z-index:0!important;background:linear-gradient(120deg,#ffe8a3,#b9782b 25%,#ffe7a4 48%,#a16c2c 77%,#ffde8e)!important;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)!important}
+.lp-row .lp{position:relative!important;z-index:2!important;display:flex!important;align-items:center!important;justify-content:center!important;height:40px!important;margin:2px!important;width:calc(100% - 4px)!important;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)!important;background:linear-gradient(100deg,#0b0d26,#161c3a 52%,#0a1028)!important;font-size:23px!important}
+.lp-row::after{bottom:-10px!important}
+@media(max-width:649px){
+.opponent-fixed-ui .lp-row,.player-fixed-ui .lp-row{flex:0 0 200px!important;width:200px!important;max-width:200px!important;min-width:200px!important;height:42px!important;min-height:42px!important}
+.lp-row .lp{height:38px!important;font-size:22px!important}
+.player-fixed-ui .field-bottomline{padding-left:75px!important}
+}
+@media(max-width:380px){.opponent-fixed-ui .lp-row,.player-fixed-ui .lp-row{flex-basis:180px!important;width:180px!important;max-width:180px!important;min-width:180px!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.71</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.72</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -705,7 +720,7 @@ radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transpare
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.71';
+const APP_VERSION = '1.72';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
