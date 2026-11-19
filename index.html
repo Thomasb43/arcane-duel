@@ -354,11 +354,14 @@ main>section.board:active{cursor:grabbing}
 /* v1.52 – alle freien Spielfeldzonen dienen als 3D-Steuerfläche. */
 main>section.board.camera-dragging{transition:none!important}
 main>section.board .zone:not(.filled){touch-action:none}
+/* v1.53 – Spielfelder bleiben in Ruhe starr; nur die Fingerbewegung dreht die Perspektive. */
+main>section.board{transform:rotateX(var(--arena-tilt,0deg)) rotateY(var(--arena-turn,0deg));transition:none!important}
+main>section.board.camera-dragging{transition:none!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.52</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.53</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
-<div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="35" value="13" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
+<div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="-25" max="35" value="0" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
@@ -371,7 +374,7 @@ main>section.board .zone:not(.filled){touch-action:none}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.52';
+const APP_VERSION = '1.53';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -688,7 +691,7 @@ $("end").onclick=()=>{
 render();
 
 /* Bewegliche 3D-Spielfeldkamera – Kartengesten bleiben unverändert. */
-let arenaTilt=13,arenaTurn=0;
+let arenaTilt=0,arenaTurn=0;
 function applyArenaCamera(){
  document.querySelectorAll('main>section.board').forEach(board=>{
   board.style.setProperty('--arena-tilt',arenaTilt+'deg');
@@ -700,7 +703,7 @@ function applyArenaCamera(){
 document.getElementById('cameraTilt').addEventListener('input',e=>{arenaTilt=Number(e.target.value);applyArenaCamera()});
 document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Math.max(-28,arenaTurn-7);applyArenaCamera()});
 document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
-document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=13;arenaTurn=0;applyArenaCamera()});
+document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=0;arenaTurn=0;applyArenaCamera()});
 applyArenaCamera();
 /* Mit einem Finger die Perspektive direkt auf freien Spielfeldflächen verändern.
    Kartenzonen, Karten und Spielsteuerung behalten ihre eigenen Wischgesten. */
@@ -723,7 +726,7 @@ document.querySelectorAll('main>section.board').forEach(board=>{
   if(Math.abs(dx)+Math.abs(dy)<3)return;
   if(e.cancelable)e.preventDefault();
   arenaTurn=Math.max(-28,Math.min(28,arenaGesture.turn+dx*.18));
-  arenaTilt=Math.max(0,Math.min(35,arenaGesture.tilt-dy*.16));
+  arenaTilt=Math.max(-25,Math.min(35,arenaGesture.tilt-dy*.16));
   applyArenaCamera();
  },{passive:false});
  const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board){arenaGesture=null;board.classList.remove('camera-dragging')}};
