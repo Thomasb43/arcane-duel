@@ -1478,8 +1478,13 @@ render();
   const zone=e.target.closest('[data-index]');if(!zone)return;
   const i=Number(zone.dataset.index),monster=myMon[i];
   if(!monster||pendingTribute||pendingPlacement||pendingBlessingZone>=0)return;
-  e.preventDefault();e.stopImmediatePropagation();close();chosenMonster=i;
-  picker=document.createElement('div');picker.className='monster-position-picker';
+  e.preventDefault();e.stopImmediatePropagation();if(picker&&picker.dataset.zone===String(i)){close();return;}close();chosenMonster=i;
+  picker=document.createElement('div');picker.className='monster-position-picker';picker.dataset.zone=String(i);
+  const dismiss=document.createElement('button');dismiss.type='button';dismiss.textContent='✕';dismiss.setAttribute('aria-label','Schließen');dismiss.addEventListener('click',ev=>{ev.stopPropagation();close();});picker.appendChild(dismiss);
+  if(!monster.faceDown){
+   const info=document.createElement('button');info.type='button';info.textContent='📜 Effekt';
+   info.addEventListener('click',ev=>{ev.stopPropagation();close();showCardInfo(monster,'monster',monster.effectText&&['Flammendrache','Frostwächter','Schattenwolf'].includes(monster.name)&&monster.effectUsedTurn!==turn?()=>{chosenMonster=i;$("effect").click();}:null);});picker.appendChild(info);
+  }
   for(const [mode,label] of [['attack','⚔ Angriff'],['defense','🛡 Verteidigung']]){
    const button=document.createElement('button');button.type='button';button.textContent=label;
    button.disabled=!isMainPhase()||monster.summonedTurn===turn||(monster.faceDown?mode!=='attack':monster.position===mode);
