@@ -363,14 +363,25 @@ main>section.board{transform:rotateX(16deg)!important;transform-origin:50% 50%!i
 /* v1.55 – beide Spielfelder bewegen sich als starre Einheit in dieselbe Richtung. */
 main{perspective:850px!important;perspective-origin:50% 50%!important}
 main>section.board{transform:translate3d(var(--camera-shift-x,0px),var(--camera-shift-y,0px),0) rotateX(16deg)!important;transition:none!important}
+
+/* v1.56 – ein gemeinsames perspektivisches Duellfeld wie in der Referenz. */
+main{perspective:none!important}
+.arena-stage{perspective:950px;perspective-origin:50% 48%;width:100%;min-width:0;position:relative}
+.arena-world{display:grid;gap:12px;transform-origin:50% 50%;transform:rotateX(var(--view-tilt,35deg)) rotateY(var(--view-turn,0deg));transform-style:preserve-3d;will-change:transform;position:relative}
+.arena-world>section.board{transform:none!important;transition:none!important;width:100%;min-width:0}
+.arena-world .zone{transform-style:preserve-3d}
+@media(max-width:649px){.arena-stage{perspective:720px}.arena-world{gap:10px}}
+@media(prefers-reduced-motion:reduce){.arena-world{will-change:auto}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.55</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.56</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
-<div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="-25" max="35" value="0" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
+<div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
+<div class="arena-stage"><div class="arena-world">
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
+</div></div>
 <section><div class="handtitle"><button id="end" class="end-turn">Zug beenden</button><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
@@ -380,7 +391,7 @@ main>section.board{transform:translate3d(var(--camera-shift-x,0px),var(--camera-
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.55';
+const APP_VERSION = '1.56';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -697,23 +708,24 @@ $("end").onclick=()=>{
 render();
 
 /* Kamerastandpunkt ändern: Beide Felder behalten dieselbe feste Geometrie. */
-let arenaTilt=0,arenaTurn=0;
+let arenaTilt=35,arenaTurn=0;
 const arenaMain=document.querySelector('main');
 function applyArenaCamera(){
  // Perspektivzentrum verschieben statt die Spielfelder zu drehen.
  // Identische Kameraverschiebung auf BEIDE Felder: keine gegenläufige Bewegung.
- arenaMain.style.setProperty('--camera-shift-x',(arenaTurn*2.1)+'px');
- arenaMain.style.setProperty('--camera-shift-y',(arenaTilt*1.8)+'px');
+ const world=document.querySelector('.arena-world');
+ world.style.setProperty('--view-tilt',arenaTilt+'deg');
+ world.style.setProperty('--view-turn',arenaTurn+'deg');
  const slider=document.getElementById('cameraTilt');
  if(slider)slider.value=arenaTilt;
 }
 document.getElementById('cameraTilt').addEventListener('input',e=>{arenaTilt=Number(e.target.value);applyArenaCamera()});
 document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Math.max(-28,arenaTurn-7);applyArenaCamera()});
 document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
-document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=0;arenaTurn=0;applyArenaCamera()});
+document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=35;arenaTurn=0;applyArenaCamera()});
 applyArenaCamera();
 let arenaGesture=null;
-document.querySelectorAll('main>section.board').forEach(board=>{
+document.querySelectorAll('.arena-world>section.board').forEach(board=>{
  board.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0)return;
   if(e.target.closest('.field-card,.opponent-hand,.grave-pile,button,input,a,[role="button"]'))return;
@@ -729,7 +741,7 @@ document.querySelectorAll('main>section.board').forEach(board=>{
   if(Math.abs(dx)+Math.abs(dy)<3)return;
   if(e.cancelable)e.preventDefault();
   arenaTurn=Math.max(-28,Math.min(28,arenaGesture.turn+dx*.18));
-  arenaTilt=Math.max(-25,Math.min(35,arenaGesture.tilt-dy*.16));
+  arenaTilt=Math.max(0,Math.min(58,arenaGesture.tilt-dy*.22));
   applyArenaCamera();
  },{passive:false});
  const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board)arenaGesture=null};
