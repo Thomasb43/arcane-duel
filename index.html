@@ -367,7 +367,7 @@ main>section.board{transform:translate3d(var(--camera-shift-x,0px),var(--camera-
 /* v1.56 – ein gemeinsames perspektivisches Duellfeld wie in der Referenz. */
 main{perspective:none!important}
 .arena-stage{perspective:950px;perspective-origin:50% 48%;width:100%;min-width:0;position:relative}
-.arena-world{display:grid;gap:12px;transform-origin:50% 50%;transform:rotateX(var(--view-tilt,35deg)) rotateY(var(--view-turn,0deg));transform-style:preserve-3d;will-change:transform;position:relative}
+.arena-world{display:grid;gap:12px;transform-origin:50% 50%;transform:rotateX(var(--view-tilt,35deg));transform-style:preserve-3d;will-change:transform;position:relative}
 .arena-world>section.board{transform:none!important;transition:none!important;width:100%;min-width:0}
 .arena-world .zone{transform-style:preserve-3d}
 @media(max-width:649px){.arena-stage{perspective:720px}.arena-world{gap:10px}}
@@ -379,9 +379,12 @@ main{perspective:none!important}
 .arena-fixed-ui .opponent-hand-wrap{margin:0!important}
 .arena-fixed-ui .field-topline,.arena-fixed-ui .field-bottomline{margin:2px 10px!important}
 .player-fixed-ui{margin-top:-2px}
+/* v1.58 – keine seitliche Neigung: nur noch Vor-/Zurück-Kamerawinkel. */
+.arena-world{transform:rotateX(var(--view-tilt,35deg))!important}
+#cameraLeft,#cameraRight{display:none!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.57</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.58</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -400,7 +403,7 @@ main{perspective:none!important}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.57';
+const APP_VERSION = '1.58';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -724,7 +727,7 @@ function applyArenaCamera(){
  // Identische Kameraverschiebung auf BEIDE Felder: keine gegenläufige Bewegung.
  const world=document.querySelector('.arena-world');
  world.style.setProperty('--view-tilt',arenaTilt+'deg');
- world.style.setProperty('--view-turn',arenaTurn+'deg');
+
  const slider=document.getElementById('cameraTilt');
  if(slider)slider.value=arenaTilt;
 }
