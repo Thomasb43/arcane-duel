@@ -382,12 +382,25 @@ main{perspective:none!important}
 /* v1.58 – keine seitliche Neigung: nur noch Vor-/Zurück-Kamerawinkel. */
 .arena-world{transform:rotateX(var(--view-tilt,35deg))!important}
 #cameraLeft,#cameraRight{display:none!important}
+/* v1.59 – rahmenlose, kamerafeste Charakterebene, keine Blockierung der Karten. */
+main{position:relative;isolation:isolate}
+.duelist-portrait{position:absolute;z-index:4;pointer-events:none;width:clamp(90px,20vw,220px);height:clamp(130px,29vw,300px);overflow:visible;filter:drop-shadow(0 0 12px rgba(140,92,255,.24));animation:duelist-breathe 4.5s ease-in-out infinite;transform-origin:bottom center}
+.duelist-portrait img{display:block;width:100%;height:100%;object-fit:contain;position:relative;z-index:2}
+.duelist-player{left:max(-38px,-5vw);bottom:clamp(125px,25vh,260px)}
+.duelist-opponent{right:max(-38px,-5vw);top:clamp(85px,12vh,165px);animation-delay:-2.2s}
+.duelist-aura{position:absolute;inset:20% 10% 8%;z-index:1;border-radius:50%;background:radial-gradient(ellipse,rgba(255,196,59,.26),transparent 67%);filter:blur(19px);animation:duelist-glow 3s ease-in-out infinite alternate}
+.duelist-opponent .duelist-aura{background:radial-gradient(ellipse,rgba(173,74,255,.32),transparent 67%);animation-delay:-1.3s}
+@keyframes duelist-breathe{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes duelist-glow{from{opacity:.45;scale:.92}to{opacity:1;scale:1.12}}
+@media(max-width:649px){.duelist-portrait{width:clamp(70px,22vw,118px);height:clamp(100px,31vw,165px)}.duelist-player{left:-16px;bottom:130px}.duelist-opponent{right:-16px;top:105px}}
+@media(prefers-reduced-motion:reduce){.duelist-portrait,.duelist-aura{animation:none}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.58</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.59</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
+<div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div>
 <div class="arena-fixed-ui"><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div></div>
 <div class="arena-stage"><div class="arena-world">
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -403,7 +416,7 @@ main{perspective:none!important}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.58';
+const APP_VERSION = '1.59';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
