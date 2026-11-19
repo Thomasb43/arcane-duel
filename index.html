@@ -357,9 +357,12 @@ main>section.board .zone:not(.filled){touch-action:none}
 /* v1.53 – Spielfelder bleiben in Ruhe starr; nur die Fingerbewegung dreht die Perspektive. */
 main>section.board{transform:rotateX(var(--arena-tilt,0deg)) rotateY(var(--arena-turn,0deg));transition:none!important}
 main>section.board.camera-dragging{transition:none!important}
+/* v1.54 – feste Spielfelder; Finger verschiebt ausschließlich den Kamerastandpunkt. */
+main{perspective:520px!important;perspective-origin:var(--camera-x,50%) var(--camera-y,42%)!important}
+main>section.board{transform:rotateX(16deg)!important;transform-origin:50% 50%!important;transition:none!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.53</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.54</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="-25" max="35" value="0" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -374,7 +377,7 @@ main>section.board.camera-dragging{transition:none!important}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.53';
+const APP_VERSION = '1.54';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -690,13 +693,13 @@ $("end").onclick=()=>{
 };
 render();
 
-/* Bewegliche 3D-Spielfeldkamera – Kartengesten bleiben unverändert. */
+/* Kamerastandpunkt ändern: Beide Felder behalten dieselbe feste Geometrie. */
 let arenaTilt=0,arenaTurn=0;
+const arenaMain=document.querySelector('main');
 function applyArenaCamera(){
- document.querySelectorAll('main>section.board').forEach(board=>{
-  board.style.setProperty('--arena-tilt',arenaTilt+'deg');
-  board.style.setProperty('--arena-turn',arenaTurn+'deg');
- });
+ // Perspektivzentrum verschieben statt die Spielfelder zu drehen.
+ arenaMain.style.setProperty('--camera-x',(50+arenaTurn*1.45)+'%');
+ arenaMain.style.setProperty('--camera-y',(42+arenaTilt*1.1)+'%');
  const slider=document.getElementById('cameraTilt');
  if(slider)slider.value=arenaTilt;
 }
@@ -705,19 +708,15 @@ document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Ma
 document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
 document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=0;arenaTurn=0;applyArenaCamera()});
 applyArenaCamera();
-/* Mit einem Finger die Perspektive direkt auf freien Spielfeldflächen verändern.
-   Kartenzonen, Karten und Spielsteuerung behalten ihre eigenen Wischgesten. */
 let arenaGesture=null;
 document.querySelectorAll('main>section.board').forEach(board=>{
  board.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0)return;
   if(e.target.closest('.field-card,.opponent-hand,.grave-pile,button,input,a,[role="button"]'))return;
   const zone=e.target.closest('.zone');
-  // Leere Monster-/Zauberzonen dürfen die Kamera steuern; belegte eigene Monster bleiben für Angriffe reserviert.
   if(zone&&zone.closest('#myMon')&&myMon[Number(zone.dataset.index)])return;
   if(zone&&zone.querySelector('.field-card'))return;
   arenaGesture={id:e.pointerId,board,x:e.clientX,y:e.clientY,turn:arenaTurn,tilt:arenaTilt};
-  board.classList.add('camera-dragging');
   board.setPointerCapture(e.pointerId);
  },{passive:true});
  board.addEventListener('pointermove',e=>{
@@ -729,7 +728,7 @@ document.querySelectorAll('main>section.board').forEach(board=>{
   arenaTilt=Math.max(-25,Math.min(35,arenaGesture.tilt-dy*.16));
   applyArenaCamera();
  },{passive:false});
- const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board){arenaGesture=null;board.classList.remove('camera-dragging')}};
+ const stop=e=>{if(arenaGesture&&arenaGesture.id===e.pointerId&&arenaGesture.board===board)arenaGesture=null};
  board.addEventListener('pointerup',stop);
  board.addEventListener('pointercancel',stop);
  board.addEventListener('lostpointercapture',stop);
