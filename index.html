@@ -919,7 +919,7 @@ main{position:relative!important;overflow:hidden}
 .shadow-chain-label-213{font-size:clamp(8px,1.4vw,12px);font-weight:900;letter-spacing:.07em;color:#f4e8ff;background:#32135ec9;border:1px solid #c99dff;border-radius:5px;padding:2px 5px;text-shadow:0 0 5px #d5a4ff}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.16</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.17</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -940,7 +940,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '2.16';
+const APP_VERSION = '2.17';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -979,12 +979,17 @@ const deck=[
 {name:"Glutkoloss",kind:"monster",emoji:"🔥",artwork:"ember-colossus",atk:2300,def:1900,level:5,skin:"fire"}
 ];
 function shuffleCards(cards){for(let i=cards.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}return cards}
+// Testmodus: Die zuletzt entwickelten Karten liegen garantiert in der Starthand.
+const testOpeningNames=["Frostpanzer","Arkaner Zerstörungsstrahl","Arkaner Wissensstrom","Arkaner Segen","Schattenfessel"];
+const testOpeningHand=testOpeningNames.map(name=>({...deck.find(c=>c.name===name)}));
 let drawPile=shuffleCards(deck.flatMap(c=>Array.from({length:(c.name==="Donnerfalke"||c.name==="Erdwächter")?1:3},()=>({...c}))));
+for(const starter of testOpeningHand){const index=drawPile.findIndex(c=>c.name===starter.name);if(index>=0)drawPile.splice(index,1);}
+
 let aiDeck=shuffleCards(deck.flatMap(c=>Array.from({length:(c.name==="Donnerfalke"||c.name==="Erdwächter")?1:3},()=>({...c}))));
 let aiHand=aiDeck.splice(0,5),aiTurn=0;
 let newlyDrawnCard=null;
 let myGraveyard=[],oppGraveyard=[];
-let pendingTribute=null,phase="main1",hand=drawPile.splice(0,5),myMon=Array(4).fill(null),mySpell=Array(4).fill(null),oppMon=Array(4).fill(null),oppSpell=Array(4).fill(null),myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1,chosenTarget=-1,chosenSpell=-1,pendingPlacement=null,normalSummonUsed=false,crystalShield=false;
+let pendingTribute=null,phase="main1",hand=testOpeningHand,myMon=Array(4).fill(null),mySpell=Array(4).fill(null),oppMon=Array(4).fill(null),oppSpell=Array(4).fill(null),myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1,chosenTarget=-1,chosenSpell=-1,pendingPlacement=null,normalSummonUsed=false,crystalShield=false;
 const $=id=>document.getElementById(id);
 function log(t){$("log").textContent=t}
 function isMainPhase(){return phase==="main1"||phase==="main2"}
