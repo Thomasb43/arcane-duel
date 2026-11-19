@@ -914,7 +914,7 @@ main{position:relative!important;overflow:hidden}
 .field-card .stats .stat-delta{font-size:.78em;font-style:normal;font-weight:900;white-space:nowrap}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.11</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.12</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -929,13 +929,13 @@ main{position:relative!important;overflow:hidden}
 <section><div class="handtitle"><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
-<div class="trap-choice-overlay" id="trapChoice205" role="dialog" aria-modal="true" aria-labelledby="trapChoiceTitle205" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">💠</div><h3 id="trapChoiceTitle205">Kristallschild</h3><p>Der Gegner greift an! Möchtest du Kristallschild aktivieren und den nächsten Kampfschaden an deinen LP verhindern?</p><div class="trap-choice-actions"><button id="trapYes205" type="button">Aktivieren</button><button id="trapNo205" type="button">Nicht aktivieren</button></div></div></div><div class="trap-choice-overlay" id="recoilChoice206" role="dialog" aria-modal="true" aria-labelledby="recoilTitle206" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">🌌</div><h3 id="recoilTitle206">Arkaner Rückschlag</h3><p>Der Gegner greift an! Angriff stoppen und das angreifende Monster dauerhaft um 500 ATK schwächen?</p><div class="trap-choice-actions"><button id="recoilYes206" type="button">Aktivieren</button><button id="recoilNo206" type="button">Nicht aktivieren</button></div></div></div><div id="battleFx" aria-hidden="true"><span>✨</span></div>
+<div class="trap-choice-overlay" id="trapChoice205" role="dialog" aria-modal="true" aria-labelledby="trapChoiceTitle205" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">💠</div><h3 id="trapChoiceTitle205">Kristallschild</h3><p>Der Gegner greift an! Möchtest du Kristallschild aktivieren und den nächsten Kampfschaden an deinen LP verhindern?</p><div class="trap-choice-actions"><button id="trapYes205" type="button">Aktivieren</button><button id="trapNo205" type="button">Nicht aktivieren</button></div></div></div><div class="trap-choice-overlay" id="recoilChoice206" role="dialog" aria-modal="true" aria-labelledby="recoilTitle206" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">🌌</div><h3 id="recoilTitle206">Arkaner Rückschlag</h3><p>Der Gegner greift an! Angriff stoppen und das angreifende Monster dauerhaft um 500 ATK schwächen?</p><div class="trap-choice-actions"><button id="recoilYes206" type="button">Aktivieren</button><button id="recoilNo206" type="button">Nicht aktivieren</button></div></div></div><div class="trap-choice-overlay" id="shadowChoice212" role="dialog" aria-modal="true" aria-labelledby="shadowTitle212" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">⛓️</div><h3 id="shadowTitle212">Schattenfessel</h3><p>Gegnerischen Angriff stoppen und dieses Monster für seinen nächsten Zug am Angreifen hindern?</p><div class="trap-choice-actions"><button id="shadowYes212" type="button">Aktivieren</button><button id="shadowNo212" type="button">Nicht aktivieren</button></div></div></div><div id="battleFx" aria-hidden="true"><span>✨</span></div>
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '2.11';
+const APP_VERSION = '2.12';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -962,6 +962,7 @@ const deck=[
 {name:"Flammenstoß",kind:"spell",emoji:"🔥",artwork:"flame-burst",effectText:"Verursacht 500 LP Schaden beim Gegner.",skin:"spell",desc:"500 LP Schaden"},
 {name:"Heilende Quelle",kind:"spell",emoji:"💚",effectText:"Du erhältst 800 LP. Deine LP dürfen dadurch über 4000 steigen.",skin:"ice",desc:"+800 LP"},
 {name:"Arkaner Segen",kind:"spell",emoji:"✨",effectText:"Wähle ein eigenes offenes Monster. Es erhält 600 ATK bis zum Ende dieses Zuges.",skin:"spell",desc:"Ein Monster +600 ATK"},
+{name:"Schattenfessel",kind:"trap",emoji:"⛓️",effectText:"Wenn ein gegnerisches Monster angreift: Stoppe den Angriff. Dieses Monster kann in seinem nächsten Zug nicht angreifen.",skin:"shadow",desc:"Angriff stoppen · nächster Angriff gesperrt"},
 {name:"Kristallschild",kind:"trap",emoji:"💠",artwork:"crystal-shield",effectText:"Verhindert einmalig den nächsten Kampfschaden an deinen Lebenspunkten.",skin:"ice",desc:"Verhindert einmalig Kampfschaden"},
 {name:"Arkaner Rückschlag",kind:"trap",emoji:"🌌",artwork:"arcane-recoil",effectText:"Wenn ein gegnerisches Monster angreift: Stoppe den Angriff. Das angreifende Monster verliert dauerhaft 500 ATK.",skin:"shadow",desc:"Angriff stoppen · −500 ATK"},
 {name:"Arkaner Magier",kind:"monster",emoji:"🧙",artwork:"arcane-mage",atk:1200,def:1500,level:3,skin:"shadow",effectText:"Wenn diese Karte offen beschworen wird: Du erhältst 300 LP."},
@@ -1307,6 +1308,28 @@ async function offerArcaneRecoil206(attacker){
   $("recoilYes206").addEventListener("click",accept);$("recoilNo206").addEventListener("click",decline);
  });
 }
+async function offerShadowFetter212(attacker){
+ const i=mySpell.findIndex(c=>c&&c.name==="Schattenfessel"&&c.kind==="trap"&&turn>c.setTurn);
+ if(i<0||!attacker)return false;
+ trapDecisionPending205=true;const overlay=$("shadowChoice212");overlay.hidden=false;$("end").disabled=true;
+ return new Promise(resolve=>{
+  function choose(yes){
+   overlay.hidden=true;trapDecisionPending205=false;$("end").disabled=false;
+   $("shadowYes212").removeEventListener("click",accept);$("shadowNo212").removeEventListener("click",decline);
+   const card=mySpell[i];
+   if(yes&&card&&card.name==="Schattenfessel"){
+    sendToGraveyard(card);mySpell[i]=null;
+    attacker.shadowBlockedAiTurn=aiTurn+1;
+    attacker.attacksThisTurn=1;
+    log("⛓️ Schattenfessel stoppt den Angriff von "+attacker.name+" und sperrt seinen Angriff im nächsten KI-Zug.");
+    render();
+   }else yes=false;
+   resolve(yes);
+  }
+  const accept=()=>choose(true),decline=()=>choose(false);
+  $("shadowYes212").addEventListener("click",accept);$("shadowNo212").addEventListener("click",decline);
+ });
+}
 let aiFxQueue=[];
 async function opponentTurn(){
  aiTurn++;
@@ -1341,8 +1364,9 @@ async function opponentTurn(){
  }
  const attackers=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&x.m.position!=="defense"&&x.m.summonedTurn!==aiTurn);
  for(const entry of attackers){
-  const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;
+  const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;if(a.shadowBlockedAiTurn===aiTurn){log("⛓️ "+a.name+" kann wegen Schattenfessel in diesem Zug nicht angreifen.");continue;}
   if(await offerArcaneRecoil206(a))continue;
+  if(await offerShadowFetter212(a))continue;
   const targets=myMon.map((m,i)=>({m,i})).filter(x=>x.m);
   if(!targets.length){
    await offerCrystalShield205();
