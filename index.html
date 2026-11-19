@@ -416,9 +416,17 @@ main{position:relative;isolation:isolate}
 .duelist-opponent{top:0!important;left:-12px!important;right:auto!important}
 .duelist-player{bottom:0!important;right:-12px!important;left:auto!important}
 }
+/* v1.62 – Duellanten höher platzieren und sämtliche Auf-/Ab-Bewegung abschalten. */
+.duelist-portrait,.duelist-portrait .duelist-aura{animation:none!important;translate:none!important}
+.duelist-opponent{top:-42px!important;bottom:auto!important}
+.duelist-player{bottom:clamp(155px,19vh,245px)!important;top:auto!important}
+@media(max-width:649px){
+.duelist-opponent{top:-45px!important;left:-12px!important}
+.duelist-player{bottom:clamp(175px,22vh,270px)!important;right:-12px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.61</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.62</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -438,7 +446,7 @@ main{position:relative;isolation:isolate}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.61';
+const APP_VERSION = '1.62';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
