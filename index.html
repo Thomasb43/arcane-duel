@@ -517,9 +517,28 @@ header{background:linear-gradient(90deg,#0c1230,#101934,#0c1230)!important}
 .opponent-fixed-ui .opponent-hand-wrap{width:52%!important;margin-left:23%!important}
 .arena-world .zone{min-height:68px!important}
 }
+/* v1.66 – Design 2: diamantförmige LP-Plaketten und leuchtende arkane Arenakulisse. */
+body{background:#070f2b!important}
+body::before{inset:0!important;opacity:1!important;background:
+radial-gradient(ellipse 55% 35% at 6% 25%,#4d247d70,transparent 80%),
+radial-gradient(ellipse 58% 42% at 85% 73%,#1265b35c,transparent 80%),
+radial-gradient(ellipse 75% 48% at 50% 50%,#123b875e,transparent 75%),
+linear-gradient(165deg,#080d25 0%,#0e1a45 45%,#09102b 100%)!important;animation:none!important}
+body::after{opacity:.68!important;background-image:radial-gradient(circle,#d8c4ff 1px,transparent 2px),radial-gradient(circle,#75caff 1px,transparent 2px),radial-gradient(circle,#fff0be .8px,transparent 1.8px)!important;background-size:89px 127px,163px 191px,211px 149px!important;animation:none!important}
+.arena-stage{position:relative;isolation:isolate}
+.arena-stage::before{content:"";position:absolute;left:50%;top:50%;width:min(90vw,630px);height:min(90vw,630px);transform:translate(-50%,-50%);pointer-events:none;z-index:-1;opacity:.5;background:
+repeating-conic-gradient(from 0deg,transparent 0deg 12deg,#5389d544 12.2deg 12.5deg,transparent 12.8deg 30deg),
+radial-gradient(circle,transparent 35%,#547ce050 35.3%,transparent 36%,transparent 45%,#8b6df055 45.4%,transparent 46%,transparent 49%,#4386e650 49.3%,transparent 50%);border-radius:50%;filter:drop-shadow(0 0 16px #536dcb88)}
+.arena-stage::after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:38px;color:#a2ddff;text-shadow:0 0 8px #55c8ff,0 0 22px #368bff;pointer-events:none;z-index:0}
+.lp-row{position:relative!important;isolation:isolate;border:0!important;border-radius:0!important;background:linear-gradient(100deg,#091329 3%,#172748 52%,#0b1730 97%)!important;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)!important;box-shadow:none!important;min-height:53px!important;padding:6px 18px!important;overflow:visible!important}
+.lp-row::before{content:"";position:absolute;inset:0;z-index:-1;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);background:linear-gradient(130deg,#ffe69e,#b98235 45%,#fff0bd 65%,#a46d2a);padding:2px;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.lp-row::after{content:"◆";position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:17px;color:#69c9ff;text-shadow:0 0 8px #47aeff}
+.opponent-lp::after{color:#cf7bff;text-shadow:0 0 8px #ac50ff}
+.lp-row .lp{color:#ffdf8b!important;font-size:clamp(22px,5.1vw,31px)!important;letter-spacing:1px;text-shadow:0 0 11px #e1a54444}
+@media(max-width:649px){.lp-row{min-height:48px!important;padding:6px 12px!important}.lp-row .lp{font-size:clamp(20px,5vw,27px)!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.65</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.66</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -539,7 +558,7 @@ header{background:linear-gradient(90deg,#0c1230,#101934,#0c1230)!important}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.65';
+const APP_VERSION = '1.66';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
