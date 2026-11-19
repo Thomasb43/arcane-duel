@@ -1295,7 +1295,7 @@ function finishSwipeSummon(position){
  const p=pendingSwipeSummon;pendingSwipeSummon=null;
  const card=myMon[p.zoneIndex];
  if(!card||card.kind!=="monster"){render();log("Platzierung nicht mehr möglich. Bitte versuche es erneut.");return;}
- card.position=position==="attack"?"attack":"defense";card.faceDown=position==="defense";
+ card.position=position==="attack"?"attack":"defense";card.faceDown=position==="defense";card.summonedTurn=turn;
  normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;
  triggerMonsterEvent(card,"summon","player",p.zoneIndex);render();animateZone('myMon',p.zoneIndex,'summon-impact');playBattleFx('myMon',p.zoneIndex,'myMon',-1,'💥');
  const summoned=myMon[p.zoneIndex];
@@ -1482,13 +1482,14 @@ render();
   picker=document.createElement('div');picker.className='monster-position-picker';
   for(const [mode,label] of [['attack','⚔ Angriff'],['defense','🛡 Verteidigung']]){
    const button=document.createElement('button');button.type='button';button.textContent=label;
-   button.disabled=!isMainPhase()||(monster.faceDown?mode!=='attack':monster.position===mode);
+   button.disabled=!isMainPhase()||monster.summonedTurn===turn||(monster.faceDown?mode!=='attack':monster.position===mode);
    button.addEventListener('click',function(ev){
-    ev.stopPropagation();if(!isMainPhase()||(monster.faceDown&&mode!=='attack'))return;
+    ev.stopPropagation();if(!isMainPhase()||monster.summonedTurn===turn||(monster.faceDown&&mode!=='attack'))return;
     monster.position=mode;monster.faceDown=false;close();render();
     log(monster.name+' wechselt in die offene '+(mode==='attack'?'Angriffsposition.':'Verteidigungsposition.'));
    });picker.appendChild(button);
   }
+  if(monster.summonedTurn===turn){const note=document.createElement('span');note.textContent='Erst im nächsten Zug wechselbar';note.style.cssText='color:#ffe5a2;font-size:11px;align-self:center;padding:0 4px';picker.appendChild(note);}
   document.body.appendChild(picker);
   const rect=zone.getBoundingClientRect();
   const w=picker.offsetWidth,h=picker.offsetHeight;
