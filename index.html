@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-resonanz-test-v1">
+<meta name="arcane-build" content="20261119-resonanz-test-fix-v2">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1046,7 +1046,7 @@ const resonanceTestCards=[
  {name:"Nachtklinge",kind:"monster",emoji:"⚔️",atk:1700,def:1000,level:4,element:"Finsternis",race:"Krieger",skin:"shadow",effectText:"Kann mit einem Resonator als Resonanzmaterial verwendet werden."}
 ];
 const resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",kind:"monster",emoji:"👑",atk:2400,def:1800,level:6,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,effectText:"Resonanzbeschwörung: Ein Resonator + ein weiteres Monster mit Levelsumme 6. Bei Beschwörung zerstöre eine gegnerische gesetzte Zauber- oder Fallenkarte."}];
-for(let i=0;i<2;i++)hand[i]= {...resonanceTestCards[i]};
+
 function summonResonanceTest(){
  if(!isMainPhase()){log("Resonanzbeschwörung nur in der Hauptphase.");return;}
  const a=myMon.findIndex(c=>c&&!c.faceDown&&c.resonator&&c.level===2);
@@ -1069,7 +1069,8 @@ let aiHand=aiDeck.splice(0,5),aiTurn=0;
 let newlyDrawnCard=null;
 let myGraveyard=[],oppGraveyard=[];
 let pendingTribute=null,phase="main1",hand=testOpeningHand,myMon=Array(4).fill(null),mySpell=Array(4).fill(null),oppMon=Array(4).fill(null),oppSpell=Array(4).fill(null),myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1,chosenTarget=-1,chosenSpell=-1,pendingPlacement=null,normalSummonUsed=false,crystalShield=false;
-const $=id=>document.getElementById(id);
+
+hand[0]={...resonanceTestCards[0]};hand[1]={...resonanceTestCards[1]};const $=id=>document.getElementById(id);
 function log(t){$("log").textContent=t}
 function isMainPhase(){return phase==="main1"||phase==="main2"}
 $("phase").addEventListener("click",()=>{
