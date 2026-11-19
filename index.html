@@ -645,9 +645,38 @@ main{position:relative;isolation:isolate}
  .arena-world{transform:rotateX(0deg)!important}
  .duelist-player{top:-10px!important;bottom:auto!important;height:160px!important}
 }
+/* v1.70 – nur der Hintergrund: violette Arkankathedrale, Runenkreise und blaue Energielinie wie Design 2. */
+body{background:#070b22!important}
+body::before{position:fixed!important;inset:0!important;z-index:-2!important;opacity:1!important;animation:none!important;background:
+radial-gradient(ellipse 38% 28% at 12% 21%,rgba(158,44,237,.37),transparent 86%),
+radial-gradient(ellipse 35% 25% at 83% 21%,rgba(119,31,190,.24),transparent 84%),
+radial-gradient(ellipse 75% 42% at 48% 49%,rgba(40,83,212,.29),transparent 80%),
+radial-gradient(ellipse 43% 32% at 88% 80%,rgba(32,97,208,.31),transparent 88%),
+radial-gradient(ellipse 38% 28% at 7% 85%,rgba(92,32,172,.27),transparent 85%),
+linear-gradient(170deg,#09091e 0%,#121039 24%,#071638 50%,#0a153b 75%,#080a20 100%)!important}
+body::after{position:fixed!important;inset:0!important;z-index:-1!important;opacity:.8!important;animation:none!important;background-image:
+radial-gradient(circle,#e8d7ff 1px,transparent 2px),
+radial-gradient(circle,#6eafff .8px,transparent 1.8px),
+radial-gradient(circle,#eebdff .65px,transparent 1.6px)!important;
+background-size:113px 157px,181px 223px,73px 131px!important;
+background-position:9px 21px,71px 99px,27px 49px!important}
+main{position:relative}
+main::before{content:"";position:absolute;pointer-events:none;z-index:0;top:8%;bottom:10%;left:0;right:0;opacity:.85;background:
+linear-gradient(90deg,transparent 1%,#c251ff26 1.4%,transparent 2.1%,transparent 10%,#7e3acb23 10.5%,transparent 11.2%,transparent 88%,#853ed123 88.5%,transparent 89.2%,transparent 98%,#a949ff24 98.5%,transparent 99%),
+radial-gradient(ellipse 52% 29% at 50% 46%,#3a4dc43d,transparent 75%)}
+main>*{position:relative}
+.arena-stage{isolation:isolate!important}
+.arena-stage::before{content:""!important;position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(92vw,660px)!important;height:min(92vw,660px)!important;border-radius:50%!important;opacity:.83!important;pointer-events:none!important;z-index:-1!important;background:
+repeating-conic-gradient(from 8deg,transparent 0deg 13deg,#8b6cff40 13.3deg 13.7deg,transparent 14deg 30deg),
+radial-gradient(circle,transparent 29%,#6399ff33 29.4%,#8a7aff99 29.8%,transparent 30.3%,transparent 40%,#7c60f099 40.4%,transparent 41%,transparent 46%,#4f98ff99 46.5%,transparent 47.1%,transparent 51%,#a464f977 51.5%,transparent 52.1%)!important;filter:drop-shadow(0 0 18px #556bff88)!important}
+.arena-stage::after{content:"✦"!important;position:absolute!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important;color:#e3f9ff!important;font-size:48px!important;line-height:1!important;z-index:1!important;pointer-events:none!important;text-shadow:0 0 7px #fff,0 0 15px #3dbaff,0 0 30px #4485ff!important}
+.arena-world{isolation:isolate}
+.arena-world::after{content:"";position:absolute;top:50%;left:0;right:0;height:2px;z-index:0;pointer-events:none;background:linear-gradient(90deg,transparent,#775aff 10%,#4dbbff 37%,#e7fbff 50%,#4dbbff 63%,#775aff 90%,transparent);box-shadow:0 0 8px #5a9dff,0 0 19px #5867ff}
+.arena-world>section.board{position:relative;z-index:1}
+@media(max-width:649px){.arena-stage::before{width:90vw!important;height:90vw!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.69</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.70</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
