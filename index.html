@@ -1466,6 +1466,37 @@ $("end").onclick=async()=>{if(trapDecisionPending205)return;
 };
 render();
 
+/* Monsterposition direkt beim Antippen auswählen (v1. Positionstasten). */
+(function(){
+ const style=document.createElement('style');
+ style.textContent='.monster-position-picker{position:fixed;z-index:1100;display:flex;gap:6px;padding:7px;background:#17213a;border:1px solid #e9c879;border-radius:10px;box-shadow:0 6px 24px #000b}.monster-position-picker button{background:#554526;border:1px solid #e9c879;color:#fff1c2;border-radius:7px;padding:9px;font-size:12px;font-weight:800}.monster-position-picker button:disabled{opacity:.4}';
+ document.head.appendChild(style);
+ let picker=null;
+ function close(){if(picker){picker.remove();picker=null;}}
+ document.getElementById('myMon').addEventListener('click',function(e){
+  if(e.target.closest('button,[data-zone-choice],[data-zone-action]'))return;
+  const zone=e.target.closest('[data-index]');if(!zone)return;
+  const i=Number(zone.dataset.index),monster=myMon[i];
+  if(!monster||pendingTribute||pendingPlacement||pendingBlessingZone>=0)return;
+  e.preventDefault();e.stopImmediatePropagation();close();chosenMonster=i;
+  picker=document.createElement('div');picker.className='monster-position-picker';
+  for(const [mode,label] of [['attack','⚔ Angriff'],['defense','🛡 Verteidigung']]){
+   const button=document.createElement('button');button.type='button';button.textContent=label;
+   button.disabled=!isMainPhase()||monster.faceDown||monster.position===mode;
+   button.addEventListener('click',function(ev){
+    ev.stopPropagation();if(!isMainPhase()||monster.faceDown)return;
+    monster.position=mode;monster.faceDown=false;close();render();
+    log(monster.name+' wechselt in die offene '+(mode==='attack'?'Angriffsposition.':'Verteidigungsposition.'));
+   });picker.appendChild(button);
+  }
+  document.body.appendChild(picker);
+  const rect=zone.getBoundingClientRect();
+  const w=picker.offsetWidth,h=picker.offsetHeight;
+  picker.style.left=Math.max(5,Math.min(innerWidth-w-5,rect.left+rect.width/2-w/2))+'px';
+  picker.style.top=Math.max(5,Math.min(innerHeight-h-5,rect.bottom+5))+'px';
+ },true);
+ document.addEventListener('pointerdown',function(e){if(picker&&!picker.contains(e.target)&&!e.target.closest('#myMon .zone'))close();},true);
+})();
 /* Kamerastandpunkt ändern: Beide Felder behalten dieselbe feste Geometrie. */
 let arenaTilt=18,arenaTurn=0;
 const arenaMain=document.querySelector('main');
