@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-manual-update-1">
+<meta name="arcane-build" content="20261119-hide-hand-footer-log">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -938,7 +938,7 @@ main{position:relative!important;overflow:hidden}
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
 <div class="trap-choice-overlay" id="trapChoice205" role="dialog" aria-modal="true" aria-labelledby="trapChoiceTitle205" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">💠</div><h3 id="trapChoiceTitle205">Kristallschild</h3><p>Der Gegner greift an! Möchtest du Kristallschild aktivieren und den nächsten Kampfschaden an deinen LP verhindern?</p><div class="trap-choice-actions"><button id="trapYes205" type="button">Aktivieren</button><button id="trapNo205" type="button">Nicht aktivieren</button></div></div></div><div class="trap-choice-overlay" id="recoilChoice206" role="dialog" aria-modal="true" aria-labelledby="recoilTitle206" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">🌌</div><h3 id="recoilTitle206">Arkaner Rückschlag</h3><p>Der Gegner greift an! Angriff stoppen und das angreifende Monster dauerhaft um 500 ATK schwächen?</p><div class="trap-choice-actions"><button id="recoilYes206" type="button">Aktivieren</button><button id="recoilNo206" type="button">Nicht aktivieren</button></div></div></div><div class="trap-choice-overlay" id="shadowChoice212" role="dialog" aria-modal="true" aria-labelledby="shadowTitle212" hidden><div class="trap-choice-panel"><div class="trap-choice-icon">⛓️</div><h3 id="shadowTitle212">Schattenfessel</h3><p>Gegnerischen Angriff stoppen und dieses Monster für seinen nächsten Zug am Angreifen hindern?</p><div class="trap-choice-actions"><button id="shadowYes212" type="button">Aktivieren</button><button id="shadowNo212" type="button">Nicht aktivieren</button></div></div></div><div id="battleFx" aria-hidden="true"><span>✨</span></div>
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
-<div class="log" id="log" aria-live="polite">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
+<div class="log" id="log" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <script>
 // VERSION 1.42
