@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-resonanz-test-fix-v2">
+<meta name="arcane-build" content="20261119-resonanz-extradeck-v3">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1045,10 +1045,11 @@ const resonanceTestCards=[
  {name:"Schattenresonator",kind:"monster",emoji:"🌑",atk:500,def:900,level:2,element:"Finsternis",race:"Magier",resonator:true,skin:"shadow",effectText:"Resonator. Kann mit einem weiteren Monster zur Resonanzbeschwörung verwendet werden."},
  {name:"Nachtklinge",kind:"monster",emoji:"⚔️",atk:1700,def:1000,level:4,element:"Finsternis",race:"Krieger",skin:"shadow",effectText:"Kann mit einem Resonator als Resonanzmaterial verwendet werden."}
 ];
-const resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",kind:"monster",emoji:"👑",atk:2400,def:1800,level:6,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,effectText:"Resonanzbeschwörung: Ein Resonator + ein weiteres Monster mit Levelsumme 6. Bei Beschwörung zerstöre eine gegnerische gesetzte Zauber- oder Fallenkarte."}];
+let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",kind:"monster",emoji:"👑",atk:2400,def:1800,level:6,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,effectText:"Resonanzbeschwörung: Ein Resonator + ein weiteres Monster mit Levelsumme 6. Bei Beschwörung zerstöre eine gegnerische gesetzte Zauber- oder Fallenkarte."}];
 
 function summonResonanceTest(){
  if(!isMainPhase()){log("Resonanzbeschwörung nur in der Hauptphase.");return;}
+ if(!resonanceExtraDeck.length){log("Dein Extra-Deck enthält kein Resonanzmonster.");return;}
  const a=myMon.findIndex(c=>c&&!c.faceDown&&c.resonator&&c.level===2);
  const b=myMon.findIndex((c,i)=>i!==a&&c&&!c.faceDown&&c.level===4);
  if(a<0||b<0){log("Lege Schattenresonator (Level 2) und Nachtklinge (Level 4) offen aufs Feld.");return;}
@@ -1056,7 +1057,7 @@ function summonResonanceTest(){
  // Die Materialzonen werden durch die Beschwörung frei; Nocthar erscheint in einer davon.
  sendToGraveyard(myMon[a]);sendToGraveyard(myMon[b]);
  myMon[a]=null;myMon[b]=null;
- const boss={...resonanceExtraDeck[0],position:"attack",faceDown:false};
+ const boss={...resonanceExtraDeck.shift(),position:"attack",faceDown:false};
  myMon[target>=0?target:a]=boss;
  const trap=oppSpell.findIndex(c=>c&&c.faceDown);
  if(trap>=0){sendToGraveyard(oppSpell[trap],"opponent");oppSpell[trap]=null;}
@@ -1186,10 +1187,13 @@ function triggerMonsterEvent(card,event,owner="player",index=-1){
 function sendToGraveyard(card,owner="player"){
  if(!card)return;
  if(card.kind==="monster"){monsterDestructionFx(card,owner);triggerMonsterEvent(card,"grave",owner);}
+ if(card.resonance){if(owner==="player")resonanceExtraDeck.push({...card,position:undefined,faceDown:false});renderExtraDeckCounts();return;}
  (owner==="opponent"?oppGraveyard:myGraveyard).push({...card});
  if(card.kind==="monster"){const zoneId=owner==="opponent"?"oppGraveZone":"myGraveZone";setTimeout(()=>{const zone=$(zoneId);if(zone){zone.classList.remove("grave-receive-fx");void zone.offsetWidth;zone.classList.add("grave-receive-fx");setTimeout(()=>zone.classList.remove("grave-receive-fx"),700);}},650);}
 }
+function renderExtraDeckCounts(){const mine=$("myExtraDeck").querySelector(".sidezone-count");if(mine)mine.textContent=resonanceExtraDeck.length;const opponent=$("oppExtraDeck").querySelector(".sidezone-count");if(opponent)opponent.textContent="0";}
 function renderGraveyards(){
+ renderExtraDeckCounts();
  const draw=(list)=>list.length?'<div class="grave-card" title="'+list[list.length-1].name+'"><span>'+(list[list.length-1].emoji||'✦')+'</span></div>':'';
  $("oppGraveButton").innerHTML=draw(oppGraveyard);
  $("myGraveButton").innerHTML=draw(myGraveyard);
@@ -1199,8 +1203,8 @@ function renderGraveyards(){
   zone.querySelector('.sidezone-label').textContent='Friedhof'+(list.length?' · '+list.length:'');
  });
 }
-document.getElementById('myExtraDeck').addEventListener('click',()=>alert('Extra-Deck: Hier werden später deine Fusionsmonster angezeigt. Noch keine Fusionskarten enthalten.'));
-document.getElementById('oppExtraDeck').addEventListener('click',()=>alert('Extra-Deck des Gegners: Noch keine Fusionskarten enthalten.'));
+document.getElementById('myExtraDeck').addEventListener('click',()=>alert(resonanceExtraDeck.length?'Dein Extra-Deck ('+resonanceExtraDeck.length+'):\n'+resonanceExtraDeck.map(c=>c.name+' · Level '+c.level+' · ATK '+c.atk+' / DEF '+c.def).join('\\n'):'Dein Extra-Deck ist leer: Das Resonanzmonster liegt möglicherweise auf dem Spielfeld.'));
+document.getElementById('oppExtraDeck').addEventListener('click',()=>alert('Der Gegner besitzt im aktuellen Resonanztest noch keine Extra-Deck-Karten.'));
 document.getElementById('myGraveZone').addEventListener('click',()=>alert(myGraveyard.length?myGraveyard.map(c=>c.name).join('\\n'):'Dein Friedhof ist leer.'));
 document.getElementById('oppGraveZone').addEventListener('click',()=>alert(oppGraveyard.length?oppGraveyard.map(c=>c.name).join('\\n'):'Der gegnerische Friedhof ist leer.'));
 let lastShownMyLP=4000,lastShownOppLP=4000,lpFeedbackInitialized=false;
