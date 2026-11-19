@@ -805,9 +805,16 @@ main{position:relative!important;overflow:hidden}
 .player-sidezones .deck-counter{text-shadow:0 0 9px rgba(76,178,255,.8)}
 .deck-sidezone .sidezone-label{font-size:9px!important;letter-spacing:.07em;text-transform:uppercase}
 @media(max-width:649px){.duel-sidezones{gap:3px!important}.duel-sidezones .deck-sidezone{height:clamp(45px,6svh,57px)!important}.deck-sidezone .deck-counter{font-size:19px}}
+/* v1.91 – eigene drei Stapel nebeneinander unter LP statt über der Hand. */
+.player-fixed-ui .player-sidezones{display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-start!important;gap:6px!important;top:60px!important;left:8px!important;right:auto!important;bottom:auto!important;width:max-content!important;max-width:calc(100vw - 16px)!important;z-index:6!important}
+.player-fixed-ui .player-sidezones .sidezone{box-sizing:border-box!important;flex:0 0 58px!important;width:58px!important;min-width:58px!important;height:65px!important;min-height:65px!important;padding:3px 2px!important;border-radius:10px!important}
+.player-fixed-ui .player-sidezones .sidezone-label{font-size:9px!important;line-height:1.05!important;overflow-wrap:anywhere!important;text-align:center!important}
+.player-fixed-ui .player-sidezones .deck-counter{font-size:20px!important}
+.player-fixed-ui .player-sidezones .sidezone-symbol{font-size:20px!important}
+@media(max-width:390px){.player-fixed-ui .player-sidezones{top:57px!important;gap:4px!important}.player-fixed-ui .player-sidezones .sidezone{flex-basis:54px!important;width:54px!important;min-width:54px!important;height:60px!important;min-height:60px!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.90</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.91</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -828,7 +835,7 @@ main{position:relative!important;overflow:hidden}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.90';
+const APP_VERSION = '1.91';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
