@@ -753,9 +753,14 @@ main>.arena-fixed-ui,main>.arena-stage,main>section{position:relative;z-index:1}
 @keyframes cathedralBreath{0%{opacity:.48;filter:hue-rotate(0deg);transform:translateY(0)}100%{opacity:.92;filter:hue-rotate(7deg);transform:translateY(-5px)}}
 @keyframes cathedralCrystal{0%{opacity:.6;filter:drop-shadow(0 0 4px rgba(var(--arena-secondary),.5))}100%{opacity:1;filter:drop-shadow(0 0 15px rgba(var(--arena-secondary),.95))}}
 @media(prefers-reduced-motion:reduce){main::before,.arena-stage::after{animation:none!important}}
+/* v1.84 – Kathedrale: detaillierte Architektur und animierte, charakterfarbige Nebel- und Lichtschichten. */
+main{background-image:url("artwork/arcane-cathedral.svg?v=1.84")!important;background-size:100% 100%!important;background-repeat:no-repeat!important;background-position:center!important}
+main::before{display:block!important;background:radial-gradient(ellipse 35% 26% at 16% 25%,rgba(var(--arena-primary),.48),transparent 88%),radial-gradient(ellipse 40% 28% at 85% 70%,rgba(var(--arena-secondary),.45),transparent 88%),radial-gradient(ellipse 50% 16% at 50% 51%,rgba(var(--arena-secondary),.25),transparent 90%)!important;animation:cathedralBreath 8s ease-in-out infinite alternate!important;mix-blend-mode:screen;pointer-events:none}
+@keyframes cathedralBreath{0%{opacity:.45;transform:translate3d(-5px,3px,0) scale(1)}100%{opacity:.8;transform:translate3d(5px,-4px,0) scale(1.025)}}
+@media(prefers-reduced-motion:reduce){main::before{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.83</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.84</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -775,7 +780,7 @@ main>.arena-fixed-ui,main>.arena-stage,main>section{position:relative;z-index:1}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.83';
+const APP_VERSION = '1.84';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
