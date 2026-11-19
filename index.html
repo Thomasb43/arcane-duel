@@ -1482,9 +1482,9 @@ render();
   picker=document.createElement('div');picker.className='monster-position-picker';
   for(const [mode,label] of [['attack','⚔ Angriff'],['defense','🛡 Verteidigung']]){
    const button=document.createElement('button');button.type='button';button.textContent=label;
-   button.disabled=!isMainPhase()||monster.faceDown||monster.position===mode;
+   button.disabled=!isMainPhase()||(monster.faceDown?mode!=='attack':monster.position===mode);
    button.addEventListener('click',function(ev){
-    ev.stopPropagation();if(!isMainPhase()||monster.faceDown)return;
+    ev.stopPropagation();if(!isMainPhase()||(monster.faceDown&&mode!=='attack'))return;
     monster.position=mode;monster.faceDown=false;close();render();
     log(monster.name+' wechselt in die offene '+(mode==='attack'?'Angriffsposition.':'Verteidigungsposition.'));
    });picker.appendChild(button);
