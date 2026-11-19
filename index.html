@@ -320,9 +320,19 @@ body::after{inset:0;z-index:-1;opacity:.58;background-image:radial-gradient(circ
 @keyframes arcaneStars{0%{background-position:13px 27px,65px 88px,20px 42px;opacity:.32}50%{opacity:.7}100%{background-position:76px 178px,-28px 299px,61px 155px;opacity:.32}}
 header,main{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){body::before,body::after{animation:none!important;will-change:auto}}
+
+/* v1.48 – lebendige arkanische Energie direkt in beiden Spielfeldern. */
+.board{position:relative;isolation:isolate;overflow:visible;background:radial-gradient(ellipse at 50% 50%,#354978 0%,#1b2c50 60%,#0d1731 100%)!important}
+.board::before{content:"";position:absolute;inset:2px;border-radius:13px;pointer-events:none;z-index:-1;opacity:.65;background:radial-gradient(ellipse 40% 28% at 15% 35%,#9470f63b,transparent 90%),radial-gradient(ellipse 40% 30% at 82% 70%,#4eabfa30,transparent 90%);animation:arenaAura 12s ease-in-out infinite alternate}
+.board::after{content:"";position:absolute;inset:3px;border-radius:12px;pointer-events:none;z-index:-1;opacity:.38;background:repeating-conic-gradient(from 0deg at 50% 50%,#d9c6ff17 0deg 1deg,transparent 1deg 30deg),radial-gradient(circle at 50% 50%,transparent 0 28%,#bba4ff32 28.3% 28.7%,transparent 29% 42%,#89c6ff2a 42.3% 42.7%,transparent 43%);animation:arenaRunes 38s linear infinite}
+.board .zone:not(.filled){background-color:#0b173255}
+.board .zone{transition:box-shadow .2s,border-color .2s}
+@keyframes arenaAura{0%{filter:hue-rotate(0deg);transform:translateY(-3px);opacity:.45}50%{opacity:.8}100%{filter:hue-rotate(28deg);transform:translateY(3px);opacity:.65}}
+@keyframes arenaRunes{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.board::before,.board::after{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.47</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.48</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
@@ -336,7 +346,7 @@ header,main{position:relative;z-index:1}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.47';
+const APP_VERSION = '1.48';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
