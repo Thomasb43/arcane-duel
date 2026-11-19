@@ -336,10 +336,22 @@ main>section.board{border:0!important;border-radius:0!important;box-shadow:none!
 main>section.board::before,main>section.board::after{border-radius:0}
 main>section.board::before{inset:0}
 main>section.board::after{inset:0}
+
+/* v1.50 – frei verstellbarer 3D-Blickwinkel für das Duellfeld. */
+main{perspective:1100px;perspective-origin:50% 42%}
+main>section.board{transform:rotateX(var(--arena-tilt,13deg)) rotateY(var(--arena-turn,0deg));transform-origin:center center;transform-style:preserve-3d;transition:transform .24s ease;backface-visibility:visible}
+.arena-camera{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;margin:5px auto 0;padding:5px 8px;max-width:850px;color:#e4d8ff;font-size:11px;position:relative;z-index:4}
+.arena-camera button{min-width:34px;min-height:30px;border:1px solid #a48dd27d;border-radius:8px;background:#20274cbf;color:#f4e9ff;font-size:14px;touch-action:manipulation}
+.arena-camera label{display:flex;align-items:center;gap:5px}
+.arena-camera input{width:90px;accent-color:#c8a9ff;touch-action:pan-x}
+.arena-camera .camera-reset{font-size:11px;padding:0 9px}
+@media(max-width:649px){main{perspective:850px}.arena-camera{gap:5px;padding:3px 5px}.arena-camera input{width:75px}}
+@media(prefers-reduced-motion:reduce){main>section.board{transition:none}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.49</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 1.50</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Eine neue Version ist verfügbar.<button id="reloadUpdate" type="button">Jetzt aktualisieren</button></div>
+<div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="35" value="13" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="lp-row opponent-lp">GEGNER <span class="lp" id="oppLP">4000 LP</span></div><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div><div class="field-bottomline"><div class="lp-row player-lp">DU <span class="lp" id="myLP">4000 LP</span></div><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></section>
@@ -352,7 +364,7 @@ main>section.board::after{inset:0}
 </main>
 <script>
 // VERSION 1.42
-const APP_VERSION = '1.49';
+const APP_VERSION = '1.50';
 let latestVersion = APP_VERSION;
 async function checkForUpdates(){
  try{
@@ -667,4 +679,20 @@ $("end").onclick=()=>{
  render();if(myLP>0&&oppLP>0)opponentTurn();
 };
 render();
+
+/* Bewegliche 3D-Spielfeldkamera – Kartengesten bleiben unverändert. */
+let arenaTilt=13,arenaTurn=0;
+function applyArenaCamera(){
+ document.querySelectorAll('main>section.board').forEach(board=>{
+  board.style.setProperty('--arena-tilt',arenaTilt+'deg');
+  board.style.setProperty('--arena-turn',arenaTurn+'deg');
+ });
+ const slider=document.getElementById('cameraTilt');
+ if(slider)slider.value=arenaTilt;
+}
+document.getElementById('cameraTilt').addEventListener('input',e=>{arenaTilt=Number(e.target.value);applyArenaCamera()});
+document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Math.max(-28,arenaTurn-7);applyArenaCamera()});
+document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
+document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=13;arenaTurn=0;applyArenaCamera()});
+applyArenaCamera();
 </script></body></html>
