@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261119-opponent-row-hand-v5">
+<meta name="arcane-build" content="20261119-hand-compact-v6">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -957,6 +957,30 @@ main{position:relative!important;overflow:hidden}
  main>section:has(#hand){overflow:visible!important;z-index:8!important}
  #hand{overflow-x:auto!important;overflow-y:visible!important;height:clamp(178px,23svh,215px)!important;max-height:none!important;padding:12px 10px 26px!important;align-items:flex-start!important;isolation:auto!important}
  #hand .card{height:clamp(145px,18svh,174px)!important;min-height:145px!important;overflow:hidden!important;flex-shrink:0!important;transform:translateY(0) rotate(var(--fan-angle,0deg))!important}
+ #hand .card.selected{transform:translateY(-5px) rotate(var(--fan-angle,0deg))!important}
+}
+
+/* v2.39: Handkarten wieder kompakt und vollständig als Fächer. */
+@media(max-width:649px){
+ #hand{
+  height:clamp(160px,20svh,185px)!important;
+  max-height:185px!important;
+  min-height:160px!important;
+  padding:12px 12px 12px!important;
+  align-items:flex-start!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+ }
+ #hand .card{
+  box-sizing:border-box!important;
+  height:clamp(118px,14svh,132px)!important;
+  min-height:118px!important;
+  max-height:132px!important;
+  flex:0 0 clamp(78px,21vw,96px)!important;
+  align-self:flex-start!important;
+  overflow:hidden!important;
+  transform:translateY(0) rotate(var(--fan-angle,0deg))!important;
+ }
  #hand .card.selected{transform:translateY(-5px) rotate(var(--fan-angle,0deg))!important}
 }
 </style></head>
