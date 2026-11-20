@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-booster-preview-multipack-v324">
+<meta name="arcane-build" content="20261120-sanctuary-reveal-v325">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4423,6 +4423,46 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-booster-reveal-322{z-index:9650!important}
 @media (min-width:600px){.arcane-booster-catalogue-grid-324{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
 @media(orientation:landscape) and (max-height:550px){.arcane-booster-catalogue-panel-324{height:96dvh!important}.arcane-booster-catalogue-grid-324{grid-template-columns:repeat(6,minmax(0,1fr))!important}.arcane-booster-quantities-324 button{min-height:49px!important}}
+
+/* v3.25: sanctuary ritual and interactive booster reveals */
+.arcane-booster-reveal-322{background:radial-gradient(ellipse at 50% 30%,#30205a,#0a0619 76%)!important;padding:0!important}
+.arcane-booster-reveal-panel-322{position:relative!important;isolation:isolate;width:100%!important;max-width:600px!important;height:100dvh!important;max-height:100dvh!important;padding:max(52px,env(safe-area-inset-top)) 14px max(22px,env(safe-area-inset-bottom))!important;border:0!important;border-radius:0!important;background:radial-gradient(ellipse at 50% 38%,#432772 0,#190d35 45%,#090817 85%)!important;box-shadow:none!important;justify-content:flex-end!important;gap:10px!important}
+.arcane-booster-reveal-kicker-322{position:absolute!important;top:calc(env(safe-area-inset-top) + 48px);left:0;right:0;text-align:center;font-size:clamp(18px,5vw,25px)!important;text-shadow:0 2px 18px #000!important;z-index:7!important}
+.arcane-sanctuary-325{position:absolute;inset:0 0 20%;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 41%,#7d43b66e,transparent 43%),repeating-linear-gradient(90deg,transparent 0 21%,#d9a35f16 22%,transparent 24%),linear-gradient(#100b28,#20103d 54%,#070a1b)}
+.sanctuary-stars-325{position:absolute;inset:0;background-image:radial-gradient(#fff9 1px,transparent 2px),radial-gradient(#cf9effa6 1px,transparent 2px);background-size:37px 53px,61px 79px;animation:sanctuaryTwinkle325 4s linear infinite}
+.sanctuary-arch-325{position:absolute;width:96%;height:68%;top:9%;left:2%;border:13px ridge #c69a59;border-bottom:0;border-radius:50% 50% 0 0;box-shadow:0 0 42px #d6a25a7a,inset 0 0 30px #f5bfff44}
+.sanctuary-guardian-325{position:absolute;top:27%;width:25%;height:38%;border:2px solid #a382ac80;border-radius:48% 48% 15% 15%;background:linear-gradient(110deg,#33214a,#b8a1bd 45%,#362448 75%);box-shadow:0 0 30px #a47bb255;color:#ffe0a6;font-size:70px;display:grid;place-items:center;opacity:.78}
+.sanctuary-guardian-325.left{left:-6%;transform:rotate(-9deg)}.sanctuary-guardian-325.right{right:-6%;transform:rotate(9deg)}
+.sanctuary-portal-325{position:absolute;width:68vw;max-width:360px;aspect-ratio:1;top:20%;left:50%;transform:translateX(-50%);border:9px double #e3b56b;border-radius:50%;background:radial-gradient(circle,#f5d0ff 1%,#8d4ce1 12%,#5020a7 38%,#15092d 72%);box-shadow:0 0 30px #df8dff,inset 0 0 34px #fff9;animation:sanctuaryPortal325 5s ease-in-out infinite}
+.sanctuary-portal-325:after{content:'✧';position:absolute;inset:0;display:grid;place-items:center;color:#ffe4a4;font-size:110px;text-shadow:0 0 26px #fff}
+.sanctuary-beam-325{position:absolute;top:15%;left:47%;width:6%;height:60%;background:linear-gradient(#fff8, #d39affdd,#fff9);filter:blur(13px);opacity:.7}
+.sanctuary-altar-325{position:absolute;top:70%;left:10%;width:80%;height:15%;border:10px ridge #e5ae62;border-radius:50%;background:radial-gradient(ellipse,#fff1ba,#ae70f0 30%,#301052 69%);box-shadow:0 0 35px #f6c76f,inset 0 0 24px #fff}
+.sanctuary-pack-325{position:absolute;top:44%;left:50%;width:123px;height:184px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transform:translate(-50%,-50%) rotate(-8deg);border:7px ridge #ffcd75;border-radius:12px;background:linear-gradient(140deg,#762abf,#240c61 55%,#100b35);color:#ffe6a3;box-shadow:0 0 40px #c780ff,0 0 95px #fff3;pointer-events:auto;cursor:pointer;animation:sanctuaryFloat325 2.6s ease-in-out infinite;z-index:3;text-align:center}
+.sanctuary-pack-325 span{font-size:60px;line-height:1}.sanctuary-pack-325 b{font:900 13px Georgia,serif;letter-spacing:2px}.sanctuary-pack-325 em{font-size:24px}
+.sanctuary-sparks-325{position:absolute;inset:0;background:radial-gradient(circle at 25% 52%,#fff 0 2px,transparent 4px),radial-gradient(circle at 67% 40%,#ffc 0 3px,transparent 6px),radial-gradient(circle at 80% 71%,#eabaff 0 2px,transparent 5px);animation:sanctuaryTwinkle325 1.5s infinite}
+.arcane-sanctuary-hint-325{position:relative;z-index:6;color:#f5d69c;font-size:13px;text-align:center;text-shadow:0 2px 10px #000;margin-top:auto}
+.arcane-booster-revealed-cards-322{position:relative!important;z-index:5!important;min-height:0!important;max-height:none!important;height:0!important;padding:0!important;overflow:visible!important;gap:5px!important;flex-wrap:nowrap!important;transition:height .3s ease!important}
+.sanctuary-cards-325 .arcane-booster-revealed-cards-322{height:230px!important;margin-bottom:10px!important;align-items:center!important}
+.arcane-booster-card-322.sanctuary-card-325{width:min(19%,105px)!important;height:160px!important;min-width:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;perspective:700px;animation:sanctuaryDeal325 .5s cubic-bezier(.2,.8,.2,1) both!important;animation-delay:calc(var(--i)*80ms)!important;cursor:pointer!important;color:white!important}
+.sanctuary-card-inner-325{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.2,.7,.2,1)}
+.is-flipped-325 .sanctuary-card-inner-325{transform:rotateY(180deg)}
+.sanctuary-card-back-325,.sanctuary-card-front-325{position:absolute;inset:0;backface-visibility:hidden;border:3px ridge #f0c777;border-radius:8px;box-shadow:0 0 17px #bd75ed;overflow:hidden}
+.sanctuary-card-back-325{display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:47px;color:#f6cf8a;background:radial-gradient(circle,#6739af,#1c1241 72%);text-shadow:0 0 16px #fff}
+.sanctuary-card-back-325 small{font:800 8px Georgia,serif;letter-spacing:1px}
+.sanctuary-card-front-325{transform:rotateY(180deg);padding:4px;display:flex;flex-direction:column;align-items:center;gap:4px;background:linear-gradient(#342150,#0d112b);border-color:var(--booster-rarity)}
+.sanctuary-card-front-325 .arcane-booster-card-art-322{height:103px!important}
+.sanctuary-card-front-325 strong{font-size:9px!important;line-height:1.1!important}.sanctuary-card-front-325 span{font-size:9px!important}
+.sanctuary-card-325[data-rarity="legendary"].is-flipped-325,.sanctuary-card-325[data-rarity="mythic"].is-flipped-325{filter:drop-shadow(0 0 16px var(--booster-rarity))!important}
+.sanctuary-cards-325 .sanctuary-pack-325{opacity:0;pointer-events:none;animation:none}
+.arcane-booster-action-322,.arcane-booster-close-322{position:relative;z-index:7;flex-shrink:0}
+.arcane-booster-action-322:disabled{opacity:.5!important}
+.sanctuary-rare-flash-325 .sanctuary-portal-325{animation:sanctuaryRare325 1s ease-out,sanctuaryPortal325 5s ease-in-out 1s infinite}
+@keyframes sanctuaryFloat325{0%,100%{transform:translate(-50%,-50%) rotate(-8deg)}50%{transform:translate(-50%,-56%) rotate(3deg)}}
+@keyframes sanctuaryPortal325{50%{filter:hue-rotate(45deg) brightness(1.45);transform:translateX(-50%) scale(1.06)}}
+@keyframes sanctuaryTwinkle325{50%{opacity:.35}}
+@keyframes sanctuaryRare325{40%{filter:brightness(3.2);box-shadow:0 0 95px #ffda73}}
+@keyframes sanctuaryDeal325{from{opacity:0;transform:translateY(120px) rotate(-25deg) scale(.3)}to{opacity:1;transform:translateY(0) rotate(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.sanctuary-pack-325,.sanctuary-portal-325,.sanctuary-stars-325,.sanctuary-sparks-325,.sanctuary-card-325{animation:none!important}.sanctuary-card-inner-325{transition:none}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5521,7 +5561,15 @@ window.setArenaCharacterTheme('magierin');
  </div>
  <div id="arcaneBoosterReveal322" class="arcane-booster-reveal-322" hidden role="dialog" aria-modal="true" aria-label="Booster-Öffnung">
   <div class="arcane-booster-reveal-panel-322">
-   <div class="arcane-booster-reveal-kicker-322" id="arcaneBoosterProgress322">Karten entdecken</div>
+   <div class="arcane-booster-reveal-kicker-322" id="arcaneBoosterProgress322">Das Heiligtum erwacht</div>
+   <div class="arcane-sanctuary-325" id="arcaneSanctuary325">
+    <div class="sanctuary-stars-325"></div><div class="sanctuary-arch-325"></div>
+    <div class="sanctuary-guardian-325 left">✦</div><div class="sanctuary-guardian-325 right">✦</div>
+    <div class="sanctuary-portal-325"></div><div class="sanctuary-beam-325"></div>
+    <div class="sanctuary-pack-325" id="arcaneSanctuaryPack325"><span>✧</span><b>ARCANE<br>DUEL</b><em>✦</em></div>
+    <div class="sanctuary-altar-325"></div><div class="sanctuary-sparks-325"></div>
+   </div>
+   <div class="arcane-sanctuary-hint-325" id="arcaneSanctuaryHint325">Berühre das Booster und entfessle seine Magie</div>
    <div id="arcaneBoosterCards322" class="arcane-booster-revealed-cards-322"></div>
    <button id="arcaneBoosterNext322" type="button" class="arcane-booster-action-322">Karten aufdecken</button>
    <button id="arcaneBoosterClose322" type="button" class="arcane-booster-close-322">Später ansehen</button>
@@ -5536,7 +5584,7 @@ window.setArenaCharacterTheme('magierin');
  const label=$b('arcaneBoosterCatalogueMessage324');
  const filterBar=$b('arcaneBoosterFilters324');
  const quantities=$b('arcaneBoosterQuantities324');
- let pack=null,step=0,currentFilter='all';
+ let pack=null,step=0,currentFilter='all',revealStage='intro',flipped=0;
  const inventory=()=>window.arcaneBoosterInventory322;
  const bank=()=>window.arcaneTestCrystals320;
  const catalog=()=>window.arcaneCollectionCatalog322;
@@ -5586,37 +5634,69 @@ window.setArenaCharacterTheme('magierin');
   renderPool();sync();
   $b('arcaneBoosterCatalogueClose324').focus({preventScroll:true});
  }
+
  function openReveal(names){
-  pack=names.slice();step=0;
+  pack=names.slice();step=0;flipped=0;revealStage='intro';
   $b('arcaneBoosterCards322').innerHTML='';
-  reveal.hidden=false;
+  reveal.hidden=false;reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325');
+  $b('arcaneSanctuaryHint325').textContent='Berühre das Booster und entfessle seine Magie';
   updateReveal();
  }
  function updateReveal(){
   const total=pack?.length||0;
-  $b('arcaneBoosterProgress322').textContent=step>=total?'Alle Karten aufgedeckt':'Karten '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
-  $b('arcaneBoosterNext322').textContent=step>=total?'Fertig · zum Shop':'Nächste 5 Karten aufdecken';
-  $b('arcaneBoosterClose322').hidden=step>=total;
+  const progress=$b('arcaneBoosterProgress322'),next=$b('arcaneBoosterNext322');
+  if(revealStage==='intro'){
+   progress.textContent='Das Heiligtum · '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
+   next.textContent='✦ Booster öffnen';next.disabled=false;
+  }else{
+   progress.textContent=step>=total?'Das Ritual ist vollendet':'Karten '+(step-4)+'–'+step+' von '+total;
+   next.textContent=flipped<5?'Enthülle alle 5 Karten':step>=total?'✦ Zum Shop zurück':'✦ Nächstes Booster öffnen';
+   next.disabled=flipped<5;
+  }
+  $b('arcaneBoosterClose322').hidden=step>=total&&revealStage==='cards'&&flipped===5;
  }
  function revealNext(){
   if(!pack)return;
-  if(step>=pack.length){
-   const state=inventory().read();
-   state.pendingPack=null;inventory().save(state);
-   reveal.hidden=true;catalogue.hidden=true;pack=null;
-   feedback.textContent='Alle gekauften Karten wurden deiner Sammlung hinzugefügt.';
-   sync();return;
+  if(revealStage==='cards'){
+   if(flipped<5)return;
+   if(step>=pack.length){
+    const state=inventory().read();state.pendingPack=null;inventory().save(state);
+    reveal.hidden=true;catalogue.hidden=true;pack=null;
+    feedback.textContent='Alle gekauften Karten wurden deiner Sammlung hinzugefügt.';
+    sync();return;
+   }
+   revealStage='intro';flipped=0;
+   reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325');
+   $b('arcaneBoosterCards322').innerHTML='';
+   $b('arcaneSanctuaryHint325').textContent='Das nächste Booster wartet auf dich';
+   updateReveal();return;
   }
   const cards=pack.slice(step,step+5);
   const view=$b('arcaneBoosterCards322');
-  view.innerHTML=cards.map(name=>{
+  view.innerHTML=cards.map((name,index)=>{
    const c=catalog()?.cards.find(c=>c.name===name);
    if(!c)return '';
-   const tone=catalog().rarityData[catalog().rarity(c)];
-   return '<div class="arcane-booster-card-322" style="--booster-rarity:'+tone.color+'"><div class="arcane-booster-card-art-322">'+catalog().renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>';
+   const rarity=catalog().rarity(c),tone=catalog().rarityData[rarity];
+   return '<button type="button" class="arcane-booster-card-322 sanctuary-card-325" aria-label="Verdeckte Karte '+(index+1)+' aufdecken" data-rarity="'+rarity+'" style="--booster-rarity:'+tone.color+';--i:'+index+'"><div class="sanctuary-card-inner-325"><div class="sanctuary-card-back-325">✧<small>ARCANE DUEL</small></div><div class="sanctuary-card-front-325"><div class="arcane-booster-card-art-322">'+catalog().renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div></div></button>';
   }).join('');
-  step+=cards.length;updateReveal();
+  step+=cards.length;flipped=0;revealStage='cards';
+  reveal.classList.add('sanctuary-burst-325');
+  window.setTimeout(()=>reveal.classList.add('sanctuary-cards-325'),500);
+  $b('arcaneSanctuaryHint325').textContent='Tippe jede Karte an, um sie zu enthüllen';
+  updateReveal();
  }
+ $b('arcaneSanctuaryPack325').addEventListener('click',()=>{if(revealStage==='intro')revealNext()});
+ $b('arcaneBoosterCards322').addEventListener('click',e=>{
+  const card=e.target.closest('.sanctuary-card-325');
+  if(!card||card.classList.contains('is-flipped-325'))return;
+  card.classList.add('is-flipped-325');card.disabled=true;flipped++;
+  if(card.dataset.rarity==='legendary'||card.dataset.rarity==='mythic'){
+   reveal.classList.remove('sanctuary-rare-flash-325');void reveal.offsetWidth;
+   reveal.classList.add('sanctuary-rare-flash-325');
+  }
+  if(flipped===5)$b('arcaneSanctuaryHint325').textContent='Alle fünf Karten sind enthüllt';
+  updateReveal();
+ });
  function buyPacks(amount){
   const price=amount*PRICE;
   const state=inventory().read();
