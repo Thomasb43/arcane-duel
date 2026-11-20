@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="920" viewBox="0 0 640 920">
+<title>Vesperion – Der Sternenverschlinger</title>
+<defs>
+ <radialGradient id="sky" cx=".47" cy=".27" r=".74"><stop stop-color="#9c48df"/><stop offset=".23" stop-color="#42218c"/><stop offset=".56" stop-color="#16174c"/><stop offset="1" stop-color="#05091e"/></radialGradient>
+ <linearGradient id="wing" x1="0" y1=".1" x2="1" y2="1"><stop stop-color="#a847e0"/><stop offset=".28" stop-color="#4931b6"/><stop offset=".6" stop-color="#101648"/><stop offset=".86" stop-color="#7542ce"/><stop offset="1" stop-color="#150a35"/></linearGradient>
+ <linearGradient id="scales" x1="0" y1=".3" x2="1" y2=".9"><stop stop-color="#a8ebff"/><stop offset=".15" stop-color="#4d85bc"/><stop offset=".37" stop-color="#272f86"/><stop offset=".62" stop-color="#1a1445"/><stop offset=".8" stop-color="#6550b9"/><stop offset="1" stop-color="#c76afa"/></linearGradient>
+ <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2cf"/><stop offset=".25" stop-color="#81dcff"/><stop offset=".55" stop-color="#3d408f"/><stop offset="1" stop-color="#cc68ff"/></linearGradient>
+ <radialGradient id="star"><stop stop-color="#ffffff"/><stop offset=".16" stop-color="#e2e4ff"/><stop offset=".42" stop-color="#b95bf8" stop-opacity=".8"/><stop offset="1" stop-color="#8c40ff" stop-opacity="0"/></radialGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="16"/></filter>
+ <filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+ <g id="spike"><path d="M0 5L-12 -16L-5 -42L8 -64L11 -25L7 5Z" fill="url(#steel)" stroke="#9fcbfa" stroke-width="2"/></g>
+</defs>
+<rect width="640" height="920" fill="url(#sky)"/>
+<g opacity=".35" filter="url(#blur)" fill="#9c41fc">
+ <ellipse cx="120" cy="430" rx="85" ry="290"/><ellipse cx="520" cy="280" rx="100" ry="260"/>
+ <ellipse cx="315" cy="760" rx="220" ry="60"/>
+</g>
+<g stroke="#a45af7" stroke-width="4" fill="none" opacity=".48"><circle cx="323" cy="387" r="243"/><circle cx="323" cy="387" r="208" stroke-dasharray="8 15"/><circle cx="323" cy="387" r="170" stroke-dasharray="22 9 3 9"/><path d="M70 390H570M319 130V700"/></g>
+<circle cx="319" cy="379" r="182" fill="url(#star)" opacity=".5"/>
+<g fill="#f6e0ff">
+ <circle cx="50" cy="109" r="2"/><circle cx="120" cy="82" r="3"/><circle cx="584" cy="97" r="2"/><circle cx="548" cy="218" r="3"/><circle cx="489" cy="762" r="2"/><circle cx="90" cy="783" r="2"/><circle cx="201" cy="166" r="2"/><circle cx="436" cy="89" r="2"/><circle cx="565" cy="590" r="2"/>
+</g>
+<!-- Vast asymmetrical wings behind the dragon -->
+<g stroke="#a787ef" stroke-width="6" stroke-linejoin="round">
+ <path d="M313 400Q230 301 199 177Q174 253 118 197L30 111Q68 234 30 340L7 498Q70 440 103 520Q140 438 201 506Q235 461 301 484Z" fill="url(#wing)"/>
+ <path d="M333 391Q412 298 465 151Q478 231 542 180L619 106Q570 258 633 322L631 491Q567 432 531 516Q488 431 438 506Q392 456 333 484Z" fill="url(#wing)"/>
+ <path d="M299 401 198 177 201 506M299 400 118 197 103 520M304 426 30 340M337 409 465 151 438 506M337 410 542 180 531 516M333 431 633 322" stroke="#d3aaff" stroke-width="3" fill="none" opacity=".85"/>
+</g>
+<!-- curling tail -->
+<path d="M326 596Q453 618 481 706Q513 800 434 824Q386 836 369 784Q409 817 438 778Q460 726 411 692Q382 669 317 667Z" fill="url(#scales)" stroke="#9abaf9" stroke-width="7"/>
+<g transform="translate(449 785) rotate(40) scale(.85)"><use href="#spike"/></g>
+<!-- hind legs, claws -->
+<path d="M277 575Q200 609 188 711L141 751L166 770L209 746L225 773L244 759L239 727L309 659Z" fill="url(#scales)" stroke="#91b3fa" stroke-width="6"/>
+<path d="M356 573Q429 613 428 696L484 729L472 752L432 735L427 759L407 751L402 726L329 652Z" fill="url(#scales)" stroke="#91b3fa" stroke-width="6"/>
+<!-- dragon breast -->
+<path d="M313 302Q245 368 259 510Q249 635 317 696Q387 616 381 507Q393 365 336 295Z" fill="url(#scales)" stroke="#98cafd" stroke-width="9"/>
+<path d="M316 343Q284 416 293 499Q289 601 321 658Q356 601 354 493Q359 405 331 343Z" fill="#11163d" opacity=".8"/>
+<g fill="none" stroke="#b48aff" stroke-width="5" opacity=".8"><path d="M290 470Q319 482 362 472M289 511Q319 527 361 514M295 555Q321 571 357 556M305 600Q320 612 343 600"/></g>
+<!-- spines -->
+<g><use href="#spike" transform="translate(314 354) rotate(-10)"/><use href="#spike" transform="translate(281 440) rotate(-47) scale(.8)"/><use href="#spike" transform="translate(363 434) rotate(41) scale(.8)"/><use href="#spike" transform="translate(278 525) rotate(-57) scale(.64)"/><use href="#spike" transform="translate(367 519) rotate(55) scale(.64)"/></g>
+<!-- arm claws -->
+<path d="M279 424Q233 456 206 510L161 533L168 551L204 543L188 572L211 576L231 547L258 539L309 484Z" fill="url(#scales)" stroke="#9bd1ff" stroke-width="6"/>
+<path d="M366 424Q410 467 442 512L477 531L481 555L456 549L468 577L445 579L426 549L396 536L341 486Z" fill="url(#scales)" stroke="#9bd1ff" stroke-width="6"/>
+<!-- neck and horned head -->
+<path d="M289 384Q261 317 279 275L297 241L272 220L297 169L313 202L340 165L362 212L386 236L351 272Q361 321 343 385Z" fill="url(#scales)" stroke="#a8deff" stroke-width="8"/>
+<path d="M284 272 225 203 254 216 253 166 299 245Z" fill="url(#steel)" stroke="#ffe6f6" stroke-width="5"/>
+<path d="M353 265 404 196 392 224 426 181 368 277Z" fill="url(#steel)" stroke="#ffe6f6" stroke-width="5"/>
+<path d="M293 269 267 294 290 312 324 323 356 313 378 290 353 271 325 283Z" fill="#152151" stroke="#8dbbfa" stroke-width="5"/>
+<path d="M289 302 324 323 357 304 351 349 319 374 299 341Z" fill="url(#scales)" stroke="#bdd1ff" stroke-width="4"/>
+<!-- glowing eyes -->
+<path d="M279 289 302 292 315 304 296 302Z" fill="#ff8df5"/><path d="M343 302 357 289 380 289 363 304Z" fill="#ff8df5"/>
+<g fill="#fff" filter="url(#glow)"><ellipse cx="302" cy="298" rx="8" ry="5"/><ellipse cx="354" cy="298" rx="8" ry="5"/></g>
+<!-- energy orb and lightning -->
+<g opacity=".8" filter="url(#glow)"><circle cx="323" cy="553" r="63" fill="url(#star)"/></g>
+<circle cx="323" cy="553" r="35" fill="url(#star)"/><circle cx="323" cy="553" r="13" fill="#fcf0ff"/>
+<g fill="none" stroke="#eabaff" stroke-width="6" stroke-linecap="round"><path d="M322 554 254 537 286 508 217 457M322 555 386 532 370 491 448 442M323 560 276 619 290 661 249 710M329 559 387 604 371 652 415 684"/></g>
+<g fill="none" stroke="#9e6dfb" stroke-width="11" stroke-linecap="round" opacity=".6"><path d="M222 457 181 441 131 456M449 440 491 406 528 414M415 683 455 705 469 742"/></g>
+<g stroke="#d2a6ff" stroke-width="2" fill="none" opacity=".66"><path d="M60 610Q319 724 589 610M100 725Q321 776 548 718"/><circle cx="323" cy="555" r="83" stroke-dasharray="3 14"/></g>
+</svg>
