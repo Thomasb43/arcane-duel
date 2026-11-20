@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-hand-monster-stats-v19">
+<meta name="arcane-build" content="20261120-extra-deck-interaction-v20">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1317,9 +1317,28 @@ main{position:relative!important;overflow:hidden}
  #hand .card .art{flex-shrink:0!important}
  #hand .card strong{flex-shrink:0!important}
 }
+
+/* v2.52: Extra-Deck statt festem Resonanzbutton. */
+#myExtraDeck.resonance-ready{border-color:#e9bdff!important;box-shadow:0 0 12px #b951ff,0 0 26px #9438ff, inset 0 0 14px #b84dff99!important;animation:resonancePulse 1.4s ease-in-out infinite alternate}
+@keyframes resonancePulse{to{box-shadow:0 0 19px #d88bff,0 0 38px #9c4fff,inset 0 0 20px #d57affbb}}
+.resonance-extra-overlay[hidden]{display:none!important}
+.resonance-extra-overlay{position:fixed;inset:0;z-index:1000;background:#060617d9;display:flex;align-items:center;justify-content:center;padding:14px}
+.resonance-extra-panel{width:min(430px,100%);max-height:82dvh;overflow:auto;padding:15px;border:2px solid #c47bff;border-radius:18px;background:linear-gradient(155deg,#2b164a,#0d1431);box-shadow:0 0 32px #a64fffaa;color:#f9eaff}
+.resonance-extra-header{display:flex;align-items:center;justify-content:space-between;font-size:18px;color:#f9d58c}
+.resonance-extra-header button{background:#392453;border:1px solid #b58ad9;color:white;border-radius:9px;padding:6px 12px;font-size:19px}
+.resonance-extra-panel p{font-size:12px;margin:8px 0 12px}
+.resonance-extra-card{display:flex;gap:12px;align-items:center;background:#13162f;border:1px solid #a16acb;border-radius:12px;padding:10px;margin-bottom:8px}
+.resonance-extra-art{width:105px;height:125px;flex:none;border:2px solid #dfb96a;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:50px;background:#21113f}
+.resonance-extra-art img{width:100%;height:100%;object-fit:cover}
+.resonance-extra-details{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}
+.resonance-extra-details strong{font-size:16px;color:#ffe4a6}
+.resonance-extra-details span{font-size:12px;color:#e6d4ff}
+.resonance-extra-details small{font-size:11px;color:#c8b7df}
+.resonance-extra-details button{border-radius:9px;padding:8px;background:#ac6c19;color:#fff5cf;border:1px solid #ffdd86;font-weight:800}
+.resonance-extra-details button:disabled{background:#34304b;color:#aaa3b9;border-color:#6d6181}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.51</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.52</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -1432,22 +1451,22 @@ const resonanceTestCards=[
 ];
 let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",kind:"monster",emoji:"👑",atk:2400,def:1800,level:6,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,effectText:"Resonanzbeschwörung: Ein Resonator + ein weiteres Monster mit Levelsumme 6. Bei Beschwörung zerstöre eine gegnerische gesetzte Zauber- oder Fallenkarte."}];
 
-function summonResonanceTest(){
+function summonResonanceTest(index=0){
  if(!isMainPhase()){log("Resonanzbeschwörung nur in der Hauptphase.");return;}
- if(!resonanceExtraDeck.length){log("Dein Extra-Deck enthält kein Resonanzmonster.");return;}
- const a=myMon.findIndex(c=>c&&!c.faceDown&&c.resonator&&c.level===2);
- const b=myMon.findIndex((c,i)=>i!==a&&c&&!c.faceDown&&c.level===4);
- if(a<0||b<0){log("Lege Schattenresonator (Level 2) und Nachtklinge (Level 4) offen aufs Feld.");return;}
- const target= myMon.findIndex((c,i)=>i!==a&&i!==b&&!c);
- // Die Materialzonen werden durch die Beschwörung frei; Nocthar erscheint in einer davon.
+ const card=resonanceExtraDeck[index];
+ if(!card){log("Dieses Resonanzmonster ist nicht mehr im Extra-Deck.");return;}
+ const materials=availableResonanceMaterials(card);
+ if(!materials){log("Du benötigst einen offenen Resonator und ein weiteres offenes Monster mit Levelsumme "+card.level+".");return;}
+ const [a,b]=materials;
+ const target=myMon.findIndex((c,i)=>i!==a&&i!==b&&!c);
  sendToGraveyard(myMon[a]);sendToGraveyard(myMon[b]);
  myMon[a]=null;myMon[b]=null;
- const boss={...resonanceExtraDeck.shift(),position:"attack",faceDown:false};
+ const boss={...resonanceExtraDeck.splice(index,1)[0],position:"attack",faceDown:false};
  myMon[target>=0?target:a]=boss;
  const trap=oppSpell.findIndex(c=>c&&c.faceDown);
  if(trap>=0){sendToGraveyard(oppSpell[trap],"opponent");oppSpell[trap]=null;}
  render();
- log("🌑 Resonanzbeschwörung! Schattenresonator (2) + Nachtklinge (4) → Resonanzfürst Nocthar (6)!"+(trap>=0?" Eine gegnerische gesetzte Karte wurde zerstört.":""));
+ log("🌑 Resonanzbeschwörung! "+boss.name+" erscheint!"+(trap>=0?" Eine gegnerische gesetzte Karte wurde zerstört.":""));
 }
 
 let aiDeck=createDuelDeck();
@@ -1588,21 +1607,63 @@ function renderGraveyards(){
   zone.querySelector('.sidezone-label').textContent='Friedhof'+(list.length?' · '+list.length:'');
  });
 }
-document.getElementById('myExtraDeck').addEventListener('click',()=>alert(resonanceExtraDeck.length?'Dein Extra-Deck ('+resonanceExtraDeck.length+'):\n'+resonanceExtraDeck.map(c=>c.name+' · Level '+c.level+' · ATK '+c.atk+' / DEF '+c.def).join('\\n'):'Dein Extra-Deck ist leer: Das Resonanzmonster liegt möglicherweise auf dem Spielfeld.'));
+function availableResonanceMaterials(card){
+ if(!isMainPhase())return null;
+ for(let a=0;a<myMon.length;a++){
+  const first=myMon[a];
+  if(!first||first.faceDown||!first.resonator)continue;
+  for(let b=0;b<myMon.length;b++){
+   const second=myMon[b];
+   if(a!==b&&second&&!second.faceDown&&first.level+second.level===card.level)return [a,b];
+  }
+ }
+ return null;
+}
+function updateExtraDeckGlow(){
+ const zone=$("myExtraDeck");
+ if(!zone)return;
+ const ready=resonanceExtraDeck.some(c=>availableResonanceMaterials(c));
+ zone.classList.toggle("resonance-ready",ready);
+ zone.setAttribute("aria-label",ready?"Extra-Deck: Resonanzmonster beschwörbar":"Extra-Deck öffnen");
+}
+function showResonanceExtraDeck(){
+ const overlay=$("resonanceExtraOverlay");
+ const cards=$("resonanceExtraCards");
+ cards.replaceChildren();
+ if(!resonanceExtraDeck.length){
+  cards.innerHTML='<p>Dein Extra-Deck ist leer. Beschworene Resonanzmonster befinden sich auf dem Spielfeld.</p>';
+ }else{
+  resonanceExtraDeck.forEach((c,index)=>{
+   const materials=availableResonanceMaterials(c);
+   const item=document.createElement("div");
+   item.className="resonance-extra-card";
+   const art=document.createElement("div");
+   art.className="resonance-extra-art";
+   art.innerHTML=renderCardArt(c);
+   const details=document.createElement("div");
+   details.className="resonance-extra-details";
+   const title=document.createElement("strong");title.textContent=c.name;
+   const stats=document.createElement("span");stats.textContent="Level "+c.level+" · "+(c.element||"Resonanz")+" · ATK "+c.atk+" / DEF "+c.def;
+   const requirement=document.createElement("small");requirement.textContent=materials?"Materialien bereit – Beschwörung möglich":"Benötigt offene Monster: Resonator + weiteres Monster, zusammen Level "+c.level;
+   const summon=document.createElement("button");
+   summon.type="button";summon.textContent=materials?"Beschwören":"Noch nicht beschwörbar";
+   summon.disabled=!materials;
+   summon.addEventListener("click",()=>{overlay.hidden=true;summonResonanceTest(index);});
+   details.append(title,stats,requirement,summon);item.append(art,details);cards.append(item);
+  });
+ }
+ overlay.hidden=false;
+}
+$("myExtraDeck").addEventListener("click",showResonanceExtraDeck);
+$("resonanceExtraClose").addEventListener("click",()=>$("resonanceExtraOverlay").hidden=true);
+$("resonanceExtraOverlay").addEventListener("click",e=>{if(e.target.id==="resonanceExtraOverlay")e.currentTarget.hidden=true;});
 document.getElementById('oppExtraDeck').addEventListener('click',()=>alert('Der Gegner besitzt im aktuellen Resonanztest noch keine Extra-Deck-Karten.'));
 document.getElementById('myGraveZone').addEventListener('click',()=>alert(myGraveyard.length?myGraveyard.map(c=>c.name).join('\\n'):'Dein Friedhof ist leer.'));
 document.getElementById('oppGraveZone').addEventListener('click',()=>alert(oppGraveyard.length?oppGraveyard.map(c=>c.name).join('\\n'):'Der gegnerische Friedhof ist leer.'));
 let lastShownMyLP=4000,lastShownOppLP=4000,lpFeedbackInitialized=false;
 function showCombatNumber(id,amount){if(amount<=0)return;const target=$(id);if(!target)return;const rect=target.getBoundingClientRect();const bubble=document.createElement('span');bubble.className='combat-damage-number';bubble.textContent='−'+amount;bubble.style.left=(rect.left+rect.width/2)+'px';bubble.style.top=(rect.top-6)+'px';document.body.appendChild(bubble);setTimeout(()=>bubble.remove(),1350);}
-function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
+function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
 
-// Die Testtaste wird bewusst außerhalb des Spielfelds ergänzt.
-const resonanceButton=document.createElement("button");
-resonanceButton.textContent="🌑 Resonanzbeschwörung";
-resonanceButton.type="button";
-resonanceButton.style.cssText="position:fixed;bottom:calc(env(safe-area-inset-bottom) + 8px);left:8px;z-index:150;background:#352052;color:#f1dbff;border:1px solid #a980e7;border-radius:12px;padding:9px 12px;font-size:12px;box-shadow:0 3px 12px #0009";
-resonanceButton.addEventListener("click",summonResonanceTest);
-document.body.appendChild(resonanceButton);
 
 function showGraveyard(owner){const list=owner==="opponent"?oppGraveyard:myGraveyard;const name=owner==="opponent"?"Gegnerischer Friedhof":"Dein Friedhof";$("graveyardList").hidden=false;$("graveyardList").textContent=name+"\n"+(list.length?list.slice().reverse().map((c,i)=>(i+1)+". "+c.emoji+" "+c.name+" ("+(c.kind==="monster"?"Monster":c.kind==="spell"?"Zauber":"Falle")+")").join("\n"):"Noch keine Karten im Friedhof.");}
 
@@ -2018,4 +2079,4 @@ window.setArenaCharacterTheme=function(name){
  arena.dataset.characterTheme=key;
 };
 window.setArenaCharacterTheme('magierin');
-</script></body></html>
+</script><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div></body></html>
