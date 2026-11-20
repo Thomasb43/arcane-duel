@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-tilted-legendary-boss-card-v313">
+<meta name="arcane-build" content="20261120-interactive-world-hub-v314">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3672,9 +3672,136 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 @media(prefers-reduced-motion:reduce){
  .arcane-intro-card-308{animation:none!important}
 }
+
+/* v3.14 – interactive fantasy city replacing old button-grid menu.
+   Buildings match the new original SVG city illustration. */
+.arcane-home-307{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:0!important;overflow:hidden!important;background:#0c0928!important;
+}
+.arcane-home-shell-307.arcane-world-hub-314{
+ display:block!important;position:relative!important;
+ width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;
+ max-height:none!important;min-height:0!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:hidden!important;
+ background:linear-gradient(180deg,rgba(6,5,26,.12),transparent 28%,rgba(9,5,28,.05) 75%,rgba(6,4,23,.26)),
+ url("artwork/arcane-world-hub-v314.svg?v=3.14") center center/cover no-repeat!important;
+ isolation:isolate!important;
+}
+.arcane-hub-shimmer-314{
+ position:absolute;inset:-15%;z-index:0;pointer-events:none;
+ background:radial-gradient(circle at 27% 64%,rgba(202,91,255,.18),transparent 17%),
+ radial-gradient(circle at 81% 37%,rgba(170,95,255,.18),transparent 18%),
+ radial-gradient(circle at 50% 90%,rgba(161,59,255,.21),transparent 25%);
+ animation:arcaneHubGlow314 6s ease-in-out infinite alternate;
+}
+.arcane-hub-title-314{
+ position:absolute;z-index:2;left:50%;top:max(4%,env(safe-area-inset-top));
+ transform:translateX(-50%);width:min(72%,320px);
+ display:flex;align-items:center;flex-direction:column;gap:0;
+ pointer-events:none;
+}
+.arcane-hub-kicker-314{color:#e8c99f;letter-spacing:2px;font-size:clamp(9px,2vw,12px);text-shadow:0 2px 5px #150821;font-weight:800}
+.arcane-hub-logo-314{
+ height:clamp(70px,15dvh,155px);width:100%;
+ background:url("artwork/arcane-logo-crest-clean-v311.svg?v=3.11") center/contain no-repeat;
+ filter:drop-shadow(0 0 15px rgba(193,98,255,.8));
+}
+.arcane-home-choices-307.arcane-hub-buildings-314{
+ display:block!important;position:absolute!important;inset:0!important;
+ z-index:3!important;pointer-events:none!important;
+}
+.arcane-home-choices-307 .arcane-hub-building-314{
+ position:absolute!important;display:flex!important;align-items:flex-end!important;
+ justify-content:center!important;width:clamp(130px,33vw,244px)!important;
+ min-height:0!important;height:clamp(95px,18dvh,225px)!important;
+ padding:0 4px 7px!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+ color:#fff1d4!important;pointer-events:auto!important;
+ cursor:pointer!important;-webkit-tap-highlight-color:transparent!important;
+ transform:translate(-50%,-50%)!important;
+}
+.arcane-home-choices-307 .arcane-hub-building-314:focus-visible{
+ outline:3px solid #ffe49c!important;outline-offset:0!important;
+}
+.arcane-home-choices-307 .arcane-hub-building-314 span{
+ white-space:nowrap!important;min-width:90px!important;
+ display:block!important;padding:8px 15px!important;
+ font-family:Georgia,'Times New Roman',serif!important;
+ font-size:clamp(15px,3.6vw,23px)!important;
+ line-height:1.2!important;font-weight:900!important;letter-spacing:.2px!important;
+ background:linear-gradient(110deg,rgba(34,10,60,.96),rgba(61,24,93,.92),rgba(24,13,57,.97))!important;
+ color:#ffe2ad!important;text-shadow:0 1px 4px #2d104a!important;
+ border:2px solid #f1c982!important;
+ border-radius:5px 13px 5px 13px!important;
+ box-shadow:0 0 14px #a94aff8c,inset 0 0 12px #be83ff6b!important;
+ transition:transform .17s ease,filter .17s ease!important;
+}
+.arcane-home-choices-307 .arcane-hub-building-314:active span{transform:scale(.95)!important;filter:brightness(1.3)!important}
+.arcane-home-choices-307 .arcane-hub-collection-314{left:24%!important;top:43%!important}
+.arcane-home-choices-307 .arcane-hub-story-314{left:79%!important;top:43%!important}
+.arcane-home-choices-307 .arcane-hub-arena-314{
+ left:36%!important;top:68%!important;
+ width:clamp(145px,42vw,260px)!important;
+ height:clamp(110px,22dvh,270px)!important;
+}
+.arcane-home-choices-307 .arcane-hub-arena-314 span{
+ font-size:clamp(19px,4.5vw,28px)!important;
+ border-color:#ffda83!important;
+}
+.arcane-home-choices-307 .arcane-hub-shop-314{left:81%!important;top:79%!important}
+.arcane-hub-hint-314{
+ position:absolute;z-index:2;bottom:max(3%,env(safe-area-inset-bottom));
+ left:50%;transform:translateX(-50%);white-space:nowrap;
+ color:#ffe2b1;font:700 13px Georgia,serif;letter-spacing:1px;
+ background:#180e3abf;border:1px solid #c5a1eea8;
+ padding:8px 18px;border-radius:22px;text-shadow:0 0 6px #6f27be;
+ pointer-events:none;
+}
+.arcane-hub-deck-314{
+ z-index:4;position:absolute;top:max(10px,env(safe-area-inset-top));right:12px;
+ width:auto!important;height:auto!important;min-height:37px!important;
+ padding:7px 11px!important;display:block!important;
+ background:linear-gradient(#452a76,#1f153d)!important;color:#fff1ca!important;
+ border:1px solid #e5c18b!important;border-radius:11px!important;
+ font-size:13px!important;font-weight:800!important;
+ box-shadow:0 0 14px #8b41dd88!important;
+}
+.arcane-hub-detail-314{
+ position:absolute!important;inset:0!important;z-index:8!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:20px!important;border:0!important;border-radius:0!important;
+ background:rgba(8,7,28,.83)!important;backdrop-filter:blur(6px)!important;
+}
+.arcane-hub-detail-314[hidden]{display:none!important}
+.arcane-hub-dialog-314{
+ width:min(100%,350px);text-align:center;padding:25px 20px;
+ border:2px solid #e9c17c;border-radius:16px;
+ background:linear-gradient(145deg,#332153,#12132e);
+ box-shadow:0 0 30px #a44ef9a0;color:#f9ebd4;
+}
+.arcane-hub-dialog-314 h3{font-size:25px;margin:0 0 13px}
+.arcane-hub-dialog-314 p{line-height:1.5;font-size:15px;margin:0 0 20px}
+.arcane-hub-dialog-314 button{min-height:45px;font-size:15px;cursor:pointer}
+@keyframes arcaneHubGlow314{from{opacity:.42;transform:translateY(-5px)}to{opacity:.95;transform:translateY(6px)}}
+@media(orientation:landscape){
+ .arcane-home-shell-307.arcane-world-hub-314{background-size:cover!important;background-position:center 59%!important}
+ .arcane-hub-title-314{top:1%!important;width:min(25vw,220px)!important}
+ .arcane-hub-logo-314{height:clamp(30px,15dvh,80px)!important}
+ .arcane-hub-kicker-314{font-size:7px!important}
+ .arcane-home-choices-307 .arcane-hub-building-314{
+  width:clamp(80px,18vw,168px)!important;height:clamp(55px,20dvh,108px)!important;
+ }
+ .arcane-home-choices-307 .arcane-hub-building-314 span{font-size:clamp(12px,2.2dvh,17px)!important;padding:5px 9px!important}
+ .arcane-home-choices-307 .arcane-hub-arena-314{width:clamp(105px,20vw,190px)!important}
+ .arcane-home-choices-307 .arcane-hub-arena-314 span{font-size:clamp(13px,2.5dvh,18px)!important}
+ .arcane-hub-hint-314{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.arcane-hub-shimmer-314{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.13</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.14</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4528,22 +4655,20 @@ window.setArenaCharacterTheme('magierin');
  home.setAttribute('role','dialog');
  home.setAttribute('aria-modal','true');
  home.setAttribute('aria-label','Arcane Duel Hauptmenü');
- home.innerHTML=`<div class="arcane-home-shell-307">
-  <div class="arcane-home-kicker-307">DIE CHRONIK BEGINNT</div>
-  <h2>ARCANE DUEL</h2>
-  <p class="arcane-home-sub-307">Wähle deinen nächsten Schritt</p>
-  <div class="arcane-home-choices-307">
-   <button type="button" class="arcane-home-duel-307" id="arcaneStartDuel307">⚔ DUELL STARTEN <small>Gegen die KI spielen</small></button>
-   <button type="button" data-arcane-mode="story">✦ STORY <small>In Vorbereitung</small></button>
-   <button type="button" data-arcane-mode="deck">▣ DECKVERWALTUNG <small>In Vorbereitung</small></button>
-   <button type="button" data-arcane-mode="collection">◇ KARTENSAMMLUNG <small>In Vorbereitung</small></button>
-   <button type="button" data-arcane-mode="shop">✧ SHOP <small>In Vorbereitung</small></button>
-  </div>
-  <div id="arcaneHomeDetail307" class="arcane-home-detail-307" hidden>
-   <h3 id="arcaneHomeDetailTitle307"></h3>
-   <p id="arcaneHomeDetailText307"></p>
-   <button type="button" id="arcaneHomeDetailBack307">Zurück zur Auswahl</button>
-  </div>
+ home.innerHTML=`<div class="arcane-home-shell-307 arcane-world-hub-314">
+ <div class="arcane-hub-shimmer-314" aria-hidden="true"></div>
+ <div class="arcane-hub-title-314"><div class="arcane-hub-kicker-314">DIE WELT DER CHRONIK</div><div class="arcane-hub-logo-314" role="img" aria-label="Arcane Duel"></div></div>
+ <div class="arcane-hub-hint-314">Gebäude antippen</div>
+ <div class="arcane-home-choices-307 arcane-hub-buildings-314">
+  <button type="button" class="arcane-hub-building-314 arcane-hub-collection-314" data-arcane-mode="collection" aria-label="Bibliothek – Kartensammlung"><span>▣ Sammlung</span></button>
+  <button type="button" class="arcane-hub-building-314 arcane-hub-story-314" data-arcane-mode="story" aria-label="Schloss – Story"><span>✦ Story</span></button>
+  <button type="button" class="arcane-hub-building-314 arcane-hub-arena-314 arcane-home-duel-307" id="arcaneStartDuel307" aria-label="Arena – Duell gegen KI starten"><span>⚔ Arena</span></button>
+  <button type="button" class="arcane-hub-building-314 arcane-hub-shop-314" data-arcane-mode="shop" aria-label="Magischer Laden – Shop"><span>◇ Shop</span></button>
+ </div>
+ <button type="button" class="arcane-hub-deck-314" data-arcane-mode="deck" aria-label="Deckverwaltung">▤ Decks</button>
+ <div id="arcaneHomeDetail307" class="arcane-home-detail-307 arcane-hub-detail-314" hidden>
+  <div class="arcane-hub-dialog-314"><h3 id="arcaneHomeDetailTitle307"></h3><p id="arcaneHomeDetailText307"></p><button type="button" id="arcaneHomeDetailBack307">Zurück zur Stadt</button></div>
+ </div>
  </div>`;
  document.body.appendChild(home);
  const menuButton=document.createElement('button');
