@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-hands-reference-v278">
+<meta name="arcane-build" content="20261120-handfan-fit-v279">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2098,9 +2098,66 @@ main.arcane-responsive .player-fixed-ui .duel-lp-face img{object-position:50% 6%
  }
 }
 
+
+/* v2.79: hand fan fit, reference proportions, no clipping. */
+@media (orientation:portrait){
+ main.arcane-responsive .opponent-hand-wrap{
+   left:12%!important;right:12%!important;width:76%!important;
+   bottom:0!important;height:clamp(84px,12dvh,115px)!important;
+ }
+ main.arcane-responsive .opponent-hand{
+   height:100%!important;width:100%!important;padding:0 0 3px!important;
+   align-items:flex-end!important;justify-content:center!important;
+   overflow:visible!important;transform:none!important;
+ }
+ main.arcane-responsive .opponent-card-back{
+   box-sizing:border-box!important;
+   flex:0 0 clamp(50px,17vw,69px)!important;
+   width:clamp(50px,17vw,69px)!important;
+   height:clamp(73px,11dvh,98px)!important;
+   margin-left:calc(-1 * clamp(13px,4.5vw,23px))!important;
+   transform:translateY(var(--back-lift,0px)) rotate(var(--back-angle,0deg))!important;
+   transform-origin:center bottom!important;
+ }
+ main.arcane-responsive .opponent-card-back:first-child{margin-left:0!important}
+ main.arcane-responsive>section:has(#hand){overflow:visible!important;min-width:0!important}
+ main.arcane-responsive #hand{
+   width:100%!important;max-width:100%!important;min-width:0!important;
+   box-sizing:border-box!important;
+   padding:4px 2px 8px!important;overflow:visible!important;
+   justify-content:center!important;align-items:flex-end!important;
+ }
+ main.arcane-responsive #hand .card{
+   box-sizing:border-box!important;
+   flex:0 0 var(--reference-card-width,78px)!important;
+   width:var(--reference-card-width,78px)!important;
+   min-width:0!important;max-width:none!important;
+   height:clamp(116px,15.5dvh,146px)!important;max-height:96%!important;
+   margin-left:calc(-1 * var(--reference-overlap,24px))!important;
+   padding:3px!important;gap:2px!important;
+   transform:translateY(var(--fan-lift,0px)) rotate(var(--fan-angle,0deg))!important;
+   transform-origin:50% 100%!important;
+ }
+ main.arcane-responsive #hand .card:first-child{margin-left:0!important}
+ main.arcane-responsive #hand .card.selected{
+   transform:translateY(calc(var(--fan-lift,0px) - 11px)) rotate(var(--fan-angle,0deg))!important;
+ }
+ main.arcane-responsive #hand .card .art{
+   flex:0 0 61%!important;max-height:61%!important;min-height:0!important;
+ }
+ main.arcane-responsive #hand .card strong{
+   font-size:clamp(8px,2.35vw,11px)!important;
+   line-height:1.06!important;overflow-wrap:anywhere!important;
+ }
+ main.arcane-responsive #hand .card .stats{
+   font-size:clamp(7px,1.75vw,9px)!important;
+   padding:2px 0 1px!important;
+ }
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.78</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.79</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -2468,7 +2525,7 @@ function enforceHandLimit(){
  });
  overlay.hidden=false;
 }
-function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
+function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");const referenceWidth=Math.max(66,Math.min(88,window.innerWidth*.205));const referenceAvailable=Math.max(240,window.innerWidth-35);const referenceOverlap=hand.length>1?Math.max(10,Math.min(referenceWidth*.68,(hand.length*referenceWidth-referenceAvailable)/(hand.length-1))):0;$("hand").style.setProperty("--reference-card-width",referenceWidth.toFixed(1)+"px");$("hand").style.setProperty("--reference-overlap",referenceOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
 
 
 function showGraveyard(owner){
