@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-graveyard-no-legacy-alert-v24">
+<meta name="arcane-build" content="20261120-galactic-cardback-v25">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1352,9 +1352,24 @@ main{position:relative!important;overflow:hidden}
 .hand-limit-choice strong{font-size:11px;overflow-wrap:anywhere}
 .hand-limit-choice small{font-size:10px;color:#e5c78d}
 #handLimitOverlay{z-index:1200}
+
+/* v2.57: Galaktischer Kartenrücken Nr. 8 aus dem hochgeladenen artwork. */
+.opponent-card-back,
+.field-card-back{
+ background-image:url("artwork/arcane-duel-kartenruecken-8.png?v=2.57")!important;
+ background-color:#140d36!important;
+ background-size:100% 100%!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ color:transparent!important;
+ font-size:0!important;
+ border-color:#d9b875!important;
+}
+.opponent-card-back::after{content:none!important;display:none!important}
+.field-card-back{width:100%;height:100%;min-height:0;overflow:hidden}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.56</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.57</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
