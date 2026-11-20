@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-card-shaped-zones-v269">
+<meta name="arcane-build" content="20261120-hud-portrait-v270">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1795,9 +1795,51 @@ main.arcane-responsive{--arena-rail:clamp(46px,8vw,92px);gap:0!important;justify
    border-radius:8px!important;
  }
 }
+
+/* v2.70 – reference HUD: compact character/LP bars and separate turn pills. */
+@media (orientation:portrait){
+ body>header{height:clamp(52px,6.4dvh,68px)!important;min-height:0!important}
+ body>header .brand{top:1px!important}
+ body>header .brand h1{font-size:clamp(19px,5vw,25px)!important}
+ body>header .turn-hud{top:clamp(28px,3.8dvh,37px)!important;right:7px!important;gap:5px!important}
+ body>header .turn-hud span,body>header .turn-hud button{
+   border:1.5px solid #f3c86e!important;border-radius:20px!important;
+   background:rgba(23,8,43,.94)!important;color:#ffdf83!important;
+   box-shadow:0 0 8px rgba(244,60,255,.75),inset 0 0 5px rgba(249,175,63,.25)!important;
+   padding:3px 9px!important;font-size:clamp(10px,2.8vw,12px)!important;
+   line-height:1.2!important;margin:0!important;
+ }
+ main.arcane-responsive{height:calc(100dvh - clamp(52px,6.4dvh,68px))!important}
+ main.arcane-responsive .opponent-fixed-ui .duelist-portrait,
+ main.arcane-responsive .player-fixed-ui .duelist-portrait{
+   left:8px!important;top:8px!important;width:clamp(38px,10.5vw,49px)!important;
+   height:clamp(38px,10.5vw,49px)!important;overflow:hidden!important;
+   border-radius:50%!important;border:2px solid #f6c35f!important;
+   background:radial-gradient(circle,#63358f,#100c2d)!important;
+   box-shadow:0 0 8px #d743ff,0 0 3px #ffc96c!important;
+   filter:none!important;animation:none!important;
+ }
+ main.arcane-responsive .duelist-portrait img{object-fit:cover!important;object-position:top center!important}
+ main.arcane-responsive .field-topline,
+ main.arcane-responsive .field-bottomline{
+   left:clamp(43px,11vw,55px)!important;top:13px!important;
+   width:clamp(105px,30vw,145px)!important;max-width:none!important;
+ }
+ main.arcane-responsive .field-topline .lp-row,
+ main.arcane-responsive .field-bottomline .lp-row{
+   height:clamp(28px,4dvh,36px)!important;padding:0 5px 0 13px!important;
+   border:2px solid #f6bc54!important;border-radius:0 20px 20px 0!important;
+   background:linear-gradient(100deg,#09091d,#21103b 70%,#09091d)!important;
+   box-shadow:0 0 9px #e32dff,inset 0 0 5px #c56b33!important;
+ }
+ main.arcane-responsive .lp{font-size:clamp(15px,4.3vw,20px)!important;line-height:1!important}
+ main.arcane-responsive .player-fixed-ui .duelist-portrait{top:7px!important}
+ main.arcane-responsive .player-fixed-ui .field-bottomline{top:12px!important}
+ main.arcane-responsive .arena-stage .sidezone{border-radius:9px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.69</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.70</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
