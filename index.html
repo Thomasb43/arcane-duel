@@ -1945,9 +1945,42 @@ main.arcane-responsive{--arena-rail:clamp(46px,8vw,92px);gap:0!important;justify
  main.arcane-responsive .field-topline{top:8px!important}
  main.arcane-responsive .player-fixed-ui .field-bottomline{top:8px!important}
 }
+
+/* v2.73: compact head-only portraits and slim glowing LP pills */
+@media (orientation:portrait){
+main.arcane-responsive .field-topline,main.arcane-responsive .field-bottomline{
+ left:clamp(43px,10.5vw,52px)!important;width:clamp(112px,25vw,132px)!important;
+ height:clamp(27px,3.5dvh,33px)!important;top:11px!important;
+}
+main.arcane-responsive .field-topline .lp-row,main.arcane-responsive .field-bottomline .lp-row{
+ border:1.5px solid #ffcd53!important;border-left:0!important;
+ border-radius:0 999px 999px 0!important;clip-path:none!important;
+ background:linear-gradient(180deg,#13091d,#05040c 65%,#1b0920)!important;
+ box-shadow:inset 0 0 3px #ff9e16,0 0 5px #ff9f1c,0 0 10px #d31cff!important;
+ padding:0 5px!important;
+}
+main.arcane-responsive .field-topline .lp,main.arcane-responsive .field-bottomline .lp{
+ font-size:clamp(15px,4vw,19px)!important;font-weight:900!important;
+ color:#ffdf4c!important;text-shadow:0 0 4px #fba514!important;
+}
+main.arcane-responsive .opponent-fixed-ui .duelist-portrait,
+main.arcane-responsive .player-fixed-ui .duelist-portrait{
+ left:8px!important;top:6px!important;width:clamp(36px,9vw,43px)!important;
+ height:clamp(36px,9vw,43px)!important;box-sizing:border-box!important;
+ border:2px solid #f5b43c!important;border-radius:11px!important;
+ clip-path:polygon(22% 0,78% 0,100% 22%,100% 78%,78% 100%,22% 100%,0 78%,0 22%)!important;
+ background:#1a0c2c!important;box-shadow:0 0 5px #ffae20,0 0 8px #b824ff!important;
+}
+main.arcane-responsive .opponent-fixed-ui .duelist-portrait img,
+main.arcane-responsive .player-fixed-ui .duelist-portrait img{
+ width:100%!important;height:100%!important;object-fit:cover!important;
+ object-position:center top!important;transform:scale(2.5)!important;
+ transform-origin:50% 15%!important;
+}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.72</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.73</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
