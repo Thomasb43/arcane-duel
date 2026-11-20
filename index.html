@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-graveyard-gallery-v22">
+<meta name="arcane-build" content="20261120-hand-limit-seven-v23">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1342,9 +1342,19 @@ main{position:relative!important;overflow:hidden}
 .grave-sidezone:focus-visible{outline:2px solid #e0b8ff}
 #graveyardOverlay .resonance-extra-art{font-size:40px}
 #graveyardOverlay .resonance-extra-details small{line-height:1.35;white-space:normal}
+
+/* v2.55 – verbindliches Handkartenlimit mit Kartenauswahl. */
+.hand-limit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.hand-limit-choice{min-width:0;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center;padding:7px 4px;background:#151631;border:1px solid #c79e62;border-radius:10px;color:#fff1d1;cursor:pointer}
+.hand-limit-choice:active{background:#43305b}
+.hand-limit-art{width:100%;height:100px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:42px;background:#1d1642;border-radius:6px}
+.hand-limit-art img{width:100%;height:100%;object-fit:cover}
+.hand-limit-choice strong{font-size:11px;overflow-wrap:anywhere}
+.hand-limit-choice small{font-size:10px;color:#e5c78d}
+#handLimitOverlay{z-index:1200}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.54</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.55</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -1363,7 +1373,7 @@ main{position:relative!important;overflow:hidden}
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
-<div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script>
+<div id="handLimitOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Handkartenlimit überschritten"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>⚠️ Maximal 7 Handkarten</strong></div><p id="handLimitMessage">Wähle eine Karte, die auf deinen Friedhof gelegt wird.</p><div id="handLimitCards" class="hand-limit-grid"></div></div></div><div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script>
 // VERSION 1.42
 const APP_VERSION='2.36';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
@@ -1668,7 +1678,29 @@ document.getElementById('myGraveZone').addEventListener('click',()=>alert(myGrav
 document.getElementById('oppGraveZone').addEventListener('click',()=>alert(oppGraveyard.length?oppGraveyard.map(c=>c.name).join('\\n'):'Der gegnerische Friedhof ist leer.'));
 let lastShownMyLP=4000,lastShownOppLP=4000,lpFeedbackInitialized=false;
 function showCombatNumber(id,amount){if(amount<=0)return;const target=$(id);if(!target)return;const rect=target.getBoundingClientRect();const bubble=document.createElement('span');bubble.className='combat-damage-number';bubble.textContent='−'+amount;bubble.style.left=(rect.left+rect.width/2)+'px';bubble.style.top=(rect.top-6)+'px';document.body.appendChild(bubble);setTimeout(()=>bubble.remove(),1350);}
-function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
+function enforceHandLimit(){
+ const overlay=$("handLimitOverlay");
+ if(hand.length<=7){overlay.hidden=true;return;}
+ const cards=$("handLimitCards");cards.replaceChildren();
+ $("handLimitMessage").textContent="Du hast "+hand.length+" Handkarten. Wähle eine Karte zum Ablegen auf den Friedhof.";
+ hand.forEach((c,index)=>{
+  const button=document.createElement("button");button.type="button";button.className="hand-limit-choice";
+  const art=document.createElement("div");art.className="hand-limit-art";art.innerHTML=renderCardArt(c);
+  const name=document.createElement("strong");name.textContent=c.name;
+  const stats=document.createElement("small");stats.textContent=c.kind==="monster"?"ATK "+c.atk+" / DEF "+c.def:c.kind==="spell"?"Zauberkarte":"Fallenkarte";
+  button.append(art,name,stats);
+  button.addEventListener("click",()=>{
+   const discarded=hand.splice(index,1)[0];
+   sendToGraveyard(discarded);
+   if(selected>=hand.length)selected=-1;
+   log("🪦 Handkartenlimit: "+discarded.name+" auf den Friedhof gelegt.");
+   render();
+  });
+  cards.append(button);
+ });
+ overlay.hidden=false;
+}
+function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
 
 
 function showGraveyard(owner){
@@ -1919,7 +1951,7 @@ async function offerShadowFetter212(attacker){
 let aiFxQueue=[];
 async function opponentTurn(){
  aiTurn++;
- const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn);
+ const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn);while(aiHand.length>7){const discarded=aiHand.splice(Math.floor(Math.random()*aiHand.length),1)[0];sendToGraveyard(discarded,"opponent");}
  log("Der Gegner ist am Zug.");
  // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
  // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
