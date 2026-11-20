@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-interactive-world-hub-v314">
+<meta name="arcane-build" content="20261120-illustrated-world-hub-v315">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3799,9 +3799,75 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-hub-hint-314{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.arcane-hub-shimmer-314{animation:none!important}}
+
+/* v3.15 – illustrated fantasy city: detailed original artwork replaces the flat SVG.
+   All buildings remain tappable; the duel gameplay and intro screen are untouched. */
+.arcane-home-shell-307.arcane-world-hub-314{
+  background:
+   linear-gradient(180deg,rgba(8,5,26,.19) 0%,rgba(15,8,39,.02) 28%,rgba(20,6,47,0) 68%,rgba(6,4,24,.16) 100%),
+   url("artwork/arcane-world-hub-final-v315.webp?v=3.15") center center/100% 100% no-repeat!important;
+}
+.arcane-hub-shimmer-314{
+  background:
+   radial-gradient(ellipse at 51% 12%,rgba(170,86,255,.15),transparent 18%),
+   radial-gradient(ellipse at 31% 67%,rgba(208,80,255,.21),transparent 20%),
+   radial-gradient(ellipse at 80% 76%,rgba(192,112,255,.18),transparent 22%),
+   radial-gradient(ellipse at 48% 94%,rgba(162,72,255,.23),transparent 18%)!important;
+  mix-blend-mode:screen!important;
+  animation:arcaneHubGlow314 5.3s ease-in-out infinite alternate!important;
+}
+.arcane-hub-title-314{
+ top:max(1%,env(safe-area-inset-top))!important;
+ width:min(56%,275px)!important;
+ filter:drop-shadow(0 4px 9px rgba(9,4,26,.85))!important;
+}
+.arcane-hub-logo-314{height:clamp(70px,13dvh,145px)!important}
+.arcane-hub-kicker-314{
+ font-size:clamp(9px,2vw,12px)!important;
+ background:rgba(18,8,45,.57)!important;
+ border-radius:12px!important;
+ padding:2px 8px!important;
+ text-shadow:0 2px 4px #08021a!important;
+}
+.arcane-home-choices-307 .arcane-hub-building-314 span{
+ background:linear-gradient(110deg,rgba(28,9,60,.91),rgba(78,24,114,.91),rgba(30,10,60,.93))!important;
+ border:2px solid #f8d58a!important;
+ border-radius:7px 14px 7px 14px!important;
+ padding:8px 13px!important;
+ color:#ffe9b8!important;
+ font-size:clamp(17px,3.8vw,24px)!important;
+ text-shadow:0 1px 5px #130525,0 0 8px #ab69ff!important;
+ box-shadow:0 0 18px rgba(183,60,255,.6),inset 0 0 10px rgba(240,188,255,.29)!important;
+}
+.arcane-home-choices-307 .arcane-hub-collection-314{left:22%!important;top:37%!important}
+.arcane-home-choices-307 .arcane-hub-story-314{left:79%!important;top:38%!important}
+.arcane-home-choices-307 .arcane-hub-arena-314{
+ left:34%!important;top:65%!important;
+ width:clamp(165px,44vw,270px)!important;
+ height:clamp(105px,22dvh,270px)!important;
+}
+.arcane-home-choices-307 .arcane-hub-shop-314{left:80%!important;top:80%!important}
+.arcane-hub-hint-314{
+ bottom:max(2%,env(safe-area-inset-bottom))!important;
+ padding:7px 17px!important;
+ background:rgba(20,8,45,.78)!important;
+ border:1px solid rgba(237,183,129,.71)!important;
+ color:#ffe8bc!important;
+ box-shadow:0 0 12px rgba(141,58,225,.45)!important;
+}
+@media(orientation:landscape){
+ .arcane-home-shell-307.arcane-world-hub-314{
+  background-size:100% 100%!important;background-position:center!important;
+ }
+ .arcane-home-choices-307 .arcane-hub-collection-314{top:37%!important}
+ .arcane-home-choices-307 .arcane-hub-story-314{top:39%!important}
+ .arcane-home-choices-307 .arcane-hub-arena-314{top:65%!important}
+ .arcane-home-choices-307 .arcane-hub-shop-314{top:79%!important}
+}
+@media(prefers-reduced-motion:reduce){.arcane-hub-shimmer-314{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.14</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.15</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
