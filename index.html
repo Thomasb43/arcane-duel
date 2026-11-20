@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-illustrated-world-hub-v315">
+<meta name="arcane-build" content="20261120-collection-codex-v316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3865,9 +3865,116 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-home-choices-307 .arcane-hub-shop-314{top:79%!important}
 }
 @media(prefers-reduced-motion:reduce){.arcane-hub-shimmer-314{animation:none!important}}
+
+/* v3.16 – playable collection interface / card codex, iPhone portrait first. */
+.arcane-collection-316{
+ position:fixed!important;inset:0!important;z-index:9400!important;
+ box-sizing:border-box!important;overflow:hidden!important;
+ display:flex!important;flex-direction:column!important;
+ background:radial-gradient(ellipse at 50% -10%,#5a2886 0%,transparent 58%),linear-gradient(165deg,#180f3b,#0b0c24 65%,#090718)!important;
+ color:#fff1d4!important;
+ padding:max(9px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+}
+.arcane-collection-316[hidden]{display:none!important}
+.arcane-collection-top-316{flex:0 0 auto!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
+.arcane-collection-back-316{
+ background:#211741!important;color:#ffe6ad!important;border:1px solid #f1c788!important;
+ border-radius:10px!important;min-height:38px!important;padding:8px 12px!important;
+ font-size:13px!important;font-weight:800!important;cursor:pointer!important;
+}
+.arcane-collection-title-316{
+ margin:5px 0 8px!important;font-family:Georgia,serif!important;
+ color:#ffe5ab!important;text-align:center!important;
+ font-size:clamp(27px,6vw,40px)!important;line-height:1.1!important;
+ text-shadow:0 0 18px rgba(191,94,255,.65)!important;
+}
+.arcane-collection-summary-316{font-size:12px!important;color:#d7c7ed!important;text-align:center!important;margin-bottom:9px!important}
+.arcane-collection-controls-316{flex:0 0 auto!important;display:flex!important;flex-direction:column!important;gap:8px!important;margin-bottom:10px!important}
+.arcane-collection-search-316,.arcane-collection-filter-316{
+ width:100%!important;box-sizing:border-box!important;min-width:0!important;min-height:42px!important;
+ border:1px solid #a88bd1!important;border-radius:10px!important;
+ background:rgba(15,13,40,.93)!important;color:#fff2d5!important;
+ padding:9px 10px!important;font-size:14px!important;
+}
+.arcane-collection-filter-row-316{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+.arcane-collection-owned-316{display:flex!important;align-items:center!important;gap:7px!important;font-size:12px!important;color:#e2d2ef!important;min-height:22px!important}
+.arcane-collection-owned-316 input{width:17px!important;height:17px!important;accent-color:#a665e0!important}
+.arcane-collection-results-316{flex:1 1 auto!important;min-height:0!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;padding:4px 3px 20px!important;overscroll-behavior:contain!important}
+.arcane-collection-grid-316{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px 8px!important}
+.arcane-collection-item-316{
+ min-width:0!important;padding:5px!important;box-sizing:border-box!important;text-align:left!important;
+ border:1px solid var(--rarity-color,#b2a8ca)!important;border-radius:10px!important;
+ background:linear-gradient(155deg,rgba(64,44,109,.9),rgba(14,13,38,.95))!important;
+ box-shadow:0 0 12px color-mix(in srgb,var(--rarity-color,#a682bc) 28%,transparent)!important;
+ color:#fef1d9!important;cursor:pointer!important;
+ display:flex!important;flex-direction:column!important;gap:4px!important;
+ touch-action:manipulation!important;
+}
+.arcane-collection-item-316:active{filter:brightness(1.25)!important}
+.arcane-collection-art-316{
+ aspect-ratio:104/145!important;width:100%!important;min-height:0!important;position:relative!important;
+ box-sizing:border-box!important;border:2px solid #c7a273!important;border-radius:5px!important;
+ overflow:hidden!important;display:grid!important;place-items:center!important;
+ background:radial-gradient(circle,#684491,#1a143b)!important;
+}
+.arcane-collection-art-316>.card-art-loader,.arcane-collection-art-316>.card-art-loader img{
+ width:100%!important;height:100%!important;max-width:none!important;
+}
+.arcane-collection-art-316 img{object-fit:cover!important}
+.arcane-collection-art-316>.card-art-fallback{font-size:40px!important}
+.arcane-collection-card-name-316{
+ font-size:clamp(9px,2.65vw,13px)!important;
+ font-weight:800!important;line-height:1.15!important;
+ overflow-wrap:anywhere!important;min-height:2.3em!important;
+}
+.arcane-collection-card-meta-316{font-size:10px!important;color:#e1cdef!important;line-height:1.2!important}
+.arcane-collection-card-count-316{font-size:10px!important;font-weight:800!important;color:#ffdfa1!important}
+.arcane-collection-empty-316{padding:30px 15px!important;text-align:center!important;color:#ead9ef!important}
+.arcane-collection-tag-316{
+ font-size:10px!important;letter-spacing:.5px!important;
+ font-weight:900!important;color:var(--rarity-color,#e5dbf6)!important;
+ text-shadow:0 0 6px #190820!important;
+}
+.arcane-collection-detail-316{
+ position:absolute!important;inset:0!important;z-index:5!important;box-sizing:border-box!important;
+ background:rgba(7,5,21,.92)!important;backdrop-filter:blur(7px)!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:18px!important;overflow-y:auto!important;
+}
+.arcane-collection-detail-316[hidden]{display:none!important}
+.arcane-collection-detail-panel-316{
+ width:min(100%,440px)!important;max-height:90dvh!important;overflow-y:auto!important;
+ padding:16px!important;box-sizing:border-box!important;
+ border:2px solid var(--rarity-color,#e6bc89)!important;border-radius:17px!important;
+ background:linear-gradient(155deg,#2c1b54,#0d0e2c)!important;
+ box-shadow:0 0 35px #973aeb7a!important;
+}
+.arcane-collection-detail-header-316{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-bottom:12px!important}
+.arcane-collection-detail-header-316 h3{margin:0!important;color:#ffe6b1!important;font-size:clamp(18px,4.5vw,26px)!important;line-height:1.2!important}
+.arcane-collection-detail-close-316{
+ flex:0 0 auto!important;min-width:42px!important;min-height:38px!important;
+ border:1px solid #e4bd83!important;background:#3e215f!important;
+ color:#fff!important;border-radius:9px!important;font-size:19px!important;cursor:pointer!important;
+}
+.arcane-collection-detail-art-316{height:min(34dvh,280px)!important;width:min(75%,240px)!important;margin:0 auto 12px!important}
+.arcane-collection-detail-stats-316{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:12px!important}
+.arcane-collection-detail-stats-316 div{border:1px solid #7a588e!important;background:#180e35!important;border-radius:8px!important;padding:9px!important;text-align:center!important;font-size:13px!important}
+.arcane-collection-detail-description-316{font-size:14px!important;line-height:1.5!important;color:#f0dff2!important;margin:10px 0!important}
+.arcane-collection-note-316{font-size:11px!important;color:#b9a5d4!important;margin-top:6px!important;line-height:1.35!important}
+@media(min-width:650px){.arcane-collection-grid-316{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
+@media(orientation:landscape) and (max-height:520px){
+ .arcane-collection-316{padding:5px 12px!important}
+ .arcane-collection-title-316{font-size:19px!important;margin:0 0 4px!important}
+ .arcane-collection-summary-316{margin:0 0 5px!important}
+ .arcane-collection-controls-316{display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:6px!important}
+ .arcane-collection-grid-316{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ .arcane-collection-detail-316{padding:7px!important}
+ .arcane-collection-detail-panel-316{max-height:95dvh!important}
+ .arcane-collection-detail-art-316{height:30dvh!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.15</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.16</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4713,6 +4820,126 @@ window.setArenaCharacterTheme('magierin');
  syncOrientation();window.addEventListener('resize',syncOrientation,{passive:true});
 })();
 
+
+/* v3.16 – Collection: card catalogue and starter-deck test holdings.
+   A persistent earned inventory does not yet exist; do not fabricate saved rewards. */
+(function initCollection316(){
+ const testNames=new Map(starterDeckList.map(([name,count])=>[name,count]));
+ for(const c of resonanceTestCards)testNames.set(c.name,Math.max(1,testNames.get(c.name)||0));
+ const extraNames=new Set(resonanceExtraDeck.map(c=>c.name));
+ const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck]
+  .filter((c,i,arr)=>arr.findIndex(d=>d.name===c.name)===i);
+ const rarities={
+  'Glutkoloss':'legendary','Flammendrache':'epic','Arkaner Magier':'rare',
+  'Frostwächter':'rare','Schattenwolf':'rare','Donnerfalke':'rare',
+  'Arkaner Zerstörungsstrahl':'epic','Resonanzfürst Nocthar':'legendary',
+  'Schattenbestie Umbra':'epic','Nyxara, Königin der Schatten':'legendary',
+  'Noctharion, Herrscher der Finsternis':'mythic','Schattenfessel':'rare',
+  'Kristallschild':'rare','Arkaner Rückschlag':'rare',
+  'Arkaner Sturm':'epic','Geisterruf':'rare',
+  'Schattenresonator':'rare','Nachtklinge':'rare'
+ };
+ const rarityData={
+  normal:{label:'Normal',color:'#c3c5d1'},
+  rare:{label:'Selten',color:'#59c6ff'},
+  epic:{label:'Episch',color:'#c678ff'},
+  legendary:{label:'Legendär',color:'#ffd26d'},
+  mythic:{label:'Mythisch',color:'#ff85dd'}
+ };
+ const types={monster:'Monster',spell:'Zauber',trap:'Falle'};
+ const collection=document.createElement('section');
+ collection.className='arcane-collection-316';collection.id='arcaneCollection316';collection.hidden=true;
+ collection.setAttribute('aria-label','Arcane Duel Kartensammlung');
+ collection.innerHTML=`<div class="arcane-collection-top-316">
+ <button type="button" class="arcane-collection-back-316" id="arcaneCollectionBack316">← Stadt</button>
+ <span class="arcane-collection-tag-316">ARCANE DUEL</span>
+ </div>
+ <h2 class="arcane-collection-title-316">Kartensammlung</h2>
+ <div id="arcaneCollectionSummary316" class="arcane-collection-summary-316"></div>
+ <div class="arcane-collection-controls-316">
+  <input id="arcaneCollectionSearch316" class="arcane-collection-search-316" type="search" autocomplete="off" placeholder="Karten suchen …" aria-label="Kartenname suchen"/>
+  <div class="arcane-collection-filter-row-316">
+   <select id="arcaneCollectionType316" class="arcane-collection-filter-316" aria-label="Kartentyp"><option value="all">Alle Typen</option><option value="monster">Monster</option><option value="spell">Zauber</option><option value="trap">Fallen</option></select>
+   <select id="arcaneCollectionRarity316" class="arcane-collection-filter-316" aria-label="Seltenheit"><option value="all">Alle Seltenheiten</option><option value="normal">Normal</option><option value="rare">Selten</option><option value="epic">Episch</option><option value="legendary">Legendär</option><option value="mythic">Mythisch</option></select>
+  </div>
+  <label class="arcane-collection-owned-316"><input type="checkbox" id="arcaneCollectionOwned316"/>Nur Karten aus Starterdeck und Testbestand</label>
+ </div>
+ <div class="arcane-collection-results-316"><div id="arcaneCollectionGrid316" class="arcane-collection-grid-316"></div></div>
+ <div id="arcaneCollectionDetail316" class="arcane-collection-detail-316" hidden></div>`;
+ document.body.appendChild(collection);
+ const $c=id=>collection.querySelector('#'+id);
+ const escapeText=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const rarity=c=>rarities[c.name]||'normal';
+ const count=c=>extraNames.has(c.name)?0:(testNames.get(c.name)||0);
+ const special=c=>extraNames.has(c.name);
+ const picture=c=>renderCardArt(c);
+ const rarityVars=c=>'--rarity-color:'+rarityData[rarity(c)].color;
+ function buildArt(c){return '<div class="arcane-collection-art-316">'+picture(c)+'</div>'}
+ function drawGrid(){
+  const query=$c('arcaneCollectionSearch316').value.toLocaleLowerCase('de').trim();
+  const kind=$c('arcaneCollectionType316').value;
+  const grade=$c('arcaneCollectionRarity316').value;
+  const onlyOwned=$c('arcaneCollectionOwned316').checked;
+  const filtered=allCards.filter(c=>{
+   const matchesName=c.name.toLocaleLowerCase('de').includes(query)||(c.element||'').toLocaleLowerCase('de').includes(query);
+   return matchesName&&(kind==='all'||c.kind===kind)&&(grade==='all'||rarity(c)===grade)&&(!onlyOwned||count(c)>0);
+  });
+  $c('arcaneCollectionSummary316').textContent=allCards.length+' bekannte Karten · '+filtered.length+' angezeigt · '+allCards.filter(c=>count(c)>0).length+' im Testbestand';
+  $c('arcaneCollectionGrid316').innerHTML=filtered.map(c=>{
+   const i=allCards.indexOf(c);
+   return '<button type="button" class="arcane-collection-item-316" data-card-index="'+i+'" style="'+rarityVars(c)+'" aria-label="'+escapeText(c.name)+'">'
+    +buildArt(c)
+    +'<span class="arcane-collection-tag-316">'+rarityData[rarity(c)].label+'</span>'
+    +'<span class="arcane-collection-card-name-316">'+escapeText(c.name)+'</span>'
+    +'<span class="arcane-collection-card-meta-316">'+types[c.kind]+(c.kind==='monster'?' · Lv. '+(c.level||'?'):'')+'</span>'
+    +'<span class="arcane-collection-card-count-316">'+(special(c)?'Extra-Deck · Testkarte':count(c)>0?'Testbestand ×'+count(c):'Nicht im Starterdeck')+'</span>'
+    +'</button>';
+  }).join('')||'<div class="arcane-collection-empty-316">Keine Karten für diese Auswahl gefunden.</div>';
+ }
+ function showCard(i){
+  const c=allCards[i];if(!c)return;
+  const rarityObj=rarityData[rarity(c)];
+  const detail=$c('arcaneCollectionDetail316');
+  const desc=c.effectText||c.desc||'Diese Karte hat keinen zusätzlichen Effekttext.';
+  detail.style.setProperty('--rarity-color',rarityObj.color);
+  detail.innerHTML='<div class="arcane-collection-detail-panel-316">'
+   +'<div class="arcane-collection-detail-header-316"><h3>'+escapeText(c.name)+'</h3><button type="button" id="arcaneCollectionClose316" class="arcane-collection-detail-close-316" aria-label="Kartendetails schließen">×</button></div>'
+   +'<div class="arcane-collection-art-316 arcane-collection-detail-art-316">'+picture(c)+'</div>'
+   +'<div class="arcane-collection-detail-stats-316"><div>'+types[c.kind]+(c.kind==='monster'?' · Level '+(c.level||'?'):'')+'</div><div style="color:'+rarityObj.color+'">'+rarityObj.label+'</div>'
+   +(c.kind==='monster'?'<div>ATK '+(c.atk??'?')+'</div><div>DEF '+(c.def??'?')+'</div>':'')+'</div>'
+   +'<p class="arcane-collection-detail-description-316">'+escapeText(desc)+'</p>'
+   +'<p class="arcane-collection-detail-description-316"><strong>Testbestand:</strong> '+(special(c)?'Resonanzkarte im Extra-Deck':count(c)+' Exemplar(e) aus dem Starterdeck/Testbestand')+'</p>'
+   +'<div class="arcane-collection-note-316">Kartensammlung im Testbetrieb. Seltenheiten vorläufig; freigeschaltete Karten und echte Besitzstände werden später gespeichert.</div>'
+   +'</div>';
+  detail.hidden=false;
+  detail.querySelector('#arcaneCollectionClose316').addEventListener('click',()=>{detail.hidden=true});
+  detail.querySelector('#arcaneCollectionClose316').focus({preventScroll:true});
+ }
+ function openCollection(){
+  collection.hidden=false;
+  $c('arcaneCollectionDetail316').hidden=true;
+  drawGrid();
+ }
+ function closeCollection(){
+  $c('arcaneCollectionDetail316').hidden=true;
+  collection.hidden=true;
+ }
+ $c('arcaneCollectionBack316').addEventListener('click',closeCollection);
+ $c('arcaneCollectionSearch316').addEventListener('input',drawGrid);
+ $c('arcaneCollectionType316').addEventListener('change',drawGrid);
+ $c('arcaneCollectionRarity316').addEventListener('change',drawGrid);
+ $c('arcaneCollectionOwned316').addEventListener('change',drawGrid);
+ $c('arcaneCollectionGrid316').addEventListener('click',event=>{
+  const button=event.target.closest('[data-card-index]');
+  if(!button)return;
+  showCard(Number(button.dataset.cardIndex));
+ });
+ $c('arcaneCollectionDetail316').addEventListener('click',event=>{
+  if(event.target===$c('arcaneCollectionDetail316'))$c('arcaneCollectionDetail316').hidden=true;
+ });
+ window.openArcaneCollection316=openCollection;
+})();
+
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
 (function initArcaneMainMenu307(){
  const home=document.createElement('div');
@@ -4724,7 +4951,7 @@ window.setArenaCharacterTheme('magierin');
  home.innerHTML=`<div class="arcane-home-shell-307 arcane-world-hub-314">
  <div class="arcane-hub-shimmer-314" aria-hidden="true"></div>
  <div class="arcane-hub-title-314"><div class="arcane-hub-kicker-314">DIE WELT DER CHRONIK</div><div class="arcane-hub-logo-314" role="img" aria-label="Arcane Duel"></div></div>
- <div class="arcane-hub-hint-314">Gebäude antippen</div>
+ 
  <div class="arcane-home-choices-307 arcane-hub-buildings-314">
   <button type="button" class="arcane-hub-building-314 arcane-hub-collection-314" data-arcane-mode="collection" aria-label="Bibliothek – Kartensammlung"><span>▣ Sammlung</span></button>
   <button type="button" class="arcane-hub-building-314 arcane-hub-story-314" data-arcane-mode="story" aria-label="Schloss – Story"><span>✦ Story</span></button>
@@ -4761,6 +4988,9 @@ window.setArenaCharacterTheme('magierin');
   shop:'Hier wird es später Booster für Arkankristalle geben.'
  };
  home.querySelectorAll('[data-arcane-mode]').forEach(button=>button.addEventListener('click',()=>{
+  if(button.dataset.arcaneMode==='collection'&&typeof window.openArcaneCollection316==='function'){
+    window.openArcaneCollection316();return;
+  }
   const mode=button.dataset.arcaneMode;
   home.querySelector('#arcaneHomeDetailTitle307').textContent=names[mode]||'Arcane Duel';
   home.querySelector('#arcaneHomeDetailText307').textContent=messages[mode]||'Dieser Bereich wird entwickelt.';
