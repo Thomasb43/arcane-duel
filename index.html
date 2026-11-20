@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-landscape-straight-hands-v291">
+<meta name="arcane-build" content="20261120-landscape-polish-v292">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2765,9 +2765,58 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  }
 }
 
+
+/* v2.92 – landscape polish: independent rival hand clearance and readable cards. */
+@media(orientation:landscape){
+ /* Opponent hand sits above the spell/trap row, without covering board slots. */
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand-wrap{
+   top:-43px!important;bottom:auto!important;
+   left:38%!important;width:24%!important;height:65px!important;
+   max-height:65px!important;position:absolute!important;
+   z-index:30!important;overflow:visible!important;transform:none!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand{
+   height:65px!important;max-height:65px!important;
+   align-items:center!important;justify-content:center!important;
+   padding:0!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-card-back{
+   height:clamp(40px,8.8dvh,56px)!important;
+   transform:none!important;margin:0!important;
+ }
+ /* Close the large horizontal gaps between zones. */
+ main.arcane-responsive>.arena-stage>.arena-world{
+   width:min(calc(100% - 12px),clamp(340px,41vw,620px))!important;
+ }
+ main.arcane-responsive>.arena-stage .zones{
+   column-gap:4px!important;
+ }
+ main.arcane-responsive>.arena-stage .zones>.zone{
+   width:94%!important;
+   font-size:clamp(8px,.8vw,11px)!important;
+ }
+ /* Give card names two readable lines; keep upright hand positions. */
+ main.arcane-responsive #hand .card{
+   padding:3px!important;gap:2px!important;
+ }
+ main.arcane-responsive #hand .card .art{
+   flex:0 0 53%!important;height:53%!important;max-height:53%!important;
+ }
+ main.arcane-responsive #hand .card strong{
+   display:block!important;white-space:normal!important;
+   overflow-wrap:anywhere!important;word-break:normal!important;
+   font-size:clamp(8px,.98vw,11px)!important;
+   line-height:1.05!important;
+   max-height:2.2em!important;overflow:hidden!important;
+ }
+ main.arcane-responsive #hand .card .stats{
+   margin-top:auto!important;font-size:clamp(6px,.75vw,9px)!important;
+ }
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.91</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.92</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
