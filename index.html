@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-mirrored-player-fan-v282">
+<meta name="arcane-build" content="20261120-four-hud-fixes-v283">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2168,9 +2168,69 @@ main.arcane-responsive .player-fixed-ui .duel-lp-face img{object-position:50% 6%
    transform:translateY(calc(var(--fan-lift,0px) - 11px)) rotate(var(--fan-angle,0deg))!important;
  }
 }
+
+/* v2.83: four focused in-game HUD fixes */
+@media (orientation:portrait){
+ /* Move only the player's fan down a little, keeping cards and drag targets intact. */
+ main.arcane-responsive #hand{transform:translateY(8px)!important}
+
+ /* Turn and phase share the opponent LP row rather than occupying the title bar. */
+ body>header .turn-hud{
+   position:fixed!important;
+   top:calc(clamp(48px,6dvh,62px) + 10px)!important;
+   right:7px!important;left:auto!important;
+   transform:none!important;z-index:70!important;
+   padding:3px 4px!important;
+   border:0!important;background:transparent!important;box-shadow:none!important;
+ }
+ body>header .turn-hud span,body>header .turn-hud button{
+   border:1.5px solid #ffc65a!important;border-radius:999px!important;
+   background:linear-gradient(#281234,#0c071b)!important;
+   box-shadow:0 0 5px #df4aff!important;color:#ffe9a5!important;
+   padding:5px 7px!important;line-height:1.1!important;
+ }
+}
+/* Both main decks use the entire deck slot as a single card-sized stack. */
+main.arcane-responsive .deck-sidezone{
+  padding:0!important;isolation:isolate!important;overflow:hidden!important;
+}
+main.arcane-responsive .deck-sidezone::before{
+  inset:3px!important;border:2px solid #e6b65d!important;
+  border-radius:6px!important;
+  background:#180d39 url("artwork/arcane-duel-kartenruecken-8.png?v=2.60") center / 100% 100% no-repeat!important;
+  box-shadow:inset 0 0 0 1px #7c4bce,0 0 5px #f6b14d!important;
+}
+main.arcane-responsive .deck-sidezone .deck-symbol,
+main.arcane-responsive .deck-sidezone .sidezone-label{display:none!important}
+main.arcane-responsive .deck-sidezone .deck-counter{
+  position:absolute!important;left:5px!important;right:5px!important;
+  bottom:5px!important;top:auto!important;margin:0!important;
+  padding:2px 0!important;
+  font-size:clamp(13px,3.2vw,19px)!important;line-height:1!important;
+  color:#fff3bf!important;text-align:center!important;
+  border-radius:0 0 4px 4px!important;background:#080717c9!important;
+  text-shadow:0 1px 3px #000!important;
+}
+/* Extra Deck: when cards remain, represent the stack as a card back, never as a number. */
+main.arcane-responsive .extra-sidezone.has-extra-cards{
+  position:relative!important;isolation:isolate!important;overflow:hidden!important;
+  padding:0!important;
+}
+main.arcane-responsive .extra-sidezone.has-extra-cards .sidezone-symbol,
+main.arcane-responsive .extra-sidezone.has-extra-cards .sidezone-label,
+main.arcane-responsive .extra-sidezone .sidezone-count{display:none!important}
+main.arcane-responsive .extra-sidezone.has-extra-cards::before{
+  content:""!important;position:absolute!important;display:block!important;
+  inset:3px!important;
+  border:2px solid #ebc16b!important;border-radius:6px!important;
+  background:#140b35 url("artwork/arcane-duel-kartenruecken-8.png?v=2.60") center / 100% 100% no-repeat!important;
+  box-shadow:inset 0 0 0 1px #8a51cc,0 0 6px #b25fff!important;
+  pointer-events:none!important;
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.82</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.83</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -2441,7 +2501,17 @@ function sendToGraveyard(card,owner="player"){
  (owner==="opponent"?oppGraveyard:myGraveyard).push({...card});
  if(card.kind==="monster"){const zoneId=owner==="opponent"?"oppGraveZone":"myGraveZone";setTimeout(()=>{const zone=$(zoneId);if(zone){zone.classList.remove("grave-receive-fx");void zone.offsetWidth;zone.classList.add("grave-receive-fx");setTimeout(()=>zone.classList.remove("grave-receive-fx"),700);}},650);}
 }
-function renderExtraDeckCounts(){const mine=$("myExtraDeck").querySelector(".sidezone-count");if(mine)mine.textContent=resonanceExtraDeck.length;const opponent=$("oppExtraDeck").querySelector(".sidezone-count");if(opponent)opponent.textContent="0";}
+function renderExtraDeckCounts(){
+ const player=$("myExtraDeck"), opponent=$("oppExtraDeck");
+ const playerCards=resonanceExtraDeck.length,opponentCards=0;
+ player.classList.toggle("has-extra-cards",playerCards>0);
+ opponent.classList.toggle("has-extra-cards",opponentCards>0);
+ player.setAttribute("title",playerCards+" Karten im Extra-Deck");
+ opponent.setAttribute("title",opponentCards+" Karten im Extra-Deck");
+ const mine=player.querySelector(".sidezone-count"),theirs=opponent.querySelector(".sidezone-count");
+ if(mine)mine.textContent="";
+ if(theirs)theirs.textContent="";
+}
 function renderGraveyards(){
  renderExtraDeckCounts();
  const draw=(list)=>list.length?'<div class="grave-card" title="'+list[list.length-1].name+'"><span>'+(list[list.length-1].emoji||'✦')+'</span></div>':'';
