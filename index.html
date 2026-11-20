@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-landscape-correction-v288">
+<meta name="arcane-build" content="20261120-landscape-spacing-v289">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2594,9 +2594,51 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
   height:clamp(38px,11dvh,58px)!important;
  }
 }
+
+/* v2.89 – landscape second pass: use available width, separate opponent fan. */
+@media (orientation:landscape){
+ /* A 40vw board gives the 4 columns visibly more room while retaining side rails. */
+ main.arcane-responsive>.arena-stage>.arena-world{
+   width:min(calc(100% - 8px),clamp(300px,40vw,610px))!important;
+   max-width:100%!important;
+ }
+ main.arcane-responsive>.arena-stage .zones>.zone{
+   font-size:clamp(8px,1vw,12px)!important;
+ }
+ /* Keep the rival's cards in the clear area between title and battlefield. */
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand-wrap{
+   top:-7px!important;bottom:auto!important;
+   left:38%!important;width:24%!important;
+   height:calc(100% - 4px)!important;
+   transform:translateY(-5px)!important;
+   z-index:22!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand{
+   align-items:flex-start!important;padding-top:1px!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-card-back{
+   flex-basis:clamp(31px,4.2vw,49px)!important;
+   width:clamp(31px,4.2vw,49px)!important;
+   height:clamp(43px,10dvh,61px)!important;
+   margin-left:calc(-1 * clamp(10px,1.45vw,18px))!important;
+ }
+ /* More legible player cards, still fully contained in the lower hand row. */
+ main.arcane-responsive #hand .card{
+   flex-basis:clamp(66px,8.5vw,103px)!important;
+   width:clamp(66px,8.5vw,103px)!important;
+   height:clamp(73px,20dvh,119px)!important;
+   margin-left:calc(-1 * clamp(17px,2.5vw,28px))!important;
+ }
+ main.arcane-responsive #hand .card:first-child{margin-left:0!important}
+ main.arcane-responsive #hand .card strong{font-size:clamp(8px,1.25vw,12px)!important}
+ /* Prevent the right-hand deck count from extending below the play area. */
+ main.arcane-responsive #myDeckZone{top:auto!important;bottom:1%!important}
+ main.arcane-responsive #myExtraDeck{top:58%!important}
+ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards{top:58%!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.88</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.89</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
