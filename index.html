@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-gold-chronicle-subtitle-v312">
+<meta name="arcane-build" content="20261120-tilted-legendary-boss-card-v313">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3603,9 +3603,78 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
    margin:0!important;
  }
 }
+
+/* v3.13 – slanted, floating rotating title card and unseen legendary boss. */
+.arcane-intro-card-308{
+  animation:arcaneLegendaryTurn313 8s linear infinite!important;
+  transform-style:preserve-3d!important;
+  will-change:transform!important;
+}
+@keyframes arcaneLegendaryTurn313{
+ from{transform:rotateZ(-10deg) rotateX(12deg) rotateY(0deg)}
+ to{transform:rotateZ(-10deg) rotateX(12deg) rotateY(360deg)}
+}
+.arcane-intro-card-float-308{
+ width:clamp(116px,26vw,195px)!important;
+}
+.arcane-intro-card-front-308{
+  transform:rotateY(180deg)!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  padding:4px!important;
+  gap:3px!important;
+  overflow:hidden!important;
+  background:linear-gradient(155deg,#59318c,#201038 55%,#6a3477)!important;
+  border:3px solid #f9d99b!important;
+  box-shadow:inset 0 0 0 2px #542569,0 0 15px #cb7afa!important;
+}
+.arcane-intro-card-front-308::before{content:none!important;display:none!important}
+.arcane-legendary-heading-313{
+ font-size:clamp(8px,1.65vw,11px)!important;
+ font-weight:900!important;
+ line-height:1.1!important;
+ padding:3px 0!important;
+ color:#ffe6a4!important;
+ letter-spacing:.6px!important;
+ text-shadow:0 0 8px #efbfff!important;
+}
+.arcane-legendary-art-313{
+ flex:1 1 auto!important;
+ min-height:0!important;
+ width:100%!important;
+ border:1px solid #edcc96!important;
+ border-radius:4px!important;
+ box-shadow:inset 0 0 13px #ce75ff!important;
+ background:#140929 url("artwork/vesperion-sternenverschlinger-teaser.svg?v=3.13") center / cover no-repeat!important;
+}
+.arcane-legendary-name-313{
+ color:#fff1d3!important;
+ text-shadow:0 1px 3px #08051e!important;
+ font-size:clamp(10px,2vw,15px)!important;
+ font-family:Georgia,'Times New Roman',serif!important;
+ font-weight:900!important;
+ letter-spacing:.5px!important;
+ line-height:1!important;
+}
+.arcane-legendary-subtitle-313{
+ color:#e5ccf9!important;
+ font-size:clamp(6px,1.15vw,9px)!important;
+ line-height:1!important;
+ margin:0 0 2px!important;
+}
+@media(orientation:landscape) and (max-height:550px){
+ .arcane-intro-card-float-308{width:clamp(60px,13dvh,115px)!important}
+ .arcane-legendary-heading-313{font-size:7px!important;padding:1px 0!important}
+ .arcane-legendary-name-313{font-size:8px!important}
+ .arcane-legendary-subtitle-313{font-size:5px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .arcane-intro-card-308{animation:none!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.12</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.13</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4524,7 +4593,12 @@ window.setArenaCharacterTheme('magierin');
    <div class="arcane-intro-ring-308"></div>
    <div class="arcane-intro-card-float-308"><div class="arcane-intro-card-308">
     <div class="arcane-intro-card-face-308 arcane-intro-card-back-308"></div>
-    <div class="arcane-intro-card-face-308 arcane-intro-card-front-308"></div>
+    <div class="arcane-intro-card-face-308 arcane-intro-card-front-308">
+     <div class="arcane-legendary-heading-313">✦ LEGENDÄR ✦</div>
+     <div class="arcane-legendary-art-313"></div>
+     <div class="arcane-legendary-name-313">VESPERION</div>
+     <div class="arcane-legendary-subtitle-313">Der Sternenverschlinger</div>
+    </div>
    </div></div>
   </div>
   <button class="arcane-intro-start-308" id="arcaneIntroStart308" type="button">SPIEL STARTEN</button>
