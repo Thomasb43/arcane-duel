@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-dynamic-hand-fan-v11">
+<meta name="arcane-build" content="20261120-field-up-hand-space-v12">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1079,6 +1079,22 @@ main{position:relative!important;overflow:hidden}
  }
  #hand .card:first-child{margin-left:0!important}
  #hand .card.selected{transform:translateY(-6px) rotate(var(--fan-angle,0deg))!important}
+}
+
+/* v2.45 – Gegner nutzt weniger Leerraum, Spielfeld rückt nach oben; Hand erhält unten Luft. */
+@media(max-width:649px){
+ .opponent-fixed-ui{
+  min-height:clamp(132px,16svh,156px)!important;
+  height:clamp(132px,16svh,156px)!important;
+ }
+ .opponent-fixed-ui .opponent-hand-wrap{transform:translateY(-8px)!important}
+ .opponent-fixed-ui .field-topline{transform:translateY(-7px)!important}
+ .arena-stage{margin-top:0!important}
+ #hand{
+  bottom:calc(env(safe-area-inset-bottom,0px) + 38px)!important;
+  height:clamp(160px,20svh,185px)!important;
+  padding-bottom:14px!important;
+ }
 }
 </style></head>
 <body>
