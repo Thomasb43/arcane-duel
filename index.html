@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-main-menu-v307">
+<meta name="arcane-build" content="20261120-rotating-intro-card-v308">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3397,9 +3397,96 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-home-choices-307 button.arcane-home-duel-307{grid-column:1/-1;min-height:47px}
  .arcane-home-detail-307{padding:8px}
 }
+
+/* v3.08 – magical animated title screen; 3D card rotates and floats. */
+.arcane-intro-308 {
+ position:fixed;inset:0;z-index:9500;box-sizing:border-box;
+ display:flex;justify-content:center;align-items:center;
+ overflow-y:auto;overflow-x:hidden;
+ padding:max(16px,env(safe-area-inset-top)) 15px max(16px,env(safe-area-inset-bottom));
+ background:
+  radial-gradient(ellipse at 50% 57%,rgba(202,86,255,.19),transparent 39%),
+  radial-gradient(ellipse at 50% 21%,rgba(88,44,197,.6),transparent 54%),
+  linear-gradient(160deg,#090720 0%,#1f1041 55%,#080c24 100%);
+ color:#ffe7b2;
+ isolation:isolate;
+}
+.arcane-intro-308[hidden]{display:none!important}
+.arcane-intro-308::before {
+ content:"";position:absolute;inset:-20%;pointer-events:none;opacity:.65;
+ background:repeating-conic-gradient(from 0deg at 50% 48%,transparent 0deg 17deg,rgba(143,61,238,.09) 18deg 19deg,transparent 20deg 39deg);
+ animation:arcaneIntroAura308 38s linear infinite;
+}
+.arcane-intro-inner-308{
+ width:min(100%,440px);height:min(100%,820px);min-height:0;
+ display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;
+ position:relative;z-index:1;gap:14px;text-align:center;
+}
+.arcane-intro-logo-308 {
+ font-family:Georgia,'Times New Roman',serif;
+ font-size:clamp(38px,8vw,66px);line-height:.88;
+ font-weight:900;letter-spacing:2px;
+ color:#fce0a0;text-shadow:0 2px 0 #7e4525,0 4px 0 #4d224f,0 0 21px #bc6dff;
+}
+.arcane-intro-logo-308 span{display:block}
+.arcane-intro-caption-308{font-size:clamp(10px,2dvh,14px);letter-spacing:3px;color:#e2cbfa}
+.arcane-intro-card-area-308{
+ flex:1;min-height:170px;max-height:410px;width:100%;
+ display:grid;place-items:center;position:relative;perspective:950px;
+}
+.arcane-intro-ring-308{
+ width:min(77%,300px);aspect-ratio:1;position:absolute;
+ border:2px solid rgba(204,121,255,.65);border-radius:50%;
+ box-shadow:0 0 25px #c54dff88,inset 0 0 22px #983cfb55;
+ animation:arcaneIntroAura308 22s linear infinite;
+}
+.arcane-intro-ring-308::before{content:"";position:absolute;inset:12%;border:1px dashed #caa2ff99;border-radius:50%}
+.arcane-intro-card-float-308{
+ position:relative;width:clamp(102px,23vw,175px);aspect-ratio:104/164;
+ animation:arcaneIntroFloat308 3.9s ease-in-out infinite;
+ filter:drop-shadow(0 9px 21px rgba(220,76,255,.65));
+}
+.arcane-intro-card-308{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:arcaneIntroFlip308 7s linear infinite}
+.arcane-intro-card-face-308{
+ box-sizing:border-box;position:absolute;inset:0;backface-visibility:hidden;
+ border:3px solid #eec06d;border-radius:10px;
+ box-shadow:0 0 0 2px #51287c,0 0 20px #ad69fd, inset 0 0 16px #25103a;
+ background:#120c29 center/100% 100% no-repeat;
+}
+.arcane-intro-card-back-308{background-image:url('artwork/arcane-duel-kartenruecken-8.png?v=2.60')}
+.arcane-intro-card-front-308{
+ transform:rotateY(180deg);
+ display:grid;place-items:center;
+ background:radial-gradient(circle,#8f43ef 0%,#331760 34%,#10102d 78%);
+}
+.arcane-intro-card-front-308::before{content:"✦";color:#ffdc92;font-size:clamp(57px,10vw,100px);text-shadow:0 0 25px #dc7bff}
+.arcane-intro-start-308{
+ width:min(100%,340px);min-height:66px;
+ padding:15px 20px;
+ background:linear-gradient(125deg,#46185f,#241340 55%,#59306e);
+ border:2px solid #f2c47a;border-radius:13px;color:#ffe0a2;
+ box-shadow:0 0 22px #a12cef6b,inset 0 0 17px #b76cff44;
+ font-size:clamp(19px,3dvh,26px);font-weight:900;
+ letter-spacing:1px;cursor:pointer;touch-action:manipulation;
+}
+.arcane-intro-start-308:active{transform:scale(.98)}
+@keyframes arcaneIntroFlip308{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
+@keyframes arcaneIntroFloat308{0%,100%{transform:translateY(7px)}50%{transform:translateY(-12px)}}
+@keyframes arcaneIntroAura308{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media (orientation:landscape) and (max-height:550px) {
+ .arcane-intro-inner-308{height:100%;width:min(100%,800px);gap:4px}
+ .arcane-intro-logo-308{font-size:clamp(25px,6dvh,38px)}
+ .arcane-intro-card-area-308{min-height:85px;max-height:180px}
+ .arcane-intro-card-float-308{width:clamp(60px,13dvh,110px)}
+ .arcane-intro-ring-308{width:clamp(100px,23dvh,160px)}
+ .arcane-intro-start-308{min-height:42px;padding:6px 13px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce) {
+ .arcane-intro-card-308,.arcane-intro-card-float-308,.arcane-intro-ring-308,.arcane-intro-308::before{animation:none!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.07</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.08</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4301,5 +4388,33 @@ window.setArenaCharacterTheme('magierin');
   detail.hidden=false;
  }));
  setMenu(true);
+})();
+
+/* v3.08 – title screen opens the existing main menu without resetting the duel. */
+(function initArcaneTitle308(){
+ const intro=document.createElement('div');
+ intro.className='arcane-intro-308';
+ intro.id='arcaneIntro308';
+ intro.setAttribute('role','dialog');
+ intro.setAttribute('aria-modal','true');
+ intro.setAttribute('aria-label','Arcane Duel Startbildschirm');
+ intro.innerHTML=`<div class="arcane-intro-inner-308">
+  <div class="arcane-intro-logo-308"><span>ARCANE</span><span>DUEL</span></div>
+  <div class="arcane-intro-caption-308">DIE CHRONIK ERWACHT</div>
+  <div class="arcane-intro-card-area-308" aria-hidden="true">
+   <div class="arcane-intro-ring-308"></div>
+   <div class="arcane-intro-card-float-308"><div class="arcane-intro-card-308">
+    <div class="arcane-intro-card-face-308 arcane-intro-card-back-308"></div>
+    <div class="arcane-intro-card-face-308 arcane-intro-card-front-308"></div>
+   </div></div>
+  </div>
+  <button class="arcane-intro-start-308" id="arcaneIntroStart308" type="button">SPIEL STARTEN</button>
+ </div>`;
+ document.body.appendChild(intro);
+ intro.querySelector('#arcaneIntroStart308').addEventListener('click',()=>{
+  intro.hidden=true;
+  const mainMenu=document.getElementById('arcaneHome307');
+  if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
+ });
 })();
 </script></body></html>
