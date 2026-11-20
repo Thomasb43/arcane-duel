@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 530" role="img" aria-labelledby="title"><title id="title">ARCANE DUEL – magisches goldenes Wappen</title>
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2=".14" y2="1"><stop stop-color="#fff9d2"/><stop offset=".17" stop-color="#fbe5a4"/><stop offset=".37" stop-color="#e5a34a"/><stop offset=".52" stop-color="#fff3b5"/><stop offset=".75" stop-color="#bf6c29"/><stop offset="1" stop-color="#ffda7f"/></linearGradient>
+ <linearGradient id="gem" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#fff2ff"/><stop offset=".23" stop-color="#e897ff"/><stop offset=".52" stop-color="#a83aff"/><stop offset="1" stop-color="#330e86"/></linearGradient>
+ <radialGradient id="core"><stop stop-color="#edc0ff" stop-opacity=".65"/><stop offset=".55" stop-color="#b04aff" stop-opacity=".3"/><stop offset="1" stop-color="#7124e8" stop-opacity="0"/></radialGradient>
+ <filter id="aura" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"/></filter>
+ <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#070215" flood-opacity=".92"/><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#9233ed" flood-opacity=".8"/></filter>
+ <path id="runic" d="M380 53a205 205 0 1 1-.1 0" />
+</defs>
+<g opacity=".68" fill="none" stroke="#c271ff" stroke-width="2.5"><circle cx="380" cy="258" r="221"/><circle cx="380" cy="258" r="207"/><circle cx="380" cy="258" r="194" stroke-dasharray="14 17"/></g>
+<text fill="#df96ff" font-size="22" letter-spacing="16" font-family="serif" opacity=".75"><textPath href="#runic">✧ ᚨ ᚱ ᚲ ᚨ ᚾ ᛖ ✧ ᛞ ᚢ ᛖ ᛚ ✧ ᚨ ᚱ ᚲ ᚨ ᚾ ᛖ ✧ ᛞ ᚢ ᛖ ᛚ ✧ </textPath></text>
+<circle cx="380" cy="235" r="181" fill="url(#core)"/>
+<g filter="url(#aura)" opacity=".85" stroke="#c34aff" stroke-width="11" fill="none"><path d="M138 195Q380 90 621 195M120 314Q380 423 640 314"/></g>
+<g fill="#261047" stroke="url(#gold)" stroke-width="7" filter="url(#shadow)">
+ <path d="M379 82 414 135 463 143 414 169 381 208 345 168 297 143 346 132Z"/>
+ <path d="M145 248 85 269 145 291 172 323 183 281 235 251 180 251Z"/>
+ <path d="M615 248 675 269 615 291 588 323 577 281 525 251 580 251Z"/>
+ <path d="M250 393 305 405 380 453 455 405 510 393 460 437 380 506 299 437Z"/>
+</g>
+<g transform="translate(380 135)">
+ <path d="M0-76 33-27 29 35 0 92-28 36-33-27Z" fill="url(#gem)" stroke="#f9c5ff" stroke-width="5"/>
+ <path d="M0-76V92L-28 36-33-27Z" fill="#7131e4" opacity=".55"/>
+ <path d="M0-76 33-27 0-7-33-27Z" fill="#f1bfff" opacity=".75"/>
+ <path d="M0-7 29 35 0 92Z" fill="#f8dbff" opacity=".63"/>
+ <path d="M0-83V98M-38 0H38" stroke="#f9d7ff" stroke-width="3" opacity=".8"/>
+</g>
+<g stroke="#65300e" stroke-linejoin="round" paint-order="stroke fill" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="900" filter="url(#shadow)">
+ <text x="380" y="310" font-size="119" textLength="684" lengthAdjust="spacingAndGlyphs" stroke-width="12" fill="url(#gold)">ARCANE</text>
+ <text x="380" y="419" font-size="130" textLength="506" lengthAdjust="spacingAndGlyphs" stroke-width="13" fill="url(#gold)">DUEL</text>
+</g>
+<g fill="none" stroke="#ffd994" stroke-width="4" stroke-linecap="round">
+ <path d="M101 341 230 348 260 379M660 341 532 348 501 379"/>
+ <path d="M235 449 308 449 380 489 452 449 525 449"/>
+</g>
+<g fill="#ead1ff"><path d="M380 467 387 483 405 489 387 495 380 512 373 495 355 489 373 483Z"/><path d="M115 330 121 343 134 348 121 353 115 366 109 353 96 348 109 343Z"/><path d="M646 330 652 343 665 348 652 353 646 366 640 353 627 348 640 343Z"/></g>
+</svg>
