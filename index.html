@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-responsive-arena-v30">
+<meta name="arcane-build" content="20261120-approved-dual-orientation-layout-v31">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1498,9 +1498,76 @@ main.arcane-responsive{width:100%!important;max-width:1200px!important;display:f
  .arcane-responsive .arena-stage .sidezone-label{font-size:9px!important}
  .arcane-responsive .lp{font-size:17px!important}
 }
+
+/* v2.63: balanced portrait/landscape arena from approved design. */
+main.arcane-responsive{--arena-rail:clamp(46px,8vw,92px);gap:0!important;justify-content:flex-start!important;overflow:hidden!important}
+.arcane-responsive .arena-stage{padding:0 var(--arena-rail)!important;width:100%!important;box-sizing:border-box!important;flex:none!important}
+.arcane-responsive .arena-world{gap:2px!important}
+.arcane-responsive .arena-world .board{display:flex!important;flex-direction:column!important;gap:2px!important;min-height:0!important}
+.arcane-responsive .arena-world .zones{width:100%!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;margin:0!important}
+.arcane-responsive .arena-world .zone{height:clamp(70px,10dvh,105px)!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;min-width:0!important;padding:2px!important;overflow:hidden!important;box-sizing:border-box!important}
+.arcane-responsive .arena-world .zone:has(.field-card){padding:2px!important}
+.arcane-responsive .arena-world .zone .field-card{display:flex!important;flex-direction:column!important;position:relative!important;width:min(100%,72px)!important;height:100%!important;min-height:0!important;max-height:100%!important;aspect-ratio:2/3!important;margin:auto!important;overflow:hidden!important;transform:none!important}
+.arcane-responsive .arena-world .zone .field-card .art{min-height:0!important;flex:1 1 auto!important}
+.arcane-responsive .arena-world .zone .field-card strong,.arcane-responsive .arena-world .zone .field-card .stats{font-size:clamp(7px,1.3vw,10px)!important;line-height:1.05!important}
+.arcane-responsive .arena-fixed-ui.opponent-fixed-ui{height:clamp(150px,22dvh,215px)!important;min-height:0!important;position:relative!important}
+.arcane-responsive .arena-fixed-ui.player-fixed-ui{height:clamp(75px,11dvh,110px)!important;min-height:0!important;position:relative!important}
+.arcane-responsive .opponent-fixed-ui .duelist-portrait{position:absolute!important;left:8px!important;top:20px!important;right:auto!important;width:clamp(65px,13vw,100px)!important;height:clamp(65px,13vw,100px)!important}
+.arcane-responsive .player-fixed-ui .duelist-portrait{position:absolute!important;right:8px!important;top:0!important;left:auto!important;width:clamp(65px,13vw,100px)!important;height:clamp(65px,13vw,100px)!important}
+.arcane-responsive .opponent-hand-wrap{top:16px!important;left:34%!important;width:43%!important;right:auto!important}
+.arcane-responsive .field-topline{position:absolute!important;left:8px!important;bottom:4px!important;top:auto!important;width:clamp(150px,43%,290px)!important;max-width:43%!important}
+.arcane-responsive .field-bottomline{position:absolute!important;right:clamp(65px,16%,115px)!important;left:auto!important;top:0!important;bottom:auto!important;width:clamp(145px,42%,300px)!important;max-width:45%!important}
+.arcane-responsive .lp-row{min-width:0!important;width:100%!important;max-width:100%!important;height:clamp(35px,5dvh,55px)!important;padding:0 8px!important}
+.arcane-responsive .lp{font-size:clamp(15px,3.5vw,24px)!important;letter-spacing:0!important}
+.arcane-responsive .field-end-turn{left:8px!important;top:4px!important;bottom:auto!important;padding:8px 10px!important;font-size:clamp(11px,2.3vw,15px)!important}
+.arcane-responsive .arena-stage .duel-sidezones{display:contents!important}
+.arcane-responsive .arena-stage .sidezone{position:absolute!important;width:calc(var(--arena-rail) - 7px)!important;height:clamp(54px,8dvh,80px)!important;min-height:0!important;max-height:none!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;gap:1px!important;overflow:hidden!important;z-index:8!important;padding:2px!important;border-radius:9px!important}
+.arcane-responsive .arena-stage .sidezone-label{font-size:clamp(7px,1.6vw,11px)!important;overflow-wrap:anywhere!important;line-height:1!important}
+.arcane-responsive .arena-stage .deck-counter{font-size:clamp(13px,3vw,21px)!important}
+.arcane-responsive .arena-stage .sidezone-symbol{font-size:clamp(13px,3vw,21px)!important}
+.arcane-responsive #oppExtraDeck{left:3px!important;top:2%!important;right:auto!important}
+.arcane-responsive #oppDeckZone{left:3px!important;top:23%!important;right:auto!important}
+.arcane-responsive #oppGraveZone{right:3px!important;top:13%!important;left:auto!important}
+.arcane-responsive #myGraveZone{left:3px!important;top:65%!important;right:auto!important}
+.arcane-responsive #myExtraDeck{right:3px!important;top:64%!important;left:auto!important}
+.arcane-responsive #myDeckZone{right:3px!important;top:84%!important;left:auto!important}
+.arcane-responsive>section:has(#hand){height:clamp(145px,21dvh,200px)!important;min-height:0!important;flex:none!important;position:relative!important;overflow:visible!important;margin:0!important;padding:0!important}
+.arcane-responsive #hand{height:clamp(120px,19dvh,170px)!important;width:min(94%,560px)!important;max-width:94%!important;margin:0 auto!important;display:flex!important;justify-content:center!important;align-items:flex-end!important;overflow:visible!important}
+.arcane-responsive #hand .card{height:clamp(115px,18dvh,160px)!important;width:clamp(65px,16vw,108px)!important;max-width:108px!important;flex:none!important;margin-left:calc(-1 * clamp(18px,5vw,42px))!important}
+.arcane-responsive #hand .card:first-child{margin-left:0!important}
+.arcane-responsive .handtitle{position:relative!important;display:flex!important;gap:7px!important;align-items:center!important;justify-content:center!important;margin:0!important;font-size:11px!important}
+.arcane-responsive .handtitle h2{font-size:11px!important;margin:0!important}
+@media(orientation:landscape) and (max-height:650px){
+ header{height:37px!important;min-height:0!important}
+ main.arcane-responsive{--arena-rail:clamp(60px,7vw,105px);min-height:calc(100dvh - 37px)!important;display:grid!important;grid-template-columns:1fr!important;grid-template-rows:clamp(35px,10dvh,55px) minmax(0,1fr) clamp(36px,10dvh,60px) clamp(55px,19dvh,100px)!important;gap:1px!important}
+ .arcane-responsive .opponent-fixed-ui{grid-row:1!important;height:100%!important}
+ .arcane-responsive .arena-stage{grid-row:2!important;align-self:stretch!important;height:100%!important;padding:0 var(--arena-rail)!important}
+ .arcane-responsive .arena-world{height:100%!important;display:grid!important;grid-template-rows:1fr 1fr!important;gap:2px!important}
+ .arcane-responsive .arena-world .board{display:grid!important;grid-template-rows:1fr 1fr!important;gap:2px!important;min-height:0!important}
+ .arcane-responsive .arena-world .zones{height:100%!important;gap:4px!important}
+ .arcane-responsive .arena-world .zone{height:100%!important;min-height:0!important;max-height:100%!important}
+ .arcane-responsive .player-fixed-ui{grid-row:3!important;height:100%!important}
+ .arcane-responsive>section:has(#hand){grid-row:4!important;height:100%!important;min-height:0!important}
+ .arcane-responsive #hand{height:100%!important;padding:0!important;align-items:flex-end!important}
+ .arcane-responsive #hand .card{height:clamp(50px,17dvh,90px)!important;width:clamp(50px,8vw,85px)!important;margin-left:calc(-1 * clamp(15px,2vw,35px))!important}
+ .arcane-responsive .handtitle{position:absolute!important;left:4px!important;top:0!important}
+ .arcane-responsive .opponent-fixed-ui .duelist-portrait,.arcane-responsive .player-fixed-ui .duelist-portrait{width:45px!important;height:45px!important;top:0!important}
+ .arcane-responsive .opponent-hand-wrap{top:0!important;left:42%!important;width:20%!important}
+ .arcane-responsive .field-topline{left:52px!important;bottom:0!important;width:25%!important}
+ .arcane-responsive .field-bottomline{right:52px!important;top:0!important;width:24%!important}
+ .arcane-responsive .lp-row{height:32px!important}
+ .arcane-responsive .field-end-turn{left:8px!important;top:0!important}
+ .arcane-responsive .arena-stage .sidezone{height:clamp(32px,13dvh,54px)!important;width:calc(var(--arena-rail) - 8px)!important}
+ .arcane-responsive #oppExtraDeck{top:2%!important}
+ .arcane-responsive #oppDeckZone{top:24%!important}
+ .arcane-responsive #oppGraveZone{top:12%!important}
+ .arcane-responsive #myGraveZone{top:62%!important}
+ .arcane-responsive #myExtraDeck{top:63%!important}
+ .arcane-responsive #myDeckZone{top:84%!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.62</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.63</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
