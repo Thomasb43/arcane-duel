@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-vertical-tilt-only-v286">
+<meta name="arcane-build" content="20261120-landscape-first-v287">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2312,9 +2312,208 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
   transform-style:preserve-3d!important;
  }
 }
+
+/* v2.87 – first landscape arena layout; portrait is intentionally untouched. */
+@media (orientation:landscape){
+ html,body{height:100%;min-height:0!important;overflow:hidden!important}
+ body>header{
+  position:relative!important;height:34px!important;min-height:34px!important;
+  padding:2px 10px!important;display:flex!important;align-items:center!important;
+  justify-content:center!important;z-index:15!important;
+ }
+ body>header .brand h1{font-size:19px!important;line-height:1!important;letter-spacing:2px!important}
+ body>header .brand small{font-size:8px!important;line-height:1!important}
+ main.arcane-responsive{
+  --arena-rail:clamp(43px,6.2vw,62px)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(59px,16fr) minmax(155px,55fr) minmax(31px,8fr) minmax(67px,21fr)!important;
+  height:calc(100dvh - 34px)!important;min-height:0!important;max-height:calc(100dvh - 34px)!important;
+  width:100%!important;max-width:100%!important;
+  padding:0 5px max(2px,env(safe-area-inset-bottom))!important;gap:2px!important;
+  margin:0 auto!important;overflow:hidden!important;isolation:isolate!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui{
+  grid-row:1!important;order:0!important;
+  height:100%!important;min-height:0!important;max-height:none!important;
+  position:relative!important;z-index:12!important;
+ }
+ main.arcane-responsive>.arena-stage{
+  grid-row:2!important;order:1!important;position:relative!important;
+  width:100%!important;height:100%!important;min-height:0!important;
+  padding:0 var(--arena-rail)!important;overflow:visible!important;
+  perspective:800px!important;
+ }
+ main.arcane-responsive>.arena-stage>.arena-world{
+  display:grid!important;grid-template-columns:1fr!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  height:100%!important;min-height:0!important;gap:3px!important;
+  transform:rotateX(var(--view-tilt,0deg))!important;
+ }
+ main.arcane-responsive>.arena-stage .board{
+  display:grid!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  height:100%!important;min-height:0!important;gap:3px!important;
+  padding:0!important;margin:0!important;border:0!important;background:none!important;
+ }
+ main.arcane-responsive>.arena-stage .zones{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  height:100%!important;min-height:0!important;width:100%!important;
+  gap:4px!important;padding:0!important;margin:0!important;
+ }
+ main.arcane-responsive>.arena-stage .zones>.zone{
+  width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  max-height:none!important;aspect-ratio:auto!important;
+  border-radius:7px!important;padding:2px!important;
+  border:2px solid #cf73ff!important;
+  background:linear-gradient(155deg,#481778aa,#180d46c9)!important;
+  box-shadow:inset 0 0 11px #dd71ff35,0 0 6px #af4aef99!important;
+  font-size:clamp(8px,1.2vw,12px)!important;overflow:hidden!important;
+ }
+ main.arcane-responsive #myMon>.zone,
+ main.arcane-responsive #mySpell>.zone{
+  border-color:#48bcff!important;
+  background:linear-gradient(155deg,#124b8f9c,#091e55c9)!important;
+  box-shadow:inset 0 0 10px #53c8ff33,0 0 6px #238bff99!important;
+ }
+ main.arcane-responsive .arena-stage .zone .field-card{
+  height:100%!important;max-height:100%!important;width:100%!important;
+  max-width:100%!important;min-height:0!important;min-width:0!important;
+  margin:0!important;overflow:hidden!important;
+ }
+ main.arcane-responsive>.player-fixed-ui{
+  grid-row:3!important;order:2!important;position:relative!important;
+  height:100%!important;min-height:0!important;max-height:none!important;z-index:14!important;
+ }
+ main.arcane-responsive>section:has(#hand){
+  grid-row:4!important;order:3!important;position:relative!important;
+  width:100%!important;height:100%!important;min-height:0!important;
+  margin:0!important;padding:0!important;overflow:visible!important;
+ }
+ main.arcane-responsive .handtitle{display:none!important}
+ main.arcane-responsive #hand{
+  display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  width:100%!important;max-width:100%!important;height:100%!important;min-height:0!important;
+  padding:2px 9px 4px!important;margin:0 auto!important;overflow:visible!important;
+ }
+ main.arcane-responsive #hand .card{
+  flex:0 0 clamp(50px,7.4vw,78px)!important;
+  width:clamp(50px,7.4vw,78px)!important;
+  height:clamp(62px,18dvh,95px)!important;min-height:0!important;max-height:97%!important;
+  margin-left:calc(-1 * clamp(13px,2.2vw,24px))!important;
+  transform:translateY(var(--fan-lift,0px)) rotate(var(--fan-angle,0deg))!important;
+  transform-origin:50% 100%!important;
+  padding:2px!important;gap:1px!important;overflow:hidden!important;
+  border:1.5px solid #f0be63!important;border-radius:6px!important;
+  background:#17102e!important;
+ }
+ main.arcane-responsive #hand .card:first-child{margin-left:0!important}
+ main.arcane-responsive #hand .card.selected{
+  transform:translateY(calc(var(--fan-lift,0px) - 8px)) rotate(var(--fan-angle,0deg))!important;
+ }
+ main.arcane-responsive #hand .card .art{height:57%!important;min-height:0!important;flex:0 0 57%!important}
+ main.arcane-responsive #hand .card strong{font-size:clamp(7px,1.05vw,10px)!important;line-height:1.05!important}
+ main.arcane-responsive #hand .card small{display:none!important}
+ main.arcane-responsive #hand .card .stats{font-size:clamp(6px,.9vw,9px)!important;line-height:1.05!important}
+ main.arcane-responsive .opponent-hand-wrap{
+  position:absolute!important;left:37%!important;top:0!important;bottom:auto!important;
+  width:26%!important;height:100%!important;margin:0!important;padding:0!important;
+  z-index:5!important;overflow:visible!important;pointer-events:none!important;
+ }
+ main.arcane-responsive .opponent-hand{
+  height:100%!important;width:100%!important;display:flex!important;justify-content:center!important;
+  align-items:flex-end!important;overflow:visible!important;padding:0 0 2px!important;
+  transform:none!important;
+ }
+ main.arcane-responsive .opponent-card-back{
+  flex:0 0 clamp(30px,4.6vw,47px)!important;
+  width:clamp(30px,4.6vw,47px)!important;
+  height:clamp(41px,11dvh,60px)!important;
+  margin-left:calc(-1 * clamp(8px,1.5vw,15px))!important;
+  transform:translateY(var(--back-lift,0px)) rotate(var(--back-angle,0deg))!important;
+  transform-origin:center bottom!important;
+ }
+ main.arcane-responsive .opponent-card-back:first-child{margin-left:0!important}
+ main.arcane-responsive .opponent-fixed-ui .field-topline{
+  position:absolute!important;left:6px!important;right:auto!important;
+  top:7px!important;bottom:auto!important;
+  width:clamp(150px,24vw,250px)!important;max-width:none!important;
+  height:37px!important;margin:0!important;padding:0!important;z-index:10!important;
+ }
+ main.arcane-responsive .player-fixed-ui .field-bottomline{
+  position:absolute!important;left:6px!important;right:auto!important;
+  top:0!important;bottom:auto!important;
+  width:clamp(150px,24vw,250px)!important;max-width:none!important;
+  height:36px!important;margin:0!important;padding:0!important;z-index:10!important;
+ }
+ main.arcane-responsive .duel-lp-hud{
+  display:flex!important;align-items:center!important;width:100%!important;height:100%!important;
+ }
+ main.arcane-responsive .duel-lp-face{
+  flex:0 0 36px!important;width:36px!important;height:36px!important;
+  border:2px solid #eabc62!important;border-radius:8px!important;overflow:hidden!important;
+  background:#25103b!important;z-index:2!important;
+ }
+ main.arcane-responsive .duel-lp-face img{
+  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;
+ }
+ main.arcane-responsive .duel-lp-hud .lp{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex:1!important;min-width:0!important;height:30px!important;
+  margin-left:-3px!important;padding:1px 6px!important;
+  border:2px solid #edbd53!important;border-radius:0 18px 18px 0!important;
+  background:linear-gradient(#21112f,#060619)!important;
+  box-shadow:0 0 7px #dc39ff!important;
+  color:#ffe063!important;font-size:clamp(15px,2.25vw,23px)!important;
+  font-weight:900!important;white-space:nowrap!important;
+ }
+ main.arcane-responsive .opponent-fixed-ui>.turn-hud{
+  position:absolute!important;left:auto!important;right:7px!important;top:7px!important;
+  bottom:auto!important;transform:none!important;
+  display:flex!important;align-items:center!important;gap:7px!important;
+  z-index:18!important;border:0!important;padding:0!important;margin:0!important;
+  background:transparent!important;box-shadow:none!important;
+ }
+ main.arcane-responsive .opponent-fixed-ui>.turn-hud span,
+ main.arcane-responsive .opponent-fixed-ui>.turn-hud button{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  min-height:29px!important;padding:5px 8px!important;margin:0!important;
+  border:1.5px solid #ebbd64!important;border-radius:99px!important;
+  background:linear-gradient(#281234,#080719)!important;box-shadow:0 0 5px #c64cf5!important;
+  color:#ffe3a0!important;font-size:clamp(10px,1.5vw,13px)!important;white-space:nowrap!important;
+ }
+ main.arcane-responsive .player-fixed-ui .field-end-turn{
+  position:absolute!important;right:8px!important;left:auto!important;top:0!important;
+  bottom:auto!important;display:block!important;z-index:20!important;
+  border:1.5px solid #e5b358!important;border-radius:18px!important;
+  padding:7px 12px!important;font-size:12px!important;
+ }
+ main.arcane-responsive .opponent-fixed-ui>.duelist-portrait,
+ main.arcane-responsive .player-fixed-ui>.duelist-portrait{display:none!important}
+ main.arcane-responsive .arena-stage .duel-sidezones{display:contents!important}
+ main.arcane-responsive .arena-stage .sidezone{
+  position:absolute!important;box-sizing:border-box!important;
+  width:calc(var(--arena-rail) - 6px)!important;
+  height:clamp(42px,12dvh,63px)!important;
+  padding:2px!important;border-radius:8px!important;
+  overflow:hidden!important;z-index:12!important;
+ }
+ main.arcane-responsive #oppExtraDeck{left:2px!important;right:auto!important;top:0!important}
+ main.arcane-responsive #oppDeckZone{left:2px!important;right:auto!important;top:26%!important}
+ main.arcane-responsive #oppGraveZone{right:2px!important;left:auto!important;top:14%!important}
+ main.arcane-responsive #myGraveZone{left:2px!important;right:auto!important;top:62%!important}
+ main.arcane-responsive #myExtraDeck{right:2px!important;left:auto!important;top:59%!important}
+ main.arcane-responsive #myDeckZone{right:2px!important;left:auto!important;top:82%!important}
+ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards{
+  top:59%!important;right:2px!important;left:auto!important;
+  width:calc(var(--arena-rail) - 6px)!important;height:clamp(42px,12dvh,63px)!important;
+ }
+ main.arcane-responsive .deck-sidezone::before,
+ main.arcane-responsive .extra-sidezone.has-extra-cards::before{inset:2px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.86</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.87</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
