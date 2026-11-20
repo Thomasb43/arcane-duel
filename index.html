@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-galactic-cardback-border-v27">
+<meta name="arcane-build" content="20261120-original-cardback-frame-v28">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1410,9 +1410,38 @@ main{position:relative!important;overflow:hidden}
  pointer-events:none!important;
  z-index:2!important;
 }
+
+/* v2.60: originaler verzierter Kartenrand aus der Bilddatei bleibt erhalten.
+   Nur der zentrale Galaxie-Wirbel rotiert innerhalb einer runden Maske. */
+.opponent-card-back,.field-card-back{
+ background-image:url("artwork/arcane-duel-kartenruecken-8.png?v=2.60")!important;
+ background-position:center!important;
+ background-size:100% 100%!important;
+ background-repeat:no-repeat!important;
+ border:1px solid #b99a60!important;
+ border-radius:6px!important;
+ box-shadow:0 3px 10px #0009!important;
+ overflow:hidden!important;
+ isolation:isolate!important;
+}
+.opponent-card-back::before,.field-card-back::before{
+ content:""!important;
+ position:absolute!important;
+ left:50%!important;top:50%!important;
+ width:140%!important;height:140%!important;
+ background:url("artwork/arcane-duel-kartenruecken-8.png?v=2.60") center / 71.43% 71.43% no-repeat!important;
+ border:0!important;
+ clip-path:none!important;
+ -webkit-mask-image:radial-gradient(ellipse 23% 28% at center,#000 56%,transparent 94%)!important;
+ mask-image:radial-gradient(ellipse 23% 28% at center,#000 56%,transparent 94%)!important;
+ transform-origin:center!important;
+ animation:galacticCardSpin 24s linear infinite!important;
+ z-index:1!important;
+}
+.opponent-card-back::after,.field-card-back::after{content:none!important;display:none!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.59</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.60</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
