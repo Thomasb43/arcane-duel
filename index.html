@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-landscape-cardzones-v290">
+<meta name="arcane-build" content="20261120-landscape-straight-hands-v291">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2674,9 +2674,100 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  }
  main.arcane-responsive>.opponent-fixed-ui .opponent-card-back:first-child{margin-left:0!important}
 }
+
+/* v2.91 – Querformat: gerade Handkarten, freie Gegnerhand, breiteres Spielfeld.
+   Nur Landscape-Regeln; Portrait und Duell-Logik bleiben unverändert. */
+@media (orientation:landscape) {
+ main.arcane-responsive {
+   grid-template-rows:minmax(65px,19fr) minmax(150px,54fr) minmax(30px,8fr) minmax(70px,19fr)!important;
+ }
+ /* Spielfeld über die verfügbare Breite gleichmäßig aufteilen. */
+ main.arcane-responsive>.arena-stage>.arena-world {
+   width:min(calc(100% - 12px),clamp(360px,45vw,680px))!important;
+   max-width:100%!important;
+ }
+ main.arcane-responsive>.arena-stage .zones {
+   grid-template-columns:repeat(4,minmax(0,1fr))!important;
+   gap:5px!important;
+ }
+ main.arcane-responsive>.arena-stage .zones>.zone {
+   box-sizing:border-box!important;
+   width:76%!important;
+   height:100%!important;
+   justify-self:center!important;
+   min-width:0!important;min-height:0!important;
+   font-size:clamp(8px,.9vw,11px)!important;
+ }
+ /* Gegnerische Karten: eine gerade Reihe im oberen HUD, keine Rotation. */
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand-wrap {
+   position:absolute!important;
+   left:38%!important;width:24%!important;
+   top:0!important;bottom:auto!important;
+   height:100%!important;max-height:100%!important;
+   transform:none!important;
+   overflow:visible!important;z-index:15!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-hand {
+   display:flex!important;
+   align-items:center!important;justify-content:center!important;
+   height:100%!important;
+   padding:3px 0!important;gap:3px!important;
+   overflow:visible!important;
+ }
+ main.arcane-responsive>.opponent-fixed-ui .opponent-card-back {
+   box-sizing:border-box!important;
+   flex:0 0 clamp(29px,3.7vw,47px)!important;
+   width:clamp(29px,3.7vw,47px)!important;
+   height:clamp(40px,8.8dvh,56px)!important;
+   margin:0!important;
+   transform:none!important;
+   transform-origin:center center!important;
+ }
+ /* Eigene Karten: gerade, nebeneinander, mit leichtem Abstand. */
+ main.arcane-responsive #hand {
+   display:flex!important;
+   align-items:flex-end!important;
+   justify-content:center!important;
+   gap:5px!important;
+   padding:2px 8px 5px!important;
+   overflow:visible!important;
+ }
+ main.arcane-responsive #hand .card {
+   box-sizing:border-box!important;
+   flex:0 0 clamp(59px,7.4vw,100px)!important;
+   width:clamp(59px,7.4vw,100px)!important;
+   height:clamp(67px,18dvh,110px)!important;
+   max-height:100%!important;min-height:0!important;
+   margin:0!important;
+   transform:none!important;
+   transform-origin:center bottom!important;
+ }
+ main.arcane-responsive #hand .card:first-child{margin-left:0!important}
+ main.arcane-responsive #hand .card.selected {
+   transform:translateY(-8px)!important;
+ }
+ main.arcane-responsive #hand .card .art {
+   flex:0 0 62%!important;height:62%!important;min-height:0!important;
+ }
+ main.arcane-responsive #hand .card strong {
+   font-size:clamp(8px,1.1vw,11px)!important;
+   line-height:1.08!important;
+ }
+ main.arcane-responsive #hand .card .stats{
+   font-size:clamp(7px,.8vw,9px)!important;
+ }
+ /* An den Seiten keine Kartenstapel abschneiden. */
+ main.arcane-responsive .arena-stage .sidezone{
+   height:clamp(38px,10dvh,58px)!important;
+ }
+ main.arcane-responsive #myDeckZone{
+   top:auto!important;bottom:0!important;
+ }
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.90</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.91</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
