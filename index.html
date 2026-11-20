@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-collection-card-design-v318">
+<meta name="arcane-build" content="20261120-collection-image-fit-v319">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4100,9 +4100,48 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-collection-item-316{padding:5px!important}
  .arcane-collection-card-name-316{font-size:10px!important}
 }
+
+/* v3.19 – fix landscape-format source artwork leaving giant empty bars in portrait collection cards.
+   The illustration is cropped to fill a consistent art window; canonical card name is separately below. */
+.arcane-collection-item-316 .arcane-collection-art-316.arcane-collection-card-frame-318{
+  aspect-ratio:5/6!important;
+  background:#170d30!important;
+}
+.arcane-collection-item-316 .arcane-collection-image-318,
+.arcane-collection-detail-316 .arcane-collection-image-318{
+  position:relative!important;
+  width:100%!important;height:100%!important;overflow:hidden!important;
+  background:#170d30!important;
+}
+.arcane-collection-item-316 .arcane-collection-image-318>.card-art-loader,
+.arcane-collection-detail-316 .arcane-collection-image-318>.card-art-loader{
+  width:100%!important;height:100%!important;position:relative!important;
+  display:block!important;overflow:hidden!important;
+}
+.arcane-collection-item-316 .arcane-collection-image-318 .card-art-loader>img,
+.arcane-collection-detail-316 .arcane-collection-image-318 .card-art-loader>img{
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:cover!important;object-position:center center!important;
+  transform:none!important;
+}
+.arcane-collection-item-316 .arcane-collection-image-318>img,
+.arcane-collection-detail-316 .arcane-collection-image-318>img{
+  width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:center center!important;
+}
+.arcane-collection-item-316 .arcane-collection-card-name-316{
+  flex:0 0 auto!important;
+  min-height:2.5em!important;
+}
+.arcane-collection-detail-art-316.arcane-collection-card-frame-318{
+  aspect-ratio:5/6!important;
+  max-height:min(40dvh,280px)!important;
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.18</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.19</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
