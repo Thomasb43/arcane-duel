@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-first-booster-v322">
+<meta name="arcane-build" content="20261120-shop-concept-two-v323">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4187,9 +4187,198 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 @keyframes arcaneCardReveal322{from{opacity:0;transform:perspective(600px) rotateY(95deg) translateY(35px) scale(.7)}to{opacity:1;transform:perspective(600px) rotateY(0) translateY(0) scale(1)}}
 @keyframes arcaneBoosterPulse322{from{filter:brightness(.85);transform:scale(.92)}to{filter:brightness(1.28);transform:scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.arcane-booster-card-322,.arcane-booster-product-shine-322{animation:none!important}}
+
+/* v3.23 – approved Concept #2 shop presentation with merchant, luminous booster and navigation. */
+.arcane-shop-320{
+ padding:0 0 max(72px,calc(70px + env(safe-area-inset-bottom)))!important;
+ gap:0!important;
+ background:linear-gradient(180deg,#110725,#201043 40%,#0b0a24 100%)!important;
+ overscroll-behavior:contain!important;
+}
+.arcane-shop-hero-323{
+ position:relative!important;width:100%!important;flex:0 0 auto!important;
+ height:clamp(225px,33dvh,360px)!important;overflow:hidden!important;
+ border-bottom:2px solid #d8a966!important;
+ background:#140d2d!important;
+ box-shadow:0 9px 22px rgba(133,47,195,.56)!important;
+}
+.arcane-shop-merchant-art-323{
+ position:absolute!important;inset:0!important;
+ background:linear-gradient(to bottom,rgba(9,5,32,.13) 0%,rgba(15,5,39,.0) 57%,rgba(12,6,30,.75) 100%),
+ url("artwork/arcane-shop-merchant-v323.webp?v=3.23") center 42%/cover no-repeat!important;
+}
+.arcane-shop-hero-323>.arcane-shop-top-320{
+ position:absolute!important;left:13px!important;right:13px!important;top:max(12px,env(safe-area-inset-top))!important;
+ z-index:3!important;
+ gap:7px!important;align-items:center!important;
+ text-shadow:0 2px 4px #170527!important;
+}
+.arcane-shop-hero-323>.arcane-shop-top-320>strong{
+ color:#ffe7a6!important;font-size:clamp(13px,3.2vw,20px)!important;
+ background:rgba(16,8,40,.62)!important;padding:6px 10px!important;border-radius:9px!important;
+}
+.arcane-shop-hero-323>.arcane-shop-top-320>.arcane-shop-back-320{
+ background:linear-gradient(160deg,rgba(38,13,76,.92),rgba(22,9,48,.93))!important;
+ border:2px solid #f0c57d!important;box-shadow:0 0 11px #a244d888!important;
+}
+.arcane-shop-hero-323>h2{
+ position:absolute!important;z-index:3!important;
+ bottom:1px!important;left:4%!important;width:92%!important;
+ box-sizing:border-box!important;
+ margin:0!important;padding:8px 5px!important;text-align:center!important;
+ color:#ffe1a1!important;font-family:Georgia,serif!important;
+ font-size:clamp(30px,7vw,46px)!important;
+ line-height:1.1!important;text-shadow:0 2px 0 #46214c,0 0 19px #8f2adb!important;
+ background:linear-gradient(90deg,transparent,rgba(23,6,52,.81) 15%,rgba(35,13,62,.85) 85%,transparent)!important;
+}
+.arcane-shop-currency-row-323{
+ width:calc(100% - 28px)!important;max-width:720px!important;box-sizing:border-box!important;
+ margin:13px auto 13px!important;padding:9px!important;
+ display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;
+ background:linear-gradient(105deg,#2d174d,#1b113d 80%)!important;
+ border:1px solid #dcae71!important;border-radius:13px!important;
+ box-shadow:inset 0 0 15px #9e4ae540,0 0 14px #a149d862!important;
+}
+.arcane-shop-currency-row-323>.arcane-shop-balance-320{
+ flex:1 1 auto!important;width:auto!important;min-width:0!important;
+ margin:0!important;padding:4px 6px!important;border:0!important;border-radius:0!important;
+ background:none!important;box-shadow:none!important;text-align:left!important;
+}
+.arcane-shop-currency-row-323>.arcane-shop-balance-320>strong{
+ font-size:clamp(26px,6.3vw,39px)!important;
+}
+.arcane-shop-currency-row-323>.arcane-shop-balance-320>span{
+ font-size:clamp(10px,2.8vw,13px)!important;
+}
+.arcane-shop-currency-row-323>.arcane-shop-reset-320{
+ flex:0 0 39%!important;max-width:220px!important;
+ margin:0!important;padding:8px!important;
+ font-size:clamp(10px,2.5vw,13px)!important;
+ line-height:1.24!important;min-height:52px!important;
+ border:1px solid #efc57e!important;border-radius:11px!important;
+ background:linear-gradient(135deg,#502571,#27153d)!important;
+}
+.arcane-shop-320>.arcane-booster-322{
+ width:calc(100% - 28px)!important;max-width:720px!important;
+ margin:0 auto 14px!important;
+}
+.arcane-shop-320 .arcane-booster-pack-322{
+ box-sizing:border-box!important;
+ display:grid!important;
+ grid-template-columns:minmax(0,41fr) minmax(0,59fr)!important;
+ grid-template-rows:auto auto auto minmax(0,1fr) auto auto!important;
+ align-items:center!important;
+ column-gap:10px!important;row-gap:5px!important;
+ border:2px solid #f0ba75!important;border-radius:22px!important;
+ padding:15px 13px 17px!important;
+ background:radial-gradient(ellipse at 25% 46%,rgba(157,48,241,.54),transparent 59%),linear-gradient(135deg,#30124d,#140e34 72%)!important;
+ box-shadow:0 0 16px #a844eea3,inset 0 0 27px #b65ce448!important;
+}
+.arcane-shop-320 .arcane-booster-overline-322{
+ grid-column:1/-1!important;grid-row:1!important;font-size:10px!important;
+ letter-spacing:2px!important;color:#dfb9fb!important;
+}
+.arcane-shop-320 .arcane-booster-title-322{
+ grid-column:1/-1!important;grid-row:2!important;
+ margin:0 0 7px!important;font-family:Georgia,serif!important;
+ font-size:clamp(24px,6vw,38px)!important;color:#ffe0a1!important;
+ text-shadow:0 0 17px #c353f2!important;
+}
+.arcane-shop-320 .arcane-booster-product-322{
+ grid-column:1!important;grid-row:3/span 2!important;
+ margin:0!important;padding:0!important;justify-self:center!important;
+ width:100%!important;max-width:195px!important;
+ height:clamp(180px,29dvh,275px)!important;transform:rotate(-6deg)!important;
+ background:url("artwork/arcane-shop-booster-v323.webp?v=3.23") center/contain no-repeat!important;
+ border:0!important;border-radius:0!important;
+ box-shadow:0 0 28px #bd46ff70!important;
+ filter:drop-shadow(0 0 10px rgba(238,121,255,.42))!important;
+}
+.arcane-shop-320 .arcane-booster-product-322::before{display:none!important}
+.arcane-shop-320 .arcane-booster-product-322>*{display:none!important}
+.arcane-shop-320 .arcane-booster-price-322{
+ grid-column:2!important;grid-row:3!important;
+ padding:12px 4px!important;margin:0!important;font-size:clamp(15px,4vw,22px)!important;
+ border:1px solid #edbf80!important;border-radius:10px!important;
+ background:rgba(42,17,74,.85)!important;line-height:1.25!important;
+}
+.arcane-shop-320 .arcane-booster-sub-322{
+ grid-column:2!important;grid-row:4!important;
+ font-size:clamp(11px,2.7vw,15px)!important;
+ margin:0!important;line-height:1.55!important;text-align:center!important;
+}
+.arcane-shop-320 #arcaneBoosterBuy322{
+ grid-column:1/-1!important;grid-row:5!important;
+ width:100%!important;margin:13px auto 0!important;
+ padding:13px 9px!important;min-height:54px!important;
+ font-size:clamp(15px,4vw,23px)!important;
+ background:linear-gradient(160deg,#8636a7,#45166d 72%,#6d2a8c)!important;
+ border:2px solid #f5c682!important;border-radius:14px!important;
+ box-shadow:0 0 15px #cb52fa99,inset 0 0 12px #ab4bfe8c!important;
+}
+.arcane-shop-320 #arcaneBoosterFeedback322{
+ grid-column:1/-1!important;grid-row:6!important;margin:3px 0 0!important;
+ font-size:12px!important;
+}
+.arcane-shop-categories-323{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:10px!important;width:calc(100% - 28px)!important;max-width:720px!important;margin:0 auto 13px!important;
+}
+.arcane-shop-category-323{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;
+ min-width:0!important;min-height:157px!important;box-sizing:border-box!important;
+ padding:8px!important;gap:3px!important;
+ background:linear-gradient(145deg,#351c5b,#110c2d)!important;
+ border:1px solid #d9a66f!important;border-radius:16px!important;
+ box-shadow:0 0 10px #ad56ec6e!important;color:#ffe0ac!important;cursor:pointer!important;
+}
+.arcane-shop-category-image-323{display:block!important;width:100%!important;height:89px!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
+.arcane-shop-decks-art-323{background-image:url("artwork/arcane-shop-decks-v323.webp?v=3.23")!important}
+.arcane-shop-gems-art-323{background-image:url("artwork/arcane-shop-crystals-v323.webp?v=3.23")!important}
+.arcane-shop-category-323>strong{font:800 clamp(15px,3.6vw,19px) Georgia,serif!important;text-align:center!important}
+.arcane-shop-category-323>small{font-size:clamp(10px,2.4vw,12px)!important;line-height:1.2!important;text-align:center!important;color:#d9c8ed!important}
+.arcane-shop-320>#arcaneShopStatus320,.arcane-shop-320>#arcaneShopWarning320{width:calc(100% - 25px)!important;margin:4px auto!important;max-width:680px!important}
+.arcane-shop-nav-323{
+ position:sticky!important;bottom:calc(-1px - env(safe-area-inset-bottom))!important;
+ z-index:7!important;width:100%!important;box-sizing:border-box!important;
+ margin-top:auto!important;padding:6px 9px max(7px,env(safe-area-inset-bottom))!important;
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;
+ background:rgba(16,7,35,.97)!important;border-top:1px solid #d7a876!important;
+ box-shadow:0 -5px 19px #b54ef64d!important;
+}
+.arcane-shop-nav-323 button{
+ cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ flex-direction:column!important;gap:2px!important;box-sizing:border-box!important;
+ border:1px solid transparent!important;border-radius:10px!important;background:transparent!important;
+ color:#edd0f5!important;font-size:clamp(19px,4vw,25px)!important;min-height:49px!important;padding:3px!important;
+}
+.arcane-shop-nav-323 button span{font-size:10px!important;font-weight:800!important;color:#f2dda5!important}
+.arcane-shop-nav-323 button.active{background:linear-gradient(145deg,#71319e,#391765)!important;border-color:#f5be7c!important;box-shadow:0 0 10px #b447f3!important}
+.arcane-shop-popup-323{
+ position:fixed!important;inset:0!important;z-index:9700!important;
+ background:rgba(5,4,22,.89)!important;backdrop-filter:blur(6px)!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;padding:16px!important;
+}
+.arcane-shop-popup-323[hidden]{display:none!important}
+.arcane-shop-popup-inner-323{
+ width:min(100%,400px)!important;box-sizing:border-box!important;
+ padding:23px 18px!important;border:2px solid #e4bd85!important;border-radius:16px!important;
+ background:linear-gradient(140deg,#311956,#110f2f)!important;text-align:center!important;
+}
+.arcane-shop-popup-inner-323 h3{font:900 25px Georgia,serif!important;color:#f8dfab!important;margin:0 0 13px!important}
+.arcane-shop-popup-inner-323 p{line-height:1.55!important;font-size:14px!important;margin-bottom:18px!important}
+.arcane-shop-popup-inner-323 button{border:1px solid #e5bc7c!important;background:#4c286e!important;border-radius:10px!important;padding:11px 17px!important;color:#ffe7af!important;min-height:44px!important}
+.arcane-shop-glimmer-323{animation:arcaneShopCurrency323 1s ease!important}
+@keyframes arcaneShopCurrency323{50%{filter:brightness(1.8)}}
+@media(orientation:landscape) and (max-height:550px){
+ .arcane-shop-hero-323{height:clamp(125px,35dvh,190px)!important}
+ .arcane-shop-merchant-art-323{background-position:center 45%!important}
+ .arcane-shop-320 .arcane-booster-product-322{height:190px!important}
+ .arcane-shop-nav-323 button{min-height:42px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.22</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.23</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5371,6 +5560,69 @@ window.setArenaCharacterTheme('magierin');
  document.getElementById('arcaneShopReset320')?.addEventListener('click',sync);
  window.arcaneBoosterShop322={sync};
  sync();
+})();
+
+
+/* v3.23 – approved Shop Concept 2: visual presentation around working shop actions. */
+(function initShopConcept323(){
+ const panel=document.getElementById('arcaneShop320');
+ if(!panel)return;
+ const top=panel.querySelector('.arcane-shop-top-320');
+ const title=panel.querySelector('h2');
+ const bank=panel.querySelector('.arcane-shop-balance-320');
+ const reset=panel.querySelector('#arcaneShopReset320');
+ const booster=panel.querySelector('#arcaneBooster322');
+ const status=panel.querySelector('#arcaneShopStatus320');
+ const warning=panel.querySelector('#arcaneShopWarning320');
+ if(!top||!title||!bank||!booster||!reset)return;
+ const hero=document.createElement('section');
+ hero.className='arcane-shop-hero-323';
+ hero.innerHTML='<div class="arcane-shop-merchant-art-323" aria-hidden="true"></div>';
+ hero.appendChild(top);hero.appendChild(title);
+ panel.prepend(hero);
+ const balanceRow=document.createElement('div');
+ balanceRow.className='arcane-shop-currency-row-323';
+ balanceRow.appendChild(bank);balanceRow.appendChild(reset);
+ hero.insertAdjacentElement('afterend',balanceRow);
+ const categories=document.createElement('div');
+ categories.className='arcane-shop-categories-323';
+ categories.innerHTML='<button type="button" id="arcaneShopDecks323" class="arcane-shop-category-323"><span class="arcane-shop-category-image-323 arcane-shop-decks-art-323"></span><strong>Starterdecks</strong><small>5 thematische Decks · demnächst</small></button>'
+  +'<button type="button" id="arcaneShopGems323" class="arcane-shop-category-323"><span class="arcane-shop-category-image-323 arcane-shop-gems-art-323"></span><strong>Arkankristalle</strong><small>Währung und Testguthaben</small></button>';
+ booster.insertAdjacentElement('afterend',categories);
+ const info=document.createElement('div');
+ info.className='arcane-shop-popup-323';info.hidden=true;
+ info.innerHTML='<div class="arcane-shop-popup-inner-323"><h3 id="arcaneShopPopupTitle323"></h3><p id="arcaneShopPopupText323"></p><button type="button" id="arcaneShopPopupClose323">Zurück zum Shop</button></div>';
+ panel.appendChild(info);
+ const nav=document.createElement('nav');
+ nav.className='arcane-shop-nav-323';nav.setAttribute('aria-label','Shop-Navigation');
+ nav.innerHTML='<button type="button" data-shop-tab="shop" class="active">⌂<span>Shop</span></button>'
+  +'<button type="button" data-shop-tab="booster">▣<span>Booster</span></button>'
+  +'<button type="button" data-shop-tab="starter">◈<span>Starterdecks</span></button>'
+  +'<button type="button" data-shop-tab="history">↺<span>Verlauf</span></button>';
+ panel.appendChild(nav);
+ function openInfo(heading,body){
+  info.querySelector('#arcaneShopPopupTitle323').textContent=heading;
+  info.querySelector('#arcaneShopPopupText323').textContent=body;
+  info.hidden=false;
+  info.querySelector('#arcaneShopPopupClose323').focus({preventScroll:true});
+ }
+ info.querySelector('#arcaneShopPopupClose323').addEventListener('click',()=>info.hidden=true);
+ panel.querySelector('#arcaneShopDecks323').addEventListener('click',()=>openInfo('Starterdecks','Die Auswahl der fünf thematischen Starterdecks ist der nächste Shop-Ausbau. Hier sind derzeit noch keine Starterdecks kaufbar.'));
+ panel.querySelector('#arcaneShopGems323').addEventListener('click',()=>{balanceRow.scrollIntoView({block:'start',behavior:'smooth'});bank.classList.remove('arcane-shop-glimmer-323');void bank.offsetWidth;bank.classList.add('arcane-shop-glimmer-323')});
+ nav.addEventListener('click',event=>{
+  const button=event.target.closest('[data-shop-tab]');if(!button)return;
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b===button));
+  const tab=button.dataset.shopTab;
+  if(tab==='shop')panel.scrollTo({top:0,behavior:'smooth'});
+  if(tab==='booster')booster.scrollIntoView({block:'center',behavior:'smooth'});
+  if(tab==='starter')openInfo('Starterdecks','Fünf thematische Starterdecks sind geplant. Das erste Deck wird kostenlos wählbar sein, weitere kosten 300 Arkankristalle. Dieser Bereich wird noch entwickelt.');
+  if(tab==='history'){
+   const inventory=window.arcaneBoosterInventory322?.read();
+   const amount=inventory?.opened||0;
+   openInfo('Booster-Verlauf','Bisher gekaufte Booster: '+amount+'. Eine detaillierte Kaufhistorie mit Datum und gezogenen Karten wird später ergänzt.');
+  }
+ });
+ // Keep existing buy, reveal, reset and currency event handlers untouched.
 })();
 
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
