@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-three-shadow-resonances-v29">
+<meta name="arcane-build" content="20261120-responsive-arena-v30">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -1439,9 +1439,68 @@ main{position:relative!important;overflow:hidden}
  z-index:1!important;
 }
 .opponent-card-back::after,.field-card-back::after{content:none!important;display:none!important}
+
+/* v2.62 - Responsive duel arena: portrait and landscape share the same game state. */
+html{overflow-x:hidden}
+main.arcane-responsive{width:100%!important;max-width:1200px!important;display:flex!important;flex-direction:column!important;gap:4px!important;min-height:calc(100dvh - 55px)!important;padding:4px 5px max(6px,env(safe-area-inset-bottom))!important;overflow:hidden!important}
+.arcane-responsive .opponent-fixed-ui{order:0!important;position:relative!important;height:clamp(104px,16dvh,155px)!important;min-height:0!important;max-height:none!important;flex:none!important}
+.arcane-responsive .arena-stage{order:1!important;position:relative!important;flex:none!important;margin:0!important;padding:0 43px!important;perspective:none!important;overflow:visible!important}
+.arcane-responsive .arena-world{transform:none!important;display:flex!important;flex-direction:column!important;gap:4px!important}
+.arcane-responsive .arena-world .board{padding:0!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.arcane-responsive .arena-world .board h2,.arcane-responsive .arena-world .middle{display:none!important}
+.arcane-responsive .arena-world .zones{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;padding:0!important;margin:0 0 3px!important}
+.arcane-responsive .arena-world .zone{height:clamp(65px,10dvh,95px)!important;min-height:0!important;max-height:none!important;width:100%!important;overflow:hidden!important;box-sizing:border-box!important;border-radius:6px!important}
+.arcane-responsive .arena-world .zone .field-card{width:min(100%,70px)!important;height:100%!important;max-height:100%!important;aspect-ratio:2/3!important;margin:auto!important;overflow:hidden!important}
+.arcane-responsive .player-fixed-ui{order:2!important;position:relative!important;flex:none!important;height:clamp(62px,9dvh,85px)!important;min-height:0!important;max-height:none!important;margin:0!important}
+.arcane-responsive main>section:has(#hand){order:3!important}
+.arcane-responsive>section:has(#hand){order:3!important;position:relative!important;height:clamp(135px,20dvh,190px)!important;min-height:0!important;padding:0 4px!important;overflow:visible!important}
+.arcane-responsive #hand{position:relative!important;inset:auto!important;bottom:auto!important;left:auto!important;right:auto!important;width:100%!important;max-width:100%!important;height:clamp(125px,18dvh,170px)!important;overflow:visible!important;display:flex!important;justify-content:center!important;align-items:flex-end!important;padding:6px 0!important;z-index:15!important}
+.arcane-responsive #hand .card{height:clamp(112px,17dvh,160px)!important;min-height:0!important;max-height:100%!important;flex-shrink:1!important}
+.arcane-responsive .handtitle{position:relative!important;inset:auto!important;margin:0!important;height:auto!important;z-index:2!important}
+.arcane-responsive .duelist-portrait{width:clamp(65px,16vw,115px)!important;height:clamp(75px,12dvh,120px)!important;max-height:100%!important;opacity:.88!important}
+.arcane-responsive .opponent-hand-wrap{position:absolute!important;top:22px!important;left:33%!important;width:40%!important;margin:0!important;transform:none!important}
+.arcane-responsive .field-topline,.arcane-responsive .field-bottomline{position:absolute!important;left:4px!important;bottom:0!important;top:auto!important;width:43%!important;margin:0!important;padding:0!important;transform:none!important}
+.arcane-responsive .field-bottomline{left:auto!important;right:4px!important}
+.arcane-responsive .lp-row{width:100%!important;max-width:100%!important;transform:none!important}
+.arcane-responsive .lp{font-size:clamp(16px,3.5vw,25px)!important;white-space:nowrap!important}
+.arcane-responsive .player-fixed-ui .duelist-player{top:0!important;right:0!important;left:auto!important}
+.arcane-responsive .field-end-turn{position:absolute!important;left:4px!important;bottom:4px!important;top:auto!important;z-index:20!important}
+.arcane-responsive .arena-stage .duel-sidezones{position:absolute!important;top:0!important;bottom:0!important;left:0!important;right:auto!important;width:40px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:5px!important;z-index:20!important}
+.arcane-responsive .arena-stage .player-sidezones{left:auto!important;right:0!important}
+.arcane-responsive .arena-stage .sidezone{width:39px!important;height:clamp(48px,7dvh,65px)!important;min-height:0!important;padding:2px!important;font-size:9px!important;overflow:hidden!important}
+.arcane-responsive .arena-stage .sidezone-label{font-size:8px!important;line-height:1.05!important;overflow-wrap:anywhere!important}
+.arcane-responsive .arena-stage .deck-counter{font-size:16px!important}
+.arcane-responsive .arena-stage .sidezone-symbol{font-size:16px!important}
+.arcane-responsive .arena-stage .duel-sidezones .deck-sidezone{order:0!important}
+.arcane-responsive .arena-stage .duel-sidezones .extra-sidezone{order:1!important}
+.arcane-responsive .arena-stage .duel-sidezones .grave-sidezone{order:2!important}
+.arcane-responsive .arena-stage .player-sidezones .grave-sidezone{order:0!important}
+.arcane-responsive .arena-stage .player-sidezones .extra-sidezone{order:1!important}
+.arcane-responsive .arena-stage .player-sidezones .deck-sidezone{order:2!important}
+@media(orientation:landscape) and (max-height:650px){
+ header{height:35px!important;min-height:0!important;padding:2px 8px!important}
+ header h1{font-size:17px!important;line-height:1!important}
+ header small{font-size:8px!important}
+ .arcane-responsive{min-height:calc(100dvh - 35px)!important;gap:1px!important}
+ .arcane-responsive .opponent-fixed-ui{height:clamp(45px,12dvh,78px)!important}
+ .arcane-responsive .arena-stage{padding:0 72px!important}
+ .arcane-responsive .arena-world{gap:2px!important}
+ .arcane-responsive .arena-world .zones{gap:4px!important;margin-bottom:2px!important}
+ .arcane-responsive .arena-world .zone{height:clamp(30px,12dvh,58px)!important}
+ .arcane-responsive .player-fixed-ui{height:clamp(35px,10dvh,60px)!important}
+ .arcane-responsive>section:has(#hand){height:clamp(55px,20dvh,98px)!important}
+ .arcane-responsive #hand{height:clamp(52px,19dvh,95px)!important;padding:0!important}
+ .arcane-responsive #hand .card{height:clamp(52px,19dvh,95px)!important}
+ .arcane-responsive .duelist-portrait{width:60px!important;height:60px!important}
+ .arcane-responsive .opponent-hand-wrap{top:0!important;left:38%!important;width:26%!important}
+ .arcane-responsive .arena-stage .duel-sidezones{width:66px!important}
+ .arcane-responsive .arena-stage .sidezone{width:62px!important;height:clamp(27px,11dvh,48px)!important}
+ .arcane-responsive .arena-stage .sidezone-label{font-size:9px!important}
+ .arcane-responsive .lp{font-size:17px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.61</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.62</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
@@ -2248,4 +2307,18 @@ window.setArenaCharacterTheme=function(name){
  arena.dataset.characterTheme=key;
 };
 window.setArenaCharacterTheme('magierin');
+
+// The same live duel DOM is reused in both orientations; no restart on rotation.
+(function(){
+ const arena=document.querySelector('main');
+ const stage=arena&&arena.querySelector('.arena-stage');
+ if(!arena||!stage)return;
+ arena.classList.add('arcane-responsive');
+ const opponent=arena.querySelector('.opponent-sidezones');
+ const player=arena.querySelector('.player-sidezones');
+ if(opponent)stage.appendChild(opponent);
+ if(player)stage.appendChild(player);
+ function syncOrientation(){arena.dataset.orientation=matchMedia('(orientation:landscape)').matches?'landscape':'portrait';}
+ syncOrientation();window.addEventListener('resize',syncOrientation,{passive:true});
+})();
 </script></body></html>
