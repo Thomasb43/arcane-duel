@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-rotating-intro-card-v308">
+<meta name="arcane-build" content="20261120-cinematic-intro-backdrop-v309">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3484,9 +3484,62 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 @media(prefers-reduced-motion:reduce) {
  .arcane-intro-card-308,.arcane-intro-card-float-308,.arcane-intro-ring-308,.arcane-intro-308::before{animation:none!important}
 }
+
+/* v3.09 – first cinematic fantasy concept adapted with existing game artwork.
+   Replaces the plain gradient title background; preserves card rotation and menu behavior. */
+.arcane-intro-308 {
+ background:
+   linear-gradient(180deg,rgba(8,5,35,.34) 0%,rgba(11,5,38,.05) 35%,rgba(22,4,48,.28) 70%,rgba(9,5,29,.7) 100%),
+   url("artwork/arcane-cathedral-background.png?v=1.85") center 49% / cover no-repeat,
+   radial-gradient(ellipse at center,#4d237e 0%,#0a0925 80%)!important;
+}
+.arcane-intro-308::before{
+ inset:-25%!important;
+ background:
+  radial-gradient(circle at 30% 70%,rgba(185,89,255,.25) 0%,transparent 17%),
+  radial-gradient(circle at 70% 30%,rgba(108,86,255,.26) 0%,transparent 22%),
+  repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 19deg,rgba(190,91,255,.07) 20deg 21deg,transparent 22deg 39deg)!important;
+ animation:arcaneIntroAura308 46s linear infinite!important;
+ pointer-events:none!important;
+}
+.arcane-intro-308::after{
+ content:"";pointer-events:none!important;position:absolute!important;inset:0!important;
+ background:radial-gradient(ellipse at 50% 68%,rgba(157,42,246,.3),transparent 45%),
+  linear-gradient(to top,rgba(58,18,102,.55),transparent 36%)!important;
+ mix-blend-mode:screen!important;
+ animation:arcaneTitleGlow309 4.5s ease-in-out infinite!important;
+}
+.arcane-intro-inner-308{z-index:2!important}
+.arcane-intro-logo-308{
+ font-size:clamp(45px,11vw,72px)!important;
+ color:#ffe4a2!important;
+ text-shadow:0 2px 0 #a56223,0 5px 0 #451852,0 0 21px #b75cff,0 0 40px #6521ef!important;
+}
+.arcane-intro-card-area-308{isolation:isolate!important}
+.arcane-intro-card-area-308::before{
+ content:"";pointer-events:none!important;
+ position:absolute!important;left:50%!important;bottom:13%!important;
+ width:min(75vw,320px)!important;height:clamp(30px,9dvh,58px)!important;
+ border:2px solid #b864ffbb!important;border-radius:50%!important;
+ box-shadow:0 0 18px #a84fff,0 0 50px #b322ee99,inset 0 0 25px #d76dff88!important;
+ transform:translateX(-50%) rotateX(65deg)!important;
+}
+.arcane-intro-ring-308{
+ border-color:rgba(247,176,255,.72)!important;
+ box-shadow:0 0 28px #d95cffaa,inset 0 0 30px #a44bff88!important;
+}
+.arcane-intro-start-308{
+ background:linear-gradient(120deg,rgba(66,18,95,.97),rgba(35,11,67,.97) 55%,rgba(80,31,116,.98))!important;
+ border:2px solid #ffdf98!important;
+ box-shadow:0 0 27px #cf54fa9a,inset 0 0 20px #9d45ff88,0 5px 0 rgba(23,4,47,.85)!important;
+}
+@keyframes arcaneTitleGlow309{0%,100%{opacity:.45}50%{opacity:.78}}
+@media(prefers-reduced-motion:reduce){
+ .arcane-intro-308::after{animation:none!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.08</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.09</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
