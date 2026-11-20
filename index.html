@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-portrait-defense-sideways-v305">
+<meta name="arcane-build" content="20261120-duel-outcome-v306">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3316,9 +3316,41 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
     transform:none!important;
   }
 }
+
+/* v3.06 – a real duel conclusion, responsive in portrait and landscape. */
+.duel-outcome-306{
+ position:fixed!important;inset:0!important;z-index:99999!important;
+ background:rgba(7,5,28,.86)!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:18px!important;box-sizing:border-box!important;
+ backdrop-filter:blur(7px)!important;
+}
+.duel-outcome-panel-306{
+ width:min(100%,410px)!important;max-height:90dvh!important;overflow:auto!important;
+ box-sizing:border-box!important;text-align:center!important;
+ padding:clamp(18px,4dvh,32px)!important;
+ border:2px solid #e9ba69!important;border-radius:18px!important;
+ background:linear-gradient(150deg,#332054,#11132f 65%,#070b24)!important;
+ box-shadow:0 0 40px #ae65ff7a,inset 0 0 28px #7847ff44!important;
+ color:#fff3d1!important;
+}
+.duel-outcome-symbol-306{font-size:clamp(35px,7dvh,66px)!important;color:#f5ca75!important;margin-bottom:8px!important}
+.duel-outcome-panel-306 h2{
+ margin:0 0 12px!important;
+ font-size:clamp(21px,4dvh,34px)!important;letter-spacing:1.4px!important;
+ color:#ffdc95!important;text-shadow:0 0 12px #ad6bff!important;
+}
+.duel-outcome-panel-306 p{font-size:clamp(13px,2.2dvh,17px)!important;margin:0 0 20px!important;line-height:1.5!important}
+.duel-outcome-panel-306 button{
+ display:inline-block!important;min-height:45px!important;padding:11px 23px!important;
+ border:2px solid #f4cb75!important;border-radius:12px!important;
+ background:linear-gradient(#ad742c,#603515)!important;
+ color:white!important;font-size:17px!important;font-weight:800!important;
+ cursor:pointer!important;touch-action:manipulation!important;
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.05</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.06</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -3695,7 +3727,33 @@ function enforceHandLimit(){
  });
  overlay.hidden=false;
 }
-function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");const referenceWidth=Math.max(66,Math.min(88,window.innerWidth*.205));const referenceAvailable=Math.max(240,window.innerWidth-35);const referenceOverlap=hand.length>1?Math.max(24,Math.min(referenceWidth*.68,(hand.length*referenceWidth-referenceAvailable+24)/(hand.length-1))):0;$("hand").style.setProperty("--reference-card-width",referenceWidth.toFixed(1)+"px");$("hand").style.setProperty("--reference-overlap",referenceOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);}
+/* v3.06: End-of-duel screen. Rewards/progression deliberately not implemented yet. */
+function syncDuelOutcome(){
+ const finished=myLP<=0||oppLP<=0;
+ let panel=document.getElementById('duelOutcome306');
+ if(!finished){
+   if(panel)panel.remove();
+   return;
+ }
+ const draw=myLP<=0&&oppLP<=0;
+ const won=oppLP<=0&&myLP>0;
+ if(!panel){
+   panel=document.createElement('div');
+   panel.id='duelOutcome306';
+   panel.className='duel-outcome-306';
+   panel.setAttribute('role','dialog');
+   panel.setAttribute('aria-modal','true');
+   panel.setAttribute('aria-labelledby','duelOutcomeTitle306');
+   panel.innerHTML='<div class="duel-outcome-panel-306"><div class="duel-outcome-symbol-306">✦</div><h2 id="duelOutcomeTitle306"></h2><p id="duelOutcomeMessage306"></p><button id="duelRestart306" type="button">Neues Duell</button></div>';
+   document.body.appendChild(panel);
+   panel.querySelector('#duelRestart306').addEventListener('click',()=>window.location.reload());
+   panel.querySelector('#duelRestart306').focus({preventScroll:true});
+ }
+ panel.querySelector('#duelOutcomeTitle306').textContent=draw?'UNENTSCHIEDEN':won?'DUELL GEWONNEN':'DUELL VERLOREN';
+ panel.querySelector('#duelOutcomeMessage306').textContent=draw?'Beide Duellanten haben 0 Lebenspunkte.':won?'Du hast die gegnerischen Lebenspunkte auf 0 reduziert.':'Deine Lebenspunkte sind auf 0 gefallen.';
+ const endButton=document.getElementById('end');if(endButton)endButton.disabled=true;
+}
+function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");const referenceWidth=Math.max(66,Math.min(88,window.innerWidth*.205));const referenceAvailable=Math.max(240,window.innerWidth-35);const referenceOverlap=hand.length>1?Math.max(24,Math.min(referenceWidth*.68,(hand.length*referenceWidth-referenceAvailable+24)/(hand.length-1))):0;$("hand").style.setProperty("--reference-card-width",referenceWidth.toFixed(1)+"px");$("hand").style.setProperty("--reference-overlap",referenceOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);syncDuelOutcome();}
 
 
 function showGraveyard(owner){
