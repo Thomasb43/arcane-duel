@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-landscape-height-v295">
+<meta name="arcane-build" content="20261120-landscape-flat-field-cards-v296">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3069,9 +3069,53 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  }
 }
 
+
+/* v2.96 – Querformat nach Referenz: gerade Zonen und größere, lesbare Handkarten. */
+@media (orientation:landscape){
+ /* Hochformat behält die vorhandene 3D-Neigung. Im Querformat bleibt das Feld unverzerrt. */
+ main.arcane-responsive>.arena-stage{perspective:none!important}
+ main.arcane-responsive>.arena-stage>.arena-world{
+   transform:none!important;transform-style:flat!important;
+ }
+ main.arcane-responsive>.arena-stage .board,
+ main.arcane-responsive>.arena-stage .zones,
+ main.arcane-responsive>.arena-stage .zones>.zone{
+   transform:none!important;
+ }
+ /* Platz für größere Handkarten, ohne über die untersten Zonen zu reichen. */
+ main.arcane-responsive #hand{
+   transform:translateY(4px)!important;
+   align-items:flex-end!important;
+   padding-bottom:9px!important;
+ }
+ main.arcane-responsive #hand .card{
+   height:clamp(88px,27dvh,155px)!important;
+   max-height:94%!important;
+   width:clamp(66px,7.5vw,120px)!important;
+   flex-basis:clamp(66px,7.5vw,120px)!important;
+   padding:3px!important;gap:2px!important;
+ }
+ main.arcane-responsive #hand .card .art{
+   flex:0 0 59%!important;height:59%!important;max-height:59%!important;
+ }
+ main.arcane-responsive #hand .card strong{
+   display:-webkit-box!important;
+   -webkit-box-orient:vertical!important;
+   -webkit-line-clamp:3!important;
+   font-size:clamp(9px,.95vw,13px)!important;line-height:1.08!important;
+   white-space:normal!important;word-break:normal!important;
+   overflow-wrap:anywhere!important;max-height:3.3em!important;
+   overflow:hidden!important;
+ }
+ main.arcane-responsive #hand .card .stats{
+   font-size:clamp(7px,.77vw,10px)!important;
+   padding-top:2px!important;
+ }
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.95</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.96</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
