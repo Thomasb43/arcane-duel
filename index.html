@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-shop-concept-two-v323">
+<meta name="arcane-build" content="20261120-booster-preview-multipack-v324">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4376,9 +4376,56 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-shop-320 .arcane-booster-product-322{height:190px!important}
  .arcane-shop-nav-323 button{min-height:42px!important}
 }
+
+/* v3.24 – set catalogue overlay, rarity filters and 1/5/10-pack purchase options. */
+.arcane-booster-catalogue-324{
+ position:fixed!important;inset:0!important;z-index:9500!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ padding:max(14px,env(safe-area-inset-top)) 12px max(14px,env(safe-area-inset-bottom))!important;
+ box-sizing:border-box!important;background:rgba(7,4,22,.85)!important;backdrop-filter:blur(7px)!important;
+}
+.arcane-booster-catalogue-324[hidden]{display:none!important}
+.arcane-booster-catalogue-panel-324{
+ width:min(100%,570px)!important;height:min(92dvh,900px)!important;min-height:0!important;
+ display:flex!important;flex-direction:column!important;overflow:hidden!important;position:relative!important;
+ padding:12px!important;box-sizing:border-box!important;
+ border:2px solid #f6c77f!important;border-radius:20px!important;
+ background:radial-gradient(ellipse at 18% 30%,rgba(159,57,231,.3),transparent 45%),
+ linear-gradient(145deg,#2c1253,#140e36 70%,#120827)!important;
+ box-shadow:0 0 26px #ab56f5aa,inset 0 0 19px #b25af65c!important;
+}
+.arcane-booster-catalogue-heading-324{flex:none!important;position:relative!important;text-align:center!important;padding:4px 35px 8px!important}
+.arcane-booster-catalogue-kicker-324{font-size:10px!important;font-weight:900!important;letter-spacing:2px!important;color:#e5bdff!important}
+.arcane-booster-catalogue-heading-324 h3{font:900 clamp(23px,5.7vw,33px) Georgia,serif!important;margin:4px 0!important;color:#ffe1a1!important;text-shadow:0 0 15px #9f4ff4!important}
+.arcane-booster-catalogue-heading-324 p{font-size:12px!important;line-height:1.3!important;margin:5px 0 0!important;color:#eddcf5!important}
+#arcaneBoosterCatalogueClose324{position:absolute!important;right:-1px!important;top:0!important;min-width:38px!important;min-height:38px!important;border:1px solid #ffe29a!important;border-radius:50%!important;background:#39194e!important;color:#fff3d1!important;font-size:25px!important;cursor:pointer!important}
+.arcane-booster-filters-324{display:flex!important;flex:0 0 auto!important;gap:6px!important;padding:7px 0 10px!important;overflow-x:auto!important;scrollbar-width:none!important}
+.arcane-booster-filters-324 button{flex:0 0 auto!important;cursor:pointer!important;min-height:35px!important;border:1px solid #aa7ac7!important;border-radius:30px!important;background:#25133f!important;color:#f9e9dc!important;font-size:12px!important;font-weight:800!important;padding:7px 12px!important}
+.arcane-booster-filters-324 button.active{border-color:#fbd68b!important;box-shadow:0 0 10px #cc4af9!important;background:#6d2189!important}
+.arcane-booster-catalogue-scroll-324{flex:1 1 auto!important;min-height:0!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;padding:4px 2px!important}
+.arcane-booster-catalogue-grid-324{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px 7px!important}
+.arcane-booster-pool-card-324{min-width:0!important;display:flex!important;align-items:center!important;flex-direction:column!important;gap:3px!important;text-align:center!important;padding:6px 4px!important;box-sizing:border-box!important;background:linear-gradient(145deg,#31144f,#11102f)!important;border:1px solid var(--rarity,#ab7bf5)!important;border-radius:9px!important;box-shadow:0 0 8px color-mix(in srgb,var(--rarity) 30%,transparent)!important}
+.arcane-booster-pool-art-324{width:100%!important;aspect-ratio:4/5!important;position:relative!important;overflow:hidden!important;border:1px solid #d0a86c!important;background:#130a2f!important}
+.arcane-booster-pool-art-324 .card-art-loader{display:block!important;position:relative!important;width:100%!important;height:100%!important;overflow:hidden!important}
+.arcane-booster-pool-art-324 img{width:100%!important;height:100%!important;object-fit:cover!important}
+.arcane-booster-pool-card-324 strong{color:#fce5c1!important;font-size:clamp(10px,2.8vw,13px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+.arcane-booster-pool-card-324 span{color:var(--rarity,#f7dbff)!important;font-size:11px!important;font-weight:900!important}
+.arcane-booster-no-cards-324{grid-column:1/-1!important;font-size:13px!important;text-align:center!important}
+.arcane-booster-catalogue-purchase-324{flex:0 0 auto!important;border-top:1px solid #bd83cd!important;margin-top:7px!important;padding-top:9px!important}
+.arcane-booster-purchase-label-324{text-align:center!important;font:900 18px Georgia,serif!important;color:#ffe1aa!important;margin:0 0 9px!important}
+.arcane-booster-purchase-label-324 span{display:block!important;margin-top:4px!important;font:700 12px sans-serif!important;color:#eac9f4!important}
+.arcane-booster-quantities-324{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+.arcane-booster-quantities-324 button{min-width:0!important;min-height:74px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;gap:5px!important;cursor:pointer!important;border:2px solid #ffd38c!important;border-radius:13px!important;background:linear-gradient(145deg,#8632a0,#3a185f)!important;color:#ffe6b3!important;box-shadow:inset 0 0 15px #ca65f65c,0 0 11px #ad3eea7a!important}
+.arcane-booster-quantities-324 button strong{font:900 clamp(15px,3.6vw,20px) Georgia,serif!important}
+.arcane-booster-quantities-324 button span{font-size:clamp(12px,3.3vw,18px)!important;font-weight:900!important}
+.arcane-booster-quantities-324 button:disabled{opacity:.43!important;cursor:not-allowed!important;filter:grayscale(.55)!important}
+#arcaneBoosterCatalogueMessage324{text-align:center!important;min-height:15px!important;margin:7px 0 0!important;color:#ead3f4!important;font-size:11px!important;line-height:1.3!important}
+.arcane-booster-reveal-322{z-index:9650!important}
+@media (min-width:600px){.arcane-booster-catalogue-grid-324{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(orientation:landscape) and (max-height:550px){.arcane-booster-catalogue-panel-324{height:96dvh!important}.arcane-booster-catalogue-grid-324{grid-template-columns:repeat(6,minmax(0,1fr))!important}.arcane-booster-quantities-324 button{min-height:49px!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.23</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5243,7 +5290,7 @@ window.setArenaCharacterTheme('magierin');
      if(typeof name==='string'&&name.length<100&&Number.isSafeInteger(number)&&number>=0&&number<=100000)counts[name]=number;
     }
    }
-   return {counts,opened:Number.isSafeInteger(v.opened)&&v.opened>=0?v.opened:0,pendingPack:Array.isArray(v.pendingPack)?v.pendingPack.filter(x=>typeof x==='string'&&x.length<100).slice(0,5):null};
+   return {counts,opened:Number.isSafeInteger(v.opened)&&v.opened>=0?v.opened:0,pendingPack:Array.isArray(v.pendingPack)?v.pendingPack.filter(x=>typeof x==='string'&&x.length<100).slice(0,50):null};
   }catch(e){return empty()}
  }
  function save(value){
@@ -5427,138 +5474,188 @@ window.setArenaCharacterTheme('magierin');
 })();
 
 
-/* v3.22 – first themed booster set, five cards with guaranteed Rare+, purchase and opening flow. */
+/* v3.24 – Schatten & Flammen catalogue overlay with real pack pool and 1/5/10 purchases. */
 (function initBoosterShop322(){
  const PRICE=100;
- const weight=[['normal',66],['rare',25],['epic',7],['legendary',1.8],['mythic',.2]];
- const chooser=items=>items[Math.floor(Math.random()*items.length)];
+ const CONFIG=[{packs:1,price:100},{packs:5,price:500},{packs:10,price:1000}];
+ const WEIGHTS=[['normal',66],['rare',25],['epic',7],['legendary',1.8],['mythic',.2]];
+ const safe=t=>String(t??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[x]));
+ const panel=document.getElementById('arcaneShop320');
+ if(!panel)return;
  const el=document.createElement('div');
  el.className='arcane-booster-322';el.id='arcaneBooster322';
  el.innerHTML=`<div class="arcane-booster-pack-322">
    <div class="arcane-booster-overline-322">ERSTES BOOSTER-SET</div>
    <div class="arcane-booster-title-322">Schatten &amp; Flammen</div>
-   <div class="arcane-booster-product-322"><div class="arcane-booster-product-shine-322">✦</div><div class="arcane-booster-product-name-322">ARCANE<br>DUEL</div><div>5 MAGISCHE KARTEN</div></div>
+   <div class="arcane-booster-product-322"><div class="arcane-booster-product-shine-322">✦</div><div class="arcane-booster-product-name-322">ARCANE DUEL</div></div>
    <div class="arcane-booster-price-322">💎 100 Arkankristalle</div>
-   <div class="arcane-booster-sub-322">5 Karten · mindestens 1 Seltene oder höher<br>Alle gezogenen Karten werden gespeichert.</div>
-   <button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button">Booster kaufen &amp; öffnen</button>
+   <div class="arcane-booster-sub-322">5 Karten pro Pack · mindestens 1 Seltene oder höher.<br>Gekaufte Karten werden in deiner Sammlung gespeichert.</div>
+   <button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button">▣ Karten anzeigen &amp; Packs wählen</button>
    <div class="arcane-booster-feedback-322" id="arcaneBoosterFeedback322" role="status" aria-live="polite"></div>
  </div>
- <div id="arcaneBoosterReveal322" class="arcane-booster-reveal-322" hidden aria-label="Booster-Öffnung">
+ <div id="arcaneBoosterCatalogue324" class="arcane-booster-catalogue-324" hidden role="dialog" aria-modal="true" aria-label="Mögliche Inhalte von Schatten und Flammen">
+  <div class="arcane-booster-catalogue-panel-324">
+   <div class="arcane-booster-catalogue-heading-324"><div class="arcane-booster-catalogue-kicker-324">ARCANE DUEL · BOOSTER-SET</div>
+    <h3>Schatten &amp; Flammen</h3><button type="button" id="arcaneBoosterCatalogueClose324" aria-label="Schließen">×</button>
+    <p>Mögliche Inhalte · Karten aus diesem Booster</p>
+   </div>
+   <div class="arcane-booster-filters-324" id="arcaneBoosterFilters324">
+    <button type="button" data-rarity="all" class="active">Alle</button>
+    <button type="button" data-rarity="normal">Normal</button>
+    <button type="button" data-rarity="rare">Selten</button>
+    <button type="button" data-rarity="epic">Episch</button>
+    <button type="button" data-rarity="legendary">Legendär</button>
+    <button type="button" data-rarity="mythic">Mythisch</button>
+   </div>
+   <div class="arcane-booster-catalogue-scroll-324"><div class="arcane-booster-catalogue-grid-324" id="arcaneBoosterPool324"></div></div>
+   <div class="arcane-booster-catalogue-purchase-324">
+    <div class="arcane-booster-purchase-label-324">Booster kaufen <span id="arcaneBoosterBalance324"></span></div>
+    <div id="arcaneBoosterQuantities324" class="arcane-booster-quantities-324">
+     <button type="button" data-packs="1"><strong>1 Pack</strong><span>💎 100</span></button>
+     <button type="button" data-packs="5"><strong>5 Packs</strong><span>💎 500</span></button>
+     <button type="button" data-packs="10"><strong>10 Packs</strong><span>💎 1.000</span></button>
+    </div>
+    <p id="arcaneBoosterCatalogueMessage324" role="status" aria-live="polite">5 Karten pro Pack · mindestens eine Seltene oder höher.</p>
+   </div>
+  </div>
+ </div>
+ <div id="arcaneBoosterReveal322" class="arcane-booster-reveal-322" hidden role="dialog" aria-modal="true" aria-label="Booster-Öffnung">
   <div class="arcane-booster-reveal-panel-322">
    <div class="arcane-booster-reveal-kicker-322" id="arcaneBoosterProgress322">Karten entdecken</div>
    <div id="arcaneBoosterCards322" class="arcane-booster-revealed-cards-322"></div>
-   <button id="arcaneBoosterNext322" type="button" class="arcane-booster-action-322">Karte aufdecken</button>
+   <button id="arcaneBoosterNext322" type="button" class="arcane-booster-action-322">Karten aufdecken</button>
    <button id="arcaneBoosterClose322" type="button" class="arcane-booster-close-322">Später ansehen</button>
   </div>
  </div>`;
- const panel=document.getElementById('arcaneShop320');
- if(!panel)return;
  const oldInfo=panel.querySelector('.arcane-shop-info-320');
- if(oldInfo)oldInfo.replaceWith(el);
- const buy=el.querySelector('#arcaneBoosterBuy322');
- const feedback=el.querySelector('#arcaneBoosterFeedback322');
- const overlay=el.querySelector('#arcaneBoosterReveal322');
- const cardsView=el.querySelector('#arcaneBoosterCards322');
- const next=el.querySelector('#arcaneBoosterNext322');
- const progress=el.querySelector('#arcaneBoosterProgress322');
- const close=el.querySelector('#arcaneBoosterClose322');
- const safe=t=>String(t||'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
- let pack=null;
- let step=0;
- function catalogue(){return window.arcaneCollectionCatalog322}
- function selectRarity(pool,guarantee){
-  const usable=weight.filter(([key])=>pool.some(c=>catalogue().rarity(c)===key)&&( !guarantee||key!=='normal'));
-  const total=usable.reduce((n,[,w])=>n+w,0);
-  if(!usable.length)throw Error('Kein Kartenpool verfügbar');
-  let roll=Math.random()*total;
-  let found=usable[usable.length-1][0];
-  for(const [name,w] of usable){roll-=w;if(roll<0){found=name;break}}
-  return found;
+ if(oldInfo)oldInfo.replaceWith(el);else panel.appendChild(el);
+ const $b=id=>el.querySelector('#'+id);
+ const catalogue=$b('arcaneBoosterCatalogue324');
+ const reveal=$b('arcaneBoosterReveal322');
+ const feedback=$b('arcaneBoosterFeedback322');
+ const label=$b('arcaneBoosterCatalogueMessage324');
+ const filterBar=$b('arcaneBoosterFilters324');
+ const quantities=$b('arcaneBoosterQuantities324');
+ let pack=null,step=0,currentFilter='all';
+ const inventory=()=>window.arcaneBoosterInventory322;
+ const bank=()=>window.arcaneTestCrystals320;
+ const catalog=()=>window.arcaneCollectionCatalog322;
+ // One fixed set: the existing main-deck pool. Boss/resonance cards are not sold in this pack.
+ const pool=()=>catalog()?.cards.filter(c=>!c.resonance&&!c.resonator&&c.kind&&c.name)||[];
+ function selectCard(guaranteed){
+  const cards=pool();
+  const options=WEIGHTS.filter(([key])=>cards.some(c=>catalog().rarity(c)===key)&&(!guaranteed||key!=='normal'));
+  const total=options.reduce((acc,[,w])=>acc+w,0);
+  if(!total)throw Error('Kartenpool derzeit nicht verfügbar');
+  let ticket=Math.random()*total,grade=options[options.length-1][0];
+  for(const [key,weight] of options){ticket-=weight;if(ticket<0){grade=key;break}}
+  const selection=cards.filter(c=>catalog().rarity(c)===grade);
+  return selection[Math.floor(Math.random()*selection.length)].name;
  }
  function rollPack(){
-  const catalog=catalogue();
-  if(!catalog)throw Error('Kartenkatalog ist nicht geladen');
-  // First set uses the existing main-deck card pool; Resonance boss cards remain Extra-Deck exclusives.
-  const pool=catalog.cards.filter(c=>!c.resonance&&!c.resonator&&c.kind&&c.name);
-  if(!pool.some(c=>catalog.rarity(c)!=='normal'))throw Error('Keine seltenen Karten gefunden');
-  const results=[];
-  for(let i=0;i<5;i++){
-   const grade=selectRarity(pool,i===0);
-   const group=pool.filter(c=>catalog.rarity(c)===grade);
-   results.push(chooser(group).name);
-  }
-  for(let i=results.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[results[i],results[j]]=[results[j],results[i]]}
-  return results;
+  const cards=[selectCard(true),selectCard(false),selectCard(false),selectCard(false),selectCard(false)];
+  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}
+  return cards;
+ }
+ function renderPool(){
+  const data=catalog();
+  const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
+  $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
+   const rarity=data.rarity(c),tone=data.rarityData[rarity];
+   return '<div class="arcane-booster-pool-card-324" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+data.renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>';
+  }).join(''):'<p class="arcane-booster-no-cards-324">In dieser Seltenheit sind derzeit keine Karten enthalten.</p>';
  }
  function sync(){
-  const state=window.arcaneBoosterInventory322.read();
-  const money=window.arcaneTestCrystals320?.get()||0;
-  buy.disabled=money<PRICE&&!state.pendingPack;
-  buy.textContent=state.pendingPack?'Gekauftes Booster weiter öffnen':money<PRICE?'Nicht genügend Arkankristalle':'Booster kaufen & öffnen';
+  const money=bank()?.get()??0,pending=inventory()?.read().pendingPack;
+  $b('arcaneBoosterBalance324').textContent='💎 '+money.toLocaleString('de-DE')+' verfügbar';
+  quantities.querySelectorAll('[data-packs]').forEach(b=>{
+   const price=Number(b.dataset.packs)*PRICE;
+   b.disabled=money<price||!!pending;
+   b.title=pending?'Öffne zuerst dein bereits gekauftes Booster':money<price?'Nicht genügend Arkankristalle':'Kaufen';
+  });
+  const buy=$b('arcaneBoosterBuy322');
+  buy.disabled=false;
+  buy.textContent=pending?'▣ Gekaufte Packs öffnen':'▣ Karten anzeigen & Packs wählen';
+  if(pending)label.textContent='Du hast noch gekaufte Karten zum Aufdecken.';
  }
- function showReveal(names){
-  pack=names.slice();
-  step=0;
-  cardsView.innerHTML='';
-  overlay.hidden=false;
+ function openCatalogue(){
+  catalogue.hidden=false;
+  currentFilter='all';
+  filterBar.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.rarity==='all'));
+  label.textContent='5 Karten pro Pack · mindestens eine Seltene oder höher.';
+  renderPool();sync();
+  $b('arcaneBoosterCatalogueClose324').focus({preventScroll:true});
+ }
+ function openReveal(names){
+  pack=names.slice();step=0;
+  $b('arcaneBoosterCards322').innerHTML='';
+  reveal.hidden=false;
   updateReveal();
  }
  function updateReveal(){
-  progress.textContent=step===5?'Booster vollständig geöffnet':'Karte '+(step+1)+' von 5';
-  next.textContent=step===5?'Fertig · zum Shop':step===0?'Erste Karte aufdecken':'Nächste Karte aufdecken';
-  close.hidden=step===5;
+  const total=pack?.length||0;
+  $b('arcaneBoosterProgress322').textContent=step>=total?'Alle Karten aufgedeckt':'Karten '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
+  $b('arcaneBoosterNext322').textContent=step>=total?'Fertig · zum Shop':'Nächste 5 Karten aufdecken';
+  $b('arcaneBoosterClose322').hidden=step>=total;
  }
  function revealNext(){
   if(!pack)return;
-  if(step===5){
-   const inv=window.arcaneBoosterInventory322.read();
-   inv.pendingPack=null;window.arcaneBoosterInventory322.save(inv);
-   overlay.hidden=true;pack=null;feedback.textContent='Alle 5 Karten sind in deiner Sammlung gespeichert.';
-   sync();
-   return;
+  if(step>=pack.length){
+   const state=inventory().read();
+   state.pendingPack=null;inventory().save(state);
+   reveal.hidden=true;catalogue.hidden=true;pack=null;
+   feedback.textContent='Alle gekauften Karten wurden deiner Sammlung hinzugefügt.';
+   sync();return;
   }
-  const name=pack[step];
-  const cat=catalogue();
-  const c=cat?.cards.find(c=>c.name===name);
-  if(c){
-   const rarity=cat.rarity(c);
-   const tone=cat.rarityData[rarity];
-   const art=cat.renderCardArt(c);
-   const tile=document.createElement('div');
-   tile.className='arcane-booster-card-322';
-   tile.style.setProperty('--booster-rarity',tone.color);
-   tile.innerHTML='<div class="arcane-booster-card-art-322">'+art+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span>';
-   cardsView.appendChild(tile);
-   tile.scrollIntoView({block:'nearest',behavior:'smooth'});
-  }
-  step++;
-  updateReveal();
+  const cards=pack.slice(step,step+5);
+  const view=$b('arcaneBoosterCards322');
+  view.innerHTML=cards.map(name=>{
+   const c=catalog()?.cards.find(c=>c.name===name);
+   if(!c)return '';
+   const tone=catalog().rarityData[catalog().rarity(c)];
+   return '<div class="arcane-booster-card-322" style="--booster-rarity:'+tone.color+'"><div class="arcane-booster-card-art-322">'+catalog().renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>';
+  }).join('');
+  step+=cards.length;updateReveal();
  }
- buy.addEventListener('click',()=>{
-  const storage=window.arcaneBoosterInventory322;
-  const bank=window.arcaneTestCrystals320;
-  let state=storage.read();
-  if(state.pendingPack){showReveal(state.pendingPack);return}
-  const available=bank.get();
-  if(available<PRICE){feedback.textContent='Du benötigst 100 Arkankristalle.';sync();return}
+ function buyPacks(amount){
+  const price=amount*PRICE;
+  const state=inventory().read();
+  if(state.pendingPack){openReveal(state.pendingPack);return}
+  const balance=bank().get();
+  if(balance<price){label.textContent='Nicht genügend Arkankristalle.';sync();return}
   try{
-   const names=rollPack();
-   const updated=storage.read();
+   const names=[];
+   for(let i=0;i<amount;i++)names.push(...rollPack());
+   const updated=inventory().read();
    for(const name of names)updated.counts[name]=(updated.counts[name]||0)+1;
-   updated.opened+=1;
-   updated.pendingPack=names;
-   if(!storage.save(updated)){feedback.textContent='Speichern fehlgeschlagen. Es wurden keine Kristalle abgezogen.';return}
-   bank.set(available-PRICE);
-   bank.refresh();
-   feedback.textContent='Booster gekauft! 5 Karten wurden deiner Sammlung hinzugefügt.';
-   showReveal(names);
-   sync();
-  }catch(e){feedback.textContent='Booster konnte nicht geöffnet werden: '+e.message}
+   updated.opened+=amount;updated.pendingPack=names;
+   if(!inventory().save(updated)){label.textContent='Speichern fehlgeschlagen. Kein Kauf durchgeführt.';return}
+   bank().set(balance-price);bank().refresh();
+   feedback.textContent=amount+' Pack'+(amount===1?'':'s')+' gekauft · '+names.length+' Karten gespeichert.';
+   openReveal(names);sync();
+  }catch(error){label.textContent='Kauf fehlgeschlagen: '+error.message}
+ }
+ $b('arcaneBoosterBuy322').addEventListener('click',()=>{
+  const pending=inventory().read().pendingPack;
+  if(pending){openReveal(pending);return}
+  openCatalogue();
  });
- next.addEventListener('click',revealNext);
- close.addEventListener('click',()=>{overlay.hidden=true;pack=null;sync()});
+ $b('arcaneBoosterCatalogueClose324').addEventListener('click',()=>catalogue.hidden=true);
+ catalogue.addEventListener('click',e=>{if(e.target===catalogue)catalogue.hidden=true});
+ filterBar.addEventListener('click',e=>{
+  const b=e.target.closest('[data-rarity]');if(!b)return;
+  currentFilter=b.dataset.rarity;
+  filterBar.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));
+  renderPool();
+ });
+ quantities.addEventListener('click',e=>{
+  const b=e.target.closest('[data-packs]');if(!b||b.disabled)return;
+  buyPacks(Number(b.dataset.packs));
+ });
+ $b('arcaneBoosterNext322').addEventListener('click',revealNext);
+ $b('arcaneBoosterClose322').addEventListener('click',()=>{reveal.hidden=true;pack=null;sync()});
  document.getElementById('arcaneShopReset320')?.addEventListener('click',sync);
- window.arcaneBoosterShop322={sync};
+ window.arcaneBoosterShop322={sync,openCatalogue};
  sync();
 })();
 
