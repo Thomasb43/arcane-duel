@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-portrait-camera-v285">
+<meta name="arcane-build" content="20261120-vertical-tilt-only-v286">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2303,11 +2303,19 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
    transition:transform .18s ease-out!important;
  }
 }
+
+/* v2.86 – portrait 3D tilt only by vertical swipe, no camera UI. */
+.arena-camera{display:none!important}
+@media(orientation:portrait){
+ main.arcane-responsive>.arena-stage>.arena-world{
+  transform:rotateX(var(--view-tilt,0deg))!important;
+  transform-style:preserve-3d!important;
+ }
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.85</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.86</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
-<div class="arena-camera" aria-label="Spielfeldkamera"><button type="button" id="cameraToggle" aria-expanded="false" aria-controls="cameraOptions">✦ 3D-Ansicht</button><div id="cameraOptions" class="camera-options"><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="45" value="0" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
 
@@ -3061,26 +3069,11 @@ render();
  document.addEventListener('pointerdown',function(e){if(picker&&!picker.contains(e.target)&&!e.target.closest('#myMon .zone'))close();},true);
 })();
 /* Kamerastandpunkt ändern: Beide Felder behalten dieselbe feste Geometrie. */
-let arenaTilt=0,arenaTurn=0;
-const arenaMain=document.querySelector('main');
+let arenaTilt=0;
 function applyArenaCamera(){
- // Both duel halves share the same 3D plane and camera transform.
  const world=document.querySelector('.arena-world');
- if(!world)return;
- world.style.setProperty('--view-tilt',arenaTilt+'deg');
- world.style.setProperty('--arena-turn',arenaTurn+'deg');
- const slider=document.getElementById('cameraTilt');
- if(slider)slider.value=arenaTilt;
+ if(world)world.style.setProperty('--view-tilt',arenaTilt+'deg');
 }
-document.getElementById('cameraToggle').addEventListener('click',()=>{
- const camera=document.querySelector('.arena-camera');
- const open=camera.classList.toggle('camera-open');
- document.getElementById('cameraToggle').setAttribute('aria-expanded',String(open));
-});
-document.getElementById('cameraTilt').addEventListener('input',e=>{arenaTilt=Number(e.target.value);applyArenaCamera()});
-document.getElementById('cameraLeft').addEventListener('click',()=>{arenaTurn=Math.max(-28,arenaTurn-7);applyArenaCamera()});
-document.getElementById('cameraRight').addEventListener('click',()=>{arenaTurn=Math.min(28,arenaTurn+7);applyArenaCamera()});
-document.getElementById('cameraReset').addEventListener('click',()=>{arenaTilt=0;arenaTurn=0;applyArenaCamera()});
 applyArenaCamera();
 let arenaGesture=null;
 document.querySelectorAll('.arena-world>section.board').forEach(board=>{
@@ -3090,15 +3083,14 @@ document.querySelectorAll('.arena-world>section.board').forEach(board=>{
   const zone=e.target.closest('.zone');
   if(zone&&zone.closest('#myMon')&&myMon[Number(zone.dataset.index)])return;
   if(zone&&zone.querySelector('.field-card'))return;
-  arenaGesture={id:e.pointerId,board,x:e.clientX,y:e.clientY,turn:arenaTurn,tilt:arenaTilt};
+  arenaGesture={id:e.pointerId,board,x:e.clientX,y:e.clientY,tilt:arenaTilt};
   board.setPointerCapture(e.pointerId);
  },{passive:true});
  board.addEventListener('pointermove',e=>{
   if(!arenaGesture||arenaGesture.id!==e.pointerId||arenaGesture.board!==board)return;
   const dx=e.clientX-arenaGesture.x,dy=e.clientY-arenaGesture.y;
-  if(Math.abs(dx)+Math.abs(dy)<3)return;
+  if(Math.abs(dy)<5||Math.abs(dy)<Math.abs(dx))return;
   if(e.cancelable)e.preventDefault();
-  arenaTurn=Math.max(-28,Math.min(28,arenaGesture.turn+dx*.18));
   arenaTilt=Math.max(0,Math.min(45,arenaGesture.tilt-dy*.22));
   applyArenaCamera();
  },{passive:false});
