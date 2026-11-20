@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-collection-image-fit-v319">
+<meta name="arcane-build" content="20261120-test-crystals-reset-v320">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4139,9 +4139,25 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
   aspect-ratio:5/6!important;
   max-height:min(40dvh,280px)!important;
 }
+
+/* v3.20 – first shop shell, safely persisted test currency and voluntary reset. */
+.arcane-shop-320{position:fixed!important;inset:0!important;z-index:9400!important;display:flex!important;flex-direction:column!important;box-sizing:border-box!important;padding:max(14px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))!important;overflow-y:auto!important;color:#ffe8bc!important;background:radial-gradient(ellipse at 50% 9%,rgba(139,66,211,.55),transparent 46%),linear-gradient(165deg,#170c39,#0b0d28 72%,#08081e)!important}
+.arcane-shop-320[hidden]{display:none!important}
+.arcane-shop-top-320{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
+.arcane-shop-back-320,.arcane-shop-reset-320{cursor:pointer!important;color:#ffe5aa!important;border:1px solid #e8c785!important;border-radius:10px!important;padding:11px 13px!important;background:#261742!important;font-weight:800!important;min-height:44px!important}
+.arcane-shop-320 h2{font-family:Georgia,serif!important;text-align:center!important;color:#ffe0a1!important;font-size:clamp(28px,6vw,43px)!important;margin:20px 0 9px!important;text-shadow:0 0 18px #ac56e9!important}
+.arcane-shop-balance-320{margin:10px auto 18px!important;text-align:center!important;border:2px solid #e8b65e!important;border-radius:19px!important;padding:16px 18px!important;background:linear-gradient(135deg,#35205b,#1a163c)!important;box-shadow:0 0 24px #a748e866!important;width:min(100%,370px)!important;box-sizing:border-box!important}
+.arcane-shop-balance-320 strong{display:block!important;font-size:clamp(30px,8vw,43px)!important;line-height:1.2!important;color:#fbe5b4!important}
+.arcane-shop-balance-320 span{display:block!important;color:#e0c9f7!important;font-size:14px!important}
+.arcane-shop-info-320{width:min(100%,460px)!important;margin:0 auto!important;padding:19px!important;box-sizing:border-box!important;border:1px solid #9772c4!important;border-radius:18px!important;background:rgba(37,21,65,.75)!important;text-align:center!important}
+.arcane-shop-info-320 h3{font-family:Georgia,serif!important;color:#f5d391!important;font-size:23px!important;margin:0 0 10px!important}
+.arcane-shop-info-320 p{line-height:1.5!important;font-size:14px!important;margin:8px 0!important;color:#ead9f0!important}
+.arcane-shop-reset-320{display:block!important;margin:20px auto 9px!important;background:linear-gradient(140deg,#69317f,#342056)!important}
+.arcane-shop-status-320{min-height:20px!important;color:#f8dda1!important;font-size:13px!important;text-align:center!important}
+.arcane-shop-warning-320{margin:5px auto!important;font-size:12px!important;color:#d2bedf!important;text-align:center!important;max-width:370px!important;line-height:1.45!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.19</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.20</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5107,6 +5123,59 @@ window.setArenaCharacterTheme('magierin');
  window.openArcaneCollection316=openCollection;
 })();
 
+
+/* v3.20 – test currency persists across refresh and can be reset intentionally. */
+(function initArcaneShop320(){
+ const STORE_KEY='arcane-duel-test-crystals-v1';
+ const INITIAL=1000;
+ let memoryBalance=INITIAL;
+ let canPersist=true;
+ function read(){
+  try{
+   const existing=localStorage.getItem(STORE_KEY);
+   if(existing===null){localStorage.setItem(STORE_KEY,String(INITIAL));return INITIAL}
+   const amount=Number(existing);
+   if(!Number.isSafeInteger(amount)||amount<0){localStorage.setItem(STORE_KEY,String(INITIAL));return INITIAL}
+   return amount;
+  }catch(error){canPersist=false;return memoryBalance}
+ }
+ function write(value){
+  const next=Math.max(0,Math.floor(value));
+  memoryBalance=next;
+  try{localStorage.setItem(STORE_KEY,String(next));canPersist=true}
+  catch(error){canPersist=false}
+  return next;
+ }
+ const panel=document.createElement('section');
+ panel.id='arcaneShop320';
+ panel.className='arcane-shop-320';
+ panel.hidden=true;
+ panel.setAttribute('aria-label','Magischer Kartenladen');
+ panel.innerHTML=`<div class="arcane-shop-top-320"><button id="arcaneShopBack320" type="button" class="arcane-shop-back-320">← Stadt</button><strong>ARCANE DUEL</strong></div>
+ <h2>Magischer Laden</h2>
+ <div class="arcane-shop-balance-320" aria-live="polite"><strong>💎 <span id="arcaneShopCount320" style="display:inline;color:inherit;font-size:inherit">1.000</span></strong><span>Arkankristalle · Testguthaben</span></div>
+ <div class="arcane-shop-info-320">
+  <h3>✦ Booster &amp; Starterdecks</h3>
+  <p>Booster: <strong>100 Arkankristalle</strong> · 5 Karten pro Pack, mindestens eine Seltene.</p>
+  <p>Starterdecks: Das erste kostenlos, weitere für 300 Arkankristalle.</p>
+  <p>Der Kauf und die Booster-Öffnung folgen als nächster Shop-Schritt.</p>
+ </div>
+ <button id="arcaneShopReset320" type="button" class="arcane-shop-reset-320">↻ Testguthaben auf 1.000 zurücksetzen</button>
+ <div id="arcaneShopStatus320" class="arcane-shop-status-320" role="status" aria-live="polite"></div>
+ <p id="arcaneShopWarning320" class="arcane-shop-warning-320">Deine Arkankristalle bleiben beim normalen Aktualisieren erhalten. Der Reset betrifft nur das Testguthaben.</p>`;
+ document.body.appendChild(panel);
+ const count=panel.querySelector('#arcaneShopCount320');
+ const status=panel.querySelector('#arcaneShopStatus320');
+ function refresh(){count.textContent=read().toLocaleString('de-DE');panel.querySelector('#arcaneShopWarning320').textContent=canPersist?'Deine Arkankristalle bleiben beim normalen Aktualisieren erhalten. Der Reset betrifft nur das Testguthaben.':'Dein Browser blockiert die dauerhafte Speicherung. Das Guthaben gilt dann nur für die aktuelle Sitzung.'}
+ panel.querySelector('#arcaneShopBack320').addEventListener('click',()=>{panel.hidden=true});
+ panel.querySelector('#arcaneShopReset320').addEventListener('click',()=>{
+  write(INITIAL);refresh();status.textContent='Testguthaben auf 1.000 Arkankristalle zurückgesetzt.';
+ });
+ window.openArcaneShop320=function(){panel.hidden=false;status.textContent='';refresh()};
+ window.arcaneTestCrystals320={get:read,set:write,refresh};
+ refresh();
+})();
+
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
 (function initArcaneMainMenu307(){
  const home=document.createElement('div');
@@ -5155,6 +5224,9 @@ window.setArenaCharacterTheme('magierin');
   shop:'Hier wird es später Booster für Arkankristalle geben.'
  };
  home.querySelectorAll('[data-arcane-mode]').forEach(button=>button.addEventListener('click',()=>{
+  if(button.dataset.arcaneMode==='shop'&&typeof window.openArcaneShop320==='function'){
+    window.openArcaneShop320();return;
+  }
   if(button.dataset.arcaneMode==='collection'&&typeof window.openArcaneCollection316==='function'){
     window.openArcaneCollection316();return;
   }
