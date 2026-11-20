@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-twelve-card-artworks-v317">
+<meta name="arcane-build" content="20261120-collection-card-design-v318">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -3972,9 +3972,137 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
  .arcane-collection-detail-panel-316{max-height:95dvh!important}
  .arcane-collection-detail-art-316{height:30dvh!important}
 }
+
+/* v3.18 – collection cards match the approved design: complete artwork,
+   ornate mini-card frame, uniform information blocks, no image cropping. */
+.arcane-collection-316{
+ background:radial-gradient(ellipse at 50% 0%,rgba(122,51,157,.47),transparent 46%),
+ linear-gradient(180deg,#190b30 0%,#0d0b28 55%,#0a091f 100%)!important;
+}
+.arcane-collection-title-316{
+ color:#ffe0a6!important;
+ font-family:Georgia,'Times New Roman',serif!important;
+ font-size:clamp(25px,5.7vw,40px)!important;
+ letter-spacing:.15px!important;
+ text-shadow:0 1px 1px #241029,0 0 17px #a75cff8f!important;
+}
+.arcane-collection-grid-316{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:12px 8px!important;align-items:stretch!important;
+}
+.arcane-collection-item-316{
+ min-height:0!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ gap:5px!important;
+ padding:9px 6px 11px!important;
+ text-align:center!important;
+ border:1px solid var(--rarity-color,#a687ba)!important;
+ border-radius:15px!important;
+ background:linear-gradient(155deg,rgba(42,23,70,.98),rgba(20,14,45,.98) 60%,rgba(30,14,54,.98))!important;
+ color:#fff0d3!important;
+ box-shadow:0 0 0 1px rgba(248,202,255,.12),0 0 14px rgba(169,79,209,.26),inset 0 0 16px rgba(101,47,132,.18)!important;
+}
+.arcane-collection-art-316.arcane-collection-card-frame-318{
+ width:100%!important;
+ height:auto!important;
+ max-width:180px!important;
+ aspect-ratio:104/150!important;
+ flex:0 0 auto!important;
+ margin:0 auto 4px!important;
+ padding:4px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ position:relative!important;
+ box-sizing:border-box!important;
+ border:2px solid #dfb975!important;
+ border-radius:8px!important;
+ overflow:hidden!important;
+ background:linear-gradient(135deg,#fbdf9b,#6d3b74 20%,#151231 36%,#1a1236 69%,#e4bb76 96%)!important;
+ box-shadow:0 0 0 1px rgba(87,38,118,.85),0 5px 10px rgba(0,0,0,.45),inset 0 0 10px rgba(255,219,139,.24)!important;
+}
+.arcane-collection-image-318{
+ width:100%!important;height:100%!important;
+ min-width:0!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ overflow:hidden!important;
+ border:1px solid rgba(251,217,154,.8)!important;
+ border-radius:4px!important;
+ background:#17102e!important;
+}
+.arcane-collection-card-frame-318 .card-art-loader,
+.arcane-collection-card-frame-318 .card-art-fallback{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;height:100%!important;max-width:100%!important;
+ max-height:100%!important;overflow:hidden!important;
+}
+.arcane-collection-card-frame-318 .card-art-loader img,
+.arcane-collection-card-frame-318 img{
+ display:block!important;
+ position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
+ width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ object-fit:contain!important;object-position:center center!important;
+ transform:none!important;
+}
+.arcane-collection-card-frame-318 .card-art-loader img{
+ position:absolute!important;inset:0!important;
+}
+.arcane-collection-rarity-318{
+ align-self:stretch!important;
+ width:max-content!important;max-width:100%!important;
+ padding:3px 11px!important;margin:0 auto 1px!important;
+ border:1px solid var(--rarity-color,#bca6c4)!important;
+ border-radius:14px!important;
+ font-size:clamp(9px,2.4vw,12px)!important;
+ font-weight:900!important;
+ line-height:1.15!important;
+ text-align:center!important;
+ background:rgba(48,25,68,.93)!important;
+ color:#f6eaf8!important;
+ box-shadow:0 0 8px rgba(181,89,255,.35)!important;
+}
+.arcane-collection-card-name-316{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;flex:1 0 auto!important;
+ min-height:2.5em!important;max-height:none!important;
+ color:#ffe8ba!important;
+ font-family:Georgia,'Times New Roman',serif!important;
+ font-size:clamp(11px,2.65vw,15px)!important;font-weight:800!important;
+ line-height:1.15!important;text-align:center!important;
+ overflow-wrap:anywhere!important;hyphens:auto!important;
+}
+.arcane-collection-card-meta-316{
+ width:100%!important;color:#d7c5e8!important;font-style:italic!important;
+ font-size:clamp(10px,2.3vw,13px)!important;line-height:1.2!important;
+ text-align:center!important;
+}
+.arcane-collection-card-count-316{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;box-sizing:border-box!important;
+ margin-top:auto!important;min-height:31px!important;
+ padding:5px 3px!important;border:1px solid #d5b677!important;border-radius:8px!important;
+ background:linear-gradient(180deg,#130e2e,#221339)!important;
+ color:#ffe0a1!important;text-align:center!important;
+ font-size:clamp(9px,2.15vw,12px)!important;font-weight:800!important;
+ line-height:1.1!important;overflow-wrap:anywhere!important;
+}
+.arcane-collection-detail-art-316.arcane-collection-card-frame-318{
+ width:min(65vw,245px)!important;
+ max-width:245px!important;
+ height:auto!important;max-height:43dvh!important;
+ aspect-ratio:104/150!important;
+ margin:0 auto 14px!important;
+}
+@media(min-width:650px){
+ .arcane-collection-grid-316{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+}
+@media(orientation:landscape) and (max-height:520px){
+ .arcane-collection-grid-316{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ .arcane-collection-item-316{padding:5px!important}
+ .arcane-collection-card-name-316{font-size:10px!important}
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.17</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.18</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4874,7 +5002,7 @@ window.setArenaCharacterTheme('magierin');
  const special=c=>extraNames.has(c.name);
  const picture=c=>renderCardArt(c);
  const rarityVars=c=>'--rarity-color:'+rarityData[rarity(c)].color;
- function buildArt(c){return '<div class="arcane-collection-art-316">'+picture(c)+'</div>'}
+ function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318"><div class="arcane-collection-image-318">'+picture(c)+'</div></div>'}
  function drawGrid(){
   const query=$c('arcaneCollectionSearch316').value.toLocaleLowerCase('de').trim();
   const kind=$c('arcaneCollectionType316').value;
@@ -4889,7 +5017,7 @@ window.setArenaCharacterTheme('magierin');
    const i=allCards.indexOf(c);
    return '<button type="button" class="arcane-collection-item-316" data-card-index="'+i+'" style="'+rarityVars(c)+'" aria-label="'+escapeText(c.name)+'">'
     +buildArt(c)
-    +'<span class="arcane-collection-tag-316">'+rarityData[rarity(c)].label+'</span>'
+    +'<span class="arcane-collection-tag-316 arcane-collection-rarity-318">'+rarityData[rarity(c)].label+'</span>'
     +'<span class="arcane-collection-card-name-316">'+escapeText(c.name)+'</span>'
     +'<span class="arcane-collection-card-meta-316">'+types[c.kind]+(c.kind==='monster'?' · Lv. '+(c.level||'?'):'')+'</span>'
     +'<span class="arcane-collection-card-count-316">'+(special(c)?'Extra-Deck · Testkarte':count(c)>0?'Testbestand ×'+count(c):'Nicht im Starterdeck')+'</span>'
