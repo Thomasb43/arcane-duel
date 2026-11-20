@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-handfan-reference-v277">
+<meta name="arcane-build" content="20261120-hands-reference-v278">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -2010,9 +2010,97 @@ main.arcane-responsive .player-fixed-ui .duel-lp-face img{object-position:50% 6%
  main.arcane-responsive #hand .card strong{font-size:clamp(9px,2.7vw,12px)!important;line-height:1.05!important}
  main.arcane-responsive #hand .card .stats{display:block!important;font-size:clamp(8px,2vw,10px)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
 }
+
+/* v2.78: Referenz-Handkarten – beide Fächer unabhängig vom Spielfeld. */
+@media (orientation:portrait){
+ main.arcane-responsive .opponent-hand-wrap{
+   position:absolute!important;left:7%!important;right:7%!important;
+   width:86%!important;top:auto!important;bottom:0!important;
+   height:clamp(110px,16dvh,156px)!important;
+   margin:0!important;padding:0!important;
+   display:flex!important;align-items:flex-end!important;justify-content:center!important;
+   overflow:visible!important;z-index:18!important;pointer-events:none!important;
+ }
+ main.arcane-responsive .opponent-hand{
+   display:flex!important;align-items:flex-end!important;justify-content:center!important;
+   width:100%!important;height:100%!important;
+   padding:0 4px 6px!important;margin:0!important;overflow:visible!important;
+   transform:none!important;gap:0!important;pointer-events:none!important;
+ }
+ main.arcane-responsive .opponent-card-back{
+   flex:0 0 clamp(56px,18vw,96px)!important;
+   width:clamp(56px,18vw,96px)!important;
+   height:clamp(83px,13.8dvh,126px)!important;
+   min-width:0!important;margin-left:calc(-1 * clamp(7px,2.3vw,14px))!important;
+   border:2px solid #ffcc6b!important;border-radius:7px!important;
+   transform:translateY(var(--back-lift,0px)) rotate(var(--back-angle,0deg))!important;
+   transform-origin:center bottom!important;
+   box-shadow:0 0 7px #f8a72e,0 4px 13px #090317b8!important;
+   overflow:hidden!important;
+ }
+ main.arcane-responsive .opponent-card-back:first-child{margin-left:0!important}
+ main.arcane-responsive>section:has(#hand){
+   position:relative!important;overflow:visible!important;
+   display:flex!important;align-items:flex-end!important;justify-content:center!important;
+   padding:0!important;
+ }
+ main.arcane-responsive #hand{
+   position:relative!important;display:flex!important;align-items:flex-end!important;
+   justify-content:center!important;gap:0!important;
+   width:100%!important;max-width:100%!important;height:100%!important;
+   padding:4px 5px 12px!important;margin:0!important;overflow:visible!important;
+ }
+ main.arcane-responsive #hand .card{
+   box-sizing:border-box!important;
+   flex:0 0 clamp(74px,21vw,116px)!important;
+   width:clamp(74px,21vw,116px)!important;
+   min-width:0!important;max-width:none!important;
+   height:clamp(128px,18dvh,180px)!important;min-height:0!important;
+   max-height:100%!important;
+   margin-left:calc(-1 * clamp(13px,3.8vw,24px))!important;
+   padding:4px!important;gap:3px!important;
+   border:2px solid #eeba58!important;border-radius:8px!important;
+   background:linear-gradient(170deg,#412452,#1a102a 38%,#0d0a20)!important;
+   box-shadow:0 0 6px #f9a72e99,0 5px 13px #050316bb!important;
+   transform:translateY(var(--fan-lift,0px)) rotate(var(--fan-angle,0deg))!important;
+   transform-origin:center bottom!important;overflow:hidden!important;
+   touch-action:none!important;
+ }
+ main.arcane-responsive #hand .card:first-child{margin-left:0!important}
+ main.arcane-responsive #hand .card.selected{
+   transform:translateY(calc(var(--fan-lift,0px) - 12px)) rotate(var(--fan-angle,0deg))!important;
+ }
+ main.arcane-responsive #hand .card.card-dragging{opacity:.22!important}
+ main.arcane-responsive #hand .card .art{
+   flex:1 1 68%!important;width:100%!important;height:auto!important;
+   min-height:0!important;max-height:68%!important;
+   margin:0!important;border:1px solid #a66fe0!important;
+   border-radius:4px!important;overflow:hidden!important;
+ }
+ main.arcane-responsive #hand .card .art img,
+ main.arcane-responsive #hand .card .art svg{
+   display:block!important;width:100%!important;height:100%!important;
+   object-fit:cover!important;
+ }
+ main.arcane-responsive #hand .card strong{
+   display:block!important;font-size:clamp(9px,2.65vw,13px)!important;
+   line-height:1.12!important;color:#fff!important;
+   font-weight:900!important;white-space:normal!important;
+   overflow-wrap:anywhere!important;text-align:left!important;
+ }
+ main.arcane-responsive #hand .card small{display:none!important}
+ main.arcane-responsive #hand .card .stats{
+   display:block!important;flex:none!important;margin-top:auto!important;
+   padding:3px 1px 1px!important;line-height:1.1!important;
+   border-top:1px solid #eeba58!important;
+   font-size:clamp(7px,1.9vw,10px)!important;color:#ffdc81!important;
+   font-weight:900!important;white-space:nowrap!important;overflow:hidden!important;
+ }
+}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.77</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 2.78</small></div><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <div class="arena-camera" aria-label="Spielfeldkamera"><span>✦ 3D-ANSICHT</span><button type="button" id="cameraLeft" aria-label="Spielfeld nach links drehen">↶</button><label for="cameraTilt">Neigung <input type="range" id="cameraTilt" min="0" max="58" value="35" aria-label="Neigung des Spielfelds"></label><button type="button" id="cameraRight" aria-label="Spielfeld nach rechts drehen">↷</button><button type="button" id="cameraReset" class="camera-reset">Zurücksetzen</button></div>
 <main>
