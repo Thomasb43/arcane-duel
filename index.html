@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-booster-size-fix-v353">
+<meta name="arcane-build" content="20261121-card-spotlight-v354">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4942,9 +4942,24 @@ transform:none!important;filter:none!important;z-index:2!important;
  .arcane-shop-320 .arcane-booster-pack-322{column-gap:4px!important}
 }
 
+
+/* v3.54: large sequential reveal */
+.arcane-spotlight-354{position:fixed;inset:0;z-index:9900;background:radial-gradient(ellipse,#37215ef7,#080617fc 74%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px 12px;color:#ffe9c0}
+.arcane-spotlight-354[hidden]{display:none!important}
+.arcane-spotlight-354 .spot-kicker-354{letter-spacing:2px;font-size:12px;font-weight:900}
+.arcane-spotlight-354 .spot-title-354{font:900 clamp(19px,5vw,27px) Georgia,serif;text-align:center;color:var(--spot-color,#fff);text-shadow:0 0 18px var(--spot-color,#fff)}
+.arcane-spotlight-354 .spot-card-354{width:min(77vw,285px);height:min(55dvh,414px);overflow:hidden;border:2px solid var(--spot-color,#fff);border-radius:12px;box-shadow:0 0 34px var(--spot-color,#a76aff);animation:spotArrival354 .7s cubic-bezier(.18,.78,.2,1) both;background:#201333}
+.arcane-spotlight-354 .spot-card-354>*{width:100%!important;height:100%!important;max-width:100%!important}
+.arcane-spotlight-354 .spot-button-354{width:min(90vw,360px);min-height:52px;padding:12px 18px;background:linear-gradient(135deg,#7939a9,#37195f);border:2px solid #f2c57d;border-radius:12px;color:#fff0c8;font-weight:900;font-size:16px}
+.arcane-spotlight-354[data-rarity="legendary"] .spot-card-354{animation:spotArrival354 .8s ease both,spotLegend354 2s ease-in-out .8s infinite alternate}
+.arcane-spotlight-354[data-rarity="mythic"] .spot-card-354{animation:spotArrival354 .9s ease both,spotMythic354 2.4s linear .9s infinite}
+@keyframes spotArrival354{from{opacity:0;transform:translateY(80px) rotateY(85deg) scale(.6)}to{opacity:1;transform:translateY(0) rotateY(0) scale(1)}}
+@keyframes spotLegend354{to{box-shadow:0 0 65px #ffd873}}
+@keyframes spotMythic354{0%,100%{box-shadow:0 0 30px #ff9feb}50%{box-shadow:0 0 55px #6bdbff}}
+@media(prefers-reduced-motion:reduce){.arcane-spotlight-354 .spot-card-354{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.53</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.54</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6224,6 +6239,27 @@ window.setArenaCharacterTheme('magierin');
  const quantities=$b('arcaneBoosterQuantities324');
  const detail=$b('arcaneBoosterCardDetail326');
  let pack=null,step=0,currentFilter='all',revealStage='intro',flipped=0,opening346=false;
+
+ const spotlight354=document.createElement('div');
+ spotlight354.className='arcane-spotlight-354';spotlight354.hidden=true;
+ spotlight354.setAttribute('role','dialog');spotlight354.setAttribute('aria-modal','true');spotlight354.setAttribute('aria-label','Gezogene Karte');
+ spotlight354.innerHTML='<div class="spot-kicker-354"></div><div class="spot-title-354"></div><div class="spot-card-354"></div><button type="button" class="spot-button-354">Weiter</button>';
+ document.body.appendChild(spotlight354);
+ const spotButton354=spotlight354.querySelector('.spot-button-354');
+ const rarityNames354={normal:'Normal',rare:'Selten',epic:'Episch',legendary:'Legendär',mythic:'Mythisch'};
+ const rarityColors354={normal:'#d7d4e4',rare:'#75d7ff',epic:'#cc8bff',legendary:'#ffd879',mythic:'#f9a0ef'};
+ spotButton354.addEventListener('click',()=>{spotlight354.hidden=true;if(revealStage==='cards'){$b('arcaneSanctuaryHint325').textContent=flipped===5?'Alle fünf Karten enthüllt':'Berühre Karte '+(flipped+1)+' von 5';updateReveal()}});
+ function showSpotlight354(cardName,rarity,position){
+  const c=catalog()?.cards.find(x=>x.name===cardName);if(!c)return;
+  spotlight354.dataset.rarity=rarity;
+  spotlight354.style.setProperty('--spot-color',rarityColors354[rarity]||'#d4b1ff');
+  spotlight354.querySelector('.spot-kicker-354').textContent='KARTE '+position+' VON 5 · '+(rarityNames354[rarity]||'Karte').toUpperCase();
+  spotlight354.querySelector('.spot-title-354').textContent=c.name;
+  spotlight354.querySelector('.spot-card-354').innerHTML=renderArcaneCard335(c,{size:'reveal'});
+  spotButton354.textContent=position===5?'✦ Alle fünf Karten ansehen':'✦ Nächste Karte';
+  spotlight354.hidden=false;spotButton354.focus({preventScroll:true});
+ }
+
  const burst348=$b('arcaneSanctuary325')?.querySelector('.arcane-rune-burst-348');
  const clearTear348=()=>reveal.querySelectorAll('.arcane-foil-fragment-348').forEach(n=>n.remove());
  const inventory=()=>window.arcaneBoosterInventory322;
@@ -6332,7 +6368,7 @@ window.setArenaCharacterTheme('magierin');
  }
 
  function openReveal(names){
-  pack=names.slice();step=0;flipped=0;revealStage='intro';clearTear348();
+  pack=names.slice();step=0;flipped=0;revealStage='intro';clearTear348();spotlight354.hidden=true;
   $b('arcaneBoosterCards322').innerHTML='';
   reveal.hidden=false;opening346=false;reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325','sanctuary-opening-346','sanctuary-rare-glory-346','sanctuary-card-awaken-346');
   $b('arcaneSanctuaryHint325').textContent='Wische quer über das Booster, um es aufzureißen';
@@ -6361,7 +6397,7 @@ window.setArenaCharacterTheme('magierin');
     feedback.textContent='Alle gekauften Karten wurden deiner Sammlung hinzugefügt.';
     sync();return;
    }
-   revealStage='intro';flipped=0;clearTear348();
+   revealStage='intro';flipped=0;clearTear348();spotlight354.hidden=true;
    reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325','sanctuary-opening-346','sanctuary-rare-glory-346','sanctuary-card-awaken-346');
    $b('arcaneBoosterCards322').innerHTML='';
    $b('arcaneSanctuaryHint325').textContent='Das nächste Booster wartet auf dich · Wische zum Öffnen';
@@ -6421,6 +6457,8 @@ window.setArenaCharacterTheme('magierin');
   const grade=card.dataset.rarity;
   card.classList.add('is-flipped-325','sanctuary-reward-'+grade+'-346');
   card.disabled=true;flipped++;
+  const revealedCard354=pack[step-5+Number(card.dataset.order)];
+  if(revealedCard354)showSpotlight354(revealedCard354,grade,flipped);
   reveal.classList.remove('sanctuary-card-awaken-346','sanctuary-rare-flash-325','sanctuary-rare-glory-346');
   void reveal.offsetWidth;
   reveal.classList.add('sanctuary-card-awaken-346');
