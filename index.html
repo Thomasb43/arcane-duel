@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-booster-swipe-v350">
+<meta name="arcane-build" content="20261121-booster-art-v351">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4852,9 +4852,18 @@ transform:none!important;filter:none!important;z-index:2!important;
 @keyframes arcaneFoilTop348{0%,15%{opacity:0;transform:translate(-50%,-50%) rotate(-6deg)}16%,27%{opacity:1;transform:translate(-50%,-50%) rotate(-6deg)}48%{opacity:1;transform:translate(-57%,-70%) rotate(-18deg)}100%{opacity:0;transform:translate(-75%,-140%) rotate(-58deg) scale(.68)}}
 @keyframes arcaneFoilBottom348{0%,15%{opacity:0;transform:translate(-50%,-50%) rotate(-6deg)}16%,27%{opacity:1;transform:translate(-50%,-50%) rotate(-6deg)}48%{opacity:1;transform:translate(-46%,-45%) rotate(8deg)}100%{opacity:0;transform:translate(-20%,-4%) rotate(35deg) scale(.83)}}
 
+
+/* v3.51 – dedicated Schatten & Flammen pack art with fallback */
+.sanctuary-pack-325.arcane-pack-image-ready-351{border:0!important;background:transparent!important;box-shadow:0 15px 32px #000b,0 0 42px #dc77ff70!important;border-radius:3px!important;overflow:visible!important}
+.sanctuary-pack-325.arcane-pack-image-ready-351:before,.sanctuary-pack-325.arcane-pack-image-ready-351:after{display:none!important}
+.sanctuary-pack-325.arcane-pack-image-ready-351>span,.sanctuary-pack-325.arcane-pack-image-ready-351>b,.sanctuary-pack-325.arcane-pack-image-ready-351>em{display:none!important}
+.arcane-pack-art-351{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-select:none;border-radius:3px;filter:drop-shadow(0 0 10px #ca77fb66)}
+.sanctuary-pack-325.arcane-pack-image-ready-351 .arcane-tear-cue-348{top:9%!important}
+.sanctuary-opening-346 .sanctuary-pack-325.arcane-pack-image-ready-351 .arcane-tear-cue-348{opacity:0!important}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.50</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.51</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6114,7 +6123,7 @@ window.setArenaCharacterTheme('magierin');
     <div class="sanctuary-stars-325"></div><div class="sanctuary-arch-325"></div>
     <div class="sanctuary-guardian-325 left">✦</div><div class="sanctuary-guardian-325 right">✦</div>
     <div class="sanctuary-portal-325"></div><div class="sanctuary-beam-325"></div>
-    <div class="sanctuary-pack-325" id="arcaneSanctuaryPack325" role="button" tabindex="0" aria-label="Booster magisch öffnen"><span>✧</span><b>ARCANE<br>DUEL</b><em>✦</em><i class="sanctuary-tear-line-346" aria-hidden="true"></i><i class="arcane-tear-cue-348" aria-hidden="true"></i></div><div class="arcane-rune-burst-348" aria-hidden="true"></div><div class="sanctuary-opening-flash-346" aria-hidden="true"></div>
+    <div class="sanctuary-pack-325" id="arcaneSanctuaryPack325" role="button" tabindex="0" aria-label="Booster magisch öffnen"><img class="arcane-pack-art-351" src="booster-schatten-flammen.png" alt="Schatten &amp; Flammen Booster" draggable="false" onload="this.parentElement.classList.add('arcane-pack-image-ready-351')" onerror="this.remove()"><span>✧</span><b>ARCANE<br>DUEL</b><em>✦</em><i class="sanctuary-tear-line-346" aria-hidden="true"></i><i class="arcane-tear-cue-348" aria-hidden="true"></i></div><div class="arcane-rune-burst-348" aria-hidden="true"></div><div class="sanctuary-opening-flash-346" aria-hidden="true"></div>
     <div class="sanctuary-altar-325"></div><div class="sanctuary-sparks-325"></div>
    </div>
    <div class="arcane-sanctuary-hint-325" id="arcaneSanctuaryHint325">Berühre das Booster und entfessle seine Magie</div>
