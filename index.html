@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-booster-tear-v348">
+<meta name="arcane-build" content="20261121-booster-tear-hotfix-v349">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4839,7 +4839,7 @@ transform:none!important;filter:none!important;z-index:2!important;
 
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.48</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.49</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6262,7 +6262,11 @@ window.setArenaCharacterTheme('magierin');
    $b('arcaneSanctuaryHint325').textContent='Das nächste Booster wartet auf dich';
    updateReveal();return;
   }
-  opening346=true;clearTear348();\n  const original348=$b('arcaneSanctuaryPack325');\n  for(const side of ['top','bottom']){const fragment=original348.cloneNode(true);fragment.removeAttribute('id');fragment.removeAttribute('role');fragment.removeAttribute('tabindex');fragment.setAttribute('aria-hidden','true');fragment.classList.add('arcane-foil-fragment-348',side);original348.after(fragment)}\n  if(burst348)burst348.innerHTML=Array.from({length:26},(_,i)=>'<i style="--r:'+(i*137.5)+'deg;--d:-'+(110+(i%6)*32)+'px;animation-delay:'+(0.16+(i%5)*0.045)+'s"></i>').join('');\n  reveal.classList.remove('sanctuary-opening-346');void reveal.offsetWidth;
+  opening346=true;clearTear348();
+  const original348=$b('arcaneSanctuaryPack325');
+  for(const side of ['top','bottom']){const fragment=original348.cloneNode(true);fragment.removeAttribute('id');fragment.removeAttribute('role');fragment.removeAttribute('tabindex');fragment.setAttribute('aria-hidden','true');fragment.classList.add('arcane-foil-fragment-348',side);original348.after(fragment)}
+  if(burst348)burst348.innerHTML=Array.from({length:26},(_,i)=>'<i style="--r:'+(i*137.5)+'deg;--d:-'+(110+(i%6)*32)+'px;animation-delay:'+(0.16+(i%5)*0.045)+'s"></i>').join('');
+  reveal.classList.remove('sanctuary-opening-346');void reveal.offsetWidth;
   reveal.classList.add('sanctuary-opening-346');updateReveal();
   const cards=pack.slice(step,step+5);
   const view=$b('arcaneBoosterCards322');
@@ -6276,7 +6280,12 @@ window.setArenaCharacterTheme('magierin');
   window.setTimeout(()=>{if(reveal.hidden||revealStage!=='cards')return;reveal.classList.add('sanctuary-burst-325','sanctuary-cards-325');opening346=false;reveal.classList.remove('sanctuary-opening-346');$b('arcaneSanctuaryHint325').textContent='Berühre die erste Karte · Das Schicksal erwacht';updateReveal();},1550);
   updateReveal();
  }
- const packSurface348=$b('arcaneSanctuaryPack325');\n let swipeStart348=null,ignoreClick348=false;\n packSurface348.addEventListener('pointerdown',e=>{if(revealStage!=='intro'||opening346)return;swipeStart348={x:e.clientX,y:e.clientY};});\n packSurface348.addEventListener('pointerup',e=>{if(!swipeStart348)return;const dx=e.clientX-swipeStart348.x,dy=e.clientY-swipeStart348.y;swipeStart348=null;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)){ignoreClick348=true;revealNext();}});\n packSurface348.addEventListener('pointercancel',()=>swipeStart348=null);\n packSurface348.addEventListener('click',()=>{if(ignoreClick348){ignoreClick348=false;return}if(revealStage==='intro')revealNext()});
+ const packSurface348=$b('arcaneSanctuaryPack325');
+ let swipeStart348=null,ignoreClick348=false;
+ packSurface348.addEventListener('pointerdown',e=>{if(revealStage!=='intro'||opening346)return;swipeStart348={x:e.clientX,y:e.clientY};});
+ packSurface348.addEventListener('pointerup',e=>{if(!swipeStart348)return;const dx=e.clientX-swipeStart348.x,dy=e.clientY-swipeStart348.y;swipeStart348=null;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)){ignoreClick348=true;revealNext();}});
+ packSurface348.addEventListener('pointercancel',()=>swipeStart348=null);
+ packSurface348.addEventListener('click',()=>{if(ignoreClick348){ignoreClick348=false;return}if(revealStage==='intro')revealNext()});
  $b('arcaneSanctuaryPack325').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&revealStage==='intro'){e.preventDefault();revealNext()}});
  $b('arcaneBoosterCards322').addEventListener('click',e=>{
   const card=e.target.closest('.sanctuary-card-325');
