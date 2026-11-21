@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261120-sanctuary-reveal-v325">
+<meta name="arcane-build" content="20261121-card-inspection-v326">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4463,6 +4463,28 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 @keyframes sanctuaryRare325{40%{filter:brightness(3.2);box-shadow:0 0 95px #ffda73}}
 @keyframes sanctuaryDeal325{from{opacity:0;transform:translateY(120px) rotate(-25deg) scale(.3)}to{opacity:1;transform:translateY(0) rotate(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){.sanctuary-pack-325,.sanctuary-portal-325,.sanctuary-stars-325,.sanctuary-sparks-325,.sanctuary-card-325{animation:none!important}.sanctuary-card-inner-325{transition:none}}
+
+/* v3.26: lower shop navigation and inspect booster catalogue cards */
+.arcane-shop-nav-323{transform:translateY(10px)!important}
+.arcane-booster-pool-card-324{cursor:pointer!important;color:inherit!important;font:inherit!important;width:100%!important;appearance:none!important;-webkit-appearance:none!important}
+.arcane-booster-pool-card-324:active{transform:scale(.97)!important}
+.arcane-booster-pool-card-324:focus-visible{outline:3px solid #fff0ae!important;outline-offset:2px!important}
+.arcane-booster-detail-326{position:fixed!important;inset:0!important;z-index:9905!important;background:#070516ed!important;backdrop-filter:blur(13px)!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:max(18px,env(safe-area-inset-top)) 15px max(18px,env(safe-area-inset-bottom))!important;box-sizing:border-box!important}
+.arcane-booster-detail-326[hidden]{display:none!important}
+.arcane-booster-detail-panel-326{position:relative!important;width:min(100%,470px)!important;max-height:90dvh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;border:2px solid var(--detail-rarity-326,#e7b978)!important;border-radius:18px!important;padding:23px 18px 20px!important;box-sizing:border-box!important;background:radial-gradient(ellipse at top,#4a2670,#1d103c 65%,#0d0b21)!important;box-shadow:0 0 35px #a45ded80!important;color:#fff1d7!important;text-align:center!important}
+.arcane-booster-detail-close-326{position:sticky!important;top:0!important;float:right!important;z-index:4!important;background:#372052!important;color:#ffe5b0!important;border:1px solid #efc77b!important;border-radius:50%!important;width:35px!important;height:35px!important;font-size:25px!important;cursor:pointer!important}
+.arcane-booster-detail-kicker-326{font-size:10px!important;letter-spacing:2px!important;color:#d6b2f1!important;font-weight:900!important;margin:4px 28px 5px!important}
+.arcane-booster-detail-panel-326 h3{font:900 clamp(21px,6vw,30px) Georgia,serif!important;color:#ffe1a5!important;margin:8px 0 15px!important;clear:both!important}
+.arcane-booster-detail-art-326{width:min(70%,250px)!important;aspect-ratio:4/5!important;margin:0 auto 15px!important;overflow:hidden!important;border:4px ridge var(--detail-rarity-326)!important;border-radius:10px!important;background:#160c30!important;box-shadow:0 0 30px var(--detail-rarity-326)!important;position:relative!important}
+.arcane-booster-detail-art-326 img{width:100%!important;height:100%!important;object-fit:cover!important}
+.arcane-booster-detail-art-326 .card-art-loader{display:block!important;width:100%!important;height:100%!important}
+.arcane-booster-detail-stats-326{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:9px 0 15px!important}
+.arcane-booster-detail-stats-326>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:7px!important;border:1px solid #8561a4!important;background:#261743!important;border-radius:8px!important;padding:9px!important;text-align:left!important}
+.arcane-booster-detail-stats-326 small{font-size:11px!important;color:#d9bbea!important}
+.arcane-booster-detail-stats-326 strong{font-size:12px!important;color:#ffe2aa!important}
+.arcane-booster-detail-effect-326{text-align:left!important;border:1px solid var(--detail-rarity-326)!important;border-radius:11px!important;background:#100e2c!important;padding:13px!important;line-height:1.55!important;white-space:normal!important}
+.arcane-booster-detail-effect-326>strong{display:block!important;color:#f6d89a!important;margin-bottom:8px!important}
+.arcane-booster-detail-effect-326 p{margin:0!important;color:#eee1f5!important;white-space:pre-line!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5559,6 +5581,12 @@ window.setArenaCharacterTheme('magierin');
    </div>
   </div>
  </div>
+ <div id="arcaneBoosterCardDetail326" class="arcane-booster-detail-326" hidden role="dialog" aria-modal="true" aria-label="Kartendetails">
+  <div class="arcane-booster-detail-panel-326">
+   <button type="button" id="arcaneBoosterDetailClose326" class="arcane-booster-detail-close-326" aria-label="Kartendetails schließen">×</button>
+   <div id="arcaneBoosterDetailBody326"></div>
+  </div>
+ </div>
  <div id="arcaneBoosterReveal322" class="arcane-booster-reveal-322" hidden role="dialog" aria-modal="true" aria-label="Booster-Öffnung">
   <div class="arcane-booster-reveal-panel-322">
    <div class="arcane-booster-reveal-kicker-322" id="arcaneBoosterProgress322">Das Heiligtum erwacht</div>
@@ -5584,6 +5612,7 @@ window.setArenaCharacterTheme('magierin');
  const label=$b('arcaneBoosterCatalogueMessage324');
  const filterBar=$b('arcaneBoosterFilters324');
  const quantities=$b('arcaneBoosterQuantities324');
+ const detail=$b('arcaneBoosterCardDetail326');
  let pack=null,step=0,currentFilter='all',revealStage='intro',flipped=0;
  const inventory=()=>window.arcaneBoosterInventory322;
  const bank=()=>window.arcaneTestCrystals320;
@@ -5610,9 +5639,32 @@ window.setArenaCharacterTheme('magierin');
   const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
   $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
    const rarity=data.rarity(c),tone=data.rarityData[rarity];
-   return '<div class="arcane-booster-pool-card-324" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+data.renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>';
+   return '<button type="button" class="arcane-booster-pool-card-324" data-pool-card="'+data.cards.indexOf(c)+'" aria-label="Kartendetails: '+safe(c.name)+'" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+data.renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></button>';
   }).join(''):'<p class="arcane-booster-no-cards-324">In dieser Seltenheit sind derzeit keine Karten enthalten.</p>';
  }
+
+ function showPoolCard(index){
+  const data=catalog(),c=data?.cards[index];if(!c)return;
+  const grade=data.rarity(c),tone=data.rarityData[grade];
+  const kinds={monster:'Monster',spell:'Zauber',trap:'Falle'};
+  const effect=c.effectText||c.desc||'Diese Karte besitzt keinen zusätzlichen Effekttext.';
+  const stat=(caption,value)=>'<div><small>'+caption+'</small><strong>'+safe(value)+'</strong></div>';
+  const stats=stat('Kartentyp',kinds[c.kind]||c.kind||'Karte')
+   +stat('Seltenheit',tone.label)
+   +(c.kind==='monster'?stat('Level',c.level??'–')+stat('ATK',c.atk??'–')+stat('DEF',c.def??'–'):'')
+   +(c.element?stat('Element',c.element):'');
+  detail.style.setProperty('--detail-rarity-326',tone.color);
+  $b('arcaneBoosterDetailBody326').innerHTML='<div class="arcane-booster-detail-kicker-326">SCHATTEN & FLAMMEN · KARTENARCHIV</div><h3>'+safe(c.name)+'</h3><div class="arcane-booster-detail-art-326">'+data.renderCardArt(c)+'</div><div class="arcane-booster-detail-stats-326">'+stats+'</div><div class="arcane-booster-detail-effect-326"><strong>Kartenbeschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>';
+  detail.hidden=false;
+  $b('arcaneBoosterDetailClose326').focus({preventScroll:true});
+ }
+ function closePoolCard(){detail.hidden=true}
+ $b('arcaneBoosterPool324').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-pool-card]');if(btn)showPoolCard(Number(btn.dataset.poolCard));
+ });
+ $b('arcaneBoosterDetailClose326').addEventListener('click',closePoolCard);
+ detail.addEventListener('click',e=>{if(e.target===detail)closePoolCard()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!detail.hidden)closePoolCard()});
  function sync(){
   const money=bank()?.get()??0,pending=inventory()?.read().pendingPack;
   $b('arcaneBoosterBalance324').textContent='💎 '+money.toLocaleString('de-DE')+' verfügbar';
