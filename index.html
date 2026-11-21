@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-rare-reveals-v356">
+<meta name="arcane-build" content="20261121-story-chapter-357">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5006,9 +5006,41 @@ transform:none!important;filter:none!important;z-index:2!important;
 @keyframes rareCrystal356{0%,18%{opacity:0;transform:translateY(75px) rotate(0) scale(.2)}40%{opacity:.9}100%{opacity:0;transform:translateY(-120px) rotate(140deg) scale(.55)}}
 @media(prefers-reduced-motion:reduce){.arcane-spotlight-354.spot-legendary-356 .spot-card-354,.arcane-spotlight-354.spot-mythic-356 .spot-card-354{animation:none!important;opacity:1!important;transform:none!important}.arcane-spotlight-354>.spot-portal-356,.arcane-spotlight-354>.spot-rarity-banner-356,.arcane-spotlight-354>.spot-runes-356,.arcane-spotlight-354>.spot-shards-356{display:none!important}}
 
+
+/* v3.57 – story chapter select, dialog and mission flow */
+.arcane-story-357{position:fixed;inset:0;z-index:10020;background:radial-gradient(ellipse at 50% 10%,#263b6c,#111329 60%,#080812);color:#fff4df;overflow-y:auto;padding:max(22px,env(safe-area-inset-top)) 12px max(24px,env(safe-area-inset-bottom));font-family:system-ui,-apple-system,sans-serif}
+.arcane-story-357[hidden]{display:none!important}
+.arcane-story-shell-357{max-width:740px;margin:auto;padding:15px;border:1px solid #d7b878;border-radius:19px;background:linear-gradient(160deg,#24335aee,#151329f5);box-shadow:0 15px 60px #030512cc}
+.arcane-story-head-357{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.arcane-story-head-357 h2{font:700 clamp(20px,6vw,30px) Georgia,serif;color:#ffdf96;margin:6px 0}
+.arcane-story-back-357,.arcane-story-choice-357,.arcane-story-action-357{border:1px solid #d8b773;background:linear-gradient(140deg,#563c83,#27214b);color:#ffedcf;border-radius:10px;padding:12px;font-weight:800;cursor:pointer}
+.arcane-story-kicker-357{color:#bcb0ef;font-weight:800;letter-spacing:2px;font-size:11px}
+.arcane-story-copy-357{color:#d7deed;line-height:1.55;font-size:14px}
+.arcane-story-grid-357{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.arcane-story-choice-357{text-align:left;display:flex;align-items:center;gap:10px;min-width:0;min-height:79px}
+.arcane-story-choice-357 span{font-size:12px;font-weight:900;color:#ffe4a6}
+.arcane-story-choice-357 strong{display:block;font-size:14px;line-height:1.2}
+.arcane-story-choice-357 small{display:block;color:#cac9e4;margin-top:5px}
+.arcane-story-choice-357:disabled{opacity:.44;filter:grayscale(.8);cursor:not-allowed}
+.arcane-story-choice-357.is-cleared-357{border-color:#76d7a9;background:linear-gradient(140deg,#17463e,#242043)}
+.arcane-story-choice-357.is-boss-357{border-color:#e4a95f;box-shadow:inset 0 0 14px #ac67194a}
+.arcane-story-dialog-357{min-height:235px;display:flex;flex-direction:column;gap:11px;justify-content:center;margin:14px 0;border:1px solid #ab8ac9;border-radius:14px;padding:20px;background:radial-gradient(ellipse at top right,#39306a,#17132e 75%)}
+.arcane-story-speaker-357{font:900 18px Georgia,serif;color:#f1c978}
+.arcane-story-line-357{font-size:clamp(16px,4.1vw,21px);line-height:1.5;min-height:85px}
+.arcane-story-dialog-progress-357{color:#acb9df;font-size:12px;letter-spacing:1px}
+.arcane-story-actions-357{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 6px}
+.arcane-story-action-357{flex:1;min-height:48px}
+.arcane-story-action-357.primary-357{background:linear-gradient(125deg,#7755b6,#343076);border-color:#ffe0a4}
+.arcane-story-hero-357{border-radius:12px;min-height:95px;margin:12px 0;padding:19px;display:flex;align-items:end;background:radial-gradient(circle at 70% 30%,#5a63a066,transparent 45%),linear-gradient(140deg,#263e68,#141630);border:1px solid #9a8fc0}
+.arcane-story-hero-357 strong{font:700 23px Georgia,serif;color:#ffdd97}
+.arcane-story-chapter-357{border:1px solid #c9a36b;border-radius:11px;padding:13px;background:#191a36;color:#ddcaab}
+.arcane-story-note-357{color:#d2c4ac;font-size:12px;line-height:1.5}
+@media(min-width:570px){.arcane-story-grid-357{grid-template-columns:repeat(5,minmax(0,1fr))}.arcane-story-choice-357{flex-direction:column;align-items:flex-start;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.arcane-story-357 *{scroll-behavior:auto!important}}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.56</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.57</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5540,6 +5572,7 @@ function syncDuelOutcome(){
    panel.querySelector('#duelRestart306').focus({preventScroll:true});
  }
  panel.querySelector('#duelOutcomeTitle306').textContent=draw?'UNENTSCHIEDEN':won?'DUELL GEWONNEN':'DUELL VERLOREN';
+ if(typeof window.arcaneStoryResult357==='function')window.arcaneStoryResult357(won,draw);
  panel.querySelector('#duelOutcomeMessage306').textContent=draw?'Beide Duellanten haben 0 Lebenspunkte.':won?'Du hast die gegnerischen Lebenspunkte auf 0 reduziert.':'Deine Lebenspunkte sind auf 0 gefallen.';
  const endButton=document.getElementById('end');if(endButton)endButton.disabled=true;
 }
@@ -6764,4 +6797,103 @@ window.setArenaCharacterTheme('magierin');
   if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
  });
 })();
+
+/* v3.57 – first playable chapter: ten consecutive duels with dialogue */
+(function initArcaneStory357(){
+ const storyButton=document.querySelector('#arcaneHome307 [data-arcane-mode="story"]');
+ const home=document.getElementById('arcaneHome307'),intro=document.getElementById('arcaneIntro308');
+ if(!storyButton||!home)return;
+ const KEY='arcane-duel-story-chapter1-357';
+ const CONTINUE='arcane-duel-story-launch-357';
+ const missions=[
+  {title:'Die erste Prüfung',opponent:'Leon',deck:'Löwen und Krieger',pre:[['Leon','Na endlich, Kael! Ich dachte schon, du traust dich nicht.'],['Kael','Du weißt doch, dass ich keine Herausforderung ausschlage.'],['Leon','Dann zeig mir, was du gelernt hast. Heute gewinne ich!']],post:[['Leon','Unglaublich! Ich war mir sicher, dass ich dich besiege.'],['Kael','Du hast mich ganz schön unter Druck gesetzt.'],['Leon','Moment … der Kristall auf dem Turm leuchtet!']]},
+  {title:'Der leuchtende Kristall',opponent:'Elara',deck:'Kristallmonster und Schutzzauber',pre:[['Elara','Der Hauptkristall hat zum ersten Mal seit hundert Jahren reagiert.'],['Kael','Und was hat das mit mir zu tun?'],['Elara','Er reagiert auf deine Karten. Lass uns das mit einem Duell überprüfen!']],post:[['Elara','Die Messwerte … der Kristall hat deinen Namen ausgesprochen!'],['Kael','Meinen Namen?'],['Elara','Wir müssen Direktor Eldric informieren.']]},
+  {title:'Der unbekannte Duellant',opponent:'Varek',deck:'Verbotene Magie',pre:[['Varek','Also bist du der Junge, auf den der Kristall reagiert.'],['Kael','Wer bist du? Was weißt du darüber?'],['Varek','Besiege mich. Vielleicht bekommst du dann eine Antwort.']],post:[['Varek','Das erste Siegel wird fallen.'],['Kael','Welches Siegel?'],['Varek','Frag deinen Direktor. Er weiß mehr, als er zugibt.']]},
+  {title:'Der verzauberte Wächter',opponent:'Darian',deck:'Wächter und Kontrolle',pre:[['Kael','Darian! Wir müssen mit dem Direktor sprechen.'],['Darian','Niemand darf diesen Bereich verlassen. Befehl des Meisters.'],['Kael','Deine Augen … du bist verzaubert! Ich hole dich zurück.']],post:[['Darian','Was ist geschehen? Ich konnte meinen Körper nicht kontrollieren.'],['Kael','Du standest unter einem Schattenzauber.'],['Darian','Die Stimme kam aus dem Heiligtum. Ein Schüler nannte sich Noctis.']]},
+  {title:'Der Schattennovize',opponent:'Noctis',deck:'Schattenmonster und Flüche',boss:true,pre:[['Noctis','Willkommen, kleiner Held. Du bist tatsächlich gekommen.'],['Kael','Du hast Darian verzaubert!'],['Noctis','Dann zeig mir, ob dein Licht meine Schatten übersteht!']],post:[['Noctis','Du verstehst nichts. Ich war nur eine Ablenkung.'],['Kael','Wofür?'],['Noctis','Während wir kämpften, wurde das Heiligtum geöffnet.']]},
+  {title:'Die verbotene Bibliothek',opponent:'Seraphine',deck:'Siegelfallen und antike Zauber',pre:[['Seraphine','Halt. Kein Schüler darf diesen Bereich betreten.'],['Kael','Jemand versucht, ein uraltes Siegel zu zerstören!'],['Seraphine','Bevor ich dir mein Wissen anvertraue, musst du dich beweisen.']],post:[['Seraphine','Vor hundert Jahren wurde Malachar unter der Akademie versiegelt.'],['Kael','Und wer könnte ihn befreien?'],['Seraphine','Jemand aus der Akademieleitung besitzt den Schlüssel.']]},
+  {title:'Verrat unter Freunden',opponent:'Riven',deck:'Drachen und dunkle Unterstützung',pre:[['Kael','Riven! Wo warst du?'],['Riven','Ich brauche den Kristall. Jemand hat versprochen, meine Familie zu retten.'],['Kael','Die Macht belügt dich!'],['Riven','Dann bleibt mir keine Wahl. Stell dich mir!']],post:[['Riven','Das war meine einzige Chance …'],['Kael','Wir finden einen anderen Weg. Ich helfe dir.'],['Riven','Ich wollte niemanden verraten. Ich hatte Angst.']]},
+  {title:'Die Siegelwächterin',opponent:'Astra',deck:'Siegelmonster und Schutzmagie',pre:[['Astra','Ein Sterblicher betritt den heiligen Pfad.'],['Kael','Ich will das Siegel beschützen.'],['Astra','Zeig mir im Duell, ob dein Herz würdig ist.']],post:[['Astra','Du bist der Erbe eines vergessenen Hüters.'],['Kael','Kann ich das erste Siegel retten?'],['Astra','Beeile dich. Jemand aus der Akademie hat sein Herz der Dunkelheit geöffnet.']]},
+  {title:'Der letzte Schutzwall',opponent:'Valtor',deck:'Schattenritter und Zerstörungszauber',pre:[['Valtor','Du wirst den Meister nicht stören.'],['Kael','Wer ist dein Meister?'],['Valtor','Der Mann, der diese Akademie um jeden Preis retten wird.']],post:[['Valtor','Du hast den letzten Schutzwall durchbrochen …'],['Kael','Wer steckt hinter diesem Ritual?'],['Eldric','Lass ihn eintreten, Valtor.'],['Kael','Direktor … Eldric?']]},
+  {title:'Der Fall des Direktors',opponent:'Gefallener Eldric',deck:'Verbotene Siegelmagie',boss:true,pre:[['Kael','Direktor Eldric! Sagen Sie, dass das nicht wahr ist.'],['Eldric','Ich wollte die Akademie retten. Malachar versprach mir die Macht dazu.'],['Kael','Er hat Sie belogen!'],['Eldric','Vielleicht. Aber ich bin zu weit gegangen. Wenn du mich aufhalten willst, musst du mich besiegen!']],post:[['Eldric','Kael … vergib mir. Malachar hat mich benutzt.'],['Kael','Dann werde ich ihn aufhalten!'],['Malachar','Ein Siegel ist gefallen. Sechs bleiben.'],['Astra','Das nächste Siegel liegt im verlorenen Wald.'],['Kael','Dann ist das unser nächstes Ziel.']]}
+ ];
+ const escapeText=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const read=()=>{try{return Math.max(1,Math.min(11,Number(localStorage.getItem(KEY))||1))}catch(e){return 1}};
+ const save=n=>{try{localStorage.setItem(KEY,String(Math.max(read(),n)))}catch(e){}};
+ const stage=document.createElement('div');stage.className='arcane-story-357';stage.id='arcaneStory357';stage.hidden=true;stage.setAttribute('role','dialog');stage.setAttribute('aria-modal','true');stage.setAttribute('aria-label','Story-Modus');
+ stage.innerHTML='<div class="arcane-story-shell-357"><div class="arcane-story-head-357"><div><div class="arcane-story-kicker-357">DIE CHRONIK DER SIEBEN SIEGEL</div><h2 id="arcaneStoryHeading357">Akademie von Arkanis</h2></div><button type="button" class="arcane-story-back-357" id="arcaneStoryBack357">Zurück</button></div><div id="arcaneStoryContent357"></div></div>';
+ document.body.appendChild(stage);
+ const content=stage.querySelector('#arcaneStoryContent357'),back=stage.querySelector('#arcaneStoryBack357');
+ let activeIndex=null,dialogStep=0,scene='map',completedResult=null;
+ function show(){stage.hidden=false;stage.scrollTop=0}
+ function close(){stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
+ back.addEventListener('click',()=>{if(scene==='map')close();else showMap()});
+ function showMap(){
+  scene='map';activeIndex=null;completedResult=null;show();
+  stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 1 · Akademie von Arkanis';
+  back.textContent='Zur Stadt';
+  const unlocked=read();
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
+   const n=i+1,locked=n>unlocked,cleared=n<unlocked;
+   return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+'1-'+n+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small></div></button>';
+  }).join('')+'</div><div class="arcane-story-chapter-357"><strong>Kapitel 2 · Der verlorene Wald</strong><p class="arcane-story-note-357">'+(unlocked>10?'Kapitel 1 abgeschlossen! Kapitel 2 folgt in einer späteren Version.':'Wird nach Mission 1-10 freigeschaltet. Die spielbaren Missionen von Kapitel 2 folgen später.')+'</p></div><p class="arcane-story-note-357">Testversion: Die Story verwendet vorerst die vorhandene Duell-KI und das bestehende Testdeck. Individuelle Gegnerdecks und Kartenbelohnungen folgen später. Dein Story-Fortschritt wird auf diesem Gerät gespeichert.</p>';
+  content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
+ }
+ function openMission(index){
+  if(index<0||index>=missions.length||index+1>read())return;
+  activeIndex=index;scene='pre';dialogStep=0;completedResult=null;
+  drawDialog();
+ }
+ function drawDialog(){
+  if(activeIndex===null)return;
+  const m=missions[activeIndex],lines=scene==='post'?m.post:m.pre,entry=lines[dialogStep];
+  show();back.textContent='Missionsübersicht';
+  stage.querySelector('#arcaneStoryHeading357').textContent='1-'+(activeIndex+1)+' · '+m.title;
+  content.innerHTML='<p class="arcane-story-copy-357">'+(scene==='post'?'Nach dem Sieg':'Vor dem Duell')+' · '+escapeText(m.opponent)+' · '+escapeText(m.deck)+'</p><div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357"></div><div class="arcane-story-line-357"></div><div class="arcane-story-dialog-progress-357">Dialog '+(dialogStep+1)+' / '+lines.length+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneStorySkip357">Dialog überspringen</button><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryAdvance357">'+(dialogStep+1<lines.length?'Weiter':scene==='post'?'Mission abschließen':'⚔ Duell starten')+'</button></div>';
+  content.querySelector('.arcane-story-speaker-357').textContent=entry[0];content.querySelector('.arcane-story-line-357').textContent=entry[1];
+  content.querySelector('#arcaneStorySkip357').addEventListener('click',()=>{if(scene==='post')finishMission();else beginDuel()});
+  content.querySelector('#arcaneStoryAdvance357').addEventListener('click',()=>{if(dialogStep+1<lines.length){dialogStep++;drawDialog()}else if(scene==='post')finishMission();else beginDuel()});
+ }
+ function beginDuel(){
+  if(activeIndex===null)return;
+  scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
+  document.getElementById('arcaneReturnMenu307').hidden=false;
+  // The existing prototype duel is reused without altering its rules or inventory.
+ }
+ function finishMission(){
+  if(activeIndex===null)return;
+  save(activeIndex+2);const isLast=activeIndex===9;
+  show();scene='finished';
+  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
+  content.querySelector('#arcaneStoryMap357').addEventListener('click',showMap);
+  content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(isLast)showMap();else openMission(activeIndex+1)});
+ }
+ // Called by the existing duel outcome display. Each result is processed only once.
+ window.arcaneStoryResult357=(won,draw)=>{
+  if(scene!=='duel'||activeIndex===null||completedResult!==null)return;
+  completedResult=won?'win':draw?'draw':'loss';
+  const outcome=document.getElementById('duelOutcome306');
+  if(outcome)outcome.style.display='none';
+  if(won){scene='post';dialogStep=0;drawDialog();return}
+  scene='lost';show();
+  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(draw?'UNENTSCHIEDEN':'DUELL VERLOREN')+'</div><div class="arcane-story-line-357">Versuche Mission 1-'+(activeIndex+1)+' erneut. Dein Story-Fortschritt bleibt erhalten.</div></div><div class="arcane-story-actions-357"><button class="arcane-story-action-357 primary-357" id="arcaneStoryRetry357">⚔ Erneut duellieren</button><button class="arcane-story-action-357" id="arcaneStoryLostMap357">Zur Übersicht</button></div>';
+  content.querySelector('#arcaneStoryRetry357').addEventListener('click',()=>restartForStory(activeIndex));
+  content.querySelector('#arcaneStoryLostMap357').addEventListener('click',showMap);
+ };
+ function restartForStory(index){
+  try{sessionStorage.setItem(CONTINUE,String(index))}catch(e){}
+  window.location.reload();
+ }
+ storyButton.addEventListener('click',event=>{event.stopImmediatePropagation();showMap()},true);
+ // A new mission starts in a clean duel, including on replays after a prior result.
+ const oldBeginDuel=beginDuel;
+ // No forced reload on the first mission; after a finished duel, use a fresh document.
+ // In the current UI, the outcome dialog already closes the gameplay via the Story panel.
+ try{
+  const pending=sessionStorage.getItem(CONTINUE);
+  if(pending!==null){sessionStorage.removeItem(CONTINUE);const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='pre';dialogStep=0;drawDialog()}}
+ }catch(e){}
+ window.arcaneStory357={open:showMap};
+})();
+
 </script></body></html>
