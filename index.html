@@ -7260,7 +7260,7 @@ window.setArenaCharacterTheme('magierin');
 /* v3.77 – first usable deck manager: stored decks, editor, ownership and activation. */
 (function initDeckManager377(){
  const KEY='arcane-duel-managed-decks-v1';
- const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
  const defaults=()=>({active:'kael',decks:[
   {id:'kael',title:'Kael – Wächter des ersten Siegels',cards:starterDeckList.map(x=>[...x])},
   {id:'leon',title:'Leon – König der Löwenarena',cards:leonDeckList363.map(x=>[...x])}
