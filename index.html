@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-card-sequence-readable-v355">
+<meta name="arcane-build" content="20261121-rare-reveals-v356">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4971,9 +4971,44 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-spotlight-354 .spot-button-354{flex:none!important;min-height:48px!important;padding:10px 15px!important}
 @media(max-height:700px){.arcane-spotlight-354 .spot-card-354{height:min(38dvh,310px)!important;width:min(61vw,220px,calc(38dvh * .68))!important}.arcane-spotlight-354 .spot-readable-355{max-height:25dvh;padding:9px 12px}}
 
+
+/* v3.56 – dedicated cinematic rarity reveals (no sound) */
+.arcane-spotlight-354{isolation:isolate;overflow:hidden!important}
+.arcane-spotlight-354>.spot-portal-356,
+.arcane-spotlight-354>.spot-runes-356,
+.arcane-spotlight-354>.spot-shards-356,
+.arcane-spotlight-354>.spot-rarity-banner-356{pointer-events:none;position:absolute}
+.arcane-spotlight-354>.spot-portal-356{inset:9% 3%;z-index:0;opacity:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,#ffe3a600 0.8deg,transparent 1.5deg 20deg);-webkit-mask:radial-gradient(ellipse,transparent 0 36%,#000 43%,transparent 52%);mask:radial-gradient(ellipse,transparent 0 36%,#000 43%,transparent 52%)}
+.arcane-spotlight-354>.spot-runes-356,.arcane-spotlight-354>.spot-shards-356{inset:0;overflow:hidden;z-index:1}
+.arcane-spotlight-354>.spot-rarity-banner-356{top:17%;left:0;right:0;z-index:3;text-align:center;font:900 clamp(25px,8vw,46px)/1 Georgia,serif;letter-spacing:.12em;text-shadow:0 0 15px currentColor,0 2px 18px #000;opacity:0}
+.arcane-spotlight-354>.spot-kicker-354,.arcane-spotlight-354>.spot-title-354,.arcane-spotlight-354>.spot-card-354,.arcane-spotlight-354>.spot-readable-355,.arcane-spotlight-354>.spot-button-354{position:relative;z-index:2}
+.arcane-spotlight-354.spot-legendary-356{background:radial-gradient(ellipse at 50% 39%,#6f5127,#20122e 64%,#070511 100%)}
+.arcane-spotlight-354.spot-mythic-356{background:radial-gradient(ellipse at 50% 39%,#5f2874,#12112c 63%,#060511 100%)}
+.arcane-spotlight-354.spot-legendary-356>.spot-portal-356{opacity:1;animation:rarePortalGold356 3s ease-out both}
+.arcane-spotlight-354.spot-mythic-356>.spot-portal-356{opacity:1;background:repeating-conic-gradient(from 0deg,#f5aaff 0 1deg,transparent 1.7deg 15deg,#7fdbff 16deg 17deg,transparent 18deg 25deg);animation:rarePortalMythic356 5s ease-out both}
+.arcane-spotlight-354.spot-legendary-356>.spot-rarity-banner-356{color:#ffe18a;animation:rareBanner356 3s ease-out both}
+.arcane-spotlight-354.spot-mythic-356>.spot-rarity-banner-356{color:#f9c5ff;animation:rareBannerMythic356 5s ease-out both}
+.arcane-spotlight-354.spot-legendary-356 .spot-card-354{border-color:#ffdf7e!important;animation:rareCardGold356 3s cubic-bezier(.16,.75,.2,1) both!important}
+.arcane-spotlight-354.spot-mythic-356 .spot-card-354{border-color:#f7bcff!important;animation:rareCardMythic356 5s cubic-bezier(.14,.8,.2,1) both!important}
+.arcane-spotlight-354 .spot-runes-356 i{position:absolute;left:var(--particle-x);top:var(--particle-y);width:7px;height:7px;border-radius:50%;opacity:0;background:#ffe4a0;box-shadow:0 0 12px 5px #ffcd6f;transform:rotate(var(--particle-rotation))}
+.arcane-spotlight-354.spot-legendary-356 .spot-runes-356 i{animation:rareSpark356 1.35s ease-out var(--particle-delay) both}
+.arcane-spotlight-354.spot-mythic-356 .spot-runes-356 i{background:#b4f4ff;box-shadow:0 0 14px 5px #d67aff;animation:rareSparkMythic356 2.4s ease-out var(--particle-delay) both}
+.arcane-spotlight-354 .spot-shards-356 i{position:absolute;left:var(--particle-x);top:var(--particle-y);width:13px;height:24px;opacity:0;background:linear-gradient(120deg,#fff,#70d4ff 50%,#ef95ff);clip-path:polygon(50% 0,100% 30%,76% 100%,25% 100%,0 30%)}
+.arcane-spotlight-354.spot-mythic-356 .spot-shards-356 i{animation:rareCrystal356 2.8s ease-out var(--particle-delay) both}
+@keyframes rarePortalGold356{0%{transform:scale(.15) rotate(-55deg);filter:brightness(3);opacity:0}26%{opacity:1}65%{transform:scale(1.22) rotate(35deg);opacity:.8}100%{transform:scale(1.1) rotate(50deg);opacity:.3}}
+@keyframes rarePortalMythic356{0%{transform:scale(.12) rotate(-180deg);filter:hue-rotate(0);opacity:0}24%{opacity:1}65%{transform:scale(1.27) rotate(75deg);filter:hue-rotate(160deg);opacity:.9}100%{transform:scale(1.06) rotate(160deg);filter:hue-rotate(300deg);opacity:.4}}
+@keyframes rareBanner356{0%,38%{opacity:0;transform:scale(2.2)}55%{opacity:1;transform:scale(1)}78%{opacity:1}100%{opacity:0}}
+@keyframes rareBannerMythic356{0%,45%{opacity:0;transform:scale(2.5)}62%{opacity:1;transform:scale(1)}82%{opacity:1}100%{opacity:0}}
+@keyframes rareCardGold356{0%,21%{opacity:0;transform:translateY(75px) rotateY(95deg) scale(.45);filter:brightness(2.2)}47%{opacity:1;transform:translateY(-8px) rotateY(-9deg) scale(1.09);filter:brightness(2)}72%{transform:translateY(0) rotateY(0) scale(1)}100%{opacity:1;transform:translateY(0) rotateY(0) scale(1);filter:drop-shadow(0 0 24px #f5ce78)}}
+@keyframes rareCardMythic356{0%,30%{opacity:0;transform:translateY(95px) rotateY(110deg) scale(.35);filter:brightness(3) hue-rotate(140deg)}55%{opacity:1;transform:translateY(-16px) rotateY(-16deg) scale(1.12);filter:brightness(2.1) hue-rotate(50deg)}78%{transform:translateY(0) rotateY(0) scale(1);filter:brightness(1.3)}100%{opacity:1;transform:translateY(0) rotateY(0) scale(1);filter:drop-shadow(0 0 23px #f2aaff)}}
+@keyframes rareSpark356{0%{opacity:0;transform:translateY(45px) scale(.2)}23%{opacity:1}100%{opacity:0;transform:translateY(-115px) scale(.4)}}
+@keyframes rareSparkMythic356{0%{opacity:0;transform:translateY(80px) rotate(0) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translateY(-145px) rotate(180deg) scale(.8)}}
+@keyframes rareCrystal356{0%,18%{opacity:0;transform:translateY(75px) rotate(0) scale(.2)}40%{opacity:.9}100%{opacity:0;transform:translateY(-120px) rotate(140deg) scale(.55)}}
+@media(prefers-reduced-motion:reduce){.arcane-spotlight-354.spot-legendary-356 .spot-card-354,.arcane-spotlight-354.spot-mythic-356 .spot-card-354{animation:none!important;opacity:1!important;transform:none!important}.arcane-spotlight-354>.spot-portal-356,.arcane-spotlight-354>.spot-rarity-banner-356,.arcane-spotlight-354>.spot-runes-356,.arcane-spotlight-354>.spot-shards-356{display:none!important}}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.55</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.56</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6257,11 +6292,42 @@ window.setArenaCharacterTheme('magierin');
  const spotlight354=document.createElement('div');
  spotlight354.className='arcane-spotlight-354';spotlight354.hidden=true;
  spotlight354.setAttribute('role','dialog');spotlight354.setAttribute('aria-modal','true');spotlight354.setAttribute('aria-label','Gezogene Karte');
- spotlight354.innerHTML='<div class="spot-kicker-354"></div><div class="spot-title-354"></div><div class="spot-card-354"></div><section class="spot-readable-355"><strong>Beschreibung & Effekt</strong><p class="spot-effect-355"></p><div class="spot-stats-355"></div></section><button type="button" class="spot-button-354">Weiter</button>';
+ spotlight354.innerHTML='<div class="spot-portal-356" aria-hidden="true"></div><div class="spot-runes-356" aria-hidden="true"></div><div class="spot-shards-356" aria-hidden="true"></div><div class="spot-rarity-banner-356" aria-hidden="true"></div><div class="spot-kicker-354"></div><div class="spot-title-354"></div><div class="spot-card-354"></div><section class="spot-readable-355"><strong>Beschreibung & Effekt</strong><p class="spot-effect-355"></p><div class="spot-stats-355"></div></section><button type="button" class="spot-button-354">Weiter</button>';
  document.body.appendChild(spotlight354);
  const spotButton354=spotlight354.querySelector('.spot-button-354');
  const rarityNames354={normal:'Normal',rare:'Selten',epic:'Episch',legendary:'Legendär',mythic:'Mythisch'};
  const rarityColors354={normal:'#d7d4e4',rare:'#75d7ff',epic:'#cc8bff',legendary:'#ffd879',mythic:'#f9a0ef'};
+
+ const rareLayers356=[spotlight354.querySelector('.spot-runes-356'),spotlight354.querySelector('.spot-shards-356')];
+ function buildRarityEffects356(rarity){
+  const runes=rareLayers356[0],shards=rareLayers356[1];
+  runes.replaceChildren();shards.replaceChildren();
+  spotlight354.classList.remove('spot-legendary-356','spot-mythic-356');
+  const banner=spotlight354.querySelector('.spot-rarity-banner-356');
+  banner.textContent=rarity==='legendary'?'LEGENDÄR':rarity==='mythic'?'MYTHISCH':'';
+  if(rarity!=='legendary'&&rarity!=='mythic')return;
+  const mythic=rarity==='mythic';
+  // Stable distribution keeps repeated card reveals visually consistent.
+  for(let i=0;i<(mythic?24:18);i++){
+   const point=document.createElement('i');
+   point.style.setProperty('--particle-x',((i*47)%90+5)+'%');
+   point.style.setProperty('--particle-y',((i*29)%60+21)+'%');
+   point.style.setProperty('--particle-delay',(i%7*.085)+'s');
+   point.style.setProperty('--particle-rotation',((i*73)%360)+'deg');
+   runes.appendChild(point);
+  }
+  if(mythic)for(let i=0;i<14;i++){
+   const piece=document.createElement('i');
+   piece.style.setProperty('--particle-x',((i*61)%84+8)+'%');
+   piece.style.setProperty('--particle-y',((i*37)%53+26)+'%');
+   piece.style.setProperty('--particle-delay',(i%5*.12+.5)+'s');
+   piece.style.setProperty('--particle-rotation',((i*43)%180)+'deg');
+   shards.appendChild(piece);
+  }
+  void spotlight354.offsetWidth;
+  spotlight354.classList.add(mythic?'spot-mythic-356':'spot-legendary-356');
+ }
+
  spotButton354.addEventListener('click',()=>{
   if(revealStage!=='cards'){spotlight354.hidden=true;return}
   if(flipped<5){
@@ -6275,6 +6341,7 @@ window.setArenaCharacterTheme('magierin');
  function showSpotlight354(cardName,rarity,position){
   const c=catalog()?.cards.find(x=>x.name===cardName);if(!c)return;
   spotlight354.dataset.rarity=rarity;
+  buildRarityEffects356(rarity);
   spotlight354.style.setProperty('--spot-color',rarityColors354[rarity]||'#d4b1ff');
   spotlight354.querySelector('.spot-kicker-354').textContent='KARTE '+position+' VON 5 · '+(rarityNames354[rarity]||'Karte').toUpperCase();
   spotlight354.querySelector('.spot-title-354').textContent=c.name;
