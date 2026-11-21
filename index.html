@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-unified-cards-v334">
+<meta name="arcane-build" content="20261121-shared-cards-v335">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4584,6 +4584,44 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 /* v3.34 – discard prompt and graveyard list use the same card-type system */
 .hand-limit-choice[class*="arcane-type-"]{border:2px solid var(--type-light)!important;background:linear-gradient(145deg,var(--type-dark),#111027 75%)!important;box-shadow:0 0 10px var(--type-halo)!important}
 .hand-limit-art[class*="arcane-type-"]{border:2px solid var(--type-light)!important;box-shadow:inset 0 0 8px var(--type-halo)!important}
+
+/* v3.35: shared shop-quality card face, scaled without rearranging. */
+.arcane-card-335{display:flex!important;flex-direction:column!important;position:relative!important;box-sizing:border-box!important;width:100%!important;height:100%!important;min-height:0!important;gap:1.5%!important;padding:3%!important;overflow:hidden!important;border:3px ridge var(--type-light,#edcc87)!important;border-radius:5%!important;background:linear-gradient(150deg,var(--type-main,#845db0),var(--type-dark,#211133) 28%,#151029 70%,var(--type-dark,#211133))!important;box-shadow:inset 0 0 12px var(--type-halo,#a87def77),0 0 8px var(--type-halo,#a87def77)!important;color:#ffe9b8!important;text-align:left!important}
+.arcane-card-head-335{flex:0 0 14%!important;min-height:0!important;position:relative!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:1%!important;padding-right:17%!important}
+.arcane-card-head-335>strong{font:900 clamp(7px,1.7vw,17px)/1.08 Georgia,serif!important;color:#ffedc5!important;overflow:hidden!important;max-height:64%!important}
+.arcane-card-head-335>small{font:800 clamp(5px,1vw,10px)/1 system-ui!important;color:var(--type-light)!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+.arcane-card-head-335>.arcane-element-329{position:absolute!important;top:0!important;right:0!important;width:16%!important;height:auto!important;aspect-ratio:1!important;z-index:2!important}
+.arcane-card-art-335{position:relative!important;flex:1 1 auto!important;min-height:0!important;border:2px solid var(--type-light)!important;border-radius:3px!important;overflow:hidden!important;background:#160e2d!important}
+.arcane-card-art-335 img,.arcane-card-art-335>.card-art-loader{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+.arcane-card-meta-335{flex:0 0 5%!important;min-height:0!important;display:flex!important;justify-content:space-between!important;gap:3px!important;font:900 clamp(5px,1vw,10px)/1 system-ui!important;white-space:nowrap!important;overflow:hidden!important}
+.arcane-card-effect-335{flex:0 0 24%!important;min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important;background:linear-gradient(#efdec9,#ceb6a7)!important;border:1px solid #bc9d78!important;border-radius:3px!important;padding:2%!important;color:#281c2b!important}
+.arcane-card-effect-335 strong{display:block!important;font:900 clamp(5px,1vw,10px)/1.1 Georgia,serif!important;color:#281929!important;margin-bottom:2%!important}
+.arcane-card-effect-335 p{font:650 clamp(5px,1vw,10px)/1.2 system-ui!important;margin:0!important;color:#281929!important;white-space:pre-line!important;overflow-wrap:anywhere!important}
+.arcane-card-stats-335{flex:0 0 6%!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-top:1px solid var(--type-light)!important;font:900 clamp(6px,1.3vw,12px)/1 system-ui!important;white-space:nowrap!important}
+.arcane-card-335.arcane-type-spell .arcane-card-effect-335{background:linear-gradient(#e2f4ff,#b9d9f3)!important}
+.arcane-card-335.arcane-type-trap .arcane-card-effect-335{background:linear-gradient(#ffe8ec,#e9bfc9)!important}
+.arcane-card-335.arcane-type-resonance .arcane-card-effect-335{background:linear-gradient(#f6e9ff,#dcbbed)!important}
+.arcane-card-335.rarity-legendary{box-shadow:0 0 13px #ffd57799,inset 0 0 12px var(--type-halo)!important}
+.arcane-card-335.rarity-mythic{box-shadow:0 0 15px #dba5ffc0,inset 0 0 14px #ff81d988!important}
+.arcane-tilt-front-327{padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.arcane-tilt-front-327>.arcane-card-335{border:6px ridge var(--type-light)!important;border-radius:13px!important}
+.arcane-size-large .arcane-card-head-335>strong{font-size:clamp(13px,4vw,17px)!important}
+.arcane-size-large .arcane-card-head-335>small,.arcane-size-large .arcane-card-effect-335 strong,.arcane-size-large .arcane-card-effect-335 p,.arcane-size-large .arcane-card-meta-335{font-size:10px!important}
+.arcane-size-large .arcane-card-stats-335{font-size:12px!important}
+.card.arcane-wrapper-335{display:block!important;aspect-ratio:104/164!important;height:auto!important;min-height:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:0 4px 10px #0009!important;overflow:visible!important}
+.field-card:has(.arcane-card-335){padding:0!important;overflow:hidden!important}
+.field-card-front:has(.arcane-card-335){position:relative!important;width:100%!important;height:100%!important;display:block!important}
+.field-card-front>.arcane-card-335{height:100%!important}
+.field-card-front>.monster-effect-indicator-201{z-index:7!important}
+.arcane-collection-card-frame-318:has(.arcane-card-335){padding:0!important;overflow:hidden!important}
+.arcane-booster-pool-art-324:has(.arcane-card-335){aspect-ratio:104/164!important}
+.sanctuary-card-front-325:has(.arcane-card-335){padding:0!important;overflow:hidden!important}
+.sanctuary-card-front-325>.arcane-card-335{border:0!important}
+.resonance-extra-art:has(.arcane-card-335),.hand-limit-art:has(.arcane-card-335){overflow:hidden!important;aspect-ratio:104/164!important;height:auto!important}
+.arcane-collection-unified-335{display:flex!important;justify-content:center!important;align-items:center!important;position:relative!important;overflow:visible!important;padding:24px 10px 14px!important}
+.arcane-collection-unified-335 .arcane-collection-detail-close-316{position:absolute!important;top:7px!important;right:7px!important;z-index:20!important}
+.arcane-collection-unified-335 .arcane-tilt-card-327{width:min(78vw,305px,calc(67dvh * .68))!important}
+@media(max-width:649px){.arcane-size-hand .arcane-card-head-335>strong,.arcane-size-field .arcane-card-head-335>strong{font-size:7px!important}.arcane-size-hand .arcane-card-effect-335 p,.arcane-size-field .arcane-card-effect-335 p{font-size:5px!important}.arcane-size-hand .arcane-card-stats-335,.arcane-size-field .arcane-card-stats-335{font-size:6px!important}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -4648,6 +4686,28 @@ function arcaneElementIcon329(c){
  return '<span class="arcane-element-329" role="img" aria-label="Element '+el+'" title="Element: '+el+'"><svg viewBox="0 0 44 44" aria-hidden="true"><defs><linearGradient id="elgrad329'+el+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+d[1]+'"/><stop offset="1" stop-color="'+d[0]+'"/></linearGradient></defs><circle cx="22" cy="22" r="20" fill="#160b28" stroke="#f6d28b" stroke-width="2.7"/><circle cx="22" cy="22" r="17" fill="'+d[0]+'" fill-opacity=".3" stroke="#bc8c51" stroke-width="1"/><g transform="translate(1 1)">'+d[2].replace(/elgrad329/g,'elgrad329'+el)+'</g></svg></span>';
 }
 
+
+
+/* v3.35: ONE card face reused in every context, only scaled. */
+function arcaneEscape335(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function arcaneRarity335(c){const d=window.arcaneCollectionCatalog322,k=d?.rarity?.(c)||'normal';return {key:k,label:d?.rarityData?.[k]?.label||'Normal',color:d?.rarityData?.[k]?.color||'#c3c5d1'}}
+function renderArcaneCard335(c,o={}){
+ if(!c)return '';
+ if(o.faceDown)return '<div class="arcane-card-335 arcane-card-back-335"><span>✧</span><strong>ARCANE DUEL</strong></div>';
+ const rarity=arcaneRarity335(c),type=arcaneCardType332(c),label=arcaneCardTypeLabel332(c),monster=c.kind==='monster';
+ const stats=monster?'<span>ATK '+arcaneEscape335(c.atk??'–')+'</span><span>DEF '+arcaneEscape335(c.def??'–')+'</span>':'<span>'+arcaneEscape335(label)+'</span>';
+ return '<div class="arcane-card-335 arcane-type-'+type+' arcane-size-'+(o.size||'small')+' rarity-'+rarity.key+'" style="--card-rarity-335:'+rarity.color+'">'
+ +'<div class="arcane-card-head-335"><strong>'+arcaneEscape335(c.name)+'</strong><small>'+arcaneEscape335(label)+' · '+arcaneEscape335(rarity.label)+'</small>'+arcaneElementIcon329(c)+'</div>'
+ +'<div class="arcane-card-art-335">'+renderCardArt(c)+'</div>'
+ +'<div class="arcane-card-meta-335"><span>'+arcaneEscape335(c.race||label)+'</span><span>'+(monster?'Level '+arcaneEscape335(c.level??'–'):arcaneEscape335(c.element||label))+'</span></div>'
+ +'<div class="arcane-card-effect-335"><strong>Beschreibung & Effekt</strong><p>'+arcaneEscape335(c.effectText||c.desc||'Kein besonderer Effekt.')+'</p></div>'
+ +'<div class="arcane-card-stats-335">'+stats+'</div></div>';
+}
+function renderArcane3D335(c){
+ return '<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 arcane-type-'+arcaneCardType332(c)+' rarity-'+arcaneRarity335(c).key+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
+ +'<div class="arcane-tilt-rotator-327"><div class="arcane-tilt-face-327 arcane-tilt-front-327">'+renderArcaneCard335(c,{size:'large'})+'</div>'
+ +'<div class="arcane-tilt-face-327 arcane-tilt-back-327"><span class="arcane-tilt-symbol-327">✧</span><strong>ARCANE DUEL</strong><small>✦ SCHATTEN & FLAMMEN ✦</small></div></div></div></div>';
+}
 
 function arcaneCardType332(c){
  if(!c)return 'normal';
