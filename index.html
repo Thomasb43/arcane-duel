@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-kael-starter-shop-v374">
+<meta name="arcane-build" content="20261121-dual-starter-packs-v375">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5138,6 +5138,40 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-kael-buy-374:disabled{opacity:.5}
 .arcane-kael-feedback-374{min-height:20px;font-size:12px;color:#aaf5bf}
 
+
+/* v3.75 illustrated starterpacks — compact shop cards, existing art loaded from /artwork/ */
+.arcane-starter-shop-375[hidden],.arcane-starter-info-375[hidden]{display:none!important}
+.arcane-starter-shop-375{margin:18px auto;padding:15px;border:1px solid #c4a467;border-radius:16px;background:linear-gradient(145deg,#222846,#0e1229);box-shadow:0 0 24px #c49d5633;color:#f9edcf}
+.arcane-starter-shop-head-375{display:flex;justify-content:space-between;gap:10px}
+.arcane-starter-shop-head-375 small{font-size:10px;letter-spacing:2px;color:#e7c77b}
+.arcane-starter-shop-head-375 h3{font:900 22px Georgia,serif;color:#ffe19f;margin:6px 0}
+.arcane-starter-shop-head-375 p{font-size:12px;color:#d3d8e8}
+#arcaneStarterClose375{width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:#2b2743;color:#ffe8b6;border:1px solid #c4a467;font-size:23px}
+.arcane-starter-products-375{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.arcane-starter-product-375{padding:8px;border:1px solid #bb9959;border-radius:12px;background:#161b37;color:#ffe9b9;cursor:pointer}
+.arcane-starter-product-375.fire{border-color:#ec9c57}
+.arcane-pack-image-375{position:relative;width:100%;aspect-ratio:3/4.7;border-radius:9px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#668ce0,#192d64 58%,#10132c);border:1px solid #d8b66d;box-shadow:inset 0 0 16px #ebc17177}
+.arcane-pack-image-375.fire{background:radial-gradient(circle at 50% 30%,#e88a46,#64202e 55%,#190c22)}
+.arcane-pack-image-375 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.arcane-pack-fallback-375{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:8px;background:linear-gradient(155deg,#ffffff1a,transparent 40%,#04020d99)}
+.arcane-pack-fallback-375 div{font:900 clamp(12px,3vw,24px) Georgia,serif;color:#ffe5ad}
+.arcane-pack-fallback-375 span{letter-spacing:2px;font-size:10px}.arcane-pack-fallback-375 strong{font:900 clamp(21px,5vw,42px) Georgia,serif}.arcane-pack-fallback-375 small{font-size:10px;color:#f6dfa8}
+.arcane-starter-product-label-375{display:flex;flex-direction:column;gap:5px;padding:8px 2px 2px;text-align:center}
+.arcane-starter-product-label-375 strong{font:900 18px Georgia,serif}.arcane-starter-product-label-375 span{font-size:11px;color:#edca81}
+.arcane-starter-info-375{margin-top:14px;padding:12px;background:#131a35;border:1px solid #697ba8;border-radius:12px}
+.arcane-starter-detail-back-375{border:1px solid #c9a967;border-radius:8px;background:#2b3150;color:#ffe4a0;padding:8px;margin-bottom:12px}
+.arcane-starter-detail-top-375{display:grid;grid-template-columns:minmax(0,40%) 1fr;gap:12px;align-items:start}
+.arcane-starter-detail-top-375 h4{font:900 21px Georgia,serif;color:#ffe4ab;margin:0 0 5px}
+.arcane-starter-detail-top-375 p{font-size:12px;line-height:1.35;margin:5px 0;color:#d8dcee}
+.arcane-starter-info-375>h4{color:#f9dc98;margin:15px 0 7px}
+.arcane-starter-card-list-375{max-height:230px;overflow-y:auto;border:1px solid #505f81;border-radius:8px}
+.arcane-starter-card-row-375{display:flex;justify-content:space-between;gap:5px;padding:7px 9px;border-bottom:1px solid #64708b55;font-size:12px}
+.arcane-starter-card-row-375 small{color:#f5cf83;white-space:nowrap}
+.arcane-starter-warning-375{font-size:11px;color:#becbe3;line-height:1.4}
+.arcane-starter-buy-375{display:block;width:100%;margin-top:12px;border:1px solid #f3d38d;border-radius:11px;background:linear-gradient(#947137,#4c361a);color:#fff0cc;font-weight:900;padding:12px}
+.arcane-starter-buy-375:disabled{opacity:.48}
+#arcaneStarterFeedback375{color:#a8f1b8;font-size:12px;min-height:15px}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7045,75 +7079,84 @@ window.setArenaCharacterTheme('magierin');
 })();
 
 
-/* v3.74 – Kael starter deck can be purchased repeatedly for crystals.
-   The existing free test starter counts as the first copy; max 3 of each card. */
-(function initKaelStarterShop374(){
- const panel=document.getElementById('arcaneShop320');
- if(!panel)return;
- const price=300,dragon='Arkaner Lichtdrache';
- const escape=t=>String(t??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
- const base=Object.fromEntries(starterDeckList);
- const inventory=()=>window.arcaneBoosterInventory322;
- const bank=()=>window.arcaneTestCrystals320;
- const total=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
- const overlay=document.createElement('div');
- overlay.id='arcaneKaelStarter374';overlay.className='arcane-kael-overlay-374';overlay.hidden=true;
- overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Kaels Starterdeck kaufen');
- overlay.innerHTML='<div class="arcane-kael-panel-374">'
- +'<button type="button" class="arcane-kael-close-374" aria-label="Schließen">×</button>'
- +'<div class="arcane-kael-eyebrow-374">ARCANE DUEL · STARTERDECK</div>'
- +'<h3>Kael – Wächter des ersten Siegels</h3>'
- +'<p class="arcane-kael-sub-374">30 Karten · 1 Arkaner Lichtdrache pro Deck · Maximal 3 Exemplare pro Karte in der Sammlung.</p>'
- +'<div class="arcane-kael-dragon-374"><strong>🐉 Arkaner Lichtdrache</strong><span id="arcaneKaelDragonCount374"></span></div>'
- +'<div class="arcane-kael-contents-374" id="arcaneKaelDeckContents374"></div>'
- +'<p class="arcane-kael-note-374">Karten, die du schon 3-mal besitzt, werden nicht erneut gutgeschrieben. Andere Karten erhältst du bis zu 3-mal.</p>'
- +'<button type="button" id="arcaneKaelBuy374" class="arcane-kael-buy-374">Starterdeck kaufen · 💎 300</button>'
- +'<p id="arcaneKaelFeedback374" class="arcane-kael-feedback-374" role="status" aria-live="polite"></p>'
- +'</div>';
- panel.appendChild(overlay);
- const buy=overlay.querySelector('#arcaneKaelBuy374');
- const feedback=overlay.querySelector('#arcaneKaelFeedback374');
- const content=overlay.querySelector('#arcaneKaelDeckContents374');
- function refresh(){
-  const owned=total(dragon),crystals=bank()?.get()||0;
-  overlay.querySelector('#arcaneKaelDragonCount374').textContent=owned+' / 3 im Bestand';
-  content.innerHTML=starterDeckList.map(([name,count])=>'<div><span>'+escape(name)+'</span><small>×'+count+' · Bestand '+total(name)+'/3</small></div>').join('');
-  buy.disabled=owned>=3||crystals<price;
-  buy.textContent=owned>=3?'Alle 3 Lichtdrachen vorhanden':crystals<price?'Nicht genügend Arkankristalle · 💎 300':'Starterdeck kaufen · 💎 300';
+/* v3.75 – Two illustrated starter pack products, using original prepared pack art files.
+   Kael is 30 cards and Leon 50 cards. Inventory cap is three per named card. */
+(function initStarterPackShop375(){
+ const shop=document.getElementById('arcaneShop320');
+ if(!shop)return;
+ const inventory=()=>window.arcaneBoosterInventory322,bank=()=>window.arcaneTestCrystals320;
+ const PRICE=300,base=Object.fromEntries(starterDeckList);
+ const products=[
+  {id:'kael',name:'Kael',title:'Wächter des ersten Siegels',image:'artwork/starterdeck-kael.png',accent:'blue',feature:'Arkaner Lichtdrache',cards:starterDeckList,freeBase:true},
+  {id:'leon',name:'Leon',title:'König der Löwenarena',image:'artwork/starterdeck-leon.png',accent:'fire',feature:'König der Löwenarena',cards:leonDeckList363,freeBase:false}
+ ];
+ const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ const qty=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
+ const wrapper=document.createElement('div');
+ wrapper.className='arcane-starter-shop-375';wrapper.hidden=true;
+ wrapper.innerHTML='<div class="arcane-starter-shop-head-375"><div><small>ARCANE DUEL · STARTERDECKS</small><h3>Wähle dein Starterpack</h3><p>Charakterdecks · 300 Arkankristalle pro Pack</p></div><button type="button" id="arcaneStarterClose375" aria-label="Starterdecks schließen">×</button></div>'
+ +'<div class="arcane-starter-products-375" id="arcaneStarterProducts375"></div>'
+ +'<div class="arcane-starter-info-375" id="arcaneStarterDetail375" hidden></div>';
+ shop.appendChild(wrapper);
+ const productsEl=wrapper.querySelector('#arcaneStarterProducts375');
+ const detail=wrapper.querySelector('#arcaneStarterDetail375');
+ function packImage(p){
+  return '<div class="arcane-pack-image-375 '+p.accent+'"><div class="arcane-pack-fallback-375"><div>ARCANE DUEL</div><span>STARTERDECK</span><strong>'+esc(p.name)+'</strong><small>'+esc(p.title)+'</small></div>'
+   +'<img src="'+p.image+'" alt="Starterpack '+esc(p.name)+'" loading="lazy" onload="this.previousElementSibling.style.display=\'none\'" onerror="this.remove()"></div>';
  }
- function open(){overlay.hidden=false;feedback.textContent='';refresh()}
- function close(){overlay.hidden=true}
- overlay.querySelector('.arcane-kael-close-374').addEventListener('click',close);
- overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
- // Intercept both old 'coming soon' actions, without changing other shop tabs.
- const card=panel.querySelector('#arcaneShopDecks323');
- card?.addEventListener('click',e=>{e.stopImmediatePropagation();open()},true);
- const nav=panel.querySelector('.arcane-shop-nav-323');
- nav?.addEventListener('click',e=>{
-  if(!e.target.closest('[data-shop-tab="starter"]'))return;
-  e.stopImmediatePropagation();
-  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.shopTab==='starter'));
-  open();
+ function previewCards(p){
+  return p.cards.map(([name,count])=>'<div class="arcane-starter-card-row-375"><span>'+esc(name)+'</span><small>×'+count+' · Bestand '+qty(name)+'/3</small></div>').join('');
+ }
+ function canGain(p){return p.cards.some(([name])=>qty(name)<3)}
+ function drawProducts(){
+  productsEl.innerHTML=products.map(p=>{
+   const cardCount=p.cards.reduce((n,[,v])=>n+v,0);
+   return '<button type="button" class="arcane-starter-product-375 '+p.accent+'" data-starter-open="'+p.id+'">'
+     +packImage(p)+'<div class="arcane-starter-product-label-375"><strong>'+esc(p.name)+'</strong><span>'+cardCount+' Karten · 💎 '+PRICE+'</span></div></button>';
+  }).join('');
+ }
+ function view(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const cardCount=p.cards.reduce((n,[,v])=>n+v,0),balance=bank()?.get()||0;
+  const buyable=canGain(p)&&balance>=PRICE;
+  detail.hidden=false;
+  detail.dataset.activeDeck=id;
+  detail.innerHTML='<button type="button" class="arcane-starter-detail-back-375" id="arcaneStarterBack375">← Alle Starterpacks</button>'
+   +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p>💎 '+PRICE+' Arkankristalle</p></div></div>'
+   +'<h4>Enthaltene Karten</h4><div class="arcane-starter-card-list-375">'+previewCards(p)+'</div>'
+   +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare pro Karte. Karten, die du bereits 3-mal besitzt, werden bei weiteren Käufen nicht erneut gutgeschrieben.</p>'
+   +'<button type="button" id="arcaneStarterBuy375" class="arcane-starter-buy-375" '+(buyable?'':'disabled')+'>'
+   +(canGain(p)?balance>=PRICE?'Starterpack kaufen · 💎 300':'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
+   +'<p id="arcaneStarterFeedback375" role="status" aria-live="polite"></p>';
+  detail.querySelector('#arcaneStarterBack375').addEventListener('click',()=>{detail.hidden=true;drawProducts()});
+  detail.querySelector('#arcaneStarterBuy375').addEventListener('click',()=>buy(p));
+  detail.scrollIntoView({block:'start',behavior:'smooth'});
+ }
+ function buy(p){
+  const result=detail.querySelector('#arcaneStarterFeedback375');
+  const inv=inventory()?.read(),balance=bank()?.get();
+  if(!inv||!Number.isSafeInteger(balance)||balance<PRICE){result.textContent='Nicht genügend Arkankristalle.';return}
+  if(inv.pendingPack){result.textContent='Bitte öffne zuerst deinen noch ausstehenden Booster.';return}
+  const adds=p.cards.map(([name,count])=>[name,Math.min(count,Math.max(0,3-qty(name)))]).filter(([,count])=>count>0);
+  if(!adds.length){result.textContent='Alle enthaltenen Karten sind bereits dreimal vorhanden.';return}
+  const next={...inv,counts:{...inv.counts}};
+  for(const [name,count] of adds)next.counts[name]=(next.counts[name]||0)+count;
+  if(!inventory().save(next)){result.textContent='Speichern fehlgeschlagen – Kauf nicht durchgeführt.';return}
+  bank().set(balance-PRICE);bank().refresh();
+  view(p.id);
+  detail.querySelector('#arcaneStarterFeedback375').textContent='Starterpack gekauft! '+adds.reduce((n,[,v])=>n+v,0)+' Karten in deiner Sammlung gespeichert.';
+ }
+ function open(){wrapper.hidden=false;detail.hidden=true;drawProducts();wrapper.scrollIntoView({block:'start',behavior:'smooth'})}
+ function close(){wrapper.hidden=true;detail.hidden=true}
+ wrapper.querySelector('#arcaneStarterClose375').addEventListener('click',close);
+ productsEl.addEventListener('click',e=>{const b=e.target.closest('[data-starter-open]');if(b)view(b.dataset.starterOpen)});
+ // Capture before the older "coming soon" UI handlers registered on these buttons.
+ shop.querySelector('#arcaneShopDecks323')?.addEventListener('click',e=>{e.stopImmediatePropagation();open()},true);
+ shop.querySelector('.arcane-shop-nav-323')?.addEventListener('click',e=>{
+  const b=e.target.closest('[data-shop-tab="starter"]');if(!b)return;
+  e.stopImmediatePropagation();open();
  },true);
- buy.addEventListener('click',()=>{
-  refresh();
-  if(buy.disabled)return;
-  const current=inventory()?.read(),wallet=bank()?.get();
-  if(!current||!Number.isSafeInteger(wallet)||wallet<price){feedback.textContent='Kauf derzeit nicht möglich.';refresh();return}
-  const additions=[];
-  for(const [name,amount] of starterDeckList){
-   const room=Math.max(0,3-((base[name]||0)+(current.counts[name]||0)));
-   if(room>0)additions.push([name,Math.min(amount,room)]);
-  }
-  if(!additions.some(([name])=>name===dragon)){feedback.textContent='Du hast bereits drei Lichtdrachen.';refresh();return}
-  const next={...current,counts:{...current.counts}};
-  for(const [name,amount] of additions)next.counts[name]=(next.counts[name]||0)+amount;
-  if(!inventory().save(next)){feedback.textContent='Speicherung fehlgeschlagen, keine Kristalle abgezogen.';return}
-  bank().set(wallet-price);bank().refresh();
-  feedback.textContent='Starterdeck gekauft! '+additions.reduce((sum,[,n])=>sum+n,0)+' zusätzliche Karten gutgeschrieben.';
-  refresh();
- });
- window.openKaelStarterShop374=open;
+ window.openArcaneStarterShop375=open;
 })();
 
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
