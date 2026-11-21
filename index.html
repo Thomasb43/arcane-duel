@@ -5446,7 +5446,8 @@ function createDuelDeck(){
  try{
   const saved=JSON.parse(localStorage.getItem('arcane-duel-managed-decks-v1')||'null');
   const choice=saved?.decks?.find(d=>d.id===saved.active);
-  if(choice&&Array.isArray(choice.cards)&&choice.cards.reduce((sum,p)=>sum+(Array.isArray(p)?p[1]:0),0)>=30
+  const leonAllowed=Number(localStorage.getItem('arcane-duel-story-chapter1-357')||1)>=2;
+  if(choice&&(!String(choice.id).startsWith('leon')||leonAllowed)&&Array.isArray(choice.cards)&&choice.cards.reduce((sum,p)=>sum+(Array.isArray(p)?p[1]:0),0)>=30
     &&choice.cards.reduce((sum,p)=>sum+(Array.isArray(p)?p[1]:0),0)<=50
     &&choice.cards.every(p=>Array.isArray(p)&&typeof p[0]==='string'&&Number.isInteger(p[1])&&p[1]>=1&&p[1]<=3&&deck.some(c=>c.name===p[0]))){
    recipe=choice.cards;
