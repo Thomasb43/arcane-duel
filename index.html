@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-leon50-v363">
+<meta name="arcane-build" content="20261121-opponent-card-preview-v364">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5089,9 +5089,20 @@ transform:none!important;filter:none!important;z-index:2!important;
 @keyframes arcaneDangerPulse361{to{opacity:.6;filter:brightness(1.5)}}
 @media(prefers-reduced-motion:reduce){.arcane-story-portrait-360,.arcane-story-dialog-box-360,.arcane-story-stage-360:before{animation:none!important;transform:none!important}}
 
+
+/* v3.64: readable, non-spoiling preview for opponent's face-up field cards */
+.arcane-opponent-preview-364{z-index:100120!important}
+.arcane-opponent-preview-364 .arcane-hand-preview-panel-336{flex-direction:column!important;gap:10px!important;width:min(100%,430px)!important;max-height:94dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:38px 8px 12px!important}
+.arcane-opponent-preview-364 .arcane-tilt-card-327{width:min(78vw,300px,calc(53dvh * .68))!important}
+.arcane-opponent-preview-364 .arcane-opponent-effect-364{width:min(100%,380px);padding:12px 14px;box-sizing:border-box;background:linear-gradient(135deg,#282144,#11132a);border:1px solid #d5b66e;border-radius:12px;color:#fff1d6;text-align:left;line-height:1.45;font-size:15px}
+.arcane-opponent-effect-364 strong{display:block;color:#ffd88c;font-size:15px;margin-bottom:5px}
+.arcane-opponent-effect-364 p{margin:0!important;color:#fff0de!important;white-space:normal}
+.arcane-opponent-effect-364 .arcane-opponent-stats-364{margin-top:7px!important;color:#f4c881!important;font-weight:800}
+#oppMon .zone.filled:not(:has(.field-facedown)),#oppSpell .zone.filled:not(:has(.field-facedown)){cursor:zoom-in;touch-action:manipulation}
+@media(max-height:650px){.arcane-opponent-preview-364 .arcane-tilt-card-327{width:min(65vw,230px,calc(42dvh * .68))!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.63</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.64</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5797,6 +5808,27 @@ function showHandPreview336(card){
  overlay.querySelector('.arcane-hand-preview-close-336').focus({preventScroll:true});
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&handPreview336)closeHandPreview336()});
+
+function showOpponentPreview364(card){
+ if(!card||card.faceDown)return false;
+ closeCardInfo();closeHandPreview336();
+ const overlay=document.createElement('div');
+ overlay.className='arcane-hand-preview-336 arcane-opponent-preview-364';
+ overlay.setAttribute('role','dialog');
+ overlay.setAttribute('aria-modal','true');
+ overlay.setAttribute('aria-label','Gegnerische Karte: '+card.name);
+ const detail=card.effectText||card.desc||'Diese Karte hat keinen zusätzlichen Effekttext.';
+ const stats=card.kind==='monster'?'<p class="arcane-opponent-stats-364">ATK '+effectiveAtk(card)+' · DEF '+effectiveDef(card)+'</p>':'';
+ overlay.innerHTML='<div class="arcane-hand-preview-panel-336"><button type="button" class="arcane-hand-preview-close-336" aria-label="Karte schließen">×</button>'+renderArcane3D335(card)+'<div class="arcane-opponent-effect-364"><strong>'+escapeOpponentPreview364(card.name)+'</strong><p>'+escapeOpponentPreview364(detail)+'</p>'+stats+'</div></div>';
+ document.body.appendChild(overlay);handPreview336=overlay;
+ window.arcaneInitCardTilt335?.(overlay.querySelector('#arcaneTiltCard327'));
+ overlay.querySelector('.arcane-hand-preview-close-336').addEventListener('click',closeHandPreview336);
+ overlay.addEventListener('click',e=>{if(e.target===overlay)closeHandPreview336()});
+ overlay.querySelector('.arcane-hand-preview-close-336').focus({preventScroll:true});
+ return true;
+}
+function escapeOpponentPreview364(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
 $("hand").addEventListener('click',e=>{
  const b=e.target.closest('[data-card]');if(!b)return;
  if(suppressNextCardClick){suppressNextCardClick=false;e.preventDefault();return;}
@@ -5809,7 +5841,14 @@ let pendingBlessingZone=-1;
 $("myMon").addEventListener('click',e=>{const choice=e.target.closest("[data-zone-choice]");if(choice){e.stopPropagation();finishSwipeSummon(choice.dataset.zoneChoice);return;}let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingBlessingZone>=0){if(!myMon[i]||myMon[i].faceDown){log('Wähle ein offenes eigenes Monster als Ziel.');return;}const blessing=mySpell[pendingBlessingZone];if(!blessing||!['Arkaner Segen','Frostpanzer','Mut der Löwen','Goldene Arena','Kampf der Arena'].includes(blessing.name)){pendingBlessingZone=-1;return;}if(blessing.name==='Mut der Löwen'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('🦁 Mut der Löwen: '+myMon[i].name+' erhält +600 ATK.');}else if(blessing.name==='Kampf der Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+500;log('⚔️ Kampf der Arena: '+myMon[i].name+' erhält +500 ATK.');}else if(blessing.name==='Goldene Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+300;log('🏟️ Goldene Arena: '+myMon[i].name+' erhält +300 ATK.');}else if(blessing.name==='Frostpanzer'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+700;log('🧊 Frostpanzer: '+myMon[i].name+' erhält +700 DEF bis zum Ende des Zuges.');}else{myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('✨ Arkaner Segen: '+myMon[i].name+' erhält +600 ATK bis zum Ende des Zuges.');}sendToGraveyard(blessing);mySpell[pendingBlessingZone]=null;pendingBlessingZone=-1;chosenSpell=-1;render();return;}if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){let c=hand.splice(selected,1)[0];c.position=pendingPlacementPosition==='attack'?'attack':'defense';c.faceDown=pendingPlacementPosition==='defense';myMon[i]=c;triggerMonsterEvent(c,'summon','player',i);normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();log(c.name+' wurde in deiner gewählten Monsterzone platziert.');return}if(myMon[i]){chosenMonster=i;const c=myMon[i];if(!c.faceDown)showCardInfo(c,"monster",c.effectText&&['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name)&&c.effectUsedTurn!==turn?()=>{chosenMonster=i;$("effect").click();}:null);else log("Verdecktes Monster ausgewählt.");}}); 
 $("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;const c=mySpell[i];showCardInfo(c,"spell",()=>{chosenSpell=i;$("activate").click();});}}); 
 let pendingDestructionZone=-1;
-$("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;const idx=+z.dataset.index;if(pendingDestructionZone>=0){if(!oppMon[idx]){log('Wähle ein gegnerisches Monster.');return;}const spell=mySpell[pendingDestructionZone];if(!spell||spell.name!=='Arkaner Zerstörungsstrahl'){pendingDestructionZone=-1;return;}const target=oppMon[idx];sendToGraveyard(target,'opponent');oppMon[idx]=null;sendToGraveyard(spell);mySpell[pendingDestructionZone]=null;pendingDestructionZone=-1;chosenSpell=-1;log('💥 Arkaner Zerstörungsstrahl zerstört '+target.name+'!');render();animateZone('oppMon',idx,'drop-impact');return;}if(oppMon[idx]){chosenTarget=idx;render();log('Angriffsziel ausgewählt: '+(oppMon[chosenTarget].faceDown?'verdecktes Monster':oppMon[chosenTarget].name)+'.')}});
+$("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;const idx=+z.dataset.index;if(pendingDestructionZone>=0){if(!oppMon[idx]){log('Wähle ein gegnerisches Monster.');return;}const spell=mySpell[pendingDestructionZone];if(!spell||spell.name!=='Arkaner Zerstörungsstrahl'){pendingDestructionZone=-1;return;}const target=oppMon[idx];sendToGraveyard(target,'opponent');oppMon[idx]=null;sendToGraveyard(spell);mySpell[pendingDestructionZone]=null;pendingDestructionZone=-1;chosenSpell=-1;log('💥 Arkaner Zerstörungsstrahl zerstört '+target.name+'!');render();animateZone('oppMon',idx,'drop-impact');return;}if(oppMon[idx]){const card=oppMon[idx];chosenTarget=idx;render();log('Angriffsziel ausgewählt: '+(card.faceDown?'verdecktes Monster':card.name)+'.');if(!card.faceDown)showOpponentPreview364(card);else log('Verdeckte Karten bleiben geheim, bis sie aufgedeckt werden.')}});
+// Bereits aufgedeckte gegnerische Zauber-/Fallenkarten antippen und lesen.
+$("oppSpell").addEventListener('click',e=>{
+ const z=e.target.closest('[data-index]');if(!z)return;
+ const card=oppSpell[Number(z.dataset.index)];
+ if(card&&!card.faceDown)showOpponentPreview364(card);
+ else if(card)log('Diese gegnerische Karte ist verdeckt. Ihr Effekt bleibt verborgen.');
+});
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 
 function activateLeonDefenseTrap363(){
