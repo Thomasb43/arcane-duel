@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-leon-unlock-levels-v382">
+<meta name="arcane-build" content="20261121-story-xp-rewards-v383">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5245,6 +5245,10 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-character-level-track-382{height:8px;background:#0a152a;border:1px solid #6d7395;border-radius:9px;margin-top:9px;overflow:hidden}
 .arcane-character-level-track-382 span{display:block;height:100%;background:linear-gradient(90deg,#5999ea,#edd084)}
 
+
+/* v3.83 story EP and currency rewards */
+.arcane-character-progress-382 small{display:block;font-size:11px;color:#cae0fd;margin-top:5px}
+.arcane-story-reward-383{padding:11px;margin-top:9px;border:1px solid #e5bd68;border-radius:9px;background:#29314f;color:#ffe7a1;font-weight:800}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -6648,15 +6652,50 @@ window.setArenaCharacterTheme('magierin');
 })();
 
 
-/* v3.82 – Story-based character progression. Mission 1 victory / Kael level 2 unlocks Leon.
-   Saved story progress is authoritative, so earlier cleared missions remain recognized. */
+/* v3.83 – Character XP and unique story mission rewards (Kael).
+   Previous story clears migrate into XP once, without retroactive currency credit. */
 (function initCharacterProgression382(){
- const STORY='arcane-duel-story-chapter1-357';
+ const STORY='arcane-duel-story-chapter1-357',KEY='arcane-duel-character-progression-v1';
  const getProgress=()=>{try{return Math.max(1,Math.min(11,Number(localStorage.getItem(STORY))||1))}catch(_){return 1}};
  const completed=()=>Math.max(0,getProgress()-1);
- const level=()=>Math.min(30,1+completed());
+ function read(){
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){}
+  if(!saved||!Array.isArray(saved.cleared)||!Number.isFinite(saved.xp))saved={xp:0,cleared:[]};
+  const cleared=[...new Set(saved.cleared.filter(x=>Number.isInteger(x)&&x>=0&&x<10))];
+  // Migrate achievements from earlier game versions without re-awarding crystals.
+  for(let i=0;i<completed();i++)if(!cleared.includes(i))cleared.push(i);
+  const xp=Math.max(0,Math.floor(saved.xp),cleared.length*100);
+  return {xp,cleared};
+ }
+ function persist(data){try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch(_){return false}}
+ const migrated=read();persist(migrated);
+ function level(){
+  let xp=read().xp,lvl=1;
+  while(lvl<30&&xp>=100+50*(lvl-1)){xp-=100+50*(lvl-1);lvl++}
+  return lvl;
+ }
+ function levelProgress(){
+  let xp=read().xp,lvl=1;
+  while(lvl<30&&xp>=100+50*(lvl-1)){xp-=100+50*(lvl-1);lvl++}
+  const next=lvl>=30?0:100+50*(lvl-1);
+  return {level:lvl,xp:read().xp,current:xp,next,percent:lvl>=30?100:Math.min(100,Math.round(xp/next*100))};
+ }
  const unlocked=name=>name==='Kael'||(name==='Leon'&&completed()>=1&&level()>=2);
- window.arcaneCharacterProgress382={completed,level,unlocked,leonUnlocked:()=>unlocked('Leon')};
+ function rewardMission(index){
+  if(!Number.isInteger(index)||index<0||index>=10)return {xp:0,crystals:0,first:false};
+  const progress=read();
+  if(progress.cleared.includes(index))return {xp:0,crystals:0,first:false};
+  const beforeLevel=level();
+  progress.cleared.push(index);progress.xp+=100;
+  if(!persist(progress))return {xp:0,crystals:0,first:false,error:'Fortschritt konnte nicht gespeichert werden'};
+  // Currency is awarded once per first mission victory, after the XP ledger is saved.
+  const bank=window.arcaneTestCrystals320;
+  const crystals=bank?50:0;
+  if(bank){bank.set(bank.get()+crystals);bank.refresh()}
+  return {xp:100,crystals,first:true,levelUp:level()>beforeLevel,newLevel:level()};
+ }
+ window.arcaneCharacterProgress382={completed,level,levelProgress,unlocked,leonUnlocked:()=>unlocked('Leon'),rewardMission};
 })();
 
 /* v3.20 – test currency persists across refresh and can be reset intentionally. */
@@ -7585,7 +7624,7 @@ window.setArenaCharacterTheme('magierin');
  stage.innerHTML='<div class="arcane-story-shell-357"><div class="arcane-story-head-357"><div><div class="arcane-story-kicker-357">DIE CHRONIK DER SIEBEN SIEGEL</div><h2 id="arcaneStoryHeading357">Akademie von Arkanis</h2></div><button type="button" class="arcane-story-back-357" id="arcaneStoryBack357">Zurück</button></div><div id="arcaneStoryContent357"></div></div>';
  document.body.appendChild(stage);
  const content=stage.querySelector('#arcaneStoryContent357'),back=stage.querySelector('#arcaneStoryBack357');
- let activeIndex=null,dialogStep=0,scene='map',completedResult=null;
+ let activeIndex=null,dialogStep=0,scene='map',completedResult=null,lastMissionReward=null;
  function show(){stage.hidden=false;stage.scrollTop=0}
  function close(){stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
  back.addEventListener('click',()=>{if(scene==='map')close();else showMap()});
@@ -7594,7 +7633,7 @@ window.setArenaCharacterTheme('magierin');
   stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 1 · Akademie von Arkanis';
   back.textContent='Zur Stadt';
   const unlocked=read();
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+Math.min(100,((window.arcaneCharacterProgress382?.level()||1)/30)*100)+'%"></span></div><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 2 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(window.arcaneCharacterProgress382?.levelProgress()?.percent||0)+'%"></span></div><small>'+(window.arcaneCharacterProgress382?.levelProgress()?.current||0)+' / '+(window.arcaneCharacterProgress382?.levelProgress()?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 2 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
    const n=i+1,locked=n>unlocked,cleared=n<unlocked;
    return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+'1-'+n+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small></div></button>';
   }).join('')+'</div><div class="arcane-story-chapter-357"><strong>Kapitel 2 · Der verlorene Wald</strong><p class="arcane-story-note-357">'+(unlocked>10?'Kapitel 1 abgeschlossen! Kapitel 2 folgt in einer späteren Version.':'Wird nach Mission 1-10 freigeschaltet. Die spielbaren Missionen von Kapitel 2 folgen später.')+'</p></div><p class="arcane-story-note-357">Testversion: Die Story verwendet vorerst die vorhandene Duell-KI und das bestehende Testdeck. Individuelle Gegnerdecks und Kartenbelohnungen folgen später. Dein Story-Fortschritt wird auf diesem Gerät gespeichert.</p>';
@@ -7640,7 +7679,7 @@ window.setArenaCharacterTheme('magierin');
   if(activeIndex===null)return;
   save(activeIndex+2);try{sessionStorage.removeItem('arcane-story-post-win-358')}catch(e){}const isLast=activeIndex===9;
   show();scene='finished';
-  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
+  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div>'+(lastMissionReward?.first?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · 💎 +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')+'</div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
   content.querySelector('#arcaneStoryMap357').addEventListener('click',showMap);
   content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(isLast)showMap();else restartForStory(activeIndex+1)});
  }
@@ -7658,6 +7697,8 @@ window.setArenaCharacterTheme('magierin');
   const outcome=document.getElementById('duelOutcome306');
   if(outcome)outcome.remove();
   if(won){
+   // Award first-clear XP/crystals before saving the mission unlock.
+   lastMissionReward=window.arcaneCharacterProgress382?.rewardMission(activeIndex)||null;
    // Unlock immediately when the duel is won; do not depend on the epilogue button.
    save(activeIndex+2);
    try{sessionStorage.setItem('arcane-story-post-win-358',String(activeIndex));sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
