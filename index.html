@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-story-dialog-scenes-v361">
+<meta name="arcane-build" content="20261121-story-opponent-decks-v362">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5091,7 +5091,7 @@ transform:none!important;filter:none!important;z-index:2!important;
 
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.61</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.62</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5286,6 +5286,53 @@ function summonResonanceTest(index=0){
 
 let aiDeck=createDuelDeck();
 let aiHand=aiDeck.splice(0,5),aiTurn=0;
+
+/* v3.62 – 10 Story-Gegner, jeweils ein eigenes spielbares 30-Karten-Deck.
+   Nur vorhandene Karten verwenden: KI-Effekte und vorhandene Duellregeln bleiben gültig. */
+const storyDeckRecipes362=[
+ {name:"Leon",theme:"Krieger & Feuer",base:["Aschenritter","Flammendrache","Erdwächter","Glutkoloss"],support:["Flammenstoß","Arkaner Segen","Drachenatem","Arkaner Rückschlag","Funkenregen","Kristallschild"]},
+ {name:"Elara",theme:"Kristall & Schutz",base:["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke"],support:["Kristallschild","Eisiger Rückstoß","Heilende Quelle","Frostpanzer","Arkaner Segen","Arkaner Wissensstrom"]},
+ {name:"Varek",theme:"Schatten & Störung",base:["Schattenwolf","Arkaner Magier","Aschenritter","Flammendrache"],support:["Schattenfessel","Gedankenraub","Geisterruf","Seelenbergung","Arkaner Rückschlag","Arkaner Sturm"]},
+ {name:"Darian",theme:"Wächter & Verteidigung",base:["Erdwächter","Frostwächter","Aschenritter","Arkaner Magier"],support:["Kristallschild","Arkaner Rückschlag","Heilende Quelle","Frostpanzer","Arkaner Segen","Schattenfessel"]},
+ {name:"Noctis",theme:"Schattenfürst",base:["Schattenwolf","Arkaner Magier","Glutkoloss","Aschenritter"],support:["Schattenfessel","Geisterruf","Gedankenraub","Seelenbergung","Arkaner Sturm","Flammenstoß"]},
+ {name:"Seraphine",theme:"Arkanes Wissen",base:["Arkaner Magier","Frostwächter","Donnerfalke","Erdwächter"],support:["Arkaner Wissensstrom","Arkaner Segen","Kristallschild","Heilende Quelle","Seelenbergung","Eisiger Rückstoß"]},
+ {name:"Riven",theme:"Wildheit & Flammen",base:["Aschenritter","Schattenwolf","Flammendrache","Donnerfalke"],support:["Flammenstoß","Funkenregen","Drachenatem","Arkaner Segen","Arkaner Sturm","Schattenfessel"]},
+ {name:"Astra",theme:"Licht & Siegel",base:["Arkaner Magier","Donnerfalke","Frostwächter","Flammendrache"],support:["Arkaner Segen","Kristallschild","Arkaner Wissensstrom","Heilende Quelle","Doppelter Segen","Sternenregen"]},
+ {name:"Valtor",theme:"Zerstörung & Opfer",base:["Glutkoloss","Flammendrache","Schattenwolf","Aschenritter"],support:["Flammenstoß","Drachenatem","Arkaner Zerstörungsstrahl","Arkaner Sturm","Schattenfessel","Geisterruf"]},
+ {name:"Eldric",theme:"Verbotene Meistermagie",base:["Arkaner Magier","Schattenwolf","Glutkoloss","Flammendrache"],support:["Arkaner Sturm","Arkaner Zerstörungsstrahl","Schattenfessel","Kristallschild","Geisterruf","Arkaner Wissensstrom"]}
+];
+function createStoryOpponentDeck362(index){
+ const recipe=storyDeckRecipes362[index];
+ if(!recipe)throw new Error("Unbekannte Story-Mission "+index);
+ const counts=new Map(), cards=[];
+ const add=(name)=>{
+  if((counts.get(name)||0)>=3)return;
+  const original=deck.find(c=>c.name===name);
+  if(!original)throw new Error("Story-Karte nicht vorhanden: "+name);
+  cards.push({...original});counts.set(name,(counts.get(name)||0)+1);
+ };
+ // 18–19 Monster garantieren einen spielbaren Anfang für die KI.
+ for(let round=0;round<3;round++)for(const name of recipe.base)add(name);
+ for(const name of recipe.base.slice(0,2))add(name);
+ for(let round=0;round<2;round++)for(const name of recipe.support)add(name);
+ // Zusätzliche Monster sorgen auch bei zufälliger Hand für regelmäßige Beschwörungen.
+ for(const name of recipe.base)while(cards.length<30&&(counts.get(name)||0)<3)add(name);
+ for(const name of recipe.support)while(cards.length<30&&(counts.get(name)||0)<3)add(name);
+ for(const name of ["Donnerfalke","Arkaner Magier","Erdwächter","Schattenwolf","Flammendrache","Aschenritter","Frostwächter","Kristallschild","Flammenstoß"])while(cards.length<30&&(counts.get(name)||0)<3)add(name);
+ if(cards.length!==30)throw new Error("Story-Deck muss 30 Karten haben: "+recipe.name+" "+cards.length);
+ return shuffleCards(cards);
+}
+window.arcaneApplyStoryOpponent362=(index)=>{
+ if(!Number.isInteger(index)||index<0||index>=storyDeckRecipes362.length)return false;
+ const cards=createStoryOpponentDeck362(index);
+ // Setze nur das noch ungespielte Gegnerdeck zurück; Spieler-Karten und LP bleiben unangetastet.
+ aiDeck=cards;
+ aiHand=aiDeck.splice(0,5);
+ aiTurn=0;
+ window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30};
+ return true;
+};
+
 let newlyDrawnCard=null;
 let myGraveyard=[],oppGraveyard=[];
 let pendingTribute=null,phase="main1",hand=testOpeningHand,myMon=Array(4).fill(null),mySpell=Array(4).fill(null),oppMon=Array(4).fill(null),oppSpell=Array(4).fill(null),myLP=4000,oppLP=4000,turn=1,selected=-1,chosenMonster=-1,chosenTarget=-1,chosenSpell=-1,pendingPlacement=null,normalSummonUsed=false,crystalShield=false;
@@ -6942,8 +6989,12 @@ window.setArenaCharacterTheme('magierin');
  }
  function beginDuel(){
   if(activeIndex===null)return;
+  if(typeof window.arcaneApplyStoryOpponent362==='function'){
+   try{window.arcaneApplyStoryOpponent362(activeIndex)}catch(e){console.error('Story-Gegnerdeck:',e);return}
+  }
   scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
   try{sessionStorage.setItem('arcane-story-active-duel-358',String(activeIndex))}catch(e){}
+  // Die KI übernimmt vor dem ersten Gegnerzug das missionsspezifische Deck.
   document.getElementById('arcaneReturnMenu307').hidden=false;
   // The existing prototype duel is reused without altering its rules or inventory.
  }
