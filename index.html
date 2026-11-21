@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-artwork-cleanup-v338">
+<meta name="arcane-build" content="20261121-card-layout-v339">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4639,9 +4639,40 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 
 /* v3.37 image-only artwork rendering – fallback when canvas cannot crop */
 .arcane-legacy-crop-fallback-337{height:142%!important;top:-25%!important;bottom:auto!important;object-fit:fill!important}
+
+/* v3.39: full card previews in collection (old preview sizing was cropping the cards) */
+.arcane-collection-grid-316 .arcane-collection-item-316>.arcane-collection-art-316.arcane-collection-card-frame-318{
+ display:block!important;align-self:stretch!important;width:100%!important;max-width:none!important;
+ height:auto!important;min-height:0!important;aspect-ratio:104/164!important;
+ padding:0!important;margin:0 auto 5px!important;border-radius:9px!important;overflow:hidden!important;
+}
+.arcane-collection-grid-316 .arcane-collection-card-frame-318>.arcane-card-335{
+ display:flex!important;width:100%!important;height:100%!important;min-height:0!important;
+ box-sizing:border-box!important;border-radius:8px!important;
+}
+.arcane-collection-grid-316 .arcane-collection-card-frame-318 .arcane-card-art-335,
+.arcane-collection-grid-316 .arcane-collection-card-frame-318 .card-art-loader{
+ min-height:0!important;overflow:hidden!important;
+}
+.arcane-card-art-335 .card-art-loader>img.arcane-art-direct-339,
+.arcane-collection-card-frame-318 .card-art-loader>img.arcane-art-direct-339{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ max-width:none!important;max-height:none!important;transform:none!important;
+ object-fit:var(--unused-art-fit,contain)!important;object-position:center center!important;
+}
+.arcane-card-art-335 .card-art-loader>img.arcane-art-direct-339:not([data-focus-contain-339]){
+ object-fit:cover!important;
+}
+.arcane-card-art-335 .card-art-loader>img.arcane-art-direct-339[data-focus-contain-339]{
+ object-fit:contain!important;
+}
+/* Stop older collection rules from positioning the image relative inside its loader. */
+.arcane-collection-grid-316 .arcane-collection-card-frame-318 .card-art-loader>img.arcane-art-direct-339{
+ position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.38</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.39</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4894,18 +4925,45 @@ function arcaneCropLegacy337(img){
   img.classList.add('arcane-legacy-crop-fallback-337');
  }
 }
+
+/* v3.39: per-artwork composition without indiscriminate zooming */
+const ARCANE_ART_FOCUS_339={
+ 'flame-dragon':{x:50,y:45,fit:'contain'},
+ 'frost-guardian':{x:49,y:45,fit:'contain'},
+ 'shadow-wolf':{x:50,y:45,fit:'contain'},
+ 'schattenresonator':{x:50,y:50,fit:'contain'},
+ 'nachtklinge':{x:58,y:50,fit:'contain'},
+ 'resonanzfuerst-nocthar':{x:50,y:45,fit:'contain'},
+ 'schattenbestie-umbra':{x:50,y:50,fit:'contain'},
+ 'nyxara-schattenkoenigin':{x:50,y:45,fit:'contain'},
+ 'noctharion-herrscher':{x:50,y:50,fit:'contain'},
+ 'arkaner-magier':{x:50,y:46,fit:'contain'},
+ 'arcane-mage':{x:50,y:46,fit:'contain'},
+ 'thunder-hawk':{x:50,y:48,fit:'contain'},
+ 'donnerfalke':{x:50,y:48,fit:'contain'},
+ 'earth-warden':{x:50,y:50,fit:'contain'},
+ 'erdwaechter':{x:50,y:50,fit:'contain'},
+ 'ember-colossus':{x:50,y:52,fit:'contain'},
+ 'aschenritter':{x:50,y:45,fit:'contain'}
+};
 function renderCardArt(c){
  if(!c)return '';
- if(c.artwork==='flame-dragon')return flameDragonArt;
+ const focus=ARCANE_ART_FOCUS_339[c.artwork]||{x:50,y:50,fit:'cover'};
+ const positioning='position:absolute;inset:0;width:100%;height:100%;object-fit:'+focus.fit+';object-position:'+focus.x+'% '+focus.y+'%;';
+ const image=c.artwork==='flame-dragon'?flameDragonArt:null;
+ if(image){
+  // This inline JPEG is intrinsically 120×115 px; CSS must not pretend it is sharp.
+  return '<span class="card-art-loader arcane-art-fitted-339" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#170d2d">'
+   +image.replace('<img ','<img class="arcane-art-direct-339" data-focus-contain-339="1" style="'+positioning+'" ')+'</span>';
+ }
  const file=CARD_ART_FILES[c.artwork];
  if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;
  const legacy=file.endsWith('.png');
- const inline='position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
- return '<span class="card-art-loader" style="display:block;position:relative;width:100%;height:100%;overflow:hidden">'
+ return '<span class="card-art-loader arcane-art-fitted-339" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#170d2d">'
   +'<span class="card-art-fallback" style="display:block;width:100%;height:100%">'+arcaneArt(c.artwork)+'</span>'
-  +'<img src="artwork/'+file+'" alt="" loading="lazy" decoding="async"'
+  +'<img class="arcane-art-direct-339" '+(focus.fit==='contain'?'data-focus-contain-339="1" ':'')+'src="artwork/'+file+'" alt="" loading="lazy" decoding="async"'
   +(legacy?' data-legacy-art-337="'+file+'"':'')
-  +' style="'+inline+'" onerror="this.remove()"'
+  +' style="'+positioning+'" onerror="this.remove()"'
   +' onload="if(this.previousElementSibling)this.previousElementSibling.style.display=\'none\';'+(legacy?'arcaneCropLegacy337(this)':'')+'"></span>';
 }
 
