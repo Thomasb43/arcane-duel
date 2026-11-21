@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-story-chapter-357">
+<meta name="arcane-build" content="20261121-story-chapter-357a">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6841,6 +6841,7 @@ window.setArenaCharacterTheme('magierin');
  }
  function openMission(index){
   if(index<0||index>=missions.length||index+1>read())return;
+  if(document.getElementById('duelOutcome306')){restartForStory(index);return}
   activeIndex=index;scene='pre';dialogStep=0;completedResult=null;
   drawDialog();
  }
@@ -6866,7 +6867,7 @@ window.setArenaCharacterTheme('magierin');
   show();scene='finished';
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
   content.querySelector('#arcaneStoryMap357').addEventListener('click',showMap);
-  content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(isLast)showMap();else openMission(activeIndex+1)});
+  content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(isLast)showMap();else restartForStory(activeIndex+1)});
  }
  // Called by the existing duel outcome display. Each result is processed only once.
  window.arcaneStoryResult357=(won,draw)=>{
@@ -6886,7 +6887,6 @@ window.setArenaCharacterTheme('magierin');
  }
  storyButton.addEventListener('click',event=>{event.stopImmediatePropagation();showMap()},true);
  // A new mission starts in a clean duel, including on replays after a prior result.
- const oldBeginDuel=beginDuel;
  // No forced reload on the first mission; after a finished duel, use a fresh document.
  // In the current UI, the outcome dialog already closes the gameplay via the Story panel.
  try{
