@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-spell-trap-duplicate-labels-v373">
+<meta name="arcane-build" content="20261121-kael-starter-shop-v374">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5120,6 +5120,24 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-size-field:has(.arcane-live-stat-370) .arcane-card-stats-335 .arcane-live-stat-370{
  font-weight:900!important;
 }
+
+/* v3.74: starter deck purchase in the established dark/gold shop style */
+.arcane-kael-overlay-374[hidden]{display:none!important}
+.arcane-kael-overlay-374{position:fixed;inset:0;z-index:99990;background:rgba(4,5,18,.92);display:flex;justify-content:center;align-items:center;padding:18px}
+.arcane-kael-panel-374{position:relative;width:min(520px,100%);max-height:90dvh;overflow:auto;padding:22px;border:2px solid #d9b877;border-radius:17px;background:linear-gradient(145deg,#28365a,#12172e 60%,#100c24);box-shadow:0 16px 70px #000c,0 0 24px #cba75d44;color:#f7e8c2}
+.arcane-kael-close-374{position:absolute;right:12px;top:10px;background:#332844;border:1px solid #d9b877;border-radius:100%;color:#fff;font-size:24px;width:36px;height:36px;cursor:pointer}
+.arcane-kael-eyebrow-374{font-size:10px;letter-spacing:2px;color:#d5be88}
+.arcane-kael-panel-374 h3{font:900 23px Georgia,serif;margin:10px 35px 8px 0;color:#ffe39c}
+.arcane-kael-sub-374,.arcane-kael-note-374{color:#cbd5ef;line-height:1.5;font-size:12px}
+.arcane-kael-dragon-374{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#1b2f53;border:1px solid #a98b53;padding:12px;border-radius:12px;margin:14px 0}
+.arcane-kael-dragon-374 span{font-weight:900;color:#ffe394;white-space:nowrap}
+.arcane-kael-contents-374{max-height:min(36dvh,240px);overflow:auto;border:1px solid #637394;border-radius:10px}
+.arcane-kael-contents-374>div{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-bottom:1px solid #53648344;font-size:12px}
+.arcane-kael-contents-374 small{color:#f3d68b;white-space:nowrap}
+.arcane-kael-buy-374{display:block;width:100%;margin-top:12px;padding:13px;border:1px solid #edcb7d;border-radius:11px;background:linear-gradient(#957337,#59401d);color:#fff4ce;font-weight:900;font-size:14px}
+.arcane-kael-buy-374:disabled{opacity:.5}
+.arcane-kael-feedback-374{min-height:20px;font-size:12px;color:#aaf5bf}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7024,6 +7042,78 @@ window.setArenaCharacterTheme('magierin');
   }
  });
  // Keep existing buy, reveal, reset and currency event handlers untouched.
+})();
+
+
+/* v3.74 – Kael starter deck can be purchased repeatedly for crystals.
+   The existing free test starter counts as the first copy; max 3 of each card. */
+(function initKaelStarterShop374(){
+ const panel=document.getElementById('arcaneShop320');
+ if(!panel)return;
+ const price=300,dragon='Arkaner Lichtdrache';
+ const escape=t=>String(t??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ const base=Object.fromEntries(starterDeckList);
+ const inventory=()=>window.arcaneBoosterInventory322;
+ const bank=()=>window.arcaneTestCrystals320;
+ const total=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
+ const overlay=document.createElement('div');
+ overlay.id='arcaneKaelStarter374';overlay.className='arcane-kael-overlay-374';overlay.hidden=true;
+ overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Kaels Starterdeck kaufen');
+ overlay.innerHTML='<div class="arcane-kael-panel-374">'
+ +'<button type="button" class="arcane-kael-close-374" aria-label="Schließen">×</button>'
+ +'<div class="arcane-kael-eyebrow-374">ARCANE DUEL · STARTERDECK</div>'
+ +'<h3>Kael – Wächter des ersten Siegels</h3>'
+ +'<p class="arcane-kael-sub-374">30 Karten · 1 Arkaner Lichtdrache pro Deck · Maximal 3 Exemplare pro Karte in der Sammlung.</p>'
+ +'<div class="arcane-kael-dragon-374"><strong>🐉 Arkaner Lichtdrache</strong><span id="arcaneKaelDragonCount374"></span></div>'
+ +'<div class="arcane-kael-contents-374" id="arcaneKaelDeckContents374"></div>'
+ +'<p class="arcane-kael-note-374">Karten, die du schon 3-mal besitzt, werden nicht erneut gutgeschrieben. Andere Karten erhältst du bis zu 3-mal.</p>'
+ +'<button type="button" id="arcaneKaelBuy374" class="arcane-kael-buy-374">Starterdeck kaufen · 💎 300</button>'
+ +'<p id="arcaneKaelFeedback374" class="arcane-kael-feedback-374" role="status" aria-live="polite"></p>'
+ +'</div>';
+ panel.appendChild(overlay);
+ const buy=overlay.querySelector('#arcaneKaelBuy374');
+ const feedback=overlay.querySelector('#arcaneKaelFeedback374');
+ const content=overlay.querySelector('#arcaneKaelDeckContents374');
+ function refresh(){
+  const owned=total(dragon),crystals=bank()?.get()||0;
+  overlay.querySelector('#arcaneKaelDragonCount374').textContent=owned+' / 3 im Bestand';
+  content.innerHTML=starterDeckList.map(([name,count])=>'<div><span>'+escape(name)+'</span><small>×'+count+' · Bestand '+total(name)+'/3</small></div>').join('');
+  buy.disabled=owned>=3||crystals<price;
+  buy.textContent=owned>=3?'Alle 3 Lichtdrachen vorhanden':crystals<price?'Nicht genügend Arkankristalle · 💎 300':'Starterdeck kaufen · 💎 300';
+ }
+ function open(){overlay.hidden=false;feedback.textContent='';refresh()}
+ function close(){overlay.hidden=true}
+ overlay.querySelector('.arcane-kael-close-374').addEventListener('click',close);
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ // Intercept both old 'coming soon' actions, without changing other shop tabs.
+ const card=panel.querySelector('#arcaneShopDecks323');
+ card?.addEventListener('click',e=>{e.stopImmediatePropagation();open()},true);
+ const nav=panel.querySelector('.arcane-shop-nav-323');
+ nav?.addEventListener('click',e=>{
+  if(!e.target.closest('[data-shop-tab="starter"]'))return;
+  e.stopImmediatePropagation();
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.shopTab==='starter'));
+  open();
+ },true);
+ buy.addEventListener('click',()=>{
+  refresh();
+  if(buy.disabled)return;
+  const current=inventory()?.read(),wallet=bank()?.get();
+  if(!current||!Number.isSafeInteger(wallet)||wallet<price){feedback.textContent='Kauf derzeit nicht möglich.';refresh();return}
+  const additions=[];
+  for(const [name,amount] of starterDeckList){
+   const room=Math.max(0,3-((base[name]||0)+(current.counts[name]||0)));
+   if(room>0)additions.push([name,Math.min(amount,room)]);
+  }
+  if(!additions.some(([name])=>name===dragon)){feedback.textContent='Du hast bereits drei Lichtdrachen.';refresh();return}
+  const next={...current,counts:{...current.counts}};
+  for(const [name,amount] of additions)next.counts[name]=(next.counts[name]||0)+amount;
+  if(!inventory().save(next)){feedback.textContent='Speicherung fehlgeschlagen, keine Kristalle abgezogen.';return}
+  bank().set(wallet-price);bank().refresh();
+  feedback.textContent='Starterdeck gekauft! '+additions.reduce((sum,[,n])=>sum+n,0)+' zusätzliche Karten gutgeschrieben.';
+  refresh();
+ });
+ window.openKaelStarterShop374=open;
 })();
 
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
