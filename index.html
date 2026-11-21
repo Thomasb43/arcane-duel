@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-tiered-starter-prices-v376">
+<meta name="arcane-build" content="20261121-deck-manager-v377">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5172,6 +5172,28 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-starter-buy-375:disabled{opacity:.48}
 #arcaneStarterFeedback375{color:#a8f1b8;font-size:12px;min-height:15px}
 
+
+/* v3.77 deck management: same dark-and-gold visual family as collection and shop */
+.arcane-deck-manager-377[hidden],.arcane-deck-editor-377[hidden]{display:none!important}
+.arcane-deck-manager-377{position:fixed;inset:0;overflow-y:auto;z-index:9000;background:radial-gradient(ellipse at top,#293c65,#11152b 65%,#090b19);padding:14px max(14px,env(safe-area-inset-left));color:#f6e9c9;font-size:13px}
+.arcane-deck-header-377{display:flex;align-items:center;gap:15px;background:#141c34;padding:10px;border:1px solid #5e6f95;border-radius:10px}
+.arcane-deck-header-377 button,.arcane-deck-manager-377 button{border:1px solid #b99b5c;border-radius:8px;background:#3c3550;color:#ffe5a1;padding:8px;cursor:pointer}
+.arcane-deck-manager-377 button:disabled{opacity:.35;cursor:default}
+.arcane-deck-manager-377 h2,.arcane-deck-manager-377 h3{color:#ffdf9d;font-family:Georgia,serif}
+.arcane-deck-manager-377>p,.arcane-deck-editor-377>p{color:#c7d3ee}
+.arcane-deck-list-377{display:grid;gap:10px}
+.arcane-deck-entry-377{display:flex;justify-content:space-between;gap:12px;align-items:center;background:linear-gradient(120deg,#25365b,#161b37);padding:15px;border:1px solid #947c53;border-radius:12px}
+.arcane-deck-entry-377 strong,.arcane-deck-entry-377 small{display:block}.arcane-deck-entry-377 small{margin-top:6px;color:#d1c08e}
+.arcane-deck-entry-377>div:last-child{display:flex;gap:7px;flex-wrap:wrap}
+.arcane-deck-editor-377{margin-top:15px;padding:14px;background:#131b34;border:1px solid #947c53;border-radius:13px}
+.arcane-deck-editor-head-377{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.arcane-deck-card-list-377{max-height:30dvh;overflow-y:auto;border:1px solid #5e6984;border-radius:9px;margin:8px 0}
+.arcane-deck-card-row-377{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;border-bottom:1px solid #63729366}
+.arcane-deck-card-row-377>div{display:flex;align-items:center;gap:8px}.arcane-deck-card-row-377 small{color:#edc87c;white-space:nowrap}
+#arcaneDeckSearch377{background:#101629;border:1px solid #7887ac;border-radius:8px;padding:10px;color:#fff;width:100%}
+.arcane-deck-manager-377 .arcane-deck-activate-377{width:100%;background:linear-gradient(#886c34,#49341b);font-weight:900;margin-top:10px}
+.arcane-deck-note-377{font-size:11px}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -5369,13 +5391,22 @@ const starterDeckList=[
  ["Kristallschild",2],["Runenbarriere",1],["Siegelgegenstoß",1],["Lichtreflexion",1]
 ];
 function createDuelDeck(){
+ let recipe=starterDeckList;
+ try{
+  const saved=JSON.parse(localStorage.getItem('arcane-duel-managed-decks-v1')||'null');
+  const choice=saved?.decks?.find(d=>d.id===saved.active);
+  if(choice&&Array.isArray(choice.cards)&&choice.cards.reduce((sum,p)=>sum+(Array.isArray(p)?p[1]:0),0)>=30
+    &&choice.cards.reduce((sum,p)=>sum+(Array.isArray(p)?p[1]:0),0)<=50
+    &&choice.cards.every(p=>Array.isArray(p)&&typeof p[0]==='string'&&Number.isInteger(p[1])&&p[1]>=1&&p[1]<=3&&deck.some(c=>c.name===p[0]))){
+   recipe=choice.cards;
+  }
+ }catch(_){}
  const cards=[];
- for(const [name,count] of starterDeckList){
+ for(const [name,count] of recipe){
   const original=deck.find(c=>c.name===name);
-  if(!original)throw new Error("Starterdeck-Karte fehlt: "+name);
+  if(!original)continue;
   for(let i=0;i<count;i++)cards.push({...original});
  }
- if(cards.length!==30)throw new Error("Starterdeck muss 30 Karten enthalten: "+cards.length);
  return shuffleCards(cards);
 }
 let drawPile=createDuelDeck();
@@ -7223,6 +7254,81 @@ window.setArenaCharacterTheme('magierin');
   detail.hidden=false;
  }));
  setMenu(true);
+})();
+
+
+/* v3.77 – first usable deck manager: stored decks, editor, ownership and activation. */
+(function initDeckManager377(){
+ const KEY='arcane-duel-managed-decks-v1';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ const defaults=()=>({active:'kael',decks:[
+  {id:'kael',title:'Kael – Wächter des ersten Siegels',cards:starterDeckList.map(x=>[...x])},
+  {id:'leon',title:'Leon – König der Löwenarena',cards:leonDeckList363.map(x=>[...x])}
+ ]});
+ function read(){
+  try{
+   const x=JSON.parse(localStorage.getItem(KEY)||'null');
+   if(x&&Array.isArray(x.decks)&&x.decks.length&&typeof x.active==='string')return x;
+  }catch(_){}
+  return defaults();
+ }
+ let state=read(),selected=state.active,filter='';
+ const available=()=>window.arcaneBoosterInventory322?.read()?.counts||{};
+ const basic=Object.fromEntries(starterDeckList);
+ const countOwned=name=>Math.min(3,(basic[name]||0)+(available()[name]||0));
+ const cardMap=new Map(deck.map(c=>[c.name,c]));
+ function isOwnedRecipe(d){return d.cards.every(([name,n])=>n<=countOwned(name))}
+ function size(d){return d.cards.reduce((n,[,v])=>n+v,0)}
+ function valid(d){return size(d)>=30&&size(d)<=50&&d.cards.every(([name,n])=>n<=3&&n<=countOwned(name))}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(_){return false}}
+ const page=document.createElement('section');
+ page.id='arcaneDeckManager377';page.className='arcane-deck-manager-377';page.hidden=true;
+ page.innerHTML='<header class="arcane-deck-header-377"><button id="arcaneDeckBack377" type="button">← Stadt</button><strong>ARCANE DUEL · DECKVERWALTUNG</strong></header>'
+ +'<h2>Meine Decks</h2><p>30–50 Karten · maximal 3 Exemplare pro Karte · Sammlung bestimmt deinen verfügbaren Bestand.</p>'
+ +'<div id="arcaneDeckList377" class="arcane-deck-list-377"></div>'
+ +'<div id="arcaneDeckEditor377" class="arcane-deck-editor-377" hidden></div>';
+ document.body.appendChild(page);
+ const list=page.querySelector('#arcaneDeckList377'),editor=page.querySelector('#arcaneDeckEditor377');
+ function drawList(){
+  list.innerHTML=state.decks.map(d=>'<div class="arcane-deck-entry-377">'
+   +'<div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div>'
+   +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button></div></div>').join('');
+ }
+ function getSelected(){return state.decks.find(d=>d.id===selected)}
+ function drawEditor(){
+  const d=getSelected();if(!d){editor.hidden=true;return}
+  editor.hidden=false;
+  const filtered=[...cardMap.values()].filter(c=>countOwned(c.name)>0&&c.name.toLowerCase().includes(filter.toLowerCase()));
+  editor.innerHTML='<div class="arcane-deck-editor-head-377"><h3>'+esc(d.title)+'</h3><button data-close>Zur Übersicht</button></div>'
+   +'<strong>'+size(d)+'/50 Karten</strong><p>'+(valid(d)?'Deck ist spielbereit.':'Mindestens 30 Karten und nur Karten aus deinem Bestand erlaubt.')+'</p>'
+   +'<h4>Aktuelles Deck</h4><div class="arcane-deck-card-list-377">'
+   +d.cards.map(([name,n])=>'<div class="arcane-deck-card-row-377"><span>'+esc(name)+'</span><div><small>×'+n+'</small><button data-remove="'+esc(name)+'">−</button></div></div>').join('')
+   +'</div><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
+   +'<div class="arcane-deck-card-list-377">'
+   +filtered.map(c=>{const n=d.cards.find(p=>p[0]===c.name)?.[1]||0;return '<div class="arcane-deck-card-row-377"><span>'+esc(c.name)+'</span><div><small>'+n+'/'+countOwned(c.name)+'</small><button data-add="'+esc(c.name)+'" '+(n>=3||n>=countOwned(c.name)||size(d)>=50?'disabled':'')+'>+</button></div></div>'}).join('')
+   +'</div><button class="arcane-deck-activate-377" data-activate '+(valid(d)?'':'disabled')+'>Als aktives Deck wählen</button>'
+   +'<p class="arcane-deck-note-377">Die gewählte Deckliste gilt ab dem nächsten neu gestarteten Duell.</p>';
+ }
+ function open(){state=read();page.hidden=false;editor.hidden=true;drawList()}
+ page.querySelector('#arcaneDeckBack377').addEventListener('click',()=>page.hidden=true);
+ list.addEventListener('click',e=>{
+  const edit=e.target.closest('[data-edit]');
+  if(edit){selected=edit.dataset.edit;filter='';drawEditor();return}
+  const active=e.target.closest('[data-active]');
+  if(active){const d=state.decks.find(x=>x.id===active.dataset.active);if(!d||!valid(d))return;state.active=d.id;save();drawList();}
+ });
+ editor.addEventListener('input',e=>{if(e.target.id==='arcaneDeckSearch377'){filter=e.target.value;const focused=e.target.selectionStart;drawEditor();const input=editor.querySelector('#arcaneDeckSearch377');input?.focus();input?.setSelectionRange(focused,focused)}});
+ editor.addEventListener('click',e=>{
+  if(e.target.closest('[data-close]')){editor.hidden=true;drawList();return}
+  const d=getSelected();if(!d)return;
+  const add=e.target.closest('[data-add]'),remove=e.target.closest('[data-remove]');
+  if(add){const name=add.dataset.add;const p=d.cards.find(x=>x[0]===name);const n=p?.[1]||0;if(size(d)<50&&n<3&&n<countOwned(name)){if(p)p[1]++;else d.cards.push([name,1]);save();drawEditor()}return}
+  if(remove){const p=d.cards.find(x=>x[0]===remove.dataset.remove);if(p){p[1]--;if(!p[1])d.cards=d.cards.filter(x=>x!==p);save();drawEditor()}return}
+  if(e.target.closest('[data-activate]')&&valid(d)){state.active=d.id;save();drawList();drawEditor()}
+ });
+ // The main-menu handler was installed earlier, so intercept at capture stage.
+ document.querySelector('[data-arcane-mode="deck"]')?.addEventListener('click',e=>{e.stopImmediatePropagation();open()},true);
+ window.openArcaneDeckManager377=open;
 })();
 
 /* v3.08 – title screen opens the existing main menu without resetting the duel. */
