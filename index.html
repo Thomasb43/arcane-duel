@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-card-inspection-v326">
+<meta name="arcane-build" content="20261121-3d-card-v327">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4485,6 +4485,36 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-booster-detail-effect-326{text-align:left!important;border:1px solid var(--detail-rarity-326)!important;border-radius:11px!important;background:#100e2c!important;padding:13px!important;line-height:1.55!important;white-space:normal!important}
 .arcane-booster-detail-effect-326>strong{display:block!important;color:#f6d89a!important;margin-bottom:8px!important}
 .arcane-booster-detail-effect-326 p{margin:0!important;color:#eee1f5!important;white-space:pre-line!important}
+
+/* v3.27 – tactile 3D trading-card inspection, front/back and rarity foil */
+.arcane-tilt-stage-327{width:100%!important;display:flex!important;justify-content:center!important;align-items:center!important;perspective:1000px!important;padding:8px 0 10px!important}
+.arcane-tilt-card-327{--tilt-x:0deg;--tilt-y:0deg;--glare-x:50%;--glare-y:50%;width:min(71vw,260px)!important;height:auto!important;aspect-ratio:0.71!important;cursor:grab!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important;transform-style:preserve-3d!important;transform:rotateX(var(--tilt-x)) rotateY(var(--tilt-y))!important;transition:transform .42s cubic-bezier(.2,.75,.2,1)!important;filter:drop-shadow(0 16px 17px #000c)!important;position:relative!important}
+.arcane-tilt-card-327.is-dragging-327{cursor:grabbing!important;transition:none!important}
+.arcane-tilt-card-327:focus-visible{outline:3px solid #fff4bf!important;outline-offset:7px!important}
+.arcane-tilt-rotator-327{position:absolute!important;inset:0!important;transform-style:preserve-3d!important;transition:transform .8s cubic-bezier(.2,.7,.18,1)!important}
+.arcane-tilt-rotator-327.is-reversed-327{transform:rotateY(180deg)!important}
+.arcane-tilt-face-327{position:absolute!important;inset:0!important;overflow:hidden!important;backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;display:flex!important;flex-direction:column!important;border:6px ridge var(--detail-rarity-326)!important;border-radius:13px!important;box-shadow:inset 0 0 20px #fff2,0 0 30px var(--detail-rarity-326)!important}
+.arcane-tilt-front-327{padding:10px!important;gap:8px!important;background:linear-gradient(145deg,#45205d,#15102f 55%,#0c0c20)!important}
+.arcane-tilt-title-327{min-height:44px!important;display:flex!important;flex-direction:column!important;gap:2px!important;align-items:flex-start!important;text-align:left!important}
+.arcane-tilt-title-327 strong{font:900 clamp(13px,4vw,17px) Georgia,serif!important;line-height:1.1!important;color:#ffe5ab!important}
+.arcane-tilt-title-327 span{font-size:10px!important;letter-spacing:1px!important;color:var(--detail-rarity-326)!important;font-weight:800!important}
+.arcane-tilt-image-327{position:relative!important;width:100%!important;flex:1!important;min-height:0!important;overflow:hidden!important;border:2px solid #e8c58e!important;border-radius:4px!important;background:#120d2a!important}
+.arcane-tilt-image-327 img{width:100%!important;height:100%!important;object-fit:cover!important;pointer-events:none!important}
+.arcane-tilt-image-327 .card-art-loader{display:block!important;width:100%!important;height:100%!important}
+.arcane-tilt-metadata-327,.arcane-tilt-numbers-327{display:flex!important;justify-content:space-between!important;gap:5px!important;font-size:10px!important;font-weight:900!important;color:#fce1af!important}
+.arcane-tilt-numbers-327{border-top:1px solid #ddc28b!important;padding-top:6px!important;font-size:12px!important}
+.arcane-tilt-glare-327{pointer-events:none!important;position:absolute!important;inset:0!important;z-index:3!important;background:radial-gradient(circle at var(--glare-x) var(--glare-y),#fff8,transparent 45%)!important;mix-blend-mode:screen!important;opacity:.68!important}
+.arcane-tilt-card-327.rarity-legendary .arcane-tilt-glare-327{background:radial-gradient(circle at var(--glare-x) var(--glare-y),#fff4b7bb,#e4aa4480 25%,transparent 55%)!important}
+.arcane-tilt-card-327.rarity-mythic .arcane-tilt-glare-327{background:linear-gradient(120deg,transparent,#ff5c9880,#75c6ff6b,#d2b3ff77,transparent),radial-gradient(circle at var(--glare-x) var(--glare-y),#ffffffb0,transparent 48%)!important;background-size:250% 250%!important;animation:arcaneFoil327 5s linear infinite}
+.arcane-tilt-back-327{transform:rotateY(180deg)!important;justify-content:center!important;align-items:center!important;gap:15px!important;color:#ffe2ad!important;background:radial-gradient(circle,#7533ab,#29104a 58%,#100b29)!important;border-color:#eecb84!important}
+.arcane-tilt-back-327:before{content:"";position:absolute;inset:12px;border:2px solid #d8b16c;border-radius:9px;pointer-events:none}
+.arcane-tilt-symbol-327{font-size:110px!important;text-shadow:0 0 22px #f8d28a!important;line-height:1!important}
+.arcane-tilt-back-327 strong{font:900 22px Georgia,serif!important;letter-spacing:2px!important}
+.arcane-tilt-back-327 small{font:800 9px Georgia,serif!important;letter-spacing:1px!important}
+.arcane-tilt-instruction-327{color:#d6b9ed!important;text-align:center!important;font-size:11px!important;margin:0 0 9px!important}
+.arcane-tilt-flip-button-327{display:block!important;width:fit-content!important;margin:0 auto 15px!important;padding:10px 18px!important;border:1px solid #e9c879!important;border-radius:10px!important;background:linear-gradient(#623082,#361d5b)!important;color:#fff0c4!important;font-size:12px!important;font-weight:900!important;cursor:pointer!important}
+@keyframes arcaneFoil327{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@media(prefers-reduced-motion:reduce){.arcane-tilt-card-327,.arcane-tilt-rotator-327{transition:none!important}.arcane-tilt-glare-327{animation:none!important}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5643,6 +5673,7 @@ window.setArenaCharacterTheme('magierin');
   }).join(''):'<p class="arcane-booster-no-cards-324">In dieser Seltenheit sind derzeit keine Karten enthalten.</p>';
  }
 
+
  function showPoolCard(index){
   const data=catalog(),c=data?.cards[index];if(!c)return;
   const grade=data.rarity(c),tone=data.rarityData[grade];
@@ -5653,10 +5684,66 @@ window.setArenaCharacterTheme('magierin');
    +stat('Seltenheit',tone.label)
    +(c.kind==='monster'?stat('Level',c.level??'–')+stat('ATK',c.atk??'–')+stat('DEF',c.def??'–'):'')
    +(c.element?stat('Element',c.element):'');
+  const cardStats=c.kind==='monster'
+   ?'<span>ATK '+safe(c.atk??'–')+'</span><span>DEF '+safe(c.def??'–')+'</span>'
+   :'<span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+safe(c.element||tone.label)+'</span>';
   detail.style.setProperty('--detail-rarity-326',tone.color);
-  $b('arcaneBoosterDetailBody326').innerHTML='<div class="arcane-booster-detail-kicker-326">SCHATTEN & FLAMMEN · KARTENARCHIV</div><h3>'+safe(c.name)+'</h3><div class="arcane-booster-detail-art-326">'+data.renderCardArt(c)+'</div><div class="arcane-booster-detail-stats-326">'+stats+'</div><div class="arcane-booster-detail-effect-326"><strong>Kartenbeschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>';
+  $b('arcaneBoosterDetailBody326').innerHTML=
+   '<div class="arcane-booster-detail-kicker-326">SCHATTEN & FLAMMEN · KARTENARCHIV</div>'
+   +'<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 rarity-'+grade+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
+   +'<div class="arcane-tilt-rotator-327"><div class="arcane-tilt-face-327 arcane-tilt-front-327">'
+   +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>'
+   +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+'</div>'
+   +'<div class="arcane-tilt-metadata-327"><span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+(c.kind==='monster'?'Level '+safe(c.level??'–'):safe(c.element||''))+'</span></div>'
+   +'<div class="arcane-tilt-numbers-327">'+cardStats+'</div>'
+   +'<div class="arcane-tilt-glare-327"></div></div>'
+   +'<div class="arcane-tilt-face-327 arcane-tilt-back-327"><span class="arcane-tilt-symbol-327">✧</span><strong>ARCANE DUEL</strong><small>✦ SCHATTEN & FLAMMEN ✦</small></div>'
+   +'</div></div></div>'
+   +'<div class="arcane-tilt-instruction-327">Mit dem Finger bewegen · Doppeltippen zum Umdrehen</div>'
+   +'<button type="button" class="arcane-tilt-flip-button-327" id="arcaneTiltFlip327">↻ Karte umdrehen</button>'
+   +'<div class="arcane-booster-detail-stats-326">'+stats+'</div>'
+   +'<div class="arcane-booster-detail-effect-326"><strong>Kartenbeschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>';
   detail.hidden=false;
+  initCardTilt327($b('arcaneTiltCard327'),$b('arcaneTiltFlip327'));
   $b('arcaneBoosterDetailClose326').focus({preventScroll:true});
+ }
+ function initCardTilt327(card,flipButton){
+  if(!card)return;
+  let active=false,originX=0,originY=0,moved=false,lastTap=0;
+  const rotator=card.querySelector('.arcane-tilt-rotator-327');
+  const reset=()=>{
+   card.classList.remove('is-dragging-327');
+   card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg');
+   card.style.setProperty('--glare-x','50%');card.style.setProperty('--glare-y','50%');
+  };
+  const flip=()=>{rotator.classList.toggle('is-reversed-327');flipButton.textContent=rotator.classList.contains('is-reversed-327')?'↻ Vorderseite zeigen':'↻ Karte umdrehen'};
+  flipButton.addEventListener('click',flip);
+  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
+  card.addEventListener('pointerdown',e=>{
+   if(e.button!==undefined&&e.button!==0)return;
+   active=true;moved=false;originX=e.clientX;originY=e.clientY;
+   card.classList.add('is-dragging-327');
+   try{card.setPointerCapture(e.pointerId)}catch(_){}
+  });
+  card.addEventListener('pointermove',e=>{
+   if(!active)return;
+   const bounds=card.getBoundingClientRect();
+   const dx=e.clientX-originX,dy=e.clientY-originY;
+   if(Math.abs(dx)+Math.abs(dy)>9)moved=true;
+   const x=Math.max(-1,Math.min(1,(e.clientX-(bounds.left+bounds.width/2))/(bounds.width/2)));
+   const y=Math.max(-1,Math.min(1,(e.clientY-(bounds.top+bounds.height/2))/(bounds.height/2)));
+   card.style.setProperty('--tilt-y',(x*16).toFixed(2)+'deg');
+   card.style.setProperty('--tilt-x',(-y*14).toFixed(2)+'deg');
+   card.style.setProperty('--glare-x',((x+1)*50).toFixed(1)+'%');
+   card.style.setProperty('--glare-y',((y+1)*50).toFixed(1)+'%');
+  });
+  card.addEventListener('pointerup',()=>{
+   if(!active)return;active=false;reset();
+   if(!moved){const now=Date.now();if(now-lastTap<360){flip();lastTap=0}else lastTap=now}
+   else lastTap=0;
+  });
+  card.addEventListener('pointercancel',()=>{active=false;lastTap=0;reset()});
+  card.addEventListener('lostpointercapture',()=>{active=false;reset()});
  }
  function closePoolCard(){detail.hidden=true}
  $b('arcaneBoosterPool324').addEventListener('click',e=>{
