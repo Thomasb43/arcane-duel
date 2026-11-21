@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-story-outcome-unblock-v359">
+<meta name="arcane-build" content="20261121-story-portraits-v360">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5042,9 +5042,26 @@ transform:none!important;filter:none!important;z-index:2!important;
 /* v3.59 – ensure story dialog cannot be blocked by generic duel outcome */
 .arcane-story-357{z-index:110000!important}
 .duel-outcome-306[hidden],.duel-outcome-306.story-consumed-359{display:none!important;pointer-events:none!important}
+
+/* v3.60 – dialogue character stage, portrait slots with graceful fallback */
+.arcane-story-dialog-357{position:relative!important;overflow:hidden!important;padding:0!important;min-height:390px!important;justify-content:flex-end!important;gap:0!important;background:radial-gradient(ellipse at 50% 35%,#393867,#151229 75%)!important}
+.arcane-story-stage-360{position:relative;display:flex;align-items:end;justify-content:space-between;gap:3px;height:clamp(190px,34dvh,330px);width:100%;padding:6px 10px 0;overflow:hidden;isolation:isolate}
+.arcane-story-stage-360:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 95%,#7996d34f,transparent 60%);z-index:-1}
+.arcane-story-portrait-360{position:relative;width:min(48%,235px);height:100%;flex:0 1 48%;display:flex;align-items:end;justify-content:center;border:0;overflow:hidden;filter:grayscale(.5) brightness(.67);opacity:.74;transition:filter .25s ease,opacity .25s ease,transform .25s ease}
+.arcane-story-portrait-360.is-speaking-360{filter:drop-shadow(0 0 12px #98a7ff88) brightness(1);opacity:1;transform:translateY(-3px);z-index:2}
+.arcane-story-portrait-360 img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;mask-image:linear-gradient(#000 0 75%,transparent 99%);-webkit-mask-image:linear-gradient(#000 0 75%,transparent 99%)}
+.arcane-story-portrait-360.is-right-360 img{transform:scaleX(-1)}
+.arcane-story-portrait-fallback-360{display:flex;align-items:center;justify-content:center;height:95%;width:100%;border-radius:45% 45% 0 0;background:radial-gradient(ellipse at 50% 35%,#6272af,#30234c 68%);color:#ebd2ff;font:700 68px Georgia,serif;text-shadow:0 0 20px #b26bff;mask-image:linear-gradient(#000 0 65%,transparent 100%);-webkit-mask-image:linear-gradient(#000 0 65%,transparent 100%)}
+.arcane-story-portrait-fallback-360[hidden]{display:none!important}
+.arcane-story-portrait-label-360{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#fff6e2;font-size:12px;font-weight:800;text-shadow:0 2px 6px #000}
+.arcane-story-dialog-box-360{position:relative;z-index:3;margin:-14px 10px 10px;padding:14px 15px 12px;border:1px solid #dbc084;border-radius:12px;background:linear-gradient(120deg,#171b38f8,#342250f8);box-shadow:0 4px 22px #060417}
+.arcane-story-dialog-box-360 .arcane-story-line-357{min-height:64px!important;font-size:clamp(15px,4vw,20px)!important}
+.arcane-story-dialog-box-360 .arcane-story-speaker-357{font-size:19px}
+.arcane-story-dialog-box-360 .arcane-story-dialog-progress-357{margin-top:9px}
+@media(max-height:700px){.arcane-story-stage-360{height:clamp(140px,28dvh,250px)}.arcane-story-dialog-357{min-height:310px!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.59</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.60</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6829,6 +6846,24 @@ window.setArenaCharacterTheme('magierin');
   {title:'Der Fall des Direktors',opponent:'Gefallener Eldric',deck:'Verbotene Siegelmagie',boss:true,pre:[['Kael','Direktor Eldric! Sagen Sie, dass das nicht wahr ist.'],['Eldric','Ich wollte die Akademie retten. Malachar versprach mir die Macht dazu.'],['Kael','Er hat Sie belogen!'],['Eldric','Vielleicht. Aber ich bin zu weit gegangen. Wenn du mich aufhalten willst, musst du mich besiegen!']],post:[['Eldric','Kael … vergib mir. Malachar hat mich benutzt.'],['Kael','Dann werde ich ihn aufhalten!'],['Malachar','Ein Siegel ist gefallen. Sechs bleiben.'],['Astra','Das nächste Siegel liegt im verlorenen Wald.'],['Kael','Dann ist das unser nächstes Ziel.']]}
  ];
  const escapeText=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
+ const portraits360={
+  'Kael':'kael','Leon':'leon','Elara':'elara','Varek':'varek','Darian':'darian-shadow',
+  'Noctis':'noctis','Seraphine':'seraphine','Riven':'riven-shadow',
+  'Astra':'astra','Valtor':null,'Eldric':'eldric','Gefallener Eldric':'eldric-shadow','Malachar':null
+ };
+ function resolvePortrait360(name){
+  const lookup=portraits360[name];
+  return lookup?'artwork/story/'+lookup+'.jpg':null;
+ }
+ function portraitHTML360(name,side,speaking){
+  const file=resolvePortrait360(name);
+  return '<div class="arcane-story-portrait-360 '+(side==='right'?'is-right-360 ':'')+(speaking?'is-speaking-360':'')+'">'
+   +(file?'<img src="'+file+'" alt="" loading="eager" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')
+   +'<div class="arcane-story-portrait-fallback-360" '+(file?'hidden':'')+'>'+escapeText((name||'?').slice(0,1))+'</div>'
+   +'<div class="arcane-story-portrait-label-360">'+escapeText(name)+'</div></div>';
+ }
+
  const read=()=>{try{return Math.max(1,Math.min(11,Number(localStorage.getItem(KEY))||1))}catch(e){return 1}};
  const save=n=>{try{localStorage.setItem(KEY,String(Math.max(read(),n)))}catch(e){}};
  const stage=document.createElement('div');stage.className='arcane-story-357';stage.id='arcaneStory357';stage.hidden=true;stage.setAttribute('role','dialog');stage.setAttribute('aria-modal','true');stage.setAttribute('aria-label','Story-Modus');
@@ -6861,7 +6896,11 @@ window.setArenaCharacterTheme('magierin');
   const m=missions[activeIndex],lines=scene==='post'?m.post:m.pre,entry=lines[dialogStep];
   show();back.textContent='Missionsübersicht';
   stage.querySelector('#arcaneStoryHeading357').textContent='1-'+(activeIndex+1)+' · '+m.title;
-  content.innerHTML='<p class="arcane-story-copy-357">'+(scene==='post'?'Nach dem Sieg':'Vor dem Duell')+' · '+escapeText(m.opponent)+' · '+escapeText(m.deck)+'</p><div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357"></div><div class="arcane-story-line-357"></div><div class="arcane-story-dialog-progress-357">Dialog '+(dialogStep+1)+' / '+lines.length+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneStorySkip357">Dialog überspringen</button><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryAdvance357">'+(dialogStep+1<lines.length?'Weiter':scene==='post'?'Mission abschließen':'⚔ Duell starten')+'</button></div>';
+  const speaker360=entry[0];
+  const partner360=speaker360==='Kael'?m.opponent:'Kael';
+  const left360=speaker360==='Kael'?'Kael':partner360;
+  const right360=speaker360==='Kael'?partner360:speaker360;
+  content.innerHTML='<p class="arcane-story-copy-357">'+(scene==='post'?'Nach dem Sieg':'Vor dem Duell')+' · '+escapeText(m.opponent)+' · '+escapeText(m.deck)+'</p><div class="arcane-story-dialog-357"><div class="arcane-story-stage-360">'+portraitHTML360(left360,'left',speaker360===left360)+portraitHTML360(right360,'right',speaker360===right360)+'</div><div class="arcane-story-dialog-box-360"><div class="arcane-story-speaker-357"></div><div class="arcane-story-line-357"></div><div class="arcane-story-dialog-progress-357">Dialog '+(dialogStep+1)+' / '+lines.length+'</div></div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneStorySkip357">Dialog überspringen</button><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryAdvance357">'+(dialogStep+1<lines.length?'Weiter':scene==='post'?'Mission abschließen':'⚔ Duell starten')+'</button></div>';
   content.querySelector('.arcane-story-speaker-357').textContent=entry[0];content.querySelector('.arcane-story-line-357').textContent=entry[1];
   content.querySelector('#arcaneStorySkip357').addEventListener('click',()=>{if(scene==='post')finishMission();else beginDuel()});
   content.querySelector('#arcaneStoryAdvance357').addEventListener('click',()=>{if(dialogStep+1<lines.length){dialogStep++;drawDialog()}else if(scene==='post')finishMission();else beginDuel()});
