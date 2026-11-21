@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-shared-cards-v335">
+<meta name="arcane-build" content="20261121-hand-inspect-v336">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4629,9 +4629,16 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .sanctuary-card-front-325:has(>.arcane-card-335){padding:0!important;display:block!important;overflow:hidden!important}
 .sanctuary-card-front-325>.arcane-card-335{border:0!important;border-radius:6px!important}
 .arcane-size-reveal .arcane-card-effect-335,.arcane-size-catalogue .arcane-card-effect-335{overflow:hidden!important}
+
+/* v3.36: fullscreen, clean 3D inspection on hand-card tap */
+.arcane-hand-preview-336{position:fixed!important;inset:0!important;z-index:10015!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))!important;background:#060416ec!important;backdrop-filter:blur(10px)!important}
+.arcane-hand-preview-panel-336{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;width:min(100%,400px)!important;max-height:95dvh!important;padding:30px 10px 14px!important;box-sizing:border-box!important}
+.arcane-hand-preview-close-336{position:absolute!important;right:0!important;top:0!important;z-index:10!important;width:44px!important;height:44px!important;border:1px solid #f5cd86!important;border-radius:50%!important;background:#321b4c!important;color:#ffe4b2!important;font-size:28px!important;cursor:pointer!important}
+.arcane-hand-preview-panel-336 .arcane-tilt-card-327{width:min(82vw,315px,calc(72dvh * .68))!important}
+.arcane-hand-preview-panel-336 .arcane-tilt-stage-327{width:100%!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.35</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.36</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5130,7 +5137,39 @@ function closeCardInfo(){$("cardInfo").classList.remove("visible");cardInfoActio
 $("cardInfoClose").onclick=closeCardInfo;
 $("cardInfo").addEventListener("click",e=>{if(e.target.id==="cardInfo")closeCardInfo()});
 $("cardInfoPrimary").onclick=()=>{const action=cardInfoAction;closeCardInfo();if(action)action();};
-$("hand").addEventListener('click',e=>{let b=e.target.closest('[data-card]');if(!b)return;if(suppressNextCardClick){suppressNextCardClick=false;e.preventDefault();return;}const i=+b.dataset.card;showCardInfo(hand[i],"hand",()=>{selected=i;render();log(hand[i].name+" ausgewählt.");});});
+
+/* v3.36: a tap on a hand card shows that actual premium card, not the old text menu. */
+let handPreview336=null;
+function closeHandPreview336(){
+ if(!handPreview336)return;
+ handPreview336.remove();handPreview336=null;
+}
+function showHandPreview336(card){
+ if(!card)return;
+ closeCardInfo();
+ closeHandPreview336();
+ const overlay=document.createElement('div');
+ overlay.className='arcane-hand-preview-336';
+ overlay.setAttribute('role','dialog');
+ overlay.setAttribute('aria-modal','true');
+ overlay.setAttribute('aria-label','Handkarte: '+card.name);
+ overlay.innerHTML='<div class="arcane-hand-preview-panel-336"><button type="button" class="arcane-hand-preview-close-336" aria-label="Karte schließen">×</button>'+renderArcane3D335(card)+'</div>';
+ document.body.appendChild(overlay);
+ handPreview336=overlay;
+ window.arcaneInitCardTilt335?.(overlay.querySelector('#arcaneTiltCard327'));
+ overlay.querySelector('.arcane-hand-preview-close-336').addEventListener('click',closeHandPreview336);
+ overlay.addEventListener('click',e=>{if(e.target===overlay)closeHandPreview336()});
+ overlay.querySelector('.arcane-hand-preview-close-336').focus({preventScroll:true});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&handPreview336)closeHandPreview336()});
+$("hand").addEventListener('click',e=>{
+ const b=e.target.closest('[data-card]');if(!b)return;
+ if(suppressNextCardClick){suppressNextCardClick=false;e.preventDefault();return;}
+ const i=Number(b.dataset.card),card=hand[i];if(!card)return;
+ selected=i;render();
+ showHandPreview336(card);
+});
+
 let pendingBlessingZone=-1;
 $("myMon").addEventListener('click',e=>{const choice=e.target.closest("[data-zone-choice]");if(choice){e.stopPropagation();finishSwipeSummon(choice.dataset.zoneChoice);return;}let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingBlessingZone>=0){if(!myMon[i]||myMon[i].faceDown){log('Wähle ein offenes eigenes Monster als Ziel.');return;}const blessing=mySpell[pendingBlessingZone];if(!blessing||!['Arkaner Segen','Frostpanzer'].includes(blessing.name)){pendingBlessingZone=-1;return;}if(blessing.name==='Frostpanzer'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+700;log('🧊 Frostpanzer: '+myMon[i].name+' erhält +700 DEF bis zum Ende des Zuges.');}else{myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('✨ Arkaner Segen: '+myMon[i].name+' erhält +600 ATK bis zum Ende des Zuges.');}sendToGraveyard(blessing);mySpell[pendingBlessingZone]=null;pendingBlessingZone=-1;chosenSpell=-1;render();return;}if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){let c=hand.splice(selected,1)[0];c.position=pendingPlacementPosition==='attack'?'attack':'defense';c.faceDown=pendingPlacementPosition==='defense';myMon[i]=c;triggerMonsterEvent(c,'summon','player',i);normalSummonUsed=true;selected=-1;pendingPlacement=null;chosenMonster=-1;render();log(c.name+' wurde in deiner gewählten Monsterzone platziert.');return}if(myMon[i]){chosenMonster=i;const c=myMon[i];if(!c.faceDown)showCardInfo(c,"monster",c.effectText&&['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name)&&c.effectUsedTurn!==turn?()=>{chosenMonster=i;$("effect").click();}:null);else log("Verdecktes Monster ausgewählt.");}}); 
 $("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){let c=hand.splice(selected,1)[0];c.setTurn=turn;mySpell[i]=c;selected=-1;pendingPlacement=null;chosenSpell=i;render();log(c.name+' wurde in deiner gewählten Zauber-/Fallenzone platziert.');return}if(mySpell[i]){chosenSpell=i;const c=mySpell[i];showCardInfo(c,"spell",()=>{chosenSpell=i;$("activate").click();});}}); 
