@@ -4849,8 +4849,11 @@ const arcaneArt=(key)=>{const defs={
 };const d=defs[key];if(!d)return '';const [light,dark,sym,body,detail]=d;return '<svg viewBox="0 0 300 210" role="img" aria-label="'+key+'" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g'+key+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+light+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><radialGradient id="bg'+key+'"><stop stop-color="'+dark+'" stop-opacity=".95"/><stop offset="1" stop-color="#10172b"/></radialGradient></defs><rect width="300" height="210" fill="url(#bg'+key+')"/><circle cx="150" cy="105" r="82" fill="none" stroke="'+light+'" stroke-opacity=".35" stroke-width="2"/><circle cx="150" cy="105" r="68" fill="none" stroke="'+light+'" stroke-opacity=".22" stroke-dasharray="4 7"/><path d="'+body+'" fill="url(#g'+key+')" stroke="'+light+'" stroke-width="5" stroke-linejoin="round"/><path d="'+detail+'" fill="none" stroke="'+light+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M150 12 L150 198 M42 105 L258 105" stroke="'+light+'" stroke-opacity=".18" stroke-width="2"/><text x="150" y="112" text-anchor="middle" font-size="30" fill="#fff" opacity=".9">'+sym+'</text><path d="M34 190 L60 174 M266 190 L240 174" stroke="'+light+'" stroke-width="3"/></svg>'};
 const CARD_ART_FILES={'heilende-quelle':'heilende-quelle.webp','arkaner-segen':'arkaner-segen.webp','arkaner-wissensstrom':'arkaner-wissensstrom.webp','geisterruf':'geisterruf.webp','gedankenraub':'gedankenraub.webp','drachenatem':'drachenatem.webp','schattenresonator':'schattenresonator.webp','nachtklinge':'nachtklinge.webp','resonanzfuerst-nocthar':'resonanzfuerst-nocthar.webp','schattenbestie-umbra':'schattenbestie-umbra.webp','nyxara-schattenkoenigin':'nyxara-schattenkoenigin.webp','noctharion-herrscher':'noctharion-herrscher.webp','flame-dragon':'flammendrache.png','frost-guardian':'frostwaechter.webp','shadow-wolf':'schattenwolf.webp','arcane-mage':'arkaner-magier.webp','thunder-hawk':'donnerfalke.webp','earth-warden':'erdwaechter.webp','ember-colossus':'glutkoloss.webp','flame-burst':'flammenstoss.webp','crystal-shield':'kristallschild.webp','arkane-ernte':'arkane-ernte.png','arkaner-magier':'arkaner-magier.png','arkaner-rueckschlag':'arkaner-rueckschlag.png','arkaner-sturm':'arkaner-sturm.png','arkaner-zerstoerungsstrahl':'arkaner-zerstoerungsstrahl.png','aschenritter':'aschenritter.png','donnerfalke':'donnerfalke.png','doppelter-segen':'doppelter-segen.png','eisiger-rueckstoss':'eisiger-rueckstoss.png','erdwaechter':'erdwaechter.png','frostpanzer':'frostpanzer.png','funkenregen':'funkenregen.png','kristallraub':'kristallraub.png','kristallschild':'kristallschild.png','lebensfunke':'lebensfunke.png','schattenfessel':'schattenfessel.png','schicksalsrad':'schicksalsrad.png','seelenbergung':'seelenbergung.png','seelenfunke':'seelenfunke.png','sternenregen':'sternenregen.png'};
 function renderCardArt(c){if(!c)return '';if(c.artwork==='flame-dragon')return flameDragonArt;const file=CARD_ART_FILES[c.artwork];if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;return '<span class="card-art-loader" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><span class="card-art-fallback" style="display:block;width:100%;height:100%">'+arcaneArt(c.artwork)+'</span><img src="artwork/'+file+'" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()" onload="this.previousElementSibling.style.display=\'none\'"></span>'}
-function cardHTML(c,i){const choice='';const mid=(hand.length-1)/2;const spread=Math.max(1,mid);const normalized=(i-mid)/spread;const angle=normalized*10;const lift=-10*(1-Math.abs(normalized));const art=renderCardArt(c);const meta=c.element&&c.race?c.element+' · '+c.race:'';const effect='';return '<div class="card arcane-type-'+arcaneCardType332(c)+' '+(c.skin||'')+(c.artwork?' illustrated':'')+(selected===i?' selected':'')+(c===newlyDrawnCard?' new-card':'')+'" style="--fan-angle:'+angle.toFixed(1)+'deg;--fan-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'"><div class="art">'+art+'</div><strong>'+c.name+'</strong><small>'+(arcaneCardTypeLabel332(c)+(c.kind==='monster'?' · Level '+c.level:''))+(meta?' · '+meta:'')+'</small><div class="stats">'+(c.kind==="monster"?'ATK '+c.atk+' / DEF '+c.def:c.desc||'Spezialkarte')+'</div>'+effect+choice+'</div>'}
-function zoneHTML(arr,type){return Array.from({length:4},(_,i)=>{const c=arr[i],hidden=!!(c&&c.faceDown),choosing=type==='myMon'&&pendingSwipeSummon&&pendingSwipeSummon.zoneIndex===i;const monsterReady=type==='myMon'&&c&&c.kind==='monster'&&!hidden&&c.effectUsedTurn!==turn&&['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name);const spellReady=type==='mySpell'&&c&&(c.kind==='spell'||(c.kind==='trap'&&turn>c.setTurn));const ready=monsterReady||spellReady;const chained=type==='oppMon'&&c&&c.shadowBlockedAiTurn>=aiTurn;const classes='zone '+(c?'filled':'')+(chained?' shadow-chained-213':'')+(pendingTribute&&pendingTribute.selected.includes(i)&&type==='myMon'?' tribute-selected':'')+(ready?' effect-ready':'')+(!c&&((type==='myMon'&&pendingPlacement==='monster')||(type==='mySpell'&&pendingPlacement==='spell'))?' placement-target':'')+(type==='oppMon'&&i===chosenTarget?' selected':'')+(type==='mySpell'&&i===chosenSpell?' selected':'');let inside=type.includes('Mon')?'Monsterzone':'Zauber/Falle';if(c){const meta=c.element&&c.race?c.element+' · '+c.race:'';const subtitle=arcaneCardTypeLabel332(c)+(c.kind==='monster'?' · Level '+c.level:'');const atkDelta=c.kind==='monster'?effectiveAtk(c)-c.atk:0,defDelta=c.kind==='monster'?effectiveDef(c)-c.def:0;const stats=c.kind==='monster'?'<span class="stat-attack '+(atkDelta>0?'stat-boosted':atkDelta<0?'stat-weakened':'')+'">ATK '+effectiveAtk(c)+'</span> / <span class="stat-defense '+(defDelta>0?'stat-boosted':defDelta<0?'stat-weakened':'')+'">DEF '+effectiveDef(c)+'</span>':c.desc||'Spezialkarte';inside='<div class="field-card '+(hidden?'arcane-facedown-333':'arcane-type-'+arcaneCardType332(c))+' '+(hidden?'':(c.skin||''))+(c.artwork?' illustrated':'')+(hidden?' field-facedown':'')+((type==='myMon'||type==='oppMon')&&c.position==='defense'?' field-defense':'')+'">'+(hidden?'<div class="field-card-back">✦</div>':'<div class="field-card-front">'+(type==='myMon'&&c.effectText?'<span class="monster-effect-indicator-201 '+(monsterReady?'is-ready':'is-used')+'">'+(monsterReady?'✦ EFFEKT':(['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name)?'✓ EFFEKT':'✦ AUTO'))+'</span>':'')+'<div class="art">'+renderCardArt(c)+'</div><strong>'+c.name+'</strong><small>'+subtitle+(meta?' · '+meta:'')+'</small><div class="stats">'+stats+'</div></div>')+(chained?'<div class="shadow-chain-overlay-213" aria-label="Schattenfessel: Monster kann nicht angreifen"><span class="shadow-chain-icon-213">⛓️</span><span class="shadow-chain-label-213">GESPERRT</span></div>':'')+(choosing?'<div class="zone-options"><button type="button" data-zone-choice="attack">Offen</button><button type="button" data-zone-choice="defense">Verdeckt</button></div>':'')+'</div>';}return '<div class="'+classes+'" data-zone="'+type+'" data-index="'+i+'">'+inside+'</div>'}).join('')}
+function cardHTML(c,i){
+ const mid=(hand.length-1)/2,rel=(i-mid)/Math.max(1,mid);
+ return '<div class="card arcane-wrapper-335 '+(selected===i?'selected ':'')+(c===newlyDrawnCard?'new-card ':'')+'" style="--fan-angle:'+(rel*10).toFixed(1)+'deg;--fan-lift:'+(-10*(1-Math.abs(rel))).toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'">'+renderArcaneCard335(c,{size:'hand'})+'</div>';
+}
+function zoneHTML(arr,type){return Array.from({length:4},(_,i)=>{const c=arr[i],hidden=!!(c&&c.faceDown),choosing=type==='myMon'&&pendingSwipeSummon&&pendingSwipeSummon.zoneIndex===i;const monsterReady=type==='myMon'&&c&&c.kind==='monster'&&!hidden&&c.effectUsedTurn!==turn&&['Flammendrache','Frostwächter','Schattenwolf'].includes(c.name);const spellReady=type==='mySpell'&&c&&(c.kind==='spell'||(c.kind==='trap'&&turn>c.setTurn));const ready=monsterReady||spellReady;const chained=type==='oppMon'&&c&&c.shadowBlockedAiTurn>=aiTurn;const classes='zone '+(c?'filled':'')+(chained?' shadow-chained-213':'')+(pendingTribute&&pendingTribute.selected.includes(i)&&type==='myMon'?' tribute-selected':'')+(ready?' effect-ready':'')+(!c&&((type==='myMon'&&pendingPlacement==='monster')||(type==='mySpell'&&pendingPlacement==='spell'))?' placement-target':'')+(type==='oppMon'&&i===chosenTarget?' selected':'')+(type==='mySpell'&&i===chosenSpell?' selected':'');let inside=type.includes('Mon')?'Monsterzone':'Zauber/Falle';if(c){const meta=c.element&&c.race?c.element+' · '+c.race:'';const subtitle=arcaneCardTypeLabel332(c)+(c.kind==='monster'?' · Level '+c.level:'');const atkDelta=c.kind==='monster'?effectiveAtk(c)-c.atk:0,defDelta=c.kind==='monster'?effectiveDef(c)-c.def:0;const stats=c.kind==='monster'?'<span class="stat-attack '+(atkDelta>0?'stat-boosted':atkDelta<0?'stat-weakened':'')+'">ATK '+effectiveAtk(c)+'</span> / <span class="stat-defense '+(defDelta>0?'stat-boosted':defDelta<0?'stat-weakened':'')+'">DEF '+effectiveDef(c)+'</span>':c.desc||'Spezialkarte';inside='<div class="field-card '+(hidden?'arcane-facedown-333':'arcane-type-'+arcaneCardType332(c))+' '+(hidden?'':(c.skin||''))+(c.artwork?' illustrated':'')+(hidden?' field-facedown':'')+((type==='myMon'||type==='oppMon')&&c.position==='defense'?' field-defense':'')+'">'+(hidden?'<div class="field-card-back">✦</div>':'<div class="field-card-front">'+(type==='myMon'&&c.effectText?'<span class="monster-effect-indicator-201 '+(monsterReady?'is-ready':'is-used')+'">'+(monsterReady?'✦ EFFEKT':'✓ EFFEKT')+'</span>':'')+renderArcaneCard335(c,{size:'field'})+'</div>')+(chained?'<div class="shadow-chain-overlay-213" aria-label="Schattenfessel: Monster kann nicht angreifen"><span class="shadow-chain-icon-213">⛓️</span><span class="shadow-chain-label-213">GESPERRT</span></div>':'')+(choosing?'<div class="zone-options"><button type="button" data-zone-choice="attack">Offen</button><button type="button" data-zone-choice="defense">Verdeckt</button></div>':'')+'</div>';}return '<div class="'+classes+'" data-zone="'+type+'" data-index="'+i+'">'+inside+'</div>'}).join('')}
 
 function showMonsterEffectFx(index,card){
  const zone=document.querySelector('#myMon [data-index="'+index+'"]');if(!zone)return;
@@ -5007,7 +5010,7 @@ function showResonanceExtraDeck(){
    item.className="resonance-extra-card arcane-type-"+arcaneCardType332(c);
    const art=document.createElement("div");
    art.className="resonance-extra-art arcane-type-"+arcaneCardType332(c);
-   art.innerHTML=renderCardArt(c);
+   art.innerHTML=renderArcaneCard335(c,{size:"list"});
    const details=document.createElement("div");
    details.className="resonance-extra-details";
    const title=document.createElement("strong");title.textContent=c.name;
@@ -5035,7 +5038,7 @@ function enforceHandLimit(){
  $("handLimitMessage").textContent="Du hast "+hand.length+" Handkarten. Wähle eine Karte zum Ablegen auf den Friedhof.";
  hand.forEach((c,index)=>{
   const button=document.createElement("button");button.type="button";button.className="hand-limit-choice arcane-type-"+arcaneCardType332(c);
-  const art=document.createElement("div");art.className="hand-limit-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderCardArt(c);
+  const art=document.createElement("div");art.className="hand-limit-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderArcaneCard335(c,{size:"list"});
   const name=document.createElement("strong");name.textContent=c.name;
   const stats=document.createElement("small");stats.textContent=c.kind==="monster"?arcaneCardTypeLabel332(c)+" · ATK "+c.atk+" / DEF "+c.def:arcaneCardTypeLabel332(c);
   button.append(art,name,stats);
@@ -5088,7 +5091,7 @@ function showGraveyard(owner){
  if(!list.length){const p=document.createElement("p");p.textContent="Noch keine Karten im Friedhof.";cards.append(p);}
  [...list].reverse().forEach(c=>{
   const item=document.createElement("div");item.className="resonance-extra-card arcane-type-"+arcaneCardType332(c);
-  const art=document.createElement("div");art.className="resonance-extra-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderCardArt(c);
+  const art=document.createElement("div");art.className="resonance-extra-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderArcaneCard335(c,{size:"list"});
   const details=document.createElement("div");details.className="resonance-extra-details";
   const title=document.createElement("strong");title.textContent=c.name;
   const type=document.createElement("span");type.textContent=c.kind==="monster"?arcaneCardTypeLabel332(c)+" · Level "+(c.level||"?")+" · ATK "+(c.atk??"?")+" / DEF "+(c.def??"?"):arcaneCardTypeLabel332(c);
@@ -5601,7 +5604,7 @@ window.setArenaCharacterTheme('magierin');
  const special=c=>extraNames.has(c.name);
  const picture=c=>renderCardArt(c);
  const rarityVars=c=>'--rarity-color:'+rarityData[rarity(c)].color;
- function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318 arcane-type-'+arcaneCardType332(c)+'"><div class="arcane-collection-image-318">'+picture(c)+'</div>'+arcaneElementIcon329(c)+'</div>'}
+ function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318 arcane-type-'+arcaneCardType332(c)+'">'+renderArcaneCard335(c,{size:'collection'})+'</div>'}
  function drawGrid(){
   const query=$c('arcaneCollectionSearch316').value.toLocaleLowerCase('de').trim();
   const kind=$c('arcaneCollectionType316').value;
@@ -5625,22 +5628,11 @@ window.setArenaCharacterTheme('magierin');
  }
  function showCard(i){
   const c=allCards[i];if(!c)return;
-  const rarityObj=rarityData[rarity(c)];
   const detail=$c('arcaneCollectionDetail316');
-  const desc=c.effectText||c.desc||'Diese Karte hat keinen zusätzlichen Effekttext.';
-  detail.style.setProperty('--rarity-color',rarityObj.color);
-  detail.innerHTML='<div class="arcane-collection-detail-panel-316 arcane-type-'+arcaneCardType332(c)+'">'
-   +'<div class="arcane-collection-detail-header-316"><h3>'+escapeText(c.name)+'</h3><button type="button" id="arcaneCollectionClose316" class="arcane-collection-detail-close-316" aria-label="Kartendetails schließen">×</button></div>'
-   +'<div class="arcane-collection-art-316 arcane-collection-detail-art-316 arcane-type-'+arcaneCardType332(c)+'">'+picture(c)+arcaneElementIcon329(c)+'</div>'
-   +'<div class="arcane-collection-detail-stats-316"><div>'+arcaneCardTypeLabel332(c)+(c.kind==='monster'?' · Level '+(c.level||'?'):'')+'</div><div style="color:'+rarityObj.color+'">'+rarityObj.label+'</div>'
-   +(c.kind==='monster'?'<div>ATK '+(c.atk??'?')+'</div><div>DEF '+(c.def??'?')+'</div>':'')+'</div>'
-   +'<p class="arcane-collection-detail-description-316">'+escapeText(desc)+'</p>'
-   +'<p class="arcane-collection-detail-description-316"><strong>Testbestand:</strong> '+(special(c)?'Resonanzkarte im Extra-Deck':count(c)+' Exemplare insgesamt (Starterdeck, Testbestand und Booster)')+'</p>'
-   +'<div class="arcane-collection-note-316">Kartensammlung im Testbetrieb. Seltenheiten vorläufig; freigeschaltete Karten und echte Besitzstände werden später gespeichert.</div>'
-   +'</div>';
+  detail.innerHTML='<div class="arcane-collection-detail-panel-316 arcane-collection-unified-335"><button type="button" id="arcaneCollectionClose316" class="arcane-collection-detail-close-316" aria-label="Schließen">×</button>'+renderArcane3D335(c)+'</div>';
   detail.hidden=false;
-  detail.querySelector('#arcaneCollectionClose316').addEventListener('click',()=>{detail.hidden=true});
-  detail.querySelector('#arcaneCollectionClose316').focus({preventScroll:true});
+  window.arcaneInitCardTilt335?.(detail.querySelector('#arcaneTiltCard327'));
+  detail.querySelector('#arcaneCollectionClose316').addEventListener('click',()=>detail.hidden=true);
  }
  function openCollection(){
   collection.hidden=false;
@@ -5831,30 +5823,11 @@ window.setArenaCharacterTheme('magierin');
 
 
  function showPoolCard(index){
-  const data=catalog(),c=data?.cards[index];if(!c)return;
-  const grade=data.rarity(c),tone=data.rarityData[grade];
-  const kinds={monster:'Monster',spell:'Zauber',trap:'Falle'};
-  const effect=c.effectText||c.desc||'Diese Karte besitzt keinen zusätzlichen Effekttext.';
-  const cardStats=c.kind==='monster'
-   ?'<span>ATK '+safe(c.atk??'–')+'</span><span>DEF '+safe(c.def??'–')+'</span>'
-   :'<span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+safe(c.element||tone.label)+'</span>';
-  detail.style.setProperty('--detail-rarity-326',tone.color);
-  $b('arcaneBoosterDetailBody326').innerHTML=
-   '<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 rarity-'+grade+' arcane-type-'+arcaneCardType332(c)+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
-   +'<div class="arcane-tilt-rotator-327"><div class="arcane-tilt-face-327 arcane-tilt-front-327">'
-   +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(arcaneCardTypeLabel332(c))+' · '+safe(tone.label)+'</span>'+arcaneElementIcon329(c)+'</div>'
-   +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+'</div>'
-   +'<div class="arcane-tilt-metadata-327"><span>'+safe(arcaneCardTypeLabel332(c))+'</span><span>'+(c.kind==='monster'?'Level '+safe(c.level??'–'):safe(c.element||''))+'</span></div>'
-   +'<div class="arcane-tilt-effect-328"><strong>Beschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>'
-   +'<div class="arcane-tilt-numbers-327">'+cardStats+'</div>'
-   +'<div class="arcane-tilt-glare-327"></div></div>'
-   +'<div class="arcane-tilt-face-327 arcane-tilt-back-327"><span class="arcane-tilt-symbol-327">✧</span><strong>ARCANE DUEL</strong><small>✦ SCHATTEN & FLAMMEN ✦</small></div>'
-   +'</div></div></div>'
-   ;
+  const c=catalog()?.cards[index];if(!c)return;
+  detail.style.setProperty('--detail-rarity-326',catalog().rarityData[catalog().rarity(c)].color);
+  $b('arcaneBoosterDetailBody326').innerHTML=renderArcane3D335(c);
   detail.hidden=false;
   initCardTilt327($b('arcaneTiltCard327'));
-  const effectArea=$b('arcaneTiltCard327').querySelector('.arcane-tilt-effect-328');
-  if(effectArea){effectArea.addEventListener('pointerdown',e=>e.stopPropagation());effectArea.addEventListener('pointermove',e=>e.stopPropagation());effectArea.addEventListener('pointerup',e=>e.stopPropagation());}
   $b('arcaneBoosterDetailClose326').focus({preventScroll:true});
  }
  function initCardTilt327(card){
@@ -5894,6 +5867,7 @@ window.setArenaCharacterTheme('magierin');
   card.addEventListener('pointercancel',()=>{active=false;lastTap=0;reset()});
   card.addEventListener('lostpointercapture',()=>{active=false;reset()});
  }
+ window.arcaneInitCardTilt335=initCardTilt327;
  function closePoolCard(){detail.hidden=true}
  $b('arcaneBoosterPool324').addEventListener('click',e=>{
   const btn=e.target.closest('[data-pool-card]');if(btn)showPoolCard(Number(btn.dataset.poolCard));
