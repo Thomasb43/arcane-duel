@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-cinematic-intro-v385">
+<meta name="arcane-build" content="20261121-anime-film-intro-v386">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5319,6 +5319,12 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-cinematic-385.motion-reduced-385 .arcane-cinema-character-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-monster-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-beam-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-impact-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-explosion-385{display:none!important}
 @media(max-height:430px){.arcane-cinema-controls-385{bottom:5px}.arcane-cinema-controls-385 button{padding:6px 12px!important}.arcane-cinema-title-385{gap:5px}}
 
+
+/* v3.86 – cinematic video opening with animated CSS fallback */
+.arcane-cinema-video-386{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;display:none;background:#050714}
+.arcane-cinematic-385.has-video-386 .arcane-cinema-video-386{display:block}
+.arcane-cinematic-385.has-video-386 .arcane-cinema-scene-385{visibility:hidden}
+.arcane-cinematic-385.has-video-386 .arcane-cinema-controls-385{z-index:4}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7714,7 +7720,7 @@ window.setArenaCharacterTheme('magierin');
  intro.setAttribute('role','dialog');
  intro.setAttribute('aria-modal','true');
  intro.setAttribute('aria-label','Arcane Duel Spielintro');
- intro.innerHTML='<div class="arcane-cinema-scene-385" aria-hidden="true">'
+ intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" playsinline muted preload="auto" aria-label="Arcane Duel Anime-Intro"><source src="artwork/arcane-duel-opening.mp4" type="video/mp4"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
   +'<div class="arcane-cinema-stars-385"></div>'
   +'<div class="arcane-cinema-character-385 kael"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display=\'none\'"><strong>KAEL</strong></div>'
   +'<div class="arcane-cinema-character-385 leon"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display=\'none\'"><strong>LEON</strong></div>'
@@ -7728,14 +7734,36 @@ window.setArenaCharacterTheme('magierin');
   +'<button id="arcaneIntroReplay385" type="button">↺ Intro wiederholen</button>'
   +'<button id="arcaneIntroStart308" type="button">SPIEL STARTEN</button></div>';
  document.body.appendChild(intro);
+ const video=intro.querySelector('#arcaneIntroVideo386');
  function replay(){
+  if(intro.classList.contains('has-video-386')){
+   video.currentTime=0;
+   const playing=video.play();
+   playing?.catch?.(()=>{intro.classList.remove('has-video-386');replay()});
+   return;
+  }
   intro.classList.remove('is-playing-385');
   void intro.offsetWidth;
   intro.classList.add('is-playing-385');
  }
+ video.addEventListener('loadeddata',()=>{
+  intro.classList.add('has-video-386');
+  intro.classList.remove('is-playing-385');
+  video.currentTime=0;
+  video.play()?.catch?.(()=>{intro.classList.remove('has-video-386');replay()});
+ });
+ video.addEventListener('error',()=>{
+  intro.classList.remove('has-video-386');
+  replay();
+ });
+ video.querySelector('source')?.addEventListener('error',()=>{
+  intro.classList.remove('has-video-386');
+  replay();
+ });
  intro.querySelector('#arcaneIntroReplay385').addEventListener('click',replay);
  intro.querySelector('#arcaneIntroStart308').addEventListener('click',()=>{
   intro.hidden=true;
+  video.pause();
   const mainMenu=document.getElementById('arcaneHome307');
   if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
  });
