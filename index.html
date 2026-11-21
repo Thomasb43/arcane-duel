@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-kael-illustrations-v369">
+<meta name="arcane-build" content="20261121-live-monster-stats-v370">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5100,6 +5100,12 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-opponent-effect-364 .arcane-opponent-stats-364{margin-top:7px!important;color:#f4c881!important;font-weight:800}
 #oppMon .zone.filled:not(:has(.field-facedown)),#oppSpell .zone.filled:not(:has(.field-facedown)){cursor:zoom-in;touch-action:manipulation}
 @media(max-height:650px){.arcane-opponent-preview-364 .arcane-tilt-card-327{width:min(65vw,230px,calc(42dvh * .68))!important}}
+
+/* v3.70: ATK/DEF effects update directly on the face-up monster card. */
+.field-card-front .arcane-card-stats-335 .arcane-live-stat-370.is-boosted{color:#44ed87!important;text-shadow:0 0 5px #26d96c88!important}
+.field-card-front .arcane-card-stats-335 .arcane-live-stat-370.is-weakened{color:#ff7878!important;text-shadow:0 0 5px #f4433688!important}
+.field-card-front .arcane-card-stats-335 .arcane-stat-delta-370{display:inline!important;font-size:.77em!important;font-weight:900!important;white-space:nowrap!important;color:inherit!important}
+.field-card-front .arcane-card-stats-335{gap:2px!important;overflow:visible!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -5173,7 +5179,11 @@ function renderArcaneCard335(c,o={}){
  if(!c)return '';
  if(o.faceDown)return '<div class="arcane-card-335 arcane-card-back-335"><span>✧</span><strong>ARCANE DUEL</strong></div>';
  const rarity=arcaneRarity335(c),type=arcaneCardType332(c),label=arcaneCardTypeLabel332(c),monster=c.kind==='monster';
- const stats=monster?'<span>ATK '+arcaneEscape335(c.atk??'–')+'</span><span>DEF '+arcaneEscape335(c.def??'–')+'</span>':'<span>'+arcaneEscape335(label)+'</span>';
+ const onField=o.size==='field'&&monster;
+ const atk=onField?effectiveAtk(c):c.atk,def=onField?effectiveDef(c):c.def;
+ const atkDiff=onField?atk-c.atk:0,defDiff=onField?def-c.def:0;
+ const stat335=(key,value,diff)=>'<span class="arcane-live-stat-370 '+(diff>0?'is-boosted':diff<0?'is-weakened':'')+'">'+key+' '+arcaneEscape335(value??'–')+(diff?'<small class="arcane-stat-delta-370"> '+(diff>0?'+':'')+arcaneEscape335(diff)+'</small>':'')+'</span>';
+ const stats=monster?stat335('ATK',atk,atkDiff)+stat335('DEF',def,defDiff):'<span>'+arcaneEscape335(label)+'</span>';
  return '<div class="arcane-card-335 arcane-type-'+type+' arcane-size-'+(o.size||'small')+' rarity-'+rarity.key+'" style="--card-rarity-335:'+rarity.color+'">'
  +'<div class="arcane-card-head-335"><strong>'+arcaneEscape335(c.name)+'</strong><small>'+arcaneEscape335(label)+' · '+arcaneEscape335(rarity.label)+'</small>'+arcaneElementIcon329(c)+'</div>'
  +'<div class="arcane-card-art-335">'+renderCardArt(c)+'</div>'
