@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-level-reward-roadmap-v384">
+<meta name="arcane-build" content="20261121-cinematic-intro-v385">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5272,6 +5272,53 @@ transform:none!important;filter:none!important;z-index:2!important;
 #arcaneLevelStatus384{min-height:20px;padding:8px 0;color:#a9ecc3}
 .arcane-character-progress-382 .arcane-level-open-384{display:block;width:100%;margin-bottom:10px;font-size:12px;font-weight:900}
 
+
+/* v3.85 cinematic opening, landscape-first mobile stage with CSS-timed sequence */
+.arcane-cinematic-385{position:fixed!important;inset:0!important;z-index:9500!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;padding:0!important;background:#050714!important;color:#fff1d4!important}
+.arcane-cinematic-385[hidden]{display:none!important}
+.arcane-cinematic-385::before{display:none!important}
+.arcane-cinema-scene-385{position:relative;width:100%;height:100%;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 35%,#41305f 0%,#10152b 43%,#050711 85%)}
+.arcane-cinema-stars-385{position:absolute;inset:0;opacity:.65;background-image:radial-gradient(#fff8 1px,transparent 2px),radial-gradient(#7cbaff99 1px,transparent 3px);background-size:40px 37px,83px 91px;transform:scale(1.15)}
+.arcane-cinema-character-385{position:absolute;top:6%;width:39%;height:78%;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;overflow:hidden;filter:drop-shadow(0 0 22px #72a4ff);opacity:0}
+.arcane-cinema-character-385.kael{left:-4%;background:linear-gradient(90deg,#367ed433,transparent)}
+.arcane-cinema-character-385.leon{right:-4%;filter:drop-shadow(0 0 22px #ff6633);background:linear-gradient(270deg,#e34a2233,transparent)}
+.arcane-cinema-character-385 img{height:90%;max-width:100%;width:100%;object-fit:contain;object-position:bottom}
+.arcane-cinema-character-385 strong{position:absolute;bottom:1%;font:900 clamp(16px,4vw,34px) Georgia,serif;letter-spacing:2px;text-shadow:0 3px 7px #000,0 0 20px #f5c670}
+.arcane-cinema-character-385.kael strong{left:25%}.arcane-cinema-character-385.leon strong{right:25%}
+.arcane-cinema-monster-385{position:absolute;top:4%;width:44%;height:84%;opacity:0;filter:drop-shadow(0 0 22px #70bbff)}
+.arcane-cinema-monster-385.kael{left:7%;}.arcane-cinema-monster-385.leon{right:7%;filter:drop-shadow(0 0 22px #ff824a)}
+.arcane-cinema-monster-385 img{height:100%;width:100%;object-fit:contain}
+.arcane-cinema-beam-385{position:absolute;top:46%;height:12%;width:51%;opacity:0;border-radius:90%;filter:blur(3px)}
+.arcane-cinema-beam-385.kael{left:-2%;transform-origin:left center;background:linear-gradient(90deg,transparent,#42baff,#e3ffff);box-shadow:0 0 30px #3fb9ff,0 0 65px #2d6ff7}
+.arcane-cinema-beam-385.leon{right:-2%;transform-origin:right center;background:linear-gradient(270deg,transparent,#ff651f,#fff3a8);box-shadow:0 0 30px #ff5b20,0 0 65px #ff2a0f}
+.arcane-cinema-impact-385{position:absolute;left:49%;top:50%;width:3px;height:3px;border-radius:50%;background:#fff;opacity:0;box-shadow:0 0 35px 20px #fff6ac,0 0 55px 40px #dd87ff}
+.arcane-cinema-explosion-385{position:absolute;left:50%;top:50%;width:100vmax;height:100vmax;border-radius:50%;transform:translate(-50%,-50%) scale(0);opacity:0;background:radial-gradient(circle,#fff 0%,#fff5c1 14%,#ffd271 27%,#c76cfa 41%,#498fff88 55%,transparent 69%)}
+.arcane-cinema-title-385{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;text-shadow:0 3px 10px #070520,0 0 27px #ba7aff}
+.arcane-cinema-title-385 strong{font:900 clamp(30px,9vw,94px) Georgia,serif;letter-spacing:.05em;color:#ffe3a2;white-space:nowrap;filter:drop-shadow(0 0 12px #f5af6d)}
+.arcane-cinema-title-385 em{font-style:normal;color:#f7e3ff}.arcane-cinema-title-385 small{letter-spacing:3px;font-size:clamp(8px,1.9vw,15px)}.arcane-cinema-title-385 span{font-size:clamp(9px,1.8vw,16px);letter-spacing:2px}
+.arcane-cinema-controls-385{position:absolute;bottom:max(9px,env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:3}
+.arcane-cinematic-385 .arcane-cinema-controls-385 button{padding:9px 18px;border:1px solid #dfbd78;border-radius:9px;color:#fbe6ad;background:#17142de8;font-weight:900;font-size:clamp(11px,2.4vw,14px);box-shadow:0 3px 13px #000b;cursor:pointer}
+.arcane-cinematic-385 #arcaneIntroStart308{background:linear-gradient(120deg,#957344,#4b3165);color:#fff4d9}
+.is-playing-385 .arcane-cinema-character-385.kael{animation:cinKael385 9s ease both}
+.is-playing-385 .arcane-cinema-character-385.leon{animation:cinLeon385 9s ease both}
+.is-playing-385 .arcane-cinema-monster-385.kael{animation:cinMonsterKael385 9s ease both}
+.is-playing-385 .arcane-cinema-monster-385.leon{animation:cinMonsterLeon385 9s ease both}
+.is-playing-385 .arcane-cinema-beam-385{animation:cinBeam385 9s ease both}
+.is-playing-385 .arcane-cinema-impact-385{animation:cinImpact385 9s ease both}
+.is-playing-385 .arcane-cinema-explosion-385{animation:cinExplosion385 9s ease both}
+.is-playing-385 .arcane-cinema-title-385{animation:cinTitle385 9s ease both}
+@keyframes cinKael385{0%{opacity:0;transform:translateX(-45%)}8%,22%{opacity:1;transform:translateX(0)}38%{opacity:.2}47%,100%{opacity:0}}
+@keyframes cinLeon385{0%,5%{opacity:0;transform:translateX(45%)}12%,23%{opacity:1;transform:translateX(0)}38%{opacity:.2}47%,100%{opacity:0}}
+@keyframes cinMonsterKael385{0%,21%{opacity:0;transform:translate(-30%,20%) scale(.4)}34%,44%{opacity:1;transform:translate(0,0) scale(1)}54%,100%{opacity:0}}
+@keyframes cinMonsterLeon385{0%,23%{opacity:0;transform:translate(30%,20%) scale(.4)}36%,44%{opacity:1;transform:translate(0,0) scale(1)}54%,100%{opacity:0}}
+@keyframes cinBeam385{0%,43%{opacity:0;transform:scaleX(0)}48%,56%{opacity:1;transform:scaleX(1)}60%,100%{opacity:0;transform:scaleX(1)}}
+@keyframes cinImpact385{0%,49%{opacity:0;transform:scale(.1)}54%,59%{opacity:1;transform:scale(1.4)}63%,100%{opacity:0;transform:scale(0)}}
+@keyframes cinExplosion385{0%,57%{opacity:0;transform:translate(-50%,-50%) scale(0)}64%{opacity:1;transform:translate(-50%,-50%) scale(2)}72%,100%{opacity:0;transform:translate(-50%,-50%) scale(2.5)}}
+@keyframes cinTitle385{0%,68%{opacity:0;transform:scale(.7)}76%,100%{opacity:1;transform:scale(1)}}
+.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-title-385{opacity:1!important;animation:none!important;transform:none!important}
+.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-character-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-monster-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-beam-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-impact-385,.arcane-cinematic-385.motion-reduced-385 .arcane-cinema-explosion-385{display:none!important}
+@media(max-height:430px){.arcane-cinema-controls-385{bottom:5px}.arcane-cinema-controls-385 button{padding:6px 12px!important}.arcane-cinema-title-385{gap:5px}}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7658,37 +7705,43 @@ window.setArenaCharacterTheme('magierin');
  window.openArcaneDeckManager377=open;
 })();
 
-/* v3.08 – title screen opens the existing main menu without resetting the duel. */
+/* v3.85 – Cinematic opening: Kael vs Leon, signature monsters, magic collision,
+   explosion and Arcane Duel logo. Replays without restarting the game. */
 (function initArcaneTitle308(){
  const intro=document.createElement('div');
- intro.className='arcane-intro-308';
+ intro.className='arcane-intro-308 arcane-cinematic-385';
  intro.id='arcaneIntro308';
  intro.setAttribute('role','dialog');
  intro.setAttribute('aria-modal','true');
- intro.setAttribute('aria-label','Arcane Duel Startbildschirm');
- intro.innerHTML=`<div class="arcane-intro-inner-308">
-  <div class="arcane-intro-logo-308"><span>ARCANE</span><span>DUEL</span></div>
-  <div class="arcane-intro-caption-308">DIE CHRONIK ERWACHT</div>
-  <div class="arcane-intro-card-area-308" aria-hidden="true">
-   <div class="arcane-intro-ring-308"></div>
-   <div class="arcane-intro-card-float-308"><div class="arcane-intro-card-308">
-    <div class="arcane-intro-card-face-308 arcane-intro-card-back-308"></div>
-    <div class="arcane-intro-card-face-308 arcane-intro-card-front-308">
-     <div class="arcane-legendary-heading-313">✦ LEGENDÄR ✦</div>
-     <div class="arcane-legendary-art-313"></div>
-     <div class="arcane-legendary-name-313">VESPERION</div>
-     <div class="arcane-legendary-subtitle-313">Der Sternenverschlinger</div>
-    </div>
-   </div></div>
-  </div>
-  <button class="arcane-intro-start-308" id="arcaneIntroStart308" type="button">SPIEL STARTEN</button>
- </div>`;
+ intro.setAttribute('aria-label','Arcane Duel Spielintro');
+ intro.innerHTML='<div class="arcane-cinema-scene-385" aria-hidden="true">'
+  +'<div class="arcane-cinema-stars-385"></div>'
+  +'<div class="arcane-cinema-character-385 kael"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display=\'none\'"><strong>KAEL</strong></div>'
+  +'<div class="arcane-cinema-character-385 leon"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display=\'none\'"><strong>LEON</strong></div>'
+  +'<div class="arcane-cinema-monster-385 kael"><img src="artwork/kael-arkaner-lichtdrache.webp" alt="" onerror="this.style.display=\'none\'"></div>'
+  +'<div class="arcane-cinema-monster-385 leon"><img src="artwork/leon-koenig-der-loewenarena.webp" alt="" onerror="this.style.display=\'none\'"></div>'
+  +'<div class="arcane-cinema-beam-385 kael"></div><div class="arcane-cinema-beam-385 leon"></div>'
+  +'<div class="arcane-cinema-impact-385"></div>'
+  +'<div class="arcane-cinema-explosion-385"></div>'
+  +'<div class="arcane-cinema-title-385"><small>✦ DIE CHRONIK ERWACHT ✦</small><strong>ARCANE <em>DUEL</em></strong><span>ZWEI HELDEN · EIN SCHICKSAL</span></div>'
+  +'</div><div class="arcane-cinema-controls-385">'
+  +'<button id="arcaneIntroReplay385" type="button">↺ Intro wiederholen</button>'
+  +'<button id="arcaneIntroStart308" type="button">SPIEL STARTEN</button></div>';
  document.body.appendChild(intro);
+ function replay(){
+  intro.classList.remove('is-playing-385');
+  void intro.offsetWidth;
+  intro.classList.add('is-playing-385');
+ }
+ intro.querySelector('#arcaneIntroReplay385').addEventListener('click',replay);
  intro.querySelector('#arcaneIntroStart308').addEventListener('click',()=>{
   intro.hidden=true;
   const mainMenu=document.getElementById('arcaneHome307');
   if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
  });
+ if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)intro.classList.add('motion-reduced-385');
+ else replay();
+ window.arcaneReplayIntro385=()=>{intro.hidden=false;replay()};
 })();
 
 /* v3.57 – first playable chapter: ten consecutive duels with dialogue */
