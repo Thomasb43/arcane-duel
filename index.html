@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-deck-manager-v377">
+<meta name="arcane-build" content="20261121-deck-card-grid-v378">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5194,6 +5194,19 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-deck-manager-377 .arcane-deck-activate-377{width:100%;background:linear-gradient(#886c34,#49341b);font-weight:900;margin-top:10px}
 .arcane-deck-note-377{font-size:11px}
 
+
+/* v3.78 — visual card editor, original card faces and artwork */
+.arcane-deck-tiles-378{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px;margin:12px 0 22px;align-items:start}
+.arcane-deck-tile-378{min-width:0;display:flex;flex-direction:column;gap:0;padding:5px;border:1px solid #a88c56;border-radius:11px;background:linear-gradient(145deg,#263354,#111b36);box-shadow:0 4px 16px #0008}
+.arcane-deck-tile-art-378{width:100%;aspect-ratio:104/164;overflow:hidden;border-radius:6px;position:relative}
+.arcane-deck-tile-art-378>.arcane-card-335{height:100%!important;width:100%!important}
+.arcane-deck-tile-bottom-378{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:8px 3px 3px;min-width:0}
+.arcane-deck-tile-bottom-378>strong{font-size:11px;line-height:1.2;color:#ffe6a4;overflow-wrap:anywhere;min-height:26px}
+.arcane-deck-tile-bottom-378>span{font-size:10px;color:#cad6ed}
+.arcane-deck-manager-377 .arcane-deck-tile-button-378{width:100%;padding:8px 3px;font-size:11px;font-weight:900;background:linear-gradient(#755d31,#3d3150)}
+.arcane-deck-counter-378{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px;border:1px solid #786b50;background:#1a2844;border-radius:9px}
+.arcane-deck-counter-378 strong{font-size:16px;color:#ffdf9e}.arcane-deck-counter-378 span{font-size:11px;color:#c5d3e9}
+@media(max-width:430px){.arcane-deck-tiles-378{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7299,15 +7312,24 @@ window.setArenaCharacterTheme('magierin');
   const d=getSelected();if(!d){editor.hidden=true;return}
   editor.hidden=false;
   const filtered=[...cardMap.values()].filter(c=>countOwned(c.name)>0&&c.name.toLowerCase().includes(filter.toLowerCase()));
+  const tile=(name,n,mode)=>{
+   const card=cardMap.get(name);if(!card)return '';
+   const owned=countOwned(name),canAdd=mode==='add'&&n<3&&n<owned&&size(d)<50;
+   const button=mode==='remove'
+    ?'<button type="button" class="arcane-deck-tile-button-378" data-remove="'+esc(name)+'" aria-label="'+esc(name)+' entfernen">− Entfernen</button>'
+    :'<button type="button" class="arcane-deck-tile-button-378" data-add="'+esc(name)+'" '+(canAdd?'':'disabled')+' aria-label="'+esc(name)+' hinzufügen">+ Hinzufügen</button>';
+   return '<div class="arcane-deck-tile-378"><div class="arcane-deck-tile-art-378">'+renderArcaneCard335(card,{size:'collection'})+'</div>'
+     +'<div class="arcane-deck-tile-bottom-378"><strong>'+esc(name)+'</strong><span>'+(mode==='remove'?'Im Deck: ×'+n:'Im Deck '+n+' / '+owned+' verfügbar')+'</span>'+button+'</div></div>';
+  };
   editor.innerHTML='<div class="arcane-deck-editor-head-377"><h3>'+esc(d.title)+'</h3><button data-close>Zur Übersicht</button></div>'
-   +'<strong>'+size(d)+'/50 Karten</strong><p>'+(valid(d)?'Deck ist spielbereit.':'Mindestens 30 Karten und nur Karten aus deinem Bestand erlaubt.')+'</p>'
-   +'<h4>Aktuelles Deck</h4><div class="arcane-deck-card-list-377">'
-   +d.cards.map(([name,n])=>'<div class="arcane-deck-card-row-377"><span>'+esc(name)+'</span><div><small>×'+n+'</small><button data-remove="'+esc(name)+'">−</button></div></div>').join('')
+   +'<div class="arcane-deck-counter-378"><strong>'+size(d)+' / 50 Karten</strong><span>'+(valid(d)?'Deck ist spielbereit':'30–50 Karten erforderlich · nur Karten aus deinem Bestand')+'</span></div>'
+   +'<h4>Aktuelles Deck</h4><div class="arcane-deck-tiles-378">'
+   +d.cards.map(([name,n])=>tile(name,n,'remove')).join('')
    +'</div><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
-   +'<div class="arcane-deck-card-list-377">'
-   +filtered.map(c=>{const n=d.cards.find(p=>p[0]===c.name)?.[1]||0;return '<div class="arcane-deck-card-row-377"><span>'+esc(c.name)+'</span><div><small>'+n+'/'+countOwned(c.name)+'</small><button data-add="'+esc(c.name)+'" '+(n>=3||n>=countOwned(c.name)||size(d)>=50?'disabled':'')+'>+</button></div></div>'}).join('')
+   +'<div class="arcane-deck-tiles-378">'
+   +filtered.map(card=>tile(card.name,d.cards.find(p=>p[0]===card.name)?.[1]||0,'add')).join('')
    +'</div><button class="arcane-deck-activate-377" data-activate '+(valid(d)?'':'disabled')+'>Als aktives Deck wählen</button>'
-   +'<p class="arcane-deck-note-377">Die gewählte Deckliste gilt ab dem nächsten neu gestarteten Duell.</p>';
+   +'<p class="arcane-deck-note-377">Änderungen werden gespeichert und gelten ab dem nächsten neu gestarteten Duell.</p>';
  }
  function open(){state=read();page.hidden=false;editor.hidden=true;drawList()}
  page.querySelector('#arcaneDeckBack377').addEventListener('click',()=>page.hidden=true);
