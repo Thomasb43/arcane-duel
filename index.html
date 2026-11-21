@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-elements-single-v330">
+<meta name="arcane-build" content="20261121-card-only-v331">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4534,6 +4534,17 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-tilt-title-327>.arcane-element-329{top:0!important;right:0!important;width:35px!important;height:35px!important}
 .arcane-collection-card-frame-318>.arcane-element-329{top:5px!important;right:5px!important;width:25px!important;height:25px!important}
 .arcane-booster-pool-art-324>.arcane-element-329{top:4px!important;right:4px!important;width:24px!important;height:24px!important}
+
+/* v3.31: only the collectible 3D card; no duplicate attribute grid or element on reverse */
+.arcane-booster-detail-panel-326{width:min(100%,440px)!important;min-height:0!important;max-height:95dvh!important;padding:22px 12px 17px!important;overflow:visible!important}
+.arcane-booster-detail-panel-326 #arcaneBoosterDetailBody326{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:0!important}
+.arcane-booster-detail-close-326{position:absolute!important;top:9px!important;right:9px!important;float:none!important;z-index:15!important}
+.arcane-tilt-stage-327{padding:8px 0!important;margin:0!important}
+.arcane-tilt-card-327{width:min(78vw,305px,calc(69dvh * .68))!important}
+.arcane-tilt-rotator-327.is-reversed-327 .arcane-tilt-front-327 .arcane-element-329{visibility:hidden!important;opacity:0!important}
+.arcane-tilt-rotator-327.is-reversed-327 .arcane-tilt-front-327{pointer-events:none!important}
+.arcane-tilt-back-327 .arcane-element-329{display:none!important}
+@media(max-height:730px){.arcane-booster-detail-panel-326{padding:14px 10px!important}.arcane-tilt-card-327{width:min(78vw,285px,calc(72dvh * .68))!important}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5714,18 +5725,12 @@ window.setArenaCharacterTheme('magierin');
   const grade=data.rarity(c),tone=data.rarityData[grade];
   const kinds={monster:'Monster',spell:'Zauber',trap:'Falle'};
   const effect=c.effectText||c.desc||'Diese Karte besitzt keinen zusätzlichen Effekttext.';
-  const stat=(caption,value)=>'<div><small>'+caption+'</small><strong>'+safe(value)+'</strong></div>';
-  const stats=stat('Kartentyp',kinds[c.kind]||c.kind||'Karte')
-   +stat('Seltenheit',tone.label)
-   +(c.kind==='monster'?stat('Level',c.level??'–')+stat('ATK',c.atk??'–')+stat('DEF',c.def??'–'):'')
-   +(c.element?stat('Element',c.element):'');
   const cardStats=c.kind==='monster'
    ?'<span>ATK '+safe(c.atk??'–')+'</span><span>DEF '+safe(c.def??'–')+'</span>'
    :'<span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+safe(c.element||tone.label)+'</span>';
   detail.style.setProperty('--detail-rarity-326',tone.color);
   $b('arcaneBoosterDetailBody326').innerHTML=
-   '<div class="arcane-booster-detail-kicker-326">SCHATTEN & FLAMMEN · KARTENARCHIV</div>'
-   +'<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 rarity-'+grade+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
+   '<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 rarity-'+grade+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
    +'<div class="arcane-tilt-rotator-327"><div class="arcane-tilt-face-327 arcane-tilt-front-327">'
    +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span>'+arcaneElementIcon329(c)+'</div>'
    +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+'</div>'
@@ -5735,16 +5740,14 @@ window.setArenaCharacterTheme('magierin');
    +'<div class="arcane-tilt-glare-327"></div></div>'
    +'<div class="arcane-tilt-face-327 arcane-tilt-back-327"><span class="arcane-tilt-symbol-327">✧</span><strong>ARCANE DUEL</strong><small>✦ SCHATTEN & FLAMMEN ✦</small></div>'
    +'</div></div></div>'
-   +'<div class="arcane-tilt-instruction-327">Mit dem Finger bewegen · Doppeltippen zum Umdrehen</div>'
-   +'<button type="button" class="arcane-tilt-flip-button-327" id="arcaneTiltFlip327">↻ Karte umdrehen</button>'
-   +'<div class="arcane-booster-detail-stats-326">'+stats+'</div>';
+   ;
   detail.hidden=false;
-  initCardTilt327($b('arcaneTiltCard327'),$b('arcaneTiltFlip327'));
+  initCardTilt327($b('arcaneTiltCard327'));
   const effectArea=$b('arcaneTiltCard327').querySelector('.arcane-tilt-effect-328');
   if(effectArea){effectArea.addEventListener('pointerdown',e=>e.stopPropagation());effectArea.addEventListener('pointermove',e=>e.stopPropagation());effectArea.addEventListener('pointerup',e=>e.stopPropagation());}
   $b('arcaneBoosterDetailClose326').focus({preventScroll:true});
  }
- function initCardTilt327(card,flipButton){
+ function initCardTilt327(card){
   if(!card)return;
   let active=false,originX=0,originY=0,moved=false,lastTap=0;
   const rotator=card.querySelector('.arcane-tilt-rotator-327');
@@ -5753,8 +5756,7 @@ window.setArenaCharacterTheme('magierin');
    card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg');
    card.style.setProperty('--glare-x','50%');card.style.setProperty('--glare-y','50%');
   };
-  const flip=()=>{rotator.classList.toggle('is-reversed-327');flipButton.textContent=rotator.classList.contains('is-reversed-327')?'↻ Vorderseite zeigen':'↻ Karte umdrehen'};
-  flipButton.addEventListener('click',flip);
+  const flip=()=>{rotator.classList.toggle('is-reversed-327')};
   card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
   card.addEventListener('pointerdown',e=>{
    if(e.button!==undefined&&e.button!==0)return;
