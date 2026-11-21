@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-umbra-resonator-art-v344">
+<meta name="arcane-build" content="20261121-clean-booster-catalogue-v345">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4408,8 +4408,8 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-booster-pool-art-324{width:100%!important;aspect-ratio:4/5!important;position:relative!important;overflow:hidden!important;border:1px solid #d0a86c!important;background:#130a2f!important}
 .arcane-booster-pool-art-324 .card-art-loader{display:block!important;position:relative!important;width:100%!important;height:100%!important;overflow:hidden!important}
 .arcane-booster-pool-art-324 img{width:100%!important;height:100%!important;object-fit:cover!important}
-.arcane-booster-pool-card-324 strong{color:#fce5c1!important;font-size:clamp(10px,2.8vw,13px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}
-.arcane-booster-pool-card-324 span{color:var(--rarity,#f7dbff)!important;font-size:11px!important;font-weight:900!important}
+.arcane-booster-pool-card-324 > strong{color:#fce5c1!important;font-size:clamp(10px,2.8vw,13px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+.arcane-booster-pool-card-324 > span{color:var(--rarity,#f7dbff)!important;font-size:11px!important;font-weight:900!important}
 .arcane-booster-no-cards-324{grid-column:1/-1!important;font-size:13px!important;text-align:center!important}
 .arcane-booster-catalogue-purchase-324{flex:0 0 auto!important;border-top:1px solid #bd83cd!important;margin-top:7px!important;padding-top:9px!important}
 .arcane-booster-purchase-label-324{text-align:center!important;font:900 18px Georgia,serif!important;color:#ffe1aa!important;margin:0 0 9px!important}
@@ -4732,9 +4732,34 @@ object-fit:cover!important;object-position:var(--art-focus-x-340,50%) var(--art-
 transform:none!important;filter:none!important;z-index:2!important;
 }
 .arcane-fullbleed-343 .card-art-fallback{position:absolute!important;inset:0!important;z-index:1!important}
+
+/* v3.45: booster possible contents show only the real card, no redundant name/rarity */
+.arcane-booster-pool-card-324{justify-content:center!important;padding:4px!important;gap:0!important;overflow:hidden!important}
+.arcane-booster-pool-card-324 .arcane-booster-pool-art-324{
+ display:block!important;width:100%!important;height:auto!important;aspect-ratio:104/164!important;
+ margin:0!important;padding:0!important;min-height:0!important;overflow:hidden!important;
+ border:0!important;background:transparent!important;
+}
+.arcane-booster-pool-card-324 .arcane-booster-pool-art-324>.arcane-card-335{
+ width:100%!important;height:100%!important;display:flex!important;min-height:0!important;
+ border-radius:6px!important;overflow:hidden!important;
+}
+.arcane-booster-pool-card-324 .arcane-card-head-335>strong{
+ font-size:clamp(5px,1.25vw,9px)!important;line-height:1.06!important;color:#ffedc5!important;
+}
+.arcane-booster-pool-card-324 .arcane-card-head-335>small{font-size:clamp(4px,.75vw,7px)!important;color:var(--type-light)!important}
+.arcane-booster-pool-card-324 .arcane-card-meta-335,
+.arcane-booster-pool-card-324 .arcane-card-effect-335 strong,
+.arcane-booster-pool-card-324 .arcane-card-effect-335 p{
+ font-size:clamp(4px,.78vw,7px)!important;line-height:1.1!important;
+}
+.arcane-booster-pool-card-324 .arcane-card-stats-335{font-size:clamp(4px,.83vw,7px)!important}
+.arcane-booster-pool-card-324 .arcane-card-head-335>.arcane-element-329{
+ width:16%!important;height:auto!important;aspect-ratio:1!important;
+}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.44</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.45</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6039,7 +6064,7 @@ window.setArenaCharacterTheme('magierin');
   const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
   $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
    const rarity=data.rarity(c),tone=data.rarityData[rarity];
-   return '<button type="button" class="arcane-booster-pool-card-324 arcane-type-'+arcaneCardType332(c)+'" data-pool-card="'+data.cards.indexOf(c)+'" aria-label="Kartendetails: '+safe(c.name)+'" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+renderArcaneCard335(c,{size:"catalogue"})+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></button>';
+   return '<button type="button" class="arcane-booster-pool-card-324 arcane-type-'+arcaneCardType332(c)+'" data-pool-card="'+data.cards.indexOf(c)+'" aria-label="Kartendetails: '+safe(c.name)+'" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+renderArcaneCard335(c,{size:"catalogue"})+'</div></button>';
   }).join(''):'<p class="arcane-booster-no-cards-324">In dieser Seltenheit sind derzeit keine Karten enthalten.</p>';
  }
 
