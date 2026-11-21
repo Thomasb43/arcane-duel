@@ -1,6 +1,6 @@
 # Arcane Duel – Leons vollständiger 50-Karten-Kartenpool
 
-**Status:** Kartenkonzept und feste Deckliste. Die individuellen Effekte werden schrittweise in die Duell-Engine integriert. Maximal 3 Exemplare pro Karte. Vier Schwierigkeitsstufen verwenden später unterschiedliche Teilmengen und KI-Regeln; die vollen 50 Karten sind der Kartenpool, nicht automatisch die beste Stufe.
+**Status:** In Arcane Duel v3.63 als Leons Story-Gegnerdeck implementiert (50 Karten, 13 neue Kartendefinitionen, automatische Beschwörungseffekte, neue Spieler-Zauber und -Fallen sowie einfache KI-Nutzung). Die vollständige grafische Ausstattung der neuen Karten folgt separat. Maximal 3 Exemplare pro Karte. Vier Schwierigkeitsstufen verwenden später unterschiedliche Teilmengen und KI-Regeln; die vollen 50 Karten sind der Kartenpool, nicht automatisch die beste Stufe.
 
 ## Feste Deckliste (50)
 
