@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-unified-cards-v333">
+<meta name="arcane-build" content="20261121-unified-cards-v334">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4580,6 +4580,10 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .resonance-extra-art[class*="arcane-type-"]{border:2px solid var(--type-light)!important;box-shadow:0 0 12px var(--type-halo)!important}
 .grave-card[class*="arcane-type-"]{border-color:var(--type-light)!important;background:linear-gradient(140deg,var(--type-main),var(--type-dark) 64%)!important;box-shadow:0 0 7px var(--type-halo)!important}
 .field-card.arcane-facedown-333{border-color:#b9a379!important;background:linear-gradient(145deg,#302048,#121228)!important;box-shadow:0 2px 7px #0009!important}
+
+/* v3.34 – discard prompt and graveyard list use the same card-type system */
+.hand-limit-choice[class*="arcane-type-"]{border:2px solid var(--type-light)!important;background:linear-gradient(145deg,var(--type-dark),#111027 75%)!important;box-shadow:0 0 10px var(--type-halo)!important}
+.hand-limit-art[class*="arcane-type-"]{border:2px solid var(--type-light)!important;box-shadow:inset 0 0 8px var(--type-halo)!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -4970,10 +4974,10 @@ function enforceHandLimit(){
  const cards=$("handLimitCards");cards.replaceChildren();
  $("handLimitMessage").textContent="Du hast "+hand.length+" Handkarten. Wähle eine Karte zum Ablegen auf den Friedhof.";
  hand.forEach((c,index)=>{
-  const button=document.createElement("button");button.type="button";button.className="hand-limit-choice";
-  const art=document.createElement("div");art.className="hand-limit-art";art.innerHTML=renderCardArt(c);
+  const button=document.createElement("button");button.type="button";button.className="hand-limit-choice arcane-type-"+arcaneCardType332(c);
+  const art=document.createElement("div");art.className="hand-limit-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderCardArt(c);
   const name=document.createElement("strong");name.textContent=c.name;
-  const stats=document.createElement("small");stats.textContent=c.kind==="monster"?"ATK "+c.atk+" / DEF "+c.def:c.kind==="spell"?"Zauberkarte":"Fallenkarte";
+  const stats=document.createElement("small");stats.textContent=c.kind==="monster"?arcaneCardTypeLabel332(c)+" · ATK "+c.atk+" / DEF "+c.def:arcaneCardTypeLabel332(c);
   button.append(art,name,stats);
   button.addEventListener("click",()=>{
    const discarded=hand.splice(index,1)[0];
@@ -5023,11 +5027,11 @@ function showGraveyard(owner){
  cards.replaceChildren();
  if(!list.length){const p=document.createElement("p");p.textContent="Noch keine Karten im Friedhof.";cards.append(p);}
  [...list].reverse().forEach(c=>{
-  const item=document.createElement("div");item.className="resonance-extra-card";
-  const art=document.createElement("div");art.className="resonance-extra-art";art.innerHTML=renderCardArt(c);
+  const item=document.createElement("div");item.className="resonance-extra-card arcane-type-"+arcaneCardType332(c);
+  const art=document.createElement("div");art.className="resonance-extra-art arcane-type-"+arcaneCardType332(c);art.innerHTML=renderCardArt(c);
   const details=document.createElement("div");details.className="resonance-extra-details";
   const title=document.createElement("strong");title.textContent=c.name;
-  const type=document.createElement("span");type.textContent=c.kind==="monster"?"Monster · Level "+(c.level||"?")+" · ATK "+(c.atk??"?")+" / DEF "+(c.def??"?"):c.kind==="spell"?"Zauberkarte":"Fallenkarte";
+  const type=document.createElement("span");type.textContent=c.kind==="monster"?arcaneCardTypeLabel332(c)+" · Level "+(c.level||"?")+" · ATK "+(c.atk??"?")+" / DEF "+(c.def??"?"):arcaneCardTypeLabel332(c);
   details.append(title,type);
   if(c.effectText){const effect=document.createElement("small");effect.textContent=c.effectText;details.append(effect);}
   item.append(art,details);cards.append(item);
