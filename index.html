@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-four-decks-compact-v380">
+<meta name="arcane-build" content="20261121-empty-new-decks-delete-v381">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5234,6 +5234,9 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-deck-mini-380>small{display:block;text-align:center;font-size:9px;line-height:1.2;color:#e6debf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 0 1px}
 @media(max-width:430px){.arcane-deck-mini-grid-380{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:6px}.arcane-deck-mini-380>small{font-size:8px}.arcane-deck-character-head-380 h3{font-size:16px}}
 
+
+/* v3.81 additional deck deletion */
+.arcane-deck-manager-377 .arcane-deck-delete-381{background:#64263b;border-color:#dd8190;color:#ffe5e5}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7333,22 +7336,32 @@ window.setArenaCharacterTheme('magierin');
  function groupDecks(ch){return state.decks.filter(d=>character(d)===ch)}
  function addDeck(ch){
   if(groupDecks(ch).length>=4)return;
-  const original=groupDecks(ch)[0];
   const number=[2,3,4].find(n=>!state.decks.some(d=>d.id===ch+'-'+n));
   if(!number)return;
   const title=(ch==='kael'?'Kael':'Leon')+' – Deck '+number;
-  const newDeck={id:ch+'-'+number,character:ch,title,cards:original?original.cards.map(([name,count])=>[name,count]):[]};
+  const newDeck={id:ch+'-'+number,character:ch,title,cards:[]};
   state.decks.push(newDeck);
   if(!save()){state.decks.pop();return}
   selected=newDeck.id;filter='';autoSeeds.clear();autoMessage='';
   drawList();drawEditor();
+ }
+ function deleteDeck(id){
+  if(id==='kael'||id==='leon')return;
+  const target=state.decks.find(d=>d.id===id);
+  if(!target)return;
+  if(!window.confirm('Deck „'+target.title+'“ wirklich löschen? Die Karten bleiben in deiner Sammlung.'))return;
+  const previous=state,updated=state.decks.filter(d=>d.id!==id);
+  state={...state,decks:updated,active:state.active===id?'kael':state.active};
+  if(!save()){state=previous;window.alert('Löschen nicht gespeichert. Bitte erneut versuchen.');return}
+  if(selected===id){selected=state.active;editor.hidden=true;autoSeeds.clear()}
+  drawList();
  }
  function drawList(){
   list.innerHTML=['kael','leon'].map(ch=>{
    const slots=groupDecks(ch),name=ch==='kael'?'Kael':'Leon';
    return '<section class="arcane-deck-character-380"><div class="arcane-deck-character-head-380"><h3>'+name+' · '+slots.length+'/4 Decks</h3><button type="button" data-new-deck="'+ch+'" '+(slots.length>=4?'disabled':'')+'>＋ Neues Deck</button></div>'
     +slots.map(d=>'<div class="arcane-deck-entry-377"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div>'
-    +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button></div></div>').join('')
+    +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button>'+(d.id==='kael'||d.id==='leon'?'':'<button type="button" class="arcane-deck-delete-381" data-delete-deck="'+esc(d.id)+'">Löschen</button>')+'</div></div>').join('')
     +'</section>';
   }).join('');
  }
@@ -7437,6 +7450,8 @@ window.setArenaCharacterTheme('magierin');
  function open(){state=read();page.hidden=false;editor.hidden=true;drawList()}
  page.querySelector('#arcaneDeckBack377').addEventListener('click',()=>page.hidden=true);
  list.addEventListener('click',e=>{
+  const removeDeck=e.target.closest('[data-delete-deck]');
+  if(removeDeck){deleteDeck(removeDeck.dataset.deleteDeck);return}
   const create=e.target.closest('[data-new-deck]');
   if(create){addDeck(create.dataset.newDeck);return}
   const edit=e.target.closest('[data-edit]');
