@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-story-xp-rewards-v383">
+<meta name="arcane-build" content="20261121-level-reward-roadmap-v384">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5249,6 +5249,29 @@ transform:none!important;filter:none!important;z-index:2!important;
 /* v3.83 story EP and currency rewards */
 .arcane-character-progress-382 small{display:block;font-size:11px;color:#cae0fd;margin-top:5px}
 .arcane-story-reward-383{padding:11px;margin-top:9px;border:1px solid #e5bd68;border-radius:9px;background:#29314f;color:#ffe7a1;font-weight:800}
+
+/* v3.84 – Level reward roadmap */
+.arcane-level-rewards-384[hidden]{display:none!important}
+.arcane-level-rewards-384{position:fixed;inset:0;z-index:9700;overflow-y:auto;padding:14px max(14px,env(safe-area-inset-left));background:radial-gradient(ellipse at top,#263b65,#10182d 66%,#080b1b);color:#fbe9c4}
+.arcane-level-header-384{display:flex;gap:13px;align-items:center;border-bottom:1px solid #826e4e;padding-bottom:10px}
+.arcane-level-rewards-384 button,.arcane-level-open-384{border:1px solid #c4a169;border-radius:9px;background:#362b4b;color:#ffe0a2;padding:10px;cursor:pointer}
+.arcane-level-rewards-384 button:disabled{opacity:.55;cursor:default}
+.arcane-level-rewards-384 h2{font-family:Georgia,serif;color:#ffe09f}
+.arcane-level-character-switch-384{display:flex;gap:10px}
+.arcane-level-character-switch-384 .chosen{background:#795f2a;color:#fff3c6}
+.arcane-level-summary-384{display:flex;justify-content:space-between;gap:12px;padding:14px;background:#243352;border:1px solid #92774e;border-radius:11px;margin-top:12px}
+.arcane-level-hint-384{font-size:12px;line-height:1.5;color:#c9d6ed}
+.arcane-level-list-384{display:grid;gap:8px}
+.arcane-level-item-384{display:grid;grid-template-columns:51px minmax(0,1fr) 105px;align-items:center;gap:8px;padding:10px;border:1px solid #4f5d79;border-radius:10px;background:#1c2a46}
+.arcane-level-number-384{font-weight:900;font-size:12px;color:#efcd8c}
+.arcane-level-details-384{display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.35}
+.arcane-level-item-384.ready{border-color:#d7b86f;background:#31314a}
+.arcane-level-item-384.claimed{opacity:.7}
+.arcane-level-item-384.locked{opacity:.65}
+.arcane-level-item-384 button{font-size:11px;padding:9px 4px}
+#arcaneLevelStatus384{min-height:20px;padding:8px 0;color:#a9ecc3}
+.arcane-character-progress-382 .arcane-level-open-384{display:block;width:100%;margin-bottom:10px;font-size:12px;font-weight:900}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7297,6 +7320,94 @@ window.setArenaCharacterTheme('magierin');
  window.openArcaneStarterShop375=open;
 })();
 
+
+/* v3.84 – Claimable character level rewards. Trophies/tickets are collected
+   as account entitlements; their dedicated use interfaces follow later. */
+(function initLevelRewards384(){
+ const KEY='arcane-duel-level-rewards-v1';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(x&&typeof x==='object'&&x.characters)return x}catch(_){}return {characters:{}}}
+ function save(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch(_){return false}}
+ function charState(store,ch){if(!store.characters[ch])store.characters[ch]={claimed:[],tickets:0,cosmetics:[]};return store.characters[ch]}
+ const charLevel=ch=>ch==='Kael'?(window.arcaneCharacterProgress382?.level()||1):1;
+ function rewards(lvl){
+  if(lvl===2)return [{type:'character',label:'Leon freischalten',value:'Leon'}];
+  if(lvl===10)return [{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
+  if(lvl===15)return [{type:'card',label:'Seltene Karte',value:'rare'}];
+  if(lvl===20)return [{type:'cosmetic',label:'Exklusive Kartenvariante',value:'Arkaner Glanz'}];
+  if(lvl===25)return [{type:'card',label:'Legendäre Karte',value:'legendary'}];
+  if(lvl===30)return [{type:'card',label:'Mythische Karte',value:'mythic'},{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Meister der Siegel'}];
+  if(lvl===5)return [{type:'crystals',label:'200 Arkankristalle',value:200}];
+  if(lvl>=26)return lvl%2===0?[{type:'crystals',label:'300 Arkankristalle',value:300}]:[{type:'ticket',label:'2 Booster-Tickets',value:2}];
+  if(lvl>=21)return lvl%2===0?[{type:'crystals',label:'250 Arkankristalle',value:250}]:[{type:'ticket',label:'2 Booster-Tickets',value:2}];
+  if(lvl>=16)return lvl%2===0?[{type:'crystals',label:'200 Arkankristalle',value:200}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
+  if(lvl>=11)return lvl%2===0?[{type:'crystals',label:'150 Arkankristalle',value:150}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
+  if(lvl>=6)return lvl%2===0?[{type:'crystals',label:'150 Arkankristalle',value:150}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
+  return lvl%2===1?[{type:'crystals',label:'100 Arkankristalle',value:100}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
+ }
+ const iconFor=t=>({character:'🔓',crystals:'💎',ticket:'🎟️',cosmetic:'✨',card:'🃏'})[t]||'✦';
+ function cardReward(grade){
+  const catalog=window.arcaneCollectionCatalog322;
+  if(!catalog)return null;
+  const stock=window.arcaneBoosterInventory322?.read()?.counts||{};
+  const base=Object.fromEntries(starterDeckList);
+  const matching=catalog.cards.filter(c=>catalog.rarity(c)===grade&&(base[c.name]||0)+(stock[c.name]||0)<3);
+  return matching.length?matching[Math.floor(Math.random()*matching.length)].name:null;
+ }
+ const screen=document.createElement('section');screen.id='arcaneLevelRewards384';screen.className='arcane-level-rewards-384';screen.hidden=true;
+ screen.innerHTML='<div class="arcane-level-header-384"><button type="button" id="arcaneLevelBack384">← Zurück</button><strong>ARCANE DUEL · LEVELBELOHNUNGEN</strong></div><h2>Dein Fortschritt</h2><div id="arcaneLevelBody384"></div>';
+ document.body.appendChild(screen);
+ const body=screen.querySelector('#arcaneLevelBody384');
+ let current='Kael';
+ function render(){
+  const data=load(),owned=charState(data,current),level=charLevel(current);
+  const unlockedLeon=!!window.arcaneCharacterProgress382?.leonUnlocked();
+  const choices=['Kael',...(unlockedLeon?['Leon']:[])];
+  body.innerHTML='<div class="arcane-level-character-switch-384">'+choices.map(ch=>'<button type="button" data-level-character="'+ch+'" class="'+(ch===current?'chosen':'')+'">'+ch+'</button>').join('')+'</div>'
+   +'<div class="arcane-level-summary-384"><strong>'+esc(current)+' · Level '+level+' / 30</strong><span>🎟️ Tickets: '+(owned.tickets||0)+'</span></div>'
+   +'<p class="arcane-level-hint-384">Levelbelohnungen können einmalig abgeholt werden. Tickets und kosmetische Freischaltungen werden gespeichert; ihre Verwendung folgt in einem späteren Update.</p>'
+   +'<div class="arcane-level-list-384">'+Array.from({length:29},(_,i)=>i+2).map(lvl=>{
+     const items=rewards(lvl);
+     const status=owned.claimed.includes(lvl)?'claimed':lvl<=level?'ready':'locked';
+     return '<div class="arcane-level-item-384 '+status+'"><div class="arcane-level-number-384">LV '+lvl+'</div><div class="arcane-level-details-384">'+items.map(x=>'<span>'+iconFor(x.type)+' '+esc(x.label)+'</span>').join('')+'</div><button type="button" data-claim-level="'+lvl+'" '+(status==='ready'?'':'disabled')+'>'+(status==='claimed'?'✓ Erhalten':status==='ready'?'Abholen':'🔒 Gesperrt')+'</button></div>';
+   }).join('')+'</div><div id="arcaneLevelStatus384" role="status" aria-live="polite"></div>';
+ }
+ function claim(lvl){
+  if(lvl>charLevel(current)||lvl<2||lvl>30)return;
+  const data=load(),owned=charState(data,current);
+  if(owned.claimed.includes(lvl))return;
+  const items=rewards(lvl);
+  const inventory=window.arcaneBoosterInventory322;
+  const bank=window.arcaneTestCrystals320;
+  if(items.some(x=>x.type==='crystals')&&!bank)return;
+  const cards=[];
+  for(const item of items){
+   if(item.type==='card'){const name=cardReward(item.value);if(!name){body.querySelector('#arcaneLevelStatus384').textContent='Noch keine verfügbare Karte dieser Seltenheit. Die Belohnung bleibt offen.';return}cards.push(name)}
+  }
+  // Persist claim first to guard repeat payouts; rollback if inventory cannot persist.
+  owned.claimed.push(lvl);
+  if(items.some(x=>x.type==='ticket'))owned.tickets=(owned.tickets||0)+items.filter(x=>x.type==='ticket').reduce((n,x)=>n+x.value,0);
+  for(const item of items)if(item.type==='cosmetic'&&!owned.cosmetics.includes(item.value))owned.cosmetics.push(item.value);
+  if(!save(data))return;
+  if(cards.length&&inventory){
+   const before=inventory.read(),after={...before,counts:{...before.counts}};
+   for(const name of cards)after.counts[name]=(after.counts[name]||0)+1;
+   if(!inventory.save(after)){owned.claimed=owned.claimed.filter(x=>x!==lvl);save(data);return}
+  }
+  for(const item of items)if(item.type==='crystals'){bank.set(bank.get()+item.value);bank.refresh()}
+  render();
+  body.querySelector('#arcaneLevelStatus384').textContent='Belohnung für Level '+lvl+' abgeholt!'+(cards.length?' Neue Karte: '+cards.join(', '):'');
+ }
+ body.addEventListener('click',e=>{
+  const ch=e.target.closest('[data-level-character]');
+  if(ch){current=ch.dataset.levelCharacter;render();return}
+  const claimButton=e.target.closest('[data-claim-level]');
+  if(claimButton&&!claimButton.disabled)claim(Number(claimButton.dataset.claimLevel));
+ });
+ screen.querySelector('#arcaneLevelBack384').addEventListener('click',()=>screen.hidden=true);
+ window.openArcaneLevelRewards384=(ch='Kael')=>{current=ch==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael';render();screen.hidden=false;screen.scrollTop=0};
+})();
+
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
 (function initArcaneMainMenu307(){
  const home=document.createElement('div');
@@ -7633,11 +7744,12 @@ window.setArenaCharacterTheme('magierin');
   stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 1 · Akademie von Arkanis';
   back.textContent='Zur Stadt';
   const unlocked=read();
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(window.arcaneCharacterProgress382?.levelProgress()?.percent||0)+'%"></span></div><small>'+(window.arcaneCharacterProgress382?.levelProgress()?.current||0)+' / '+(window.arcaneCharacterProgress382?.levelProgress()?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 2 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(window.arcaneCharacterProgress382?.levelProgress()?.percent||0)+'%"></span></div><small>'+(window.arcaneCharacterProgress382?.levelProgress()?.current||0)+' / '+(window.arcaneCharacterProgress382?.levelProgress()?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 2 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
    const n=i+1,locked=n>unlocked,cleared=n<unlocked;
    return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+'1-'+n+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small></div></button>';
   }).join('')+'</div><div class="arcane-story-chapter-357"><strong>Kapitel 2 · Der verlorene Wald</strong><p class="arcane-story-note-357">'+(unlocked>10?'Kapitel 1 abgeschlossen! Kapitel 2 folgt in einer späteren Version.':'Wird nach Mission 1-10 freigeschaltet. Die spielbaren Missionen von Kapitel 2 folgen später.')+'</p></div><p class="arcane-story-note-357">Testversion: Die Story verwendet vorerst die vorhandene Duell-KI und das bestehende Testdeck. Individuelle Gegnerdecks und Kartenbelohnungen folgen später. Dein Story-Fortschritt wird auf diesem Gerät gespeichert.</p>';
-  content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
+    content.querySelector('#arcaneLevelOpen384')?.addEventListener('click',()=>window.openArcaneLevelRewards384?.());
+content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
  }
  function openMission(index){
   if(index<0||index>=missions.length||index+1>read())return;
