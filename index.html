@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-dual-starter-packs-v375">
+<meta name="arcane-build" content="20261121-tiered-starter-prices-v376">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -7085,7 +7085,11 @@ window.setArenaCharacterTheme('magierin');
  const shop=document.getElementById('arcaneShop320');
  if(!shop)return;
  const inventory=()=>window.arcaneBoosterInventory322,bank=()=>window.arcaneTestCrystals320;
- const PRICE=300,base=Object.fromEntries(starterDeckList);
+ const FIRST_PRICE=300,REPEAT_PRICE=600,base=Object.fromEntries(starterDeckList);
+ const PURCHASE_KEY='arcane-duel-starter-pack-purchases-v1';
+ function purchaseCount(){try{return Math.max(0,parseInt(localStorage.getItem(PURCHASE_KEY)||'0',10)||0)}catch(_){return window.arcaneStarterPurchaseCount375||0}}
+ function recordPurchase(){const n=purchaseCount()+1;window.arcaneStarterPurchaseCount375=n;try{localStorage.setItem(PURCHASE_KEY,String(n))}catch(_){}}
+ const currentPrice=()=>purchaseCount()===0?FIRST_PRICE:REPEAT_PRICE;
  const products=[
   {id:'kael',name:'Kael',title:'Wächter des ersten Siegels',image:'artwork/starterdeck-kael.png',accent:'blue',feature:'Arkaner Lichtdrache',cards:starterDeckList,freeBase:true},
   {id:'leon',name:'Leon',title:'König der Löwenarena',image:'artwork/starterdeck-leon.png',accent:'fire',feature:'König der Löwenarena',cards:leonDeckList363,freeBase:false}
@@ -7094,7 +7098,7 @@ window.setArenaCharacterTheme('magierin');
  const qty=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
  const wrapper=document.createElement('div');
  wrapper.className='arcane-starter-shop-375';wrapper.hidden=true;
- wrapper.innerHTML='<div class="arcane-starter-shop-head-375"><div><small>ARCANE DUEL · STARTERDECKS</small><h3>Wähle dein Starterpack</h3><p>Charakterdecks · 300 Arkankristalle pro Pack</p></div><button type="button" id="arcaneStarterClose375" aria-label="Starterdecks schließen">×</button></div>'
+ wrapper.innerHTML='<div class="arcane-starter-shop-head-375"><div><small>ARCANE DUEL · STARTERDECKS</small><h3>Wähle dein Starterpack</h3><p>Erster Starterpack-Kauf: 300 💎 · ab dem zweiten: 600 💎</p></div><button type="button" id="arcaneStarterClose375" aria-label="Starterdecks schließen">×</button></div>'
  +'<div class="arcane-starter-products-375" id="arcaneStarterProducts375"></div>'
  +'<div class="arcane-starter-info-375" id="arcaneStarterDetail375" hidden></div>';
  shop.appendChild(wrapper);
@@ -7112,21 +7116,21 @@ window.setArenaCharacterTheme('magierin');
   productsEl.innerHTML=products.map(p=>{
    const cardCount=p.cards.reduce((n,[,v])=>n+v,0);
    return '<button type="button" class="arcane-starter-product-375 '+p.accent+'" data-starter-open="'+p.id+'">'
-     +packImage(p)+'<div class="arcane-starter-product-label-375"><strong>'+esc(p.name)+'</strong><span>'+cardCount+' Karten · 💎 '+PRICE+'</span></div></button>';
+     +packImage(p)+'<div class="arcane-starter-product-label-375"><strong>'+esc(p.name)+'</strong><span>'+cardCount+' Karten · 💎 '+currentPrice()+'</span></div></button>';
   }).join('');
  }
  function view(id){
   const p=products.find(x=>x.id===id);if(!p)return;
-  const cardCount=p.cards.reduce((n,[,v])=>n+v,0),balance=bank()?.get()||0;
-  const buyable=canGain(p)&&balance>=PRICE;
+  const cardCount=p.cards.reduce((n,[,v])=>n+v,0),balance=bank()?.get()||0,price=currentPrice();
+  const buyable=canGain(p)&&balance>=price;
   detail.hidden=false;
   detail.dataset.activeDeck=id;
   detail.innerHTML='<button type="button" class="arcane-starter-detail-back-375" id="arcaneStarterBack375">← Alle Starterpacks</button>'
-   +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p>💎 '+PRICE+' Arkankristalle</p></div></div>'
+   +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p>💎 '+price+' Arkankristalle</p></div></div>'
    +'<h4>Enthaltene Karten</h4><div class="arcane-starter-card-list-375">'+previewCards(p)+'</div>'
    +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare pro Karte. Karten, die du bereits 3-mal besitzt, werden bei weiteren Käufen nicht erneut gutgeschrieben.</p>'
    +'<button type="button" id="arcaneStarterBuy375" class="arcane-starter-buy-375" '+(buyable?'':'disabled')+'>'
-   +(canGain(p)?balance>=PRICE?'Starterpack kaufen · 💎 300':'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
+   +(canGain(p)?balance>=price?'Starterpack kaufen · 💎 '+price:'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
    +'<p id="arcaneStarterFeedback375" role="status" aria-live="polite"></p>';
   detail.querySelector('#arcaneStarterBack375').addEventListener('click',()=>{detail.hidden=true;drawProducts()});
   detail.querySelector('#arcaneStarterBuy375').addEventListener('click',()=>buy(p));
@@ -7134,15 +7138,15 @@ window.setArenaCharacterTheme('magierin');
  }
  function buy(p){
   const result=detail.querySelector('#arcaneStarterFeedback375');
-  const inv=inventory()?.read(),balance=bank()?.get();
-  if(!inv||!Number.isSafeInteger(balance)||balance<PRICE){result.textContent='Nicht genügend Arkankristalle.';return}
+  const inv=inventory()?.read(),balance=bank()?.get(),price=currentPrice();
+  if(!inv||!Number.isSafeInteger(balance)||balance<price){result.textContent='Nicht genügend Arkankristalle.';return}
   if(inv.pendingPack){result.textContent='Bitte öffne zuerst deinen noch ausstehenden Booster.';return}
   const adds=p.cards.map(([name,count])=>[name,Math.min(count,Math.max(0,3-qty(name)))]).filter(([,count])=>count>0);
   if(!adds.length){result.textContent='Alle enthaltenen Karten sind bereits dreimal vorhanden.';return}
   const next={...inv,counts:{...inv.counts}};
   for(const [name,count] of adds)next.counts[name]=(next.counts[name]||0)+count;
   if(!inventory().save(next)){result.textContent='Speichern fehlgeschlagen – Kauf nicht durchgeführt.';return}
-  bank().set(balance-PRICE);bank().refresh();
+  bank().set(balance-price);bank().refresh();recordPurchase();
   view(p.id);
   detail.querySelector('#arcaneStarterFeedback375').textContent='Starterpack gekauft! '+adds.reduce((n,[,v])=>n+v,0)+' Karten in deiner Sammlung gespeichert.';
  }
