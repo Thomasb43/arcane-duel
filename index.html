@@ -4622,6 +4622,13 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-collection-unified-335 .arcane-collection-detail-close-316{position:absolute!important;top:7px!important;right:7px!important;z-index:20!important}
 .arcane-collection-unified-335 .arcane-tilt-card-327{width:min(78vw,305px,calc(67dvh * .68))!important}
 @media(max-width:649px){.arcane-size-hand .arcane-card-head-335>strong,.arcane-size-field .arcane-card-head-335>strong{font-size:7px!important}.arcane-size-hand .arcane-card-effect-335 p,.arcane-size-field .arcane-card-effect-335 p{font-size:5px!important}.arcane-size-hand .arcane-card-stats-335,.arcane-size-field .arcane-card-stats-335{font-size:6px!important}}
+
+/* Shared card front in catalogue and booster opening */
+.arcane-booster-pool-art-324:has(>.arcane-card-335){aspect-ratio:104/164!important;min-height:0!important}
+.arcane-booster-pool-art-324>.arcane-card-335{border-width:2px!important;border-radius:4px!important}
+.sanctuary-card-front-325:has(>.arcane-card-335){padding:0!important;display:block!important;overflow:hidden!important}
+.sanctuary-card-front-325>.arcane-card-335{border:0!important;border-radius:6px!important}
+.arcane-size-reveal .arcane-card-effect-335,.arcane-size-catalogue .arcane-card-effect-335{overflow:hidden!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5817,7 +5824,7 @@ window.setArenaCharacterTheme('magierin');
   const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
   $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
    const rarity=data.rarity(c),tone=data.rarityData[rarity];
-   return '<button type="button" class="arcane-booster-pool-card-324 arcane-type-'+arcaneCardType332(c)+'" data-pool-card="'+data.cards.indexOf(c)+'" aria-label="Kartendetails: '+safe(c.name)+'" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+data.renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></button>';
+   return '<button type="button" class="arcane-booster-pool-card-324 arcane-type-'+arcaneCardType332(c)+'" data-pool-card="'+data.cards.indexOf(c)+'" aria-label="Kartendetails: '+safe(c.name)+'" style="--rarity:'+tone.color+'"><div class="arcane-booster-pool-art-324">'+renderArcaneCard335(c,{size:"catalogue"})+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></button>';
   }).join(''):'<p class="arcane-booster-no-cards-324">In dieser Seltenheit sind derzeit keine Karten enthalten.</p>';
  }
 
@@ -5939,7 +5946,7 @@ window.setArenaCharacterTheme('magierin');
    const c=catalog()?.cards.find(c=>c.name===name);
    if(!c)return '';
    const rarity=catalog().rarity(c),tone=catalog().rarityData[rarity];
-   return '<button type="button" class="arcane-booster-card-322 sanctuary-card-325" aria-label="Verdeckte Karte '+(index+1)+' aufdecken" data-rarity="'+rarity+'" style="--booster-rarity:'+tone.color+';--i:'+index+'"><div class="sanctuary-card-inner-325"><div class="sanctuary-card-back-325">✧<small>ARCANE DUEL</small></div><div class="sanctuary-card-front-325 arcane-type-'+arcaneCardType332(c)+'"><div class="arcane-booster-card-art-322">'+catalog().renderCardArt(c)+'</div><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div></div></button>';
+   return '<button type="button" class="arcane-booster-card-322 sanctuary-card-325" aria-label="Verdeckte Karte '+(index+1)+' aufdecken" data-rarity="'+rarity+'" style="--booster-rarity:'+tone.color+';--i:'+index+'"><div class="sanctuary-card-inner-325"><div class="sanctuary-card-back-325">✧<small>ARCANE DUEL</small></div><div class="sanctuary-card-front-325 arcane-type-'+arcaneCardType332(c)+'">'+renderArcaneCard335(c,{size:'reveal'})+'</div></div></button>';
   }).join('');
   step+=cards.length;flipped=0;revealStage='cards';
   reveal.classList.add('sanctuary-burst-325');
