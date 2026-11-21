@@ -6197,7 +6197,7 @@ async function opponentTurn(){
   const target=safeTargets[0]||hiddenTargets[0]||null;
   if(targets.length&&!target){log("🧠 Die KI verzichtet auf den Angriff: Dein offenes Monster ist stärker oder nicht sicher zu besiegen.");continue;}
   // Kaels neue Fallen reagieren automatisch auf einen echten Angriff.
-  const kaelTrapIndex=mySpell.findIndex(c=>c&&['Siegelgegenstoß','Lichtreflexion','Runenbarriere'].includes(c.name)&&turn>c.setTurn);
+  const kaelTrapIndex=mySpell.findIndex(c=>c&&['Siegelgegenstoß','Lichtreflexion','Runenbarriere'].includes(c.name)&&turn>c.setTurn&&(c.name!=='Runenbarriere'||(target&&target.m&&!target.m.faceDown)));
   if(kaelTrapIndex>=0){
    const trap=mySpell[kaelTrapIndex];mySpell[kaelTrapIndex]=null;sendToGraveyard(trap);
    if(trap.name==='Siegelgegenstoß')kaelNegateAttack367=true;
