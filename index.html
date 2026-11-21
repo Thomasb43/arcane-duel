@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-card-spotlight-v354">
+<meta name="arcane-build" content="20261121-card-sequence-readable-v355">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4957,9 +4957,23 @@ transform:none!important;filter:none!important;z-index:2!important;
 @keyframes spotLegend354{to{box-shadow:0 0 65px #ffd873}}
 @keyframes spotMythic354{0%,100%{box-shadow:0 0 30px #ff9feb}50%{box-shadow:0 0 55px #6bdbff}}
 @media(prefers-reduced-motion:reduce){.arcane-spotlight-354 .spot-card-354{animation:none!important}}
+
+/* v3.55 – direct card-to-card reveal and readable effect outside card */
+.arcane-spotlight-354{gap:8px!important;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+.arcane-spotlight-354 .spot-kicker-354{font-size:clamp(11px,2.8vw,14px)!important}
+.arcane-spotlight-354 .spot-title-354{font-size:clamp(19px,5vw,26px)!important}
+.arcane-spotlight-354 .spot-card-354{flex:none!important;width:min(66vw,245px,calc(43dvh * .68))!important;height:min(43dvh,356px)!important;max-height:none!important;aspect-ratio:auto!important}
+.arcane-spotlight-354 .spot-readable-355{width:min(94vw,440px);max-height:23dvh;overflow-y:auto;position:relative;flex:none;box-sizing:border-box;padding:12px 15px;background:linear-gradient(145deg,#2e1a49,#160e2b);border:1px solid #e6be7b;border-radius:12px;box-shadow:0 0 17px #9c50c54b}
+.arcane-spotlight-354 .spot-readable-355 strong{display:block;color:#ffe0a5;font:800 clamp(14px,3.5vw,17px)/1.25 system-ui,sans-serif;margin:0 0 6px}
+.arcane-spotlight-354 .spot-effect-355{margin:0!important;color:#fff1e4;font:500 clamp(14px,3.6vw,17px)/1.45 system-ui,sans-serif!important;white-space:pre-line;overflow-wrap:anywhere}
+.arcane-spotlight-354 .spot-stats-355{margin-top:6px;font:800 clamp(12px,3vw,15px)/1.3 system-ui,sans-serif;color:#f5d68b}
+.arcane-spotlight-354 .spot-stats-355:empty{display:none}
+.arcane-spotlight-354 .spot-button-354{flex:none!important;min-height:48px!important;padding:10px 15px!important}
+@media(max-height:700px){.arcane-spotlight-354 .spot-card-354{height:min(38dvh,310px)!important;width:min(61vw,220px,calc(38dvh * .68))!important}.arcane-spotlight-354 .spot-readable-355{max-height:25dvh;padding:9px 12px}}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.54</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.55</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6243,12 +6257,21 @@ window.setArenaCharacterTheme('magierin');
  const spotlight354=document.createElement('div');
  spotlight354.className='arcane-spotlight-354';spotlight354.hidden=true;
  spotlight354.setAttribute('role','dialog');spotlight354.setAttribute('aria-modal','true');spotlight354.setAttribute('aria-label','Gezogene Karte');
- spotlight354.innerHTML='<div class="spot-kicker-354"></div><div class="spot-title-354"></div><div class="spot-card-354"></div><button type="button" class="spot-button-354">Weiter</button>';
+ spotlight354.innerHTML='<div class="spot-kicker-354"></div><div class="spot-title-354"></div><div class="spot-card-354"></div><section class="spot-readable-355"><strong>Beschreibung & Effekt</strong><p class="spot-effect-355"></p><div class="spot-stats-355"></div></section><button type="button" class="spot-button-354">Weiter</button>';
  document.body.appendChild(spotlight354);
  const spotButton354=spotlight354.querySelector('.spot-button-354');
  const rarityNames354={normal:'Normal',rare:'Selten',epic:'Episch',legendary:'Legendär',mythic:'Mythisch'};
  const rarityColors354={normal:'#d7d4e4',rare:'#75d7ff',epic:'#cc8bff',legendary:'#ffd879',mythic:'#f9a0ef'};
- spotButton354.addEventListener('click',()=>{spotlight354.hidden=true;if(revealStage==='cards'){$b('arcaneSanctuaryHint325').textContent=flipped===5?'Alle fünf Karten enthüllt':'Berühre Karte '+(flipped+1)+' von 5';updateReveal()}});
+ spotButton354.addEventListener('click',()=>{
+  if(revealStage!=='cards'){spotlight354.hidden=true;return}
+  if(flipped<5){
+   const nextCard=$b('arcaneBoosterCards322').querySelector('.sanctuary-card-325[data-order="'+flipped+'"]');
+   if(nextCard&&!nextCard.disabled){nextCard.click();return}
+  }
+  spotlight354.hidden=true;
+  $b('arcaneSanctuaryHint325').textContent=flipped===5?'Alle fünf Karten enthüllt · Das Ritual ist vollendet':'Berühre Karte '+(flipped+1)+' von 5';
+  updateReveal();
+ });
  function showSpotlight354(cardName,rarity,position){
   const c=catalog()?.cards.find(x=>x.name===cardName);if(!c)return;
   spotlight354.dataset.rarity=rarity;
@@ -6256,6 +6279,11 @@ window.setArenaCharacterTheme('magierin');
   spotlight354.querySelector('.spot-kicker-354').textContent='KARTE '+position+' VON 5 · '+(rarityNames354[rarity]||'Karte').toUpperCase();
   spotlight354.querySelector('.spot-title-354').textContent=c.name;
   spotlight354.querySelector('.spot-card-354').innerHTML=renderArcaneCard335(c,{size:'reveal'});
+  spotlight354.querySelector('.spot-effect-355').textContent=c.effectText||c.desc||'Kein besonderer Effekt.';
+  const stats=spotlight354.querySelector('.spot-stats-355');
+  stats.textContent=c.kind==='monster'?'ATK '+(c.atk??'–')+'  ·  DEF '+(c.def??'–')+'  ·  Level '+(c.level??'–'):'';
+  const cardContainer=spotlight354.querySelector('.spot-card-354');
+  cardContainer.style.animation='none';void cardContainer.offsetWidth;cardContainer.style.animation='';
   spotButton354.textContent=position===5?'✦ Alle fünf Karten ansehen':'✦ Nächste Karte';
   spotlight354.hidden=false;spotButton354.focus({preventScroll:true});
  }
