@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-story-chapter-357a">
+<meta name="arcane-build" content="20261121-story-win-fix-v358">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5040,7 +5040,7 @@ transform:none!important;filter:none!important;z-index:2!important;
 
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.57</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.58</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5568,7 +5568,10 @@ function syncDuelOutcome(){
    panel.setAttribute('aria-labelledby','duelOutcomeTitle306');
    panel.innerHTML='<div class="duel-outcome-panel-306"><div class="duel-outcome-symbol-306">✦</div><h2 id="duelOutcomeTitle306"></h2><p id="duelOutcomeMessage306"></p><button id="duelRestart306" type="button">Neues Duell</button></div>';
    document.body.appendChild(panel);
-   panel.querySelector('#duelRestart306').addEventListener('click',()=>window.location.reload());
+   panel.querySelector('#duelRestart306').addEventListener('click',()=>{
+    if(typeof window.arcaneStoryReturnAfterDuel358==='function'&&window.arcaneStoryReturnAfterDuel358())return;
+    window.location.reload();
+   });
    panel.querySelector('#duelRestart306').focus({preventScroll:true});
  }
  panel.querySelector('#duelOutcomeTitle306').textContent=draw?'UNENTSCHIEDEN':won?'DUELL GEWONNEN':'DUELL VERLOREN';
@@ -6858,12 +6861,13 @@ window.setArenaCharacterTheme('magierin');
  function beginDuel(){
   if(activeIndex===null)return;
   scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
+  try{sessionStorage.setItem('arcane-story-active-duel-358',String(activeIndex))}catch(e){}
   document.getElementById('arcaneReturnMenu307').hidden=false;
   // The existing prototype duel is reused without altering its rules or inventory.
  }
  function finishMission(){
   if(activeIndex===null)return;
-  save(activeIndex+2);const isLast=activeIndex===9;
+  save(activeIndex+2);try{sessionStorage.removeItem('arcane-story-post-win-358')}catch(e){}const isLast=activeIndex===9;
   show();scene='finished';
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
   content.querySelector('#arcaneStoryMap357').addEventListener('click',showMap);
@@ -6875,7 +6879,13 @@ window.setArenaCharacterTheme('magierin');
   completedResult=won?'win':draw?'draw':'loss';
   const outcome=document.getElementById('duelOutcome306');
   if(outcome)outcome.style.display='none';
-  if(won){scene='post';dialogStep=0;drawDialog();return}
+  if(won){
+   // Unlock immediately when the duel is won; do not depend on the epilogue button.
+   save(activeIndex+2);
+   try{sessionStorage.setItem('arcane-story-post-win-358',String(activeIndex));sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
+   scene='post';dialogStep=0;home.hidden=true;drawDialog();return;
+  }
+  try{sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
   scene='lost';show();
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(draw?'UNENTSCHIEDEN':'DUELL VERLOREN')+'</div><div class="arcane-story-line-357">Versuche Mission 1-'+(activeIndex+1)+' erneut. Dein Story-Fortschritt bleibt erhalten.</div></div><div class="arcane-story-actions-357"><button class="arcane-story-action-357 primary-357" id="arcaneStoryRetry357">⚔ Erneut duellieren</button><button class="arcane-story-action-357" id="arcaneStoryLostMap357">Zur Übersicht</button></div>';
   content.querySelector('#arcaneStoryRetry357').addEventListener('click',()=>restartForStory(activeIndex));
@@ -6891,8 +6901,18 @@ window.setArenaCharacterTheme('magierin');
  // In the current UI, the outcome dialog already closes the gameplay via the Story panel.
  try{
   const pending=sessionStorage.getItem(CONTINUE);
-  if(pending!==null){sessionStorage.removeItem(CONTINUE);const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='pre';dialogStep=0;drawDialog()}}
+  if(pending!==null){sessionStorage.removeItem(CONTINUE);sessionStorage.removeItem('arcane-story-post-win-358');sessionStorage.removeItem('arcane-story-active-duel-358');const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='pre';dialogStep=0;drawDialog()}}
+  else {
+   const post=sessionStorage.getItem('arcane-story-post-win-358');
+   if(post!==null){const index=Number(post);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='post';dialogStep=0;completedResult='win';drawDialog()}}
+  }
  }catch(e){}
+ window.arcaneStoryReturnAfterDuel358=()=>{
+  if(activeIndex===null)return false;
+  if(completedResult==='win'){scene='post';dialogStep=0;home.hidden=true;drawDialog();return true}
+  if(completedResult==='loss'||completedResult==='draw'){restartForStory(activeIndex);return true}
+  return false;
+ };
  window.arcaneStory357={open:showMap};
 })();
 
