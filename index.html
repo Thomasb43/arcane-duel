@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-live-monster-stats-v370">
+<meta name="arcane-build" content="20261121-live-monster-stats-v371">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5182,7 +5182,7 @@ function renderArcaneCard335(c,o={}){
  const onField=o.size==='field'&&monster;
  const atk=onField?effectiveAtk(c):c.atk,def=onField?effectiveDef(c):c.def;
  const atkDiff=onField?atk-c.atk:0,defDiff=onField?def-c.def:0;
- const stat335=(key,value,diff)=>'<span class="arcane-live-stat-370 '+(diff>0?'is-boosted':diff<0?'is-weakened':'')+'">'+key+' '+arcaneEscape335(value??'–')+(diff?'<small class="arcane-stat-delta-370"> '+(diff>0?'+':'')+arcaneEscape335(diff)+'</small>':'')+'</span>';
+ const stat335=(key,value,diff)=>'<span class="arcane-live-stat-370 '+(diff>0?'is-boosted':diff<0?'is-weakened':'')+'">'+key+' '+arcaneEscape335(value??'–')+'</span>';
  const stats=monster?stat335('ATK',atk,atkDiff)+stat335('DEF',def,defDiff):'<span>'+arcaneEscape335(label)+'</span>';
  return '<div class="arcane-card-335 arcane-type-'+type+' arcane-size-'+(o.size||'small')+' rarity-'+rarity.key+'" style="--card-rarity-335:'+rarity.color+'">'
  +'<div class="arcane-card-head-335"><strong>'+arcaneEscape335(c.name)+'</strong><small>'+arcaneEscape335(label)+' · '+arcaneEscape335(rarity.label)+'</small>'+arcaneElementIcon329(c)+'</div>'
