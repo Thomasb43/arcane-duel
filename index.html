@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-in-card-effects-v328">
+<meta name="arcane-build" content="20261121-elements-v329">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4526,6 +4526,14 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-tilt-effect-328 p{font-size:10px!important;font-weight:600!important;line-height:1.27!important;white-space:pre-line!important;margin:0!important;overflow-wrap:anywhere!important;color:#271d29!important}
 .arcane-tilt-numbers-327{padding-top:3px!important;font-size:11px!important}
 @media(max-height:680px){.arcane-tilt-card-327{width:min(62vw,225px)!important}.arcane-tilt-effect-328{height:76px!important}}
+
+/* v3.29: approved elemental emblems on card corners */
+.arcane-tilt-title-327{position:relative!important;padding-right:38px!important}
+.arcane-element-329{position:absolute!important;z-index:9!important;top:4px!important;right:4px!important;width:32px!important;height:32px!important;display:block!important;filter:drop-shadow(0 2px 4px #000c)!important;pointer-events:none!important}
+.arcane-element-329 svg{width:100%!important;height:100%!important;display:block!important}
+.arcane-tilt-title-327>.arcane-element-329{top:0!important;right:0!important;width:35px!important;height:35px!important}
+.arcane-collection-card-frame-318>.arcane-element-329{top:5px!important;right:5px!important;width:25px!important;height:25px!important}
+.arcane-booster-pool-art-324>.arcane-element-329{top:4px!important;right:4px!important;width:24px!important;height:24px!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -4574,6 +4582,22 @@ setInterval(()=>{if(!document.hidden)checkForUpdates();},45000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdates();});
 window.addEventListener('pageshow',()=>checkForUpdates());
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
+
+/* Element emblems, visual only; existing card effects remain unchanged. */
+function arcaneElementOf329(c){
+ if(!c)return '';
+ const alias={feuer:'Feuer',wasser:'Wasser',eis:'Eis',blitz:'Blitz',donner:'Blitz',erde:'Erde',wind:'Wind',licht:'Licht',schatten:'Schatten',finsternis:'Schatten',natur:'Natur',arkan:'Arkan'};
+ const e=String(c.element||'').toLocaleLowerCase('de');if(alias[e])return alias[e];
+ const name=String(c.name||'').toLocaleLowerCase('de');
+ for(const [pattern,el] of [[/flamm|glut|feuer|lava/,'Feuer'],[/wasser|quelle|flut|welle/,'Wasser'],[/frost|eis|schnee|kristall/,'Eis'],[/donner|blitz|gewitter/,'Blitz'],[/erde|stein|fels/,'Erde'],[/wind/,'Wind'],[/licht|sonne/,'Licht'],[/schatten|nacht|finsternis|umbra|nocthar|nyxara/,'Schatten'],[/wald|natur|blatt|wurzel/,'Natur'],[/arkan|magier|magie/,'Arkan']])if(pattern.test(name))return el;
+ return '';
+}
+const ARCANE_ELEMENT_SHAPES_329={"Feuer":["#ff421d","#ffd061","<path d=\"M20 4 C28 15 17 18 20 23 C29 17 29 12 28 8 C39 24 34 36 21 38 C6 37 7 24 14 18 C13 25 19 26 19 21 C16 16 17 10 20 4Z\" fill=\"url(#elgrad329)\" stroke=\"#fff0b5\" stroke-width=\"1.3\"/><path d=\"M21 21 C26 28 25 34 20 35 C15 34 17 28 21 21Z\" fill=\"#fffaad\"/>"],"Wasser":["#146dec","#86f7ff","<path d=\"M21 4 C15 15 8 21 8 28 A13 13 0 0 0 34 28 C34 21 27 13 21 4 Z\" fill=\"url(#elgrad329)\" stroke=\"#b9f8ff\" stroke-width=\"1.3\"/><path d=\"M12 27 Q20 18 28 26\" fill=\"none\" stroke=\"#e0ffff\" stroke-width=\"3\"/>"],"Eis":["#3997ff","#e9ffff","<g stroke=\"url(#elgrad329)\" stroke-width=\"3\" stroke-linecap=\"round\"><path d=\"M21 4 V38 M4 21 H38 M9 9 L33 33 M33 9 L9 33\"/><path d=\"M16 9 L21 14 L26 9 M16 33 L21 28 L26 33 M9 16 L14 21 L9 26 M33 16 L28 21 L33 26\"/></g>"],"Blitz":["#b438ff","#ffe950","<path d=\"M23 3 L10 23 H20 L17 39 L34 17 H25 L30 3 Z\" fill=\"url(#elgrad329)\" stroke=\"#fff2a7\" stroke-width=\"1.6\"/>"],"Erde":["#82513b","#e4c08b","<path d=\"M21 4 L34 17 L30 34 L20 39 L8 30 L9 17 Z\" fill=\"url(#elgrad329)\" stroke=\"#fce2b3\" stroke-width=\"1.4\"/><path d=\"M21 4 L18 24 L20 39 M9 17 L18 24 L34 17\" stroke=\"#fce2b3\" stroke-width=\"1.3\" fill=\"none\"/>"],"Wind":["#1988c6","#dcffff","<path d=\"M7 17 C13 8 34 9 34 17 C34 22 27 23 22 19 M5 25 C14 36 32 33 33 28 C34 24 26 23 23 28\" fill=\"none\" stroke=\"url(#elgrad329)\" stroke-width=\"4.2\" stroke-linecap=\"round\"/>"],"Licht":["#ffb230","#fffbd8","<path d=\"M21 2 L26 16 L40 21 L26 26 L21 40 L16 26 L2 21 L16 16 Z\" fill=\"url(#elgrad329)\" stroke=\"#fff4bb\" stroke-width=\"1.5\"/><circle cx=\"21\" cy=\"21\" r=\"4\" fill=\"#fffde5\"/>"],"Schatten":["#6120bb","#d8a1ff","<path d=\"M32 4 C20 7 12 15 12 24 C12 33 20 39 31 35 C20 31 20 18 32 4 Z\" fill=\"url(#elgrad329)\" stroke=\"#dfbaff\" stroke-width=\"1.6\"/><path d=\"M8 23 C16 14 26 14 34 23 C27 31 15 31 8 23 Z\" fill=\"none\" stroke=\"#a35afa\" stroke-width=\"2.5\"/>"],"Natur":["#249b4f","#cbff5b","<path d=\"M20 36 C8 31 10 20 8 13 C17 15 17 7 27 6 C37 15 34 30 20 36Z\" fill=\"url(#elgrad329)\" stroke=\"#e1ff9d\" stroke-width=\"1.5\"/><path d=\"M13 30 L29 12 M20 23 L12 19 M22 20 L29 24\" fill=\"none\" stroke=\"#e4ffbe\" stroke-width=\"1.7\"/>"],"Arkan":["#8d30ff","#f4b9ff","<path d=\"M21 2 L33 20 L21 40 L9 20 Z\" fill=\"url(#elgrad329)\" stroke=\"#ffe7ff\" stroke-width=\"1.4\"/><path d=\"M21 2 V40 M9 20 H33\" stroke=\"#fff\" stroke-width=\"1.2\"/><ellipse cx=\"21\" cy=\"21\" rx=\"19\" ry=\"7\" fill=\"none\" stroke=\"#dba6ff\" stroke-width=\"1.6\" transform=\"rotate(-25 21 21)\"/>"]};
+function arcaneElementIcon329(c){
+ const el=arcaneElementOf329(c),d=ARCANE_ELEMENT_SHAPES_329[el];if(!d)return '';
+ return '<span class="arcane-element-329" role="img" aria-label="Element '+el+'" title="Element: '+el+'"><svg viewBox="0 0 44 44" aria-hidden="true"><defs><linearGradient id="elgrad329" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+d[1]+'"/><stop offset="1" stop-color="'+d[0]+'"/></linearGradient></defs><circle cx="22" cy="22" r="20" fill="#160b28" stroke="#f6d28b" stroke-width="2.7"/><circle cx="22" cy="22" r="17" fill="'+d[0]+'" fill-opacity=".3" stroke="#bc8c51" stroke-width="1"/><g transform="translate(1 1)">'+d[2]+'</g></svg></span>';
+}
+
 const deck=[
 {name:"Flammendrache",kind:"monster",emoji:"🐉",atk:1800,def:1200,level:4,element:"Feuer",race:"Drache",effectText:"Einmal pro Duellzug: +500 ATK bis zum Ende des Zuges.",skin:"fire",artwork:"flame-dragon"},
 {name:"Frostwächter",kind:"monster",emoji:"🧊",artwork:"frost-guardian",atk:1400,def:1900,level:4,effectText:"Einmal pro Duellzug: +500 DEF bis zum Ende des Zuges.",skin:"ice"},
@@ -5456,7 +5480,7 @@ window.setArenaCharacterTheme('magierin');
  const special=c=>extraNames.has(c.name);
  const picture=c=>renderCardArt(c);
  const rarityVars=c=>'--rarity-color:'+rarityData[rarity(c)].color;
- function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318"><div class="arcane-collection-image-318">'+picture(c)+'</div></div>'}
+ function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318"><div class="arcane-collection-image-318">'+picture(c)+'</div>'+arcaneElementIcon329(c)+'</div>'}
  function drawGrid(){
   const query=$c('arcaneCollectionSearch316').value.toLocaleLowerCase('de').trim();
   const kind=$c('arcaneCollectionType316').value;
@@ -5703,8 +5727,8 @@ window.setArenaCharacterTheme('magierin');
    '<div class="arcane-booster-detail-kicker-326">SCHATTEN & FLAMMEN · KARTENARCHIV</div>'
    +'<div class="arcane-tilt-stage-327"><div class="arcane-tilt-card-327 rarity-'+grade+'" id="arcaneTiltCard327" role="button" tabindex="0" aria-label="Karte bewegen, doppeltippen zum Umdrehen">'
    +'<div class="arcane-tilt-rotator-327"><div class="arcane-tilt-face-327 arcane-tilt-front-327">'
-   +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>'
-   +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+'</div>'
+   +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span>'+arcaneElementIcon329(c)+'</div>'
+   +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+arcaneElementIcon329(c)+'</div>'
    +'<div class="arcane-tilt-metadata-327"><span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+(c.kind==='monster'?'Level '+safe(c.level??'–'):safe(c.element||''))+'</span></div>'
    +'<div class="arcane-tilt-effect-328"><strong>Beschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>'
    +'<div class="arcane-tilt-numbers-327">'+cardStats+'</div>'
