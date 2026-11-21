@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-deck-card-grid-v378">
+<meta name="arcane-build" content="20261121-auto-deck-v379">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5207,6 +5207,17 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-deck-counter-378{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px;border:1px solid #786b50;background:#1a2844;border-radius:9px}
 .arcane-deck-counter-378 strong{font-size:16px;color:#ffdf9e}.arcane-deck-counter-378 span{font-size:11px;color:#c5d3e9}
 @media(max-width:430px){.arcane-deck-tiles-378{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
+
+/* v3.79 – Auto-Deck optional 1–5 anchor cards */
+.arcane-auto-controls-379{margin:12px 0;padding:13px;background:linear-gradient(145deg,#2c315e,#172b4b);border:1px solid #d6b574;border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.arcane-auto-controls-379>strong{color:#ffe299;font-size:16px}
+.arcane-auto-controls-379>span{margin-left:auto;color:#cce2ff;font-weight:800}
+.arcane-auto-controls-379>p{flex-basis:100%;margin:3px 0;font-size:12px;line-height:1.5;color:#d3dbea}
+.arcane-deck-manager-377 .arcane-auto-controls-379>button{width:100%;font-weight:900;padding:12px;background:linear-gradient(#8d7135,#60451d);color:#fff0bd}
+.arcane-auto-controls-379>small{width:100%;color:#baf5d4;font-size:12px}
+.arcane-deck-manager-377 .arcane-auto-pick-379{display:block;width:100%;padding:7px 2px;border:1px solid #788cba;background:#26365b;color:#d8e9ff;font-size:11px}
+.arcane-deck-manager-377 .arcane-auto-pick-379.selected{border-color:#f9df91;background:#5a502d;color:#ffedae;box-shadow:0 0 9px #ecc76c66}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7285,7 +7296,7 @@ window.setArenaCharacterTheme('magierin');
   }catch(_){}
   return defaults();
  }
- let state=read(),selected=state.active,filter='';
+ let state=read(),selected=state.active,filter='',autoSeeds=new Set(),autoMessage='';
  const available=()=>window.arcaneBoosterInventory322?.read()?.counts||{};
  const basic=Object.fromEntries(starterDeckList);
  const countOwned=name=>Math.min(3,(basic[name]||0)+(available()[name]||0));
@@ -7308,6 +7319,55 @@ window.setArenaCharacterTheme('magierin');
    +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button></div></div>').join('');
  }
  function getSelected(){return state.decks.find(d=>d.id===selected)}
+ function autoBuild(d){
+  const wanted=[...autoSeeds].filter(name=>cardMap.has(name)&&countOwned(name)>0);
+  if(wanted.length<1||wanted.length>5){autoMessage='Bitte wähle 1 bis 5 Karten aus.';return false}
+  // Build a complete 30-card deck without using unowned cards or exceeding three copies.
+  const all=[...cardMap.values()].filter(c=>c.kind==='monster'||c.kind==='spell'||c.kind==='trap').filter(c=>countOwned(c.name)>0);
+  const motif=all.filter(c=>wanted.includes(c.name));
+  const weights=new Map();
+  for(const card of all){
+   let score=0;
+   if(motif.some(s=>s.element&&s.element===card.element))score+=9;
+   if(motif.some(s=>s.race&&s.race===card.race))score+=8;
+   if(motif.some(s=>s.skin&&s.skin===card.skin))score+=2;
+   if(card.kind==='monster'){
+    score+=10;
+    if((card.level||4)<=4)score+=9;
+    else if((card.level||4)===5||card.level===6)score+=1;
+    else score-=12;
+    score+=Math.min(6,Math.floor((card.atk||0)/400));
+   }
+   weights.set(card.name,score);
+  }
+  const result=new Map();
+  const total=()=>[...result.values()].reduce((sum,n)=>sum+n,0);
+  const groupCount=kind=>[...result].reduce((sum,[name,n])=>sum+(cardMap.get(name)?.kind===kind?n:0),0);
+  const add=name=>{const n=result.get(name)||0;if(n>=Math.min(3,countOwned(name))||total()>=30)return false;result.set(name,n+1);return true};
+  wanted.forEach(add);
+  // Prefer a playable mix: around 18 monsters, 8 spells, 4 traps.
+  const targets={monster:18,spell:8,trap:4};
+  for(const kind of ['monster','spell','trap']){
+   const candidates=all.filter(c=>c.kind===kind).sort((a,b)=>weights.get(b.name)-weights.get(a.name)||a.name.localeCompare(b.name,'de'));
+   let changed=true;
+   while(groupCount(kind)<targets[kind]&&total()<30&&changed){
+    changed=false;
+    for(const card of candidates){if(add(card.name)){changed=true;break}}
+   }
+  }
+  // If a category is scarce, fill the remainder with any suitable owned cards.
+  const rest=all.sort((a,b)=>weights.get(b.name)-weights.get(a.name)||a.name.localeCompare(b.name,'de'));
+  let changed=true;
+  while(total()<30&&changed){
+   changed=false;
+   for(const card of rest){if(add(card.name)){changed=true;break}}
+  }
+  if(total()<30){autoMessage='Nicht genügend Karten in deiner Sammlung: '+total()+' von 30 verfügbar.';return false}
+  d.cards=[...result.entries()].map(([name,n])=>[name,n]);
+  if(!save()){autoMessage='Deck konnte nicht gespeichert werden.';return false}
+  autoMessage='Auto-Deck erstellt: 30 Karten · '+groupCount('monster')+' Monster · '+groupCount('spell')+' Zauber · '+groupCount('trap')+' Fallen.';
+  return true;
+ }
  function drawEditor(){
   const d=getSelected();if(!d){editor.hidden=true;return}
   editor.hidden=false;
@@ -7318,11 +7378,13 @@ window.setArenaCharacterTheme('magierin');
    const button=mode==='remove'
     ?'<button type="button" class="arcane-deck-tile-button-378" data-remove="'+esc(name)+'" aria-label="'+esc(name)+' entfernen">− Entfernen</button>'
     :'<button type="button" class="arcane-deck-tile-button-378" data-add="'+esc(name)+'" '+(canAdd?'':'disabled')+' aria-label="'+esc(name)+' hinzufügen">+ Hinzufügen</button>';
+   const pick=mode==='add'?'<button type="button" data-seed="'+esc(name)+'" class="arcane-auto-pick-379 '+(autoSeeds.has(name)?'selected':'')+'" aria-pressed="'+autoSeeds.has(name)+'">'+(autoSeeds.has(name)?'✓ Wunschkarte':'☆ Wunschkarte')+'</button>':'';
    return '<div class="arcane-deck-tile-378"><div class="arcane-deck-tile-art-378">'+renderArcaneCard335(card,{size:'collection'})+'</div>'
-     +'<div class="arcane-deck-tile-bottom-378"><strong>'+esc(name)+'</strong><span>'+(mode==='remove'?'Im Deck: ×'+n:'Im Deck '+n+' / '+owned+' verfügbar')+'</span>'+button+'</div></div>';
+     +'<div class="arcane-deck-tile-bottom-378"><strong>'+esc(name)+'</strong><span>'+(mode==='remove'?'Im Deck: ×'+n:'Im Deck '+n+' / '+owned+' verfügbar')+'</span>'+pick+button+'</div></div>';
   };
   editor.innerHTML='<div class="arcane-deck-editor-head-377"><h3>'+esc(d.title)+'</h3><button data-close>Zur Übersicht</button></div>'
    +'<div class="arcane-deck-counter-378"><strong>'+size(d)+' / 50 Karten</strong><span>'+(valid(d)?'Deck ist spielbereit':'30–50 Karten erforderlich · nur Karten aus deinem Bestand')+'</span></div>'
+   +'<div class="arcane-auto-controls-379"><strong>Auto-Deck</strong><span>'+autoSeeds.size+'/5 Wunschkarten gewählt</span><p>Wähle unten 1–5 Karten aus deiner Sammlung. Das Auto-Deck ergänzt passende Karten zu einem spielbaren 30-Karten-Deck.</p><button type="button" data-auto-build '+(autoSeeds.size?'':'disabled')+'>✦ Auto-Deck erstellen</button><small>'+esc(autoMessage)+'</small></div>'
    +'<h4>Aktuelles Deck</h4><div class="arcane-deck-tiles-378">'
    +d.cards.map(([name,n])=>tile(name,n,'remove')).join('')
    +'</div><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
@@ -7335,7 +7397,7 @@ window.setArenaCharacterTheme('magierin');
  page.querySelector('#arcaneDeckBack377').addEventListener('click',()=>page.hidden=true);
  list.addEventListener('click',e=>{
   const edit=e.target.closest('[data-edit]');
-  if(edit){selected=edit.dataset.edit;filter='';drawEditor();return}
+  if(edit){selected=edit.dataset.edit;filter='';autoSeeds.clear();autoMessage='';drawEditor();return}
   const active=e.target.closest('[data-active]');
   if(active){const d=state.decks.find(x=>x.id===active.dataset.active);if(!d||!valid(d))return;state.active=d.id;save();drawList();}
  });
@@ -7343,6 +7405,18 @@ window.setArenaCharacterTheme('magierin');
  editor.addEventListener('click',e=>{
   if(e.target.closest('[data-close]')){editor.hidden=true;drawList();return}
   const d=getSelected();if(!d)return;
+  const seed=e.target.closest('[data-seed]');
+  if(seed){
+   const name=seed.dataset.seed;
+   if(autoSeeds.has(name))autoSeeds.delete(name);
+   else if(autoSeeds.size<5)autoSeeds.add(name);
+   else autoMessage='Du kannst höchstens 5 Wunschkarten auswählen.';
+   drawEditor();return;
+  }
+  if(e.target.closest('[data-auto-build]')){
+   if(!window.confirm('Aktuelles Deck durch ein neues Auto-Deck mit 30 Karten ersetzen?'))return;
+   autoBuild(d);drawList();drawEditor();return;
+  }
   const add=e.target.closest('[data-add]'),remove=e.target.closest('[data-remove]');
   if(add){const name=add.dataset.add;const p=d.cards.find(x=>x[0]===name);const n=p?.[1]||0;if(size(d)<50&&n<3&&n<countOwned(name)){if(p)p[1]++;else d.cards.push([name,1]);save();drawEditor()}return}
   if(remove){const p=d.cards.find(x=>x[0]===remove.dataset.remove);if(p){p[1]--;if(!p[1])d.cards=d.cards.filter(x=>x!==p);save();drawEditor()}return}
