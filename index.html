@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-hand-inspect-v336">
+<meta name="arcane-build" content="20261121-artwork-cleanup-v337">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4636,9 +4636,12 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-hand-preview-close-336{position:absolute!important;right:0!important;top:0!important;z-index:10!important;width:44px!important;height:44px!important;border:1px solid #f5cd86!important;border-radius:50%!important;background:#321b4c!important;color:#ffe4b2!important;font-size:28px!important;cursor:pointer!important}
 .arcane-hand-preview-panel-336 .arcane-tilt-card-327{width:min(82vw,315px,calc(72dvh * .68))!important}
 .arcane-hand-preview-panel-336 .arcane-tilt-stage-327{width:100%!important}
+
+/* v3.37 image-only artwork rendering – fallback when canvas cannot crop */
+.arcane-legacy-crop-fallback-337{height:142%!important;top:-25%!important;bottom:auto!important;object-fit:fill!important}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.36</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.37</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -4862,7 +4865,50 @@ const arcaneArt=(key)=>{const defs={
 'crystal-shield':['#b9f4ff','#477ac9','◇','M150 28 L212 66 L202 142 L150 188 L98 142 L88 66 Z','M150 48 L190 76 L184 132 L150 164 L116 132 L110 76 Z']
 };const d=defs[key];if(!d)return '';const [light,dark,sym,body,detail]=d;return '<svg viewBox="0 0 300 210" role="img" aria-label="'+key+'" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g'+key+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+light+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><radialGradient id="bg'+key+'"><stop stop-color="'+dark+'" stop-opacity=".95"/><stop offset="1" stop-color="#10172b"/></radialGradient></defs><rect width="300" height="210" fill="url(#bg'+key+')"/><circle cx="150" cy="105" r="82" fill="none" stroke="'+light+'" stroke-opacity=".35" stroke-width="2"/><circle cx="150" cy="105" r="68" fill="none" stroke="'+light+'" stroke-opacity=".22" stroke-dasharray="4 7"/><path d="'+body+'" fill="url(#g'+key+')" stroke="'+light+'" stroke-width="5" stroke-linejoin="round"/><path d="'+detail+'" fill="none" stroke="'+light+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M150 12 L150 198 M42 105 L258 105" stroke="'+light+'" stroke-opacity=".18" stroke-width="2"/><text x="150" y="112" text-anchor="middle" font-size="30" fill="#fff" opacity=".9">'+sym+'</text><path d="M34 190 L60 174 M266 190 L240 174" stroke="'+light+'" stroke-width="3"/></svg>'};
 const CARD_ART_FILES={'heilende-quelle':'heilende-quelle.webp','arkaner-segen':'arkaner-segen.webp','arkaner-wissensstrom':'arkaner-wissensstrom.webp','geisterruf':'geisterruf.webp','gedankenraub':'gedankenraub.webp','drachenatem':'drachenatem.webp','schattenresonator':'schattenresonator.webp','nachtklinge':'nachtklinge.webp','resonanzfuerst-nocthar':'resonanzfuerst-nocthar.webp','schattenbestie-umbra':'schattenbestie-umbra.webp','nyxara-schattenkoenigin':'nyxara-schattenkoenigin.webp','noctharion-herrscher':'noctharion-herrscher.webp','flame-dragon':'flammendrache.png','frost-guardian':'frostwaechter.webp','shadow-wolf':'schattenwolf.webp','arcane-mage':'arkaner-magier.webp','thunder-hawk':'donnerfalke.webp','earth-warden':'erdwaechter.webp','ember-colossus':'glutkoloss.webp','flame-burst':'flammenstoss.webp','crystal-shield':'kristallschild.webp','arkane-ernte':'arkane-ernte.png','arkaner-magier':'arkaner-magier.png','arkaner-rueckschlag':'arkaner-rueckschlag.png','arkaner-sturm':'arkaner-sturm.png','arkaner-zerstoerungsstrahl':'arkaner-zerstoerungsstrahl.png','aschenritter':'aschenritter.png','donnerfalke':'donnerfalke.png','doppelter-segen':'doppelter-segen.png','eisiger-rueckstoss':'eisiger-rueckstoss.png','erdwaechter':'erdwaechter.png','frostpanzer':'frostpanzer.png','funkenregen':'funkenregen.png','kristallraub':'kristallraub.png','kristallschild':'kristallschild.png','lebensfunke':'lebensfunke.png','schattenfessel':'schattenfessel.png','schicksalsrad':'schicksalsrad.png','seelenbergung':'seelenbergung.png','seelenfunke':'seelenfunke.png','sternenregen':'sternenregen.png'};
-function renderCardArt(c){if(!c)return '';if(c.artwork==='flame-dragon')return flameDragonArt;const file=CARD_ART_FILES[c.artwork];if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;return '<span class="card-art-loader" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><span class="card-art-fallback" style="display:block;width:100%;height:100%">'+arcaneArt(c.artwork)+'</span><img src="artwork/'+file+'" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()" onload="this.previousElementSibling.style.display=\'none\'"></span>'}
+
+/* v3.37 – remove old card borders/text from legacy .png artwork.
+   The artwork crop is computed once per image and reused across views. */
+const ARCANE_CROP_CACHE_337=new Map();
+function arcaneCropLegacy337(img){
+ if(!img||img.dataset.cropReady337)return;
+ const key=img.getAttribute('data-legacy-art-337');if(!key)return;
+ img.dataset.cropReady337='1';
+ try{
+  const cached=ARCANE_CROP_CACHE_337.get(key);
+  if(cached){img.src=cached;return;}
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('Canvas unavailable');
+  const w=img.naturalWidth,h=img.naturalHeight;
+  if(!w||!h)throw new Error('Missing source dimensions');
+  // Old image is a rendered card: title/rune at top, frame and occasional next-card strip below.
+  // Keep only the central illustrated scene.
+  const sx=Math.round(w*.055),sy=Math.round(h*.175);
+  const sw=Math.round(w*.89),sh=Math.round(h*.695);
+  canvas.width=sw;canvas.height=sh;
+  ctx.drawImage(img,sx,sy,sw,sh,0,0,sw,sh);
+  const cleaned=canvas.toDataURL('image/webp',.93);
+  ARCANE_CROP_CACHE_337.set(key,cleaned);
+  img.src=cleaned;
+ }catch(_){
+  // If canvas is unsupported, use a visual crop without disrupting the game.
+  img.classList.add('arcane-legacy-crop-fallback-337');
+ }
+}
+function renderCardArt(c){
+ if(!c)return '';
+ if(c.artwork==='flame-dragon')return flameDragonArt;
+ const file=CARD_ART_FILES[c.artwork];
+ if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;
+ const legacy=file.endsWith('.png');
+ const inline='position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
+ return '<span class="card-art-loader" style="display:block;position:relative;width:100%;height:100%;overflow:hidden">'
+  +'<span class="card-art-fallback" style="display:block;width:100%;height:100%">'+arcaneArt(c.artwork)+'</span>'
+  +'<img src="artwork/'+file+'" alt="" loading="lazy" decoding="async"'
+  +(legacy?' data-legacy-art-337="'+file+'"':'')
+  +' style="'+inline+'" onerror="this.remove()"'
+  +' onload="if(this.previousElementSibling)this.previousElementSibling.style.display=\'none\';'+(legacy?'arcaneCropLegacy337(this)':'')+'"></span>';
+}
+
 function cardHTML(c,i){
  const mid=(hand.length-1)/2,rel=(i-mid)/Math.max(1,mid);
  return '<div class="card arcane-wrapper-335 '+(selected===i?'selected ':'')+(c===newlyDrawnCard?'new-card ':'')+'" style="--fan-angle:'+(rel*10).toFixed(1)+'deg;--fan-lift:'+(-10*(1-Math.abs(rel))).toFixed(1)+'px;z-index:'+(i+1)+'" data-card="'+i+'">'+renderArcaneCard335(c,{size:'hand'})+'</div>';
