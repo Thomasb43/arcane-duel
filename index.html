@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-3d-card-v327">
+<meta name="arcane-build" content="20261121-in-card-effects-v328">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4515,6 +4515,17 @@ main.arcane-responsive .arena-stage #myExtraDeck.has-extra-cards::before{
 .arcane-tilt-flip-button-327{display:block!important;width:fit-content!important;margin:0 auto 15px!important;padding:10px 18px!important;border:1px solid #e9c879!important;border-radius:10px!important;background:linear-gradient(#623082,#361d5b)!important;color:#fff0c4!important;font-size:12px!important;font-weight:900!important;cursor:pointer!important}
 @keyframes arcaneFoil327{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @media(prefers-reduced-motion:reduce){.arcane-tilt-card-327,.arcane-tilt-rotator-327{transition:none!important}.arcane-tilt-glare-327{animation:none!important}}
+
+/* v3.28: card effect text appears within the physical 3D card */
+.arcane-tilt-card-327{width:min(76vw,280px)!important;aspect-ratio:0.68!important}
+.arcane-tilt-front-327{padding:9px!important;gap:5px!important}
+.arcane-tilt-title-327{min-height:38px!important}
+.arcane-tilt-image-327{flex:1 1 auto!important;min-height:90px!important}
+.arcane-tilt-effect-328{position:relative!important;flex:0 0 auto!important;height:91px!important;padding:6px 7px!important;overflow-y:auto!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;border:1px solid #bca078!important;border-radius:5px!important;background:linear-gradient(180deg,#e7d8c4,#c9b8a9)!important;color:#22162a!important;text-align:left!important;user-select:text!important;-webkit-user-select:text!important}
+.arcane-tilt-effect-328 strong{display:block!important;color:#312036!important;font:900 10px Georgia,serif!important;margin-bottom:3px!important}
+.arcane-tilt-effect-328 p{font-size:10px!important;font-weight:600!important;line-height:1.27!important;white-space:pre-line!important;margin:0!important;overflow-wrap:anywhere!important;color:#271d29!important}
+.arcane-tilt-numbers-327{padding-top:3px!important;font-size:11px!important}
+@media(max-height:680px){.arcane-tilt-card-327{width:min(62vw,225px)!important}.arcane-tilt-effect-328{height:76px!important}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.24</small></div></header>
@@ -5695,16 +5706,18 @@ window.setArenaCharacterTheme('magierin');
    +'<div class="arcane-tilt-title-327"><strong>'+safe(c.name)+'</strong><span>'+safe(tone.label)+'</span></div>'
    +'<div class="arcane-tilt-image-327">'+data.renderCardArt(c)+'</div>'
    +'<div class="arcane-tilt-metadata-327"><span>'+safe(kinds[c.kind]||'Karte')+'</span><span>'+(c.kind==='monster'?'Level '+safe(c.level??'–'):safe(c.element||''))+'</span></div>'
+   +'<div class="arcane-tilt-effect-328"><strong>Beschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>'
    +'<div class="arcane-tilt-numbers-327">'+cardStats+'</div>'
    +'<div class="arcane-tilt-glare-327"></div></div>'
    +'<div class="arcane-tilt-face-327 arcane-tilt-back-327"><span class="arcane-tilt-symbol-327">✧</span><strong>ARCANE DUEL</strong><small>✦ SCHATTEN & FLAMMEN ✦</small></div>'
    +'</div></div></div>'
    +'<div class="arcane-tilt-instruction-327">Mit dem Finger bewegen · Doppeltippen zum Umdrehen</div>'
    +'<button type="button" class="arcane-tilt-flip-button-327" id="arcaneTiltFlip327">↻ Karte umdrehen</button>'
-   +'<div class="arcane-booster-detail-stats-326">'+stats+'</div>'
-   +'<div class="arcane-booster-detail-effect-326"><strong>Kartenbeschreibung & Effekt</strong><p>'+safe(effect)+'</p></div>';
+   +'<div class="arcane-booster-detail-stats-326">'+stats+'</div>';
   detail.hidden=false;
   initCardTilt327($b('arcaneTiltCard327'),$b('arcaneTiltFlip327'));
+  const effectArea=$b('arcaneTiltCard327').querySelector('.arcane-tilt-effect-328');
+  if(effectArea){effectArea.addEventListener('pointerdown',e=>e.stopPropagation());effectArea.addEventListener('pointermove',e=>e.stopPropagation());effectArea.addEventListener('pointerup',e=>e.stopPropagation());}
   $b('arcaneBoosterDetailClose326').focus({preventScroll:true});
  }
  function initCardTilt327(card,flipButton){
