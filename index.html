@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-clean-booster-catalogue-v345">
+<meta name="arcane-build" content="20261121-sanctuary-booster-ritual-v346">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4757,9 +4757,35 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-booster-pool-card-324 .arcane-card-head-335>.arcane-element-329{
  width:16%!important;height:auto!important;aspect-ratio:1!important;
 }
+
+/* v3.46 – cinematic ritual, protected purchase logic and sequential rare reveals */
+.arcane-booster-reveal-322{--sanctuary-glory-color-346:#ca88ff}
+.sanctuary-pack-325{overflow:visible!important;isolation:isolate!important}
+.sanctuary-tear-line-346{position:absolute;left:8%;right:8%;top:47%;height:4px;border-radius:90%;opacity:0;transform:scaleX(.1) rotate(-13deg);background:#fff9d6;box-shadow:0 0 12px 5px #ffd88d,0 0 24px 10px #d98cff;pointer-events:none}
+.sanctuary-opening-flash-346{position:absolute;top:44%;left:50%;width:80vw;max-width:480px;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;z-index:4;background:radial-gradient(circle,#fffef2 0%,#ffe4a5 15%,#cd79ff 35%,#7e36d777 54%,transparent 71%)}
+.sanctuary-opening-346 .sanctuary-pack-325{animation:sanctuaryRip346 1.1s cubic-bezier(.28,.62,.4,1) both!important}
+.sanctuary-opening-346 .sanctuary-tear-line-346{animation:sanctuaryTear346 .64s ease-out .23s both!important}
+.sanctuary-opening-346 .sanctuary-opening-flash-346{animation:sanctuaryFlash346 1.1s ease-out both!important}
+.sanctuary-opening-346 .sanctuary-portal-325{filter:brightness(1.7) saturate(1.5)!important}
+.sanctuary-cards-325 .sanctuary-portal-325{filter:brightness(1.1) saturate(1.2)}
+.sanctuary-card-325.sanctuary-reward-rare-346.is-flipped-325{filter:drop-shadow(0 0 10px #7bd8ff)!important}
+.sanctuary-card-325.sanctuary-reward-epic-346.is-flipped-325{filter:drop-shadow(0 0 15px #c36cff)!important}
+.sanctuary-card-325.sanctuary-reward-legendary-346.is-flipped-325{filter:drop-shadow(0 0 21px #ffd36b)!important}
+.sanctuary-card-325.sanctuary-reward-mythic-346.is-flipped-325{filter:drop-shadow(0 0 25px #f6bcff)!important}
+.sanctuary-rare-glory-346 .arcane-sanctuary-325:after{content:'';position:absolute;top:25%;left:50%;width:min(78vw,370px);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:5;background:radial-gradient(circle,var(--sanctuary-glory-color-346) 0%,transparent 65%);animation:sanctuaryGlory346 1.15s ease-out both}
+.sanctuary-card-awaken-346 .sanctuary-portal-325{animation:sanctuaryPulse346 .85s ease-out, sanctuaryPortal325 5s ease-in-out .85s infinite}
+.sanctuary-cards-325 .sanctuary-card-325:not(.is-flipped-325)[data-order="0"]{box-shadow:0 0 18px #ffedb7aa!important}
+.sanctuary-card-325.is-flipped-325 .sanctuary-card-front-325{animation:sanctuaryCardShine346 .9s ease-out both}
+@keyframes sanctuaryRip346{0%{opacity:1;filter:brightness(1);transform:translate(-50%,-50%) rotate(-8deg) scale(1)}30%{transform:translate(-50%,-50%) rotate(4deg) scale(1.16);filter:brightness(1.8)}62%{opacity:1;transform:translate(-50%,-50%) rotate(-3deg) scale(1.28);filter:brightness(3)}100%{opacity:0;transform:translate(-50%,-65%) rotate(13deg) scale(1.85);filter:brightness(5)}}
+@keyframes sanctuaryTear346{0%{opacity:0;transform:scaleX(.1) rotate(-13deg)}40%{opacity:1;transform:scaleX(1) rotate(-13deg)}100%{opacity:0;transform:scaleX(1.35) rotate(-13deg)}}
+@keyframes sanctuaryFlash346{0%,33%{opacity:0;transform:translate(-50%,-50%) scale(.2)}58%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8)}}
+@keyframes sanctuaryGlory346{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:.7;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8)}}
+@keyframes sanctuaryPulse346{0%{filter:brightness(1)}35%{filter:brightness(2.3)}100%{filter:brightness(1)}}
+@keyframes sanctuaryCardShine346{0%{filter:brightness(1.9)}100%{filter:brightness(1)}}
+@media(prefers-reduced-motion:reduce){.sanctuary-opening-346 .sanctuary-pack-325{animation:none!important;opacity:0!important}.sanctuary-opening-flash-346,.sanctuary-tear-line-346{display:none!important}.sanctuary-rare-glory-346 .arcane-sanctuary-325:after{display:none!important}.sanctuary-card-awaken-346 .sanctuary-portal-325,.sanctuary-card-325.is-flipped-325 .sanctuary-card-front-325{animation:none!important}}
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.45</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.46</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6019,7 +6045,7 @@ window.setArenaCharacterTheme('magierin');
     <div class="sanctuary-stars-325"></div><div class="sanctuary-arch-325"></div>
     <div class="sanctuary-guardian-325 left">✦</div><div class="sanctuary-guardian-325 right">✦</div>
     <div class="sanctuary-portal-325"></div><div class="sanctuary-beam-325"></div>
-    <div class="sanctuary-pack-325" id="arcaneSanctuaryPack325"><span>✧</span><b>ARCANE<br>DUEL</b><em>✦</em></div>
+    <div class="sanctuary-pack-325" id="arcaneSanctuaryPack325" role="button" tabindex="0" aria-label="Booster magisch öffnen"><span>✧</span><b>ARCANE<br>DUEL</b><em>✦</em><i class="sanctuary-tear-line-346" aria-hidden="true"></i></div><div class="sanctuary-opening-flash-346" aria-hidden="true"></div>
     <div class="sanctuary-altar-325"></div><div class="sanctuary-sparks-325"></div>
    </div>
    <div class="arcane-sanctuary-hint-325" id="arcaneSanctuaryHint325">Berühre das Booster und entfessle seine Magie</div>
@@ -6038,7 +6064,7 @@ window.setArenaCharacterTheme('magierin');
  const filterBar=$b('arcaneBoosterFilters324');
  const quantities=$b('arcaneBoosterQuantities324');
  const detail=$b('arcaneBoosterCardDetail326');
- let pack=null,step=0,currentFilter='all',revealStage='intro',flipped=0;
+ let pack=null,step=0,currentFilter='all',revealStage='intro',flipped=0,opening346=false;
  const inventory=()=>window.arcaneBoosterInventory322;
  const bank=()=>window.arcaneTestCrystals320;
  const catalog=()=>window.arcaneCollectionCatalog322;
@@ -6147,7 +6173,7 @@ window.setArenaCharacterTheme('magierin');
  function openReveal(names){
   pack=names.slice();step=0;flipped=0;revealStage='intro';
   $b('arcaneBoosterCards322').innerHTML='';
-  reveal.hidden=false;reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325');
+  reveal.hidden=false;opening346=false;reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325','sanctuary-opening-346','sanctuary-rare-glory-346','sanctuary-card-awaken-346');
   $b('arcaneSanctuaryHint325').textContent='Berühre das Booster und entfessle seine Magie';
   updateReveal();
  }
@@ -6156,16 +6182,16 @@ window.setArenaCharacterTheme('magierin');
   const progress=$b('arcaneBoosterProgress322'),next=$b('arcaneBoosterNext322');
   if(revealStage==='intro'){
    progress.textContent='Das Heiligtum · '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
-   next.textContent='✦ Booster öffnen';next.disabled=false;
+   next.textContent=opening346?'✦ Magie entfesselt …':'✦ Booster öffnen';next.disabled=opening346;
   }else{
    progress.textContent=step>=total?'Das Ritual ist vollendet':'Karten '+(step-4)+'–'+step+' von '+total;
-   next.textContent=flipped<5?'Enthülle alle 5 Karten':step>=total?'✦ Zum Shop zurück':'✦ Nächstes Booster öffnen';
+   next.textContent=flipped<5?'Karte '+(flipped+1)+' von 5 aufdecken':step>=total?'✦ Zum Shop zurück':'✦ Nächstes Booster öffnen';
    next.disabled=flipped<5;
   }
   $b('arcaneBoosterClose322').hidden=step>=total&&revealStage==='cards'&&flipped===5;
  }
  function revealNext(){
-  if(!pack)return;
+  if(!pack||opening346)return;
   if(revealStage==='cards'){
    if(flipped<5)return;
    if(step>=pack.length){
@@ -6175,35 +6201,46 @@ window.setArenaCharacterTheme('magierin');
     sync();return;
    }
    revealStage='intro';flipped=0;
-   reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325');
+   reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325','sanctuary-opening-346','sanctuary-rare-glory-346','sanctuary-card-awaken-346');
    $b('arcaneBoosterCards322').innerHTML='';
    $b('arcaneSanctuaryHint325').textContent='Das nächste Booster wartet auf dich';
    updateReveal();return;
   }
+  opening346=true;reveal.classList.remove('sanctuary-opening-346');void reveal.offsetWidth;
+  reveal.classList.add('sanctuary-opening-346');updateReveal();
   const cards=pack.slice(step,step+5);
   const view=$b('arcaneBoosterCards322');
   view.innerHTML=cards.map((name,index)=>{
    const c=catalog()?.cards.find(c=>c.name===name);
    if(!c)return '';
    const rarity=catalog().rarity(c),tone=catalog().rarityData[rarity];
-   return '<button type="button" class="arcane-booster-card-322 sanctuary-card-325" aria-label="Verdeckte Karte '+(index+1)+' aufdecken" data-rarity="'+rarity+'" style="--booster-rarity:'+tone.color+';--i:'+index+'"><div class="sanctuary-card-inner-325"><div class="sanctuary-card-back-325">✧<small>ARCANE DUEL</small></div><div class="sanctuary-card-front-325 arcane-type-'+arcaneCardType332(c)+'">'+renderArcaneCard335(c,{size:'reveal'})+'</div></div></button>';
+   return '<button type="button" class="arcane-booster-card-322 sanctuary-card-325" aria-label="Verdeckte Karte '+(index+1)+' aufdecken" data-rarity="'+rarity+'" data-order="'+index+'" style="--booster-rarity:'+tone.color+';--i:'+index+'"><div class="sanctuary-card-inner-325"><div class="sanctuary-card-back-325">✧<small>ARCANE DUEL</small></div><div class="sanctuary-card-front-325 arcane-type-'+arcaneCardType332(c)+'">'+renderArcaneCard335(c,{size:'reveal'})+'</div></div></button>';
   }).join('');
   step+=cards.length;flipped=0;revealStage='cards';
-  reveal.classList.add('sanctuary-burst-325');
-  window.setTimeout(()=>reveal.classList.add('sanctuary-cards-325'),500);
-  $b('arcaneSanctuaryHint325').textContent='Tippe jede Karte an, um sie zu enthüllen';
+  window.setTimeout(()=>{if(reveal.hidden||revealStage!=='cards')return;reveal.classList.add('sanctuary-burst-325','sanctuary-cards-325');opening346=false;reveal.classList.remove('sanctuary-opening-346');$b('arcaneSanctuaryHint325').textContent='Berühre die erste Karte · Das Schicksal erwacht';updateReveal();},1100);
   updateReveal();
  }
  $b('arcaneSanctuaryPack325').addEventListener('click',()=>{if(revealStage==='intro')revealNext()});
+ $b('arcaneSanctuaryPack325').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&revealStage==='intro'){e.preventDefault();revealNext()}});
  $b('arcaneBoosterCards322').addEventListener('click',e=>{
   const card=e.target.closest('.sanctuary-card-325');
-  if(!card||card.classList.contains('is-flipped-325'))return;
-  card.classList.add('is-flipped-325');card.disabled=true;flipped++;
-  if(card.dataset.rarity==='legendary'||card.dataset.rarity==='mythic'){
-   reveal.classList.remove('sanctuary-rare-flash-325');void reveal.offsetWidth;
-   reveal.classList.add('sanctuary-rare-flash-325');
+  if(!card||opening346||card.classList.contains('is-flipped-325'))return;
+  if(Number(card.dataset.order)!==flipped){
+   $b('arcaneSanctuaryHint325').textContent='Enthülle zuerst Karte '+(flipped+1);
+   return;
   }
-  if(flipped===5)$b('arcaneSanctuaryHint325').textContent='Alle fünf Karten sind enthüllt';
+  const grade=card.dataset.rarity;
+  card.classList.add('is-flipped-325','sanctuary-reward-'+grade+'-346');
+  card.disabled=true;flipped++;
+  reveal.classList.remove('sanctuary-card-awaken-346','sanctuary-rare-flash-325','sanctuary-rare-glory-346');
+  void reveal.offsetWidth;
+  reveal.classList.add('sanctuary-card-awaken-346');
+  if(grade==='epic'||grade==='legendary'||grade==='mythic'){
+   reveal.style.setProperty('--sanctuary-glory-color-346',grade==='mythic'?'#f2b8ff':grade==='legendary'?'#ffdb7e':'#cb83ff');
+   reveal.classList.add('sanctuary-rare-glory-346');
+  }
+  const label=({normal:'Normal',rare:'Selten',epic:'Episch',legendary:'Legendär',mythic:'Mythisch'})[grade]||'Karte';
+  $b('arcaneSanctuaryHint325').textContent=flipped===5?'Alle fünf Karten enthüllt · Das Ritual ist vollendet':label+' enthüllt · Weiter mit Karte '+(flipped+1);
   updateReveal();
  });
  function buyPacks(amount){
