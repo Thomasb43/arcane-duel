@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-sanctuary-booster-ritual-v346">
+<meta name="arcane-build" content="20261121-premium-booster-intro-v347">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -4783,9 +4783,41 @@ transform:none!important;filter:none!important;z-index:2!important;
 @keyframes sanctuaryPulse346{0%{filter:brightness(1)}35%{filter:brightness(2.3)}100%{filter:brightness(1)}}
 @keyframes sanctuaryCardShine346{0%{filter:brightness(1.9)}100%{filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.sanctuary-opening-346 .sanctuary-pack-325{animation:none!important;opacity:0!important}.sanctuary-opening-flash-346,.sanctuary-tear-line-346{display:none!important}.sanctuary-rare-glory-346 .arcane-sanctuary-325:after{display:none!important}.sanctuary-card-awaken-346 .sanctuary-portal-325,.sanctuary-card-325.is-flipped-325 .sanctuary-card-front-325{animation:none!important}}
+
+/* v3.47 – premium collectible booster entrance, stage 1 only */
+.arcane-booster-reveal-322:not(.sanctuary-cards-325) .arcane-sanctuary-325{perspective:900px}
+.arcane-booster-reveal-322:not(.sanctuary-cards-325):not(.sanctuary-opening-346) .sanctuary-pack-325{
+  width:clamp(168px,46vw,220px)!important;height:clamp(242px,67vw,316px)!important;
+  top:46%!important;gap:0!important;overflow:hidden!important;
+  border:2px solid #ffe3a0!important;border-radius:15px!important;
+  background:
+    radial-gradient(ellipse at 50% 38%,#ffedb42e 0%,transparent 35%),
+    radial-gradient(ellipse at 50% 61%,#df4d3980 0%,transparent 40%),
+    repeating-linear-gradient(130deg,transparent 0 17px,#ffa44a09 18px 20px),
+    linear-gradient(145deg,#632225 0%,#301038 38%,#140d2c 69%,#581c30 100%)!important;
+  box-shadow:0 0 0 4px #2b1835,0 0 0 6px #aa784e,0 19px 30px #000c,0 0 55px #b75cff78,0 0 100px #ff9f4947!important;
+  animation:arcanePackArrival347 1.15s cubic-bezier(.18,.8,.18,1) both,arcanePackFloat347 3.3s ease-in-out 1.15s infinite!important;
+  transform-style:preserve-3d;will-change:transform,filter;
+}
+.sanctuary-pack-325:before{content:"";position:absolute;inset:7px;border:2px solid #eebc72;border-radius:8px;pointer-events:none;background:
+ linear-gradient(130deg,#ffe1a722,transparent 25%,transparent 74%,#ffe3a51c),
+ repeating-linear-gradient(90deg,#efc06b99 0 2px,transparent 2px 13px) top / 100% 8px no-repeat,
+ repeating-linear-gradient(90deg,#efc06b99 0 2px,transparent 2px 13px) bottom / 100% 8px no-repeat;
+ box-shadow:inset 0 0 20px #13040b,0 0 15px #e9a45c44}
+.sanctuary-pack-325:after{content:"";position:absolute;inset:-50%;background:linear-gradient(105deg,transparent 43%,#fff3c044 49%,#fff8df70 50%,transparent 57%);transform:translateX(-80%) rotate(8deg);animation:arcanePackGleam347 4.7s ease-in-out 1.5s infinite;pointer-events:none}
+.sanctuary-pack-325 span{position:relative;z-index:1;display:grid;place-items:center;width:90px;height:90px;border:3px double #ffdc83;border-radius:50%;background:radial-gradient(circle,#f9a15b55,#45102c 65%,#190b21);box-shadow:0 0 19px #ffb15f77,inset 0 0 20px #0009;color:#ffe6a0;font-size:65px!important;text-shadow:0 0 25px #ffcb78}
+.sanctuary-pack-325 b{position:relative;z-index:1;margin-top:17px;font:900 clamp(16px,4vw,22px)/1.12 Georgia,serif!important;letter-spacing:3px!important;color:#fff3c8;text-shadow:0 2px 1px #25101b,0 0 13px #ffbc65a1}
+.sanctuary-pack-325 em{position:relative;z-index:1;margin-top:14px;font-size:28px!important;color:#ffd28b;filter:drop-shadow(0 0 10px #ff9b4f)}
+.arcane-booster-reveal-322:not(.sanctuary-cards-325) .sanctuary-portal-325{filter:brightness(1.35) saturate(1.25);animation:sanctuaryPortal325 5s ease-in-out infinite}
+@keyframes arcanePackArrival347{0%{opacity:0;filter:blur(12px) brightness(2);transform:translate(-50%,-85%) rotate(-19deg) scale(.58)}65%{opacity:1;filter:blur(0) brightness(1.6);transform:translate(-50%,-50%) rotate(4deg) scale(1.07)}100%{opacity:1;filter:brightness(1);transform:translate(-50%,-50%) rotate(-6deg) scale(1)}}
+@keyframes arcanePackFloat347{0%,100%{transform:translate(-50%,-50%) rotate(-6deg) translateY(0)}50%{transform:translate(-50%,-50%) rotate(-3deg) translateY(-10px)}}
+@keyframes arcanePackGleam347{0%,55%,100%{transform:translateX(-80%) rotate(8deg)}74%{transform:translateX(80%) rotate(8deg)}}
+@media(max-height:650px){.arcane-booster-reveal-322:not(.sanctuary-cards-325):not(.sanctuary-opening-346) .sanctuary-pack-325{width:145px!important;height:204px!important}.sanctuary-pack-325 span{width:66px;height:66px;font-size:46px!important}.sanctuary-pack-325 b{margin-top:8px;font-size:15px!important}.sanctuary-pack-325 em{margin-top:6px}}
+@media(prefers-reduced-motion:reduce){.arcane-booster-reveal-322:not(.sanctuary-cards-325):not(.sanctuary-opening-346) .sanctuary-pack-325{animation:none!important;transform:translate(-50%,-50%) rotate(-6deg)}.sanctuary-pack-325:after{animation:none}}
+
 </style></head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.46</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.47</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
