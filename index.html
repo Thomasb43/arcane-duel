@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-auto-deck-v379">
+<meta name="arcane-build" content="20261121-four-decks-compact-v380">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5218,6 +5218,22 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-deck-manager-377 .arcane-auto-pick-379{display:block;width:100%;padding:7px 2px;border:1px solid #788cba;background:#26365b;color:#d8e9ff;font-size:11px}
 .arcane-deck-manager-377 .arcane-auto-pick-379.selected{border-color:#f9df91;background:#5a502d;color:#ffedae;box-shadow:0 0 9px #ecc76c66}
 
+
+/* v3.80 – four deck slots per character and compact own-deck gallery */
+.arcane-deck-character-380{margin:12px 0 20px;padding:12px;border:1px solid #8a7954;border-radius:14px;background:linear-gradient(140deg,#1d2848,#11162e)}
+.arcane-deck-character-head-380{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-bottom:11px}
+.arcane-deck-character-head-380 h3{margin:0;font-size:19px}
+.arcane-deck-character-head-380 button{font-size:12px;white-space:nowrap}
+.arcane-deck-character-380 .arcane-deck-entry-377{margin-top:8px}
+.arcane-deck-mini-grid-380{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px;margin:10px 0 20px;padding:10px;background:#0e152b;border:1px solid #4a597c;border-radius:11px}
+.arcane-deck-mini-380{position:relative;min-width:0;padding:3px;background:#263454;border:1px solid #6c7094;border-radius:7px}
+.arcane-deck-mini-card-380{position:relative;overflow:hidden;aspect-ratio:104/164;border-radius:4px}
+.arcane-deck-mini-card-380>.arcane-card-335{width:100%!important;height:100%!important}
+.arcane-deck-mini-count-380{position:absolute;top:5px;left:5px;background:#13182ded;color:#ffe8a4;border:1px solid #cdb271;border-radius:4px;font-size:11px;font-weight:900;padding:2px 4px;z-index:2}
+.arcane-deck-manager-377 .arcane-deck-mini-remove-380{position:absolute;right:4px;top:4px;z-index:3;background:#7e3042;color:#fff;border:1px solid #ef9da4;border-radius:50%;width:23px;height:23px;padding:0;font-size:18px;line-height:20px}
+.arcane-deck-mini-380>small{display:block;text-align:center;font-size:9px;line-height:1.2;color:#e6debf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 0 1px}
+@media(max-width:430px){.arcane-deck-mini-grid-380{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:6px}.arcane-deck-mini-380>small{font-size:8px}.arcane-deck-character-head-380 h3{font-size:16px}}
+
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7313,10 +7329,28 @@ window.setArenaCharacterTheme('magierin');
  +'<div id="arcaneDeckEditor377" class="arcane-deck-editor-377" hidden></div>';
  document.body.appendChild(page);
  const list=page.querySelector('#arcaneDeckList377'),editor=page.querySelector('#arcaneDeckEditor377');
+ function character(d){return d.character==='leon'||d.id==='leon'||d.id.startsWith('leon-')?'leon':'kael'}
+ function groupDecks(ch){return state.decks.filter(d=>character(d)===ch)}
+ function addDeck(ch){
+  if(groupDecks(ch).length>=4)return;
+  const original=groupDecks(ch)[0];
+  const number=[2,3,4].find(n=>!state.decks.some(d=>d.id===ch+'-'+n));
+  if(!number)return;
+  const title=(ch==='kael'?'Kael':'Leon')+' – Deck '+number;
+  const newDeck={id:ch+'-'+number,character:ch,title,cards:original?original.cards.map(([name,count])=>[name,count]):[]};
+  state.decks.push(newDeck);
+  if(!save()){state.decks.pop();return}
+  selected=newDeck.id;filter='';autoSeeds.clear();autoMessage='';
+  drawList();drawEditor();
+ }
  function drawList(){
-  list.innerHTML=state.decks.map(d=>'<div class="arcane-deck-entry-377">'
-   +'<div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div>'
-   +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button></div></div>').join('');
+  list.innerHTML=['kael','leon'].map(ch=>{
+   const slots=groupDecks(ch),name=ch==='kael'?'Kael':'Leon';
+   return '<section class="arcane-deck-character-380"><div class="arcane-deck-character-head-380"><h3>'+name+' · '+slots.length+'/4 Decks</h3><button type="button" data-new-deck="'+ch+'" '+(slots.length>=4?'disabled':'')+'>＋ Neues Deck</button></div>'
+    +slots.map(d=>'<div class="arcane-deck-entry-377"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div>'
+    +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button></div></div>').join('')
+    +'</section>';
+  }).join('');
  }
  function getSelected(){return state.decks.find(d=>d.id===selected)}
  function autoBuild(d){
@@ -7375,6 +7409,13 @@ window.setArenaCharacterTheme('magierin');
   const tile=(name,n,mode)=>{
    const card=cardMap.get(name);if(!card)return '';
    const owned=countOwned(name),canAdd=mode==='add'&&n<3&&n<owned&&size(d)<50;
+   if(mode==='remove'){
+    return '<div class="arcane-deck-mini-380" title="'+esc(name)+'">'
+     +'<div class="arcane-deck-mini-card-380">'+renderArcaneCard335(card,{size:'collection'})+'</div>'
+     +'<span class="arcane-deck-mini-count-380">×'+n+'</span>'
+     +'<button type="button" data-remove="'+esc(name)+'" class="arcane-deck-mini-remove-380" aria-label="'+esc(name)+' entfernen">−</button>'
+     +'<small>'+esc(name)+'</small></div>';
+   }
    const button=mode==='remove'
     ?'<button type="button" class="arcane-deck-tile-button-378" data-remove="'+esc(name)+'" aria-label="'+esc(name)+' entfernen">− Entfernen</button>'
     :'<button type="button" class="arcane-deck-tile-button-378" data-add="'+esc(name)+'" '+(canAdd?'':'disabled')+' aria-label="'+esc(name)+' hinzufügen">+ Hinzufügen</button>';
@@ -7385,7 +7426,7 @@ window.setArenaCharacterTheme('magierin');
   editor.innerHTML='<div class="arcane-deck-editor-head-377"><h3>'+esc(d.title)+'</h3><button data-close>Zur Übersicht</button></div>'
    +'<div class="arcane-deck-counter-378"><strong>'+size(d)+' / 50 Karten</strong><span>'+(valid(d)?'Deck ist spielbereit':'30–50 Karten erforderlich · nur Karten aus deinem Bestand')+'</span></div>'
    +'<div class="arcane-auto-controls-379"><strong>Auto-Deck</strong><span>'+autoSeeds.size+'/5 Wunschkarten gewählt</span><p>Wähle unten 1–5 Karten aus deiner Sammlung. Das Auto-Deck ergänzt passende Karten zu einem spielbaren 30-Karten-Deck.</p><button type="button" data-auto-build '+(autoSeeds.size?'':'disabled')+'>✦ Auto-Deck erstellen</button><small>'+esc(autoMessage)+'</small></div>'
-   +'<h4>Aktuelles Deck</h4><div class="arcane-deck-tiles-378">'
+   +'<h4>Mein Deck · kompakte Kartenübersicht</h4><div class="arcane-deck-mini-grid-380">'
    +d.cards.map(([name,n])=>tile(name,n,'remove')).join('')
    +'</div><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
    +'<div class="arcane-deck-tiles-378">'
@@ -7396,6 +7437,8 @@ window.setArenaCharacterTheme('magierin');
  function open(){state=read();page.hidden=false;editor.hidden=true;drawList()}
  page.querySelector('#arcaneDeckBack377').addEventListener('click',()=>page.hidden=true);
  list.addEventListener('click',e=>{
+  const create=e.target.closest('[data-new-deck]');
+  if(create){addDeck(create.dataset.newDeck);return}
   const edit=e.target.closest('[data-edit]');
   if(edit){selected=edit.dataset.edit;filter='';autoSeeds.clear();autoMessage='';drawEditor();return}
   const active=e.target.closest('[data-active]');
