@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-story-difficulties-v4351">
+<meta name="arcane-build" content="20261122-chronoresonanz-starter-v436">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5417,6 +5417,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 </main>
 <div id="handLimitOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Handkartenlimit überschritten"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>⚠️ Maximal 7 Handkarten</strong></div><p id="handLimitMessage">Wähle eine Karte, die auf deinen Friedhof gelegt wird.</p><div id="handLimitCards" class="hand-limit-grid"></div></div></div><div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script src="valtor-images.js?v=431"></script>
 <script src="eldric-images.js?v=434"></script>
+<script src="resonance-starter-v436.js?v=436"></script>
 <script>
 // VERSION 1.42
 const APP_VERSION='2.36';
@@ -5646,6 +5647,9 @@ function isResonanceDeck436(){
  try{return JSON.parse(localStorage.getItem('arcane-duel-managed-decks-v1')||'null')?.active==='resonanz-starter'}catch(_){return false}
 }
 
+// Register resonance starter cards before the player's initial hand is drawn,
+ // and before shop, collection and deck manager catalogue snapshots are built.
+deck.push(...window.ARCANE_CHRONORESONANZ_436.cards.map(c=>({...c})));
 let drawPile=createDuelDeck();
 const testOpeningHand=drawPile.splice(0,5);
 
@@ -5662,6 +5666,10 @@ let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",artwork:"resonanzfuerst-n
 ];
 
 if(isResonanceDeck436())resonanceExtraDeck=resonanceShopExtra436.map(c=>({...c}));
+// Only the active Resonance Starter uses its three associated Extra-Deck monsters.
+if(window.ARCANE_CHRONORESONANZ_436.active()){
+ resonanceExtraDeck=window.ARCANE_CHRONORESONANZ_436.extra.map(c=>({...c}));
+}
 function summonResonanceTest(index=0){
  if(!isMainPhase()){log("Resonanzbeschwörung nur in der Hauptphase.");return;}
  const card=resonanceExtraDeck[index];
@@ -7553,18 +7561,18 @@ window.setArenaCharacterTheme('magierin');
 (function initCollection316(){
  const testNames=new Map(starterDeckList.map(([name,count])=>[name,count]));
  for(const c of resonanceTestCards)testNames.set(c.name,Math.max(1,testNames.get(c.name)||0));
- const extraNames=new Set(resonanceExtraDeck.map(c=>c.name));
- const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck]
+ const extraNames=new Set([...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra].map(c=>c.name));
+ const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra]
   .filter((c,i,arr)=>arr.findIndex(d=>d.name===c.name)===i);
  const rarities={
   'Glutkoloss':'legendary','Flammendrache':'epic','Arkaner Magier':'rare',
   'Frostwächter':'rare','Schattenwolf':'rare','Donnerfalke':'rare',
-  'Arkaner Zerstörungsstrahl':'epic','Resonanzfürst Nocthar':'legendary',
+  'Arkaner Zerstörungsstrahl':'epic','Resonanzfürst Nocthar':'legendary','Resonanzhüter Auralis':'epic','Sphärendrache Cantaris':'legendary','Harmoniekaiser Solarys':'legendary',
   'Schattenbestie Umbra':'epic','Nyxara, Königin der Schatten':'legendary',
   'Noctharion, Herrscher der Finsternis':'mythic','Schattenfessel':'rare',
   'Kristallschild':'rare','Arkaner Rückschlag':'rare',
   'Arkaner Sturm':'epic','Geisterruf':'rare',
-  'Schattenresonator':'rare','Nachtklinge':'rare'
+  'Schattenresonator':'rare','Nachtklinge':'rare','Sternklang-Novizin':'rare','Echo-Dirigent':'rare'
  };
  const rarityData={
   normal:{label:'Normal',color:'#c3c5d1'},
@@ -8993,4 +9001,5 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
 })();
 </script>
 <script src="story-difficulty-v435.js?v=4351"></script>
+<script>window.ARCANE_CHRONORESONANZ_436?.install();</script>
 </body></html>
