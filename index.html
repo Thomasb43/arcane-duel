@@ -5636,6 +5636,16 @@ function createDuelDeck(){
  }
  return shuffleCards(cards);
 }
+/* v4.36: Chronoresonanz – Klang der Sphären */
+const resonanceShopCards436=[{"name":"Sternklang-Novizin","kind":"monster","fx":"draw","effectText":"Resonator. Bei offener Beschwörung ziehe 1 Karte.","emoji":"🎼","resonanceShop":true,"skin":"ice","element":"Klang","level":2,"atk":700,"def":1100,"resonator":true,"race":"Sphärenwesen"},{"name":"Echo-Dirigent","kind":"monster","fx":"shield","effectText":"Resonator. Bei offener Beschwörung erhält ein eigenes Chronoresonanzmonster 200 DEF.","emoji":"🎵","resonanceShop":true,"skin":"ice","element":"Klang","level":3,"atk":1100,"def":1200,"resonator":true,"race":"Sphärenwesen"},{"name":"Sphärenritter","kind":"monster","fx":"charge","effectText":"Bei offener Beschwörung +200 ATK, falls du einen Resonator kontrollierst.","emoji":"⚔️","resonanceShop":true,"skin":"ice","element":"Klang","level":4,"atk":1700,"def":1200,"resonator":false,"race":"Sphärenwesen"},{"name":"Kristall-Echowächter","kind":"monster","fx":"bulwark","effectText":"Bei offener Beschwörung erhält diese Karte 300 DEF.","emoji":"🔔","resonanceShop":true,"skin":"ice","element":"Klang","level":4,"atk":1200,"def":1900,"resonator":false,"race":"Sphärenwesen"},{"name":"Wellenluchs","kind":"monster","fx":"seek","effectText":"Bei offener Beschwörung nimm 1 Chronoresonanz-Resonator aus dem Deck auf die Hand.","emoji":"🐈","resonanceShop":true,"skin":"ice","element":"Klang","level":3,"atk":1400,"def":1100,"resonator":false,"race":"Sphärenwesen"},{"name":"Obertongeist","kind":"monster","fx":"healing","effectText":"Bei offener Beschwörung erhältst du 200 LP.","emoji":"✨","resonanceShop":true,"skin":"ice","element":"Klang","level":2,"atk":900,"def":1300,"resonator":false,"race":"Sphärenwesen"},{"name":"Echomelodie","kind":"spell","fx":"draw","effectText":"Ziehe 1 Karte oder 2 mit einem offenen Chronoresonanz-Resonator.","emoji":"📜","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Sphärenruf","kind":"spell","fx":"seek","effectText":"Nimm 1 Chronoresonanz-Resonator aus deinem Deck auf die Hand.","emoji":"🎺","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Resonanz-Reprise","kind":"spell","fx":"revive","effectText":"Beschwöre 1 Chronoresonanz-Monster bis Stufe 4 aus dem Friedhof offen in Verteidigung. Kein Angriff in diesem Zug.","emoji":"🪄","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Oberton-Segen","kind":"spell","fx":"power","effectText":"Ein offenes Resonanzmonster aus deinem Extra-Deck erhält 400 ATK.","emoji":"🌠","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Taktwende","kind":"trap","fx":"guard","effectText":"Ab deinem nächsten Zug manuell aktivierbar: 1 Chronoresonanz-Resonator erhält 400 DEF.","emoji":"🛡️","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Gegenhall","kind":"trap","fx":"counter","effectText":"Ab deinem nächsten Zug manuell aktivierbar: Annulliere den nächsten gegnerischen Angriff.","emoji":"🔊","resonanceShop":true,"skin":"spell","element":"Klang"},{"name":"Echostille","kind":"trap","fx":"ward","effectText":"Ab deinem nächsten Zug manuell aktivierbar: Eigene Resonanzmonster aus dem Extra-Deck erhalten 300 ATK.","emoji":"🔕","resonanceShop":true,"skin":"spell","element":"Klang"}];
+const resonanceShopRecipe436=[["Sternklang-Novizin",3],["Echo-Dirigent",3],["Sphärenritter",3],["Kristall-Echowächter",3],["Wellenluchs",3],["Obertongeist",3],["Echomelodie",2],["Sphärenruf",2],["Resonanz-Reprise",2],["Oberton-Segen",1],["Taktwende",2],["Gegenhall",2],["Echostille",1]];
+const resonanceShopExtra436=[{"name":"Resonanzhüter Auralis","level":5,"atk":1950,"def":2200,"fx":"healing","effectText":"Bei Resonanzbeschwörung erhältst du 300 LP.","emoji":"🛡️","kind":"monster","element":"Klang","race":"Resonanz","skin":"ice","resonance":true,"resonanceShop":true,"recipe":"chronoresonanz"},{"name":"Sphärendrache Cantaris","level":6,"atk":2450,"def":2000,"fx":"backrow","effectText":"Bei Resonanzbeschwörung zerstöre eine gesetzte gegnerische Zauber- oder Fallenkarte.","emoji":"🐉","kind":"monster","element":"Klang","race":"Resonanz","skin":"ice","resonance":true,"resonanceShop":true,"recipe":"chronoresonanz"},{"name":"Harmoniekaiser Solarys","level":7,"atk":2850,"def":2400,"fx":"weak","effectText":"Bei Resonanzbeschwörung verliert das stärkste offene gegnerische Monster 500 ATK.","emoji":"👑","kind":"monster","element":"Klang","race":"Resonanz","skin":"ice","resonance":true,"resonanceShop":true,"recipe":"chronoresonanz"}];
+deck.push(...resonanceShopCards436);
+window.arcaneResonanceStarter436={title:"Chronoresonanz – Klang der Sphären",cards:resonanceShopRecipe436.map(x=>[...x]),extra:resonanceShopExtra436.map(x=>({...x}))};
+function isResonanceDeck436(){
+ try{return JSON.parse(localStorage.getItem('arcane-duel-managed-decks-v1')||'null')?.active==='resonanz-starter'}catch(_){return false}
+}
+
 let drawPile=createDuelDeck();
 const testOpeningHand=drawPile.splice(0,5);
 
@@ -5651,6 +5661,7 @@ let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",artwork:"resonanzfuerst-n
 {name:"Noctharion, Herrscher der Finsternis",artwork:"noctharion-herrscher",kind:"monster",emoji:"🐉",atk:3200,def:2600,level:9,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,recipe:"noctharion",effectText:"Resonanz: Nyxara + ein weiteres Schattenmonster. Kann zweimal pro Zug angreifen. Nach dem zweiten Angriff verlierst du 500 LP."}
 ];
 
+if(isResonanceDeck436())resonanceExtraDeck=resonanceShopExtra436.map(c=>({...c}));
 function summonResonanceTest(index=0){
  if(!isMainPhase()){log("Resonanzbeschwörung nur in der Hauptphase.");return;}
  const card=resonanceExtraDeck[index];
@@ -6521,7 +6532,9 @@ function availableResonanceMaterials(card){
   const first=myMon[a];if(!first||first.faceDown)continue;
   for(let b=0;b<myMon.length;b++){
    const second=myMon[b];if(a===b||!second||second.faceDown)continue;
-   if(card.recipe==="nyxara"){
+   if(card.recipe==="chronoresonanz"){
+    if(first.resonanceShop&&first.resonator&&second.resonanceShop&&!second.resonator&&!second.resonance&&first.level+second.level===card.level)return [a,b];
+   }else if(card.recipe==="nyxara"){
     if(first.name==="Schattenresonator"&&second.name==="Nachtklinge")return [a,b];
    }else if(card.recipe==="noctharion"){
     if(first.name==="Nyxara, Königin der Schatten"&&second.element==="Finsternis"&&!second.resonance)return [a,b];
@@ -6533,6 +6546,7 @@ function availableResonanceMaterials(card){
  return null;
 }
 function resonanceRequirement(card){
+ if(card.recipe==="chronoresonanz")return "Ein offener Chronoresonanz-Resonator + ein anderes offenes Chronoresonanzmonster, Levelsumme "+card.level;
  if(card.recipe==="nyxara")return "Schattenresonator + Nachtklinge (Spezialrezept)";
  if(card.recipe==="noctharion")return "Nyxara + ein weiteres offenes Schattenmonster";
  return "Offener Resonator + weiteres offenes Monster, Levelsumme "+card.level;
