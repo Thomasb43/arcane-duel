@@ -1,4 +1,4 @@
-/* Arcane Duel v4.44 – Vier Story-Schwierigkeitsstufen für Kapitel 1 und 2 */
+/* Arcane Duel v4.45 – Vier Story-Schwierigkeitsstufen für Kapitel 1, 2 und 3 */
 (function(){
 'use strict';
 const LABELS=['Einsteiger','Fortgeschritten','Experte','Meister'];
@@ -31,9 +31,9 @@ createStoryOpponentDeck362=function(index){
 function readWins(){
  try{
   const data=JSON.parse(localStorage.getItem(WIN_KEY)||'[]');
-  if(Array.isArray(data))return Array.from({length:20},(_,i)=>Math.max(0,Math.min(15,Math.trunc(Number(data[i])||0))));
+  if(Array.isArray(data))return Array.from({length:30},(_,i)=>Math.max(0,Math.min(15,Math.trunc(Number(data[i])||0))));
  }catch(e){}
- return Array(20).fill(0);
+ return Array(30).fill(0);
 }
 function recordWin(index,tier){
  const current=readWins();current[index]|=(1<<(clamp(tier)-1));
@@ -41,16 +41,18 @@ function recordWin(index,tier){
 }
 function choose(index,tier){
  tier=clamp(tier);
- if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
+ if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
+ else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
  else window[PROPS[index]]=tier;
- window.arcaneStorySelectedDifficulty435={mission:index+1,chapter:index<10?1:2,missionNumber:index<10?index+1:index-9,tier,label:LABELS[tier-1]};
+ window.arcaneStorySelectedDifficulty435={mission:index+1,chapter:index<10?1:index<20?2:3,missionNumber:index%10+1,tier,label:LABELS[tier-1]};
  try{sessionStorage.setItem(TIER_KEY,String(tier));sessionStorage.setItem(MISSION_KEY,String(index))}catch(e){}
 }
 const oldApply=window.arcaneApplyStoryOpponent362;
 window.arcaneApplyStoryOpponent362=function(index){
  let active=-1,tier=1;
  try{active=Number(sessionStorage.getItem(MISSION_KEY));tier=active===index?clamp(sessionStorage.getItem(TIER_KEY)):1}catch(e){}
- if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
+ if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
+ else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
  const ok=oldApply(index);
  if(ok&&window.arcaneStoryOpponentInfo362){
   const info=window.arcaneStoryOpponentInfo362;
@@ -65,7 +67,7 @@ if(typeof oldResult==='function'){
    try{
     const pending=sessionStorage.getItem('arcane-story-active-duel-358');
     const index=Number(pending),selected=Number(sessionStorage.getItem(MISSION_KEY));
-    if(pending!==null&&Number.isInteger(index)&&index>=0&&index<20){
+    if(pending!==null&&Number.isInteger(index)&&index>=0&&index<30){
      recordWin(index,selected===index?sessionStorage.getItem(TIER_KEY):1);
     }
    }catch(e){console.warn('Schwierigkeitssieg konnte nicht gespeichert werden:',e)}
@@ -96,10 +98,10 @@ document.head.appendChild(style);
 let ignoreButton=null,opened=false;
 function missionIndex(){
  const title=document.getElementById('arcaneStoryHeading357')?.textContent||'';
- const match=title.match(/^([12])-(\d+)\s/);
+ const match=title.match(/^([123])-(\d+)\s/);
  if(!match)return -1;
  const index=(Number(match[1])-1)*10+Number(match[2])-1;
- return Number.isInteger(index)&&index>=0&&index<20?index:-1;
+ return Number.isInteger(index)&&index>=0&&index<30?index:-1;
 }
 function showChoice(index,continueButton){
  if(opened)return;
@@ -109,7 +111,7 @@ function showChoice(index,continueButton){
  modal.id='arcaneStoryDifficulty435';modal.className='arcane-difficulty-overlay-435';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Schwierigkeit wählen');
  const panel=document.createElement('div');panel.className='arcane-difficulty-panel-435';
  const heading=document.createElement('h2');heading.className='arcane-difficulty-title-435';heading.textContent='Schwierigkeit wählen';
- const intro=document.createElement('p');intro.className='arcane-difficulty-intro-435';intro.textContent='Mission '+(index<10?'1-'+(index+1):'2-'+(index-9))+' · Wähle eine der vier Deckstufen. Jede Stufe hat einen eigenen Siegstatus.';
+ const intro=document.createElement('p');intro.className='arcane-difficulty-intro-435';intro.textContent='Mission '+(index<10?'1-'+(index+1):index<20?'2-'+(index-9):'3-'+(index-19))+' · Wähle eine der vier Deckstufen. Jede Stufe hat einen eigenen Siegstatus.';
  const grid=document.createElement('div');grid.className='arcane-difficulty-grid-435';
  for(let tier=1;tier<=4;tier++){
   const won=!!(marks&(1<<(tier-1))),button=document.createElement('button');
@@ -159,5 +161,5 @@ if(container){
  new MutationObserver(decorate).observe(container,{childList:true});
  decorate();
 }
-window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,select:choose,missions:20};
+window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,select:choose,missions:30};
 })();
