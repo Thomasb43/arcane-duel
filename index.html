@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-no-direct-attacks-through-monsters-v399">
+<meta name="arcane-build" content="20261122-elara-50-card-pool-four-level-presets-v400">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5645,8 +5645,31 @@ const storyDeckRecipes362=[
  {name:"Valtor",theme:"Zerstörung & Opfer",base:["Glutkoloss","Flammendrache","Schattenwolf","Aschenritter"],support:["Flammenstoß","Drachenatem","Arkaner Zerstörungsstrahl","Arkaner Sturm","Schattenfessel","Geisterruf"]},
  {name:"Eldric",theme:"Verbotene Meistermagie",base:["Arkaner Magier","Schattenwolf","Glutkoloss","Flammendrache"],support:["Arkaner Sturm","Arkaner Zerstörungsstrahl","Schattenfessel","Kristallschild","Geisterruf","Arkaner Wissensstrom"]}
 ];
+/* v4.00 – Elara: 50 physical cards in her collection, 30 per duel.
+   The four 30-card loadouts are prepared for future difficulty selection.
+   No difficulty selector is exposed yet; story 1-2 currently uses tier 1. */
+const elaraCardPool400=[["Frostwächter",3],["Arkaner Magier",3],["Erdwächter",3],["Donnerfalke",3],["Runenwächter",3],["Lichtfalke",3],["Arkaner Lehrling",3],["Kristallschild",3],["Eisiger Rückstoß",3],["Heilende Quelle",3],["Frostpanzer",3],["Arkaner Segen",3],["Arkaner Wissensstrom",3],["Doppelter Segen",3],["Seelenbergung",3],["Arkaner Rückschlag",3],["Lebensfunke",2]];
+const elaraDifficultyPresets400=[{"label":"Einsteiger","monster":["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke","Runenwächter","Arkaner Lehrling"],"support":["Heilende Quelle","Frostpanzer","Arkaner Segen","Kristallschild"]},{"label":"Fortgeschritten","monster":["Frostwächter","Arkaner Magier","Donnerfalke","Runenwächter","Lichtfalke","Arkaner Lehrling"],"support":["Heilende Quelle","Arkaner Wissensstrom","Eisiger Rückstoß","Kristallschild"]},{"label":"Experte","monster":["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke","Runenwächter","Lichtfalke"],"support":["Arkaner Wissensstrom","Eisiger Rückstoß","Arkaner Rückschlag","Seelenbergung"]},{"label":"Meister","monster":["Frostwächter","Arkaner Magier","Donnerfalke","Runenwächter","Lichtfalke","Arkaner Lehrling"],"support":["Arkaner Wissensstrom","Eisiger Rückstoß","Arkaner Rückschlag","Kristallschild"]}];
+function createElaraDeck400(tier=1){
+ const chosen=Math.max(1,Math.min(4,Math.trunc(Number(tier)||1)));
+ const preset=elaraDifficultyPresets400[chosen-1];
+ const poolCounts=new Map(elaraCardPool400);
+ const selectedNames=[...preset.monster,...preset.support];
+ const counts=new Map(),cards=[];
+ for(const name of selectedNames){
+  const original=deck.find(c=>c.name===name);
+  if(!original||!poolCounts.has(name))throw new Error('Elara-Karte fehlt: '+name);
+  if(poolCounts.get(name)<3)throw new Error('Elara-Karte hat weniger als 3 Exemplare: '+name);
+  for(let i=0;i<3;i++){cards.push({...original});counts.set(name,(counts.get(name)||0)+1)}
+ }
+ if(elaraCardPool400.reduce((n,[,count])=>n+count,0)!==50||cards.length!==30||[...counts.values()].some(n=>n>3))throw new Error('Elara: ungültige Deckgröße oder Kopienanzahl');
+ return shuffleCards(cards);
+}
+window.arcaneElaraDeck400={pool:elaraCardPool400.map(([name,count])=>({name,count})),presets:elaraDifficultyPresets400.map((p,i)=>({level:i+1,label:p.label,deckSize:30})),create:createElaraDeck400};
+
 function createStoryOpponentDeck362(index){
  if(index===0)return createLeonDeck363();
+ if(index===1)return createElaraDeck400(window.arcaneStoryDifficulty400||1);
  const recipe=storyDeckRecipes362[index];
  if(!recipe)throw new Error("Unbekannte Story-Mission "+index);
  const counts=new Map(), cards=[];
@@ -5674,7 +5697,7 @@ window.arcaneApplyStoryOpponent362=(index)=>{
  aiDeck=cards;
  aiHand=aiDeck.splice(0,5);
  aiTurn=0;
- window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30};
+ window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{})};
  return true;
 };
 
