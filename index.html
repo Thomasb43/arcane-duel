@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-resonanz-illustrationen-v441">
+<meta name="arcane-build" content="20261122-deck-extra-sechs-felder-v442">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5395,6 +5395,30 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
   font-size:clamp(7px,1.9vw,9px)!important;
  }
 }
+
+/* v4.42: sechs Resonanzplätze unter jedem Deck */
+.arcane-deck-extra-section-442{margin:14px 0 18px;padding:12px;border:1px solid #9b8259;border-radius:12px;background:linear-gradient(135deg,#15243e,#101527)}
+.arcane-deck-extra-heading-442{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:9px}
+.arcane-deck-extra-heading-442 h4{margin:0;color:#ffe5ab;font-size:16px}
+.arcane-deck-extra-heading-442 span{color:#b7d4f4;font-size:12px;font-weight:700}
+.arcane-deck-extra-slots-442{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.arcane-deck-extra-slot-442{min-width:0;position:relative;display:grid;gap:4px}
+.arcane-deck-manager-377 .arcane-deck-extra-slot-main-442{display:flex;flex-direction:column;gap:4px;align-items:stretch;width:100%;min-width:0;min-height:108px;padding:4px;border:1px dashed #687ca0;border-radius:8px;background:linear-gradient(#1d2c50,#12182f);color:#e1eaff;text-align:center}
+.arcane-deck-manager-377 .arcane-deck-extra-slot-main-442[aria-pressed="true"]{border:2px solid #ffdf92;box-shadow:0 0 10px #e8c67366}
+.arcane-deck-extra-preview-442{aspect-ratio:104/164;width:100%;min-height:60px;display:grid;place-items:center;overflow:hidden;border-radius:5px;background:#0b1429;position:relative}
+.arcane-deck-extra-preview-442 .arcane-card-335{width:100%!important;height:100%!important}
+.arcane-deck-extra-preview-442.empty{border:1px solid #374864;background:repeating-linear-gradient(135deg,#1b2944,#1b2944 8px,#152039 8px,#152039 16px);color:#789bc0;font-size:20px}
+.arcane-deck-extra-slot-main-442 small{display:block;font-size:9px;line-height:1.15;min-height:20px;overflow-wrap:anywhere;color:#e4d6bd}
+.arcane-deck-manager-377 .arcane-deck-extra-remove-442{position:absolute;top:2px;right:2px;z-index:4;width:22px;height:22px;padding:0;border-radius:50%;background:#792c40;border-color:#faa4b0;color:#fff;font-size:16px}
+.arcane-deck-extra-note-442{color:#bfcfe9;font-size:11px;line-height:1.5;margin:10px 0}
+.arcane-deck-extra-choices-442{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px;margin-top:9px}
+.arcane-deck-manager-377 .arcane-deck-extra-choice-442{width:100%;display:grid;gap:5px;padding:5px;background:#1d2947;border:1px solid #7e7390;text-align:center;min-width:0}
+.arcane-deck-extra-choice-442 .arcane-card-335{width:100%!important;height:100%!important}
+.arcane-deck-extra-choice-442 .arcane-deck-extra-preview-442{max-height:180px}
+.arcane-deck-extra-choice-442 strong{font-size:10px;line-height:1.25;overflow-wrap:anywhere;color:#ffe5a4}
+.arcane-deck-extra-choice-442 small{color:#bdd2e8;font-size:10px}
+.arcane-deck-manager-377 .arcane-deck-extra-choice-442:disabled{opacity:.42}
+@media(max-width:580px){.arcane-deck-extra-slots-442{grid-template-columns:repeat(3,minmax(0,1fr))}.arcane-deck-extra-choices-442{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -5677,15 +5701,34 @@ let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",artwork:"resonanzfuerst-n
 {name:"Nyxara, Königin der Schatten",artwork:"nyxara-schattenkoenigin",kind:"monster",emoji:"🌙",atk:2600,def:2100,level:7,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,recipe:"nyxara",effectText:"Resonanz: Schattenresonator + Nachtklinge. Bei Beschwörung zerstört sie eine gegnerische Zauber- oder Fallenkarte."},
 {name:"Noctharion, Herrscher der Finsternis",artwork:"noctharion-herrscher",kind:"monster",emoji:"🐉",atk:3200,def:2600,level:9,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,recipe:"noctharion",effectText:"Resonanz: Nyxara + ein weiteres Schattenmonster. Kann zweimal pro Zug angreifen. Nach dem zweiten Angriff verlierst du 500 LP."}
 ];
+// Legacy cards remain available in the catalogue but no longer occupy free slots.
+const arcaneLegacyResonance442=resonanceExtraDeck.map(c=>({...c}));
+resonanceExtraDeck=[];
 
 /* Neue Resonanzmonster bleiben im Extra-Deck, nicht im Hauptdeck.
    Bereits auf dem Spielfeld liegende Exemplare werden mitgezaehlt. */
 function syncHeroResonanceExtra439(){
- const counts=window.arcaneBoosterInventory322?.read()?.counts||{};
- for(const boss of arcaneHeroResonanceBosses439){
-  const target=Math.min(3,Math.max(0,Number(counts[boss.name])||0));
-  const present=resonanceExtraDeck.filter(c=>c.name===boss.name).length+myMon.filter(c=>c&&c.name===boss.name).length;
-  for(let i=present;i<target;i++)resonanceExtraDeck.push({...boss});
+ // The Extra Deck holds only the cards chosen in six slots of the active deck.
+ let selected=[];
+ try{
+  const saved=JSON.parse(localStorage.getItem('arcane-duel-managed-decks-v1')||'null');
+  const active=saved?.decks?.find(d=>d.id===saved.active);
+  if(Array.isArray(active?.extra))selected=active.extra.slice(0,6);
+  else if(active?.id==='chronoresonanz-starter')selected=window.ARCANE_CHRONORESONANZ_436.extra.map(c=>c.name);
+ }catch(_){}
+ let owned={};
+ try{owned=JSON.parse(localStorage.getItem('arcane-duel-booster-inventory-v1')||'null')?.counts||{}}catch(_){}
+ const known=new Map([...arcaneLegacyResonance442,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439].map(c=>[c.name,c]));
+ const onField={},used={};
+ for(const c of myMon)if(c?.resonance)onField[c.name]=(onField[c.name]||0)+1;
+ resonanceExtraDeck=[];
+ for(const name of selected){
+  const card=known.get(name);
+  if(!card?.resonance)continue;
+  const max=Math.min(3,Math.max(0,Number(owned[name])||0));
+  if((used[name]||0)>=max)continue;
+  used[name]=(used[name]||0)+1;
+  if(used[name]>(onField[name]||0))resonanceExtraDeck.push({...card});
  }
  renderExtraDeckCounts();updateExtraDeckGlow();
 }
@@ -7602,8 +7645,8 @@ syncHeroResonanceExtra439();
 (function initCollection316(){
  const testNames=new Map(starterDeckList.map(([name,count])=>[name,count]));
  for(const c of resonanceTestCards)testNames.set(c.name,Math.max(1,testNames.get(c.name)||0));
- const extraNames=new Set([...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439].map(c=>c.name));
- const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439]
+ const extraNames=new Set([...arcaneLegacyResonance442,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439].map(c=>c.name));
+ const allCards=[...deck,...resonanceTestCards,...arcaneLegacyResonance442,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439]
   .filter((c,i,arr)=>arr.findIndex(d=>d.name===c.name)===i);
  const rarities={
   'Glutkoloss':'legendary','Flammendrache':'epic','Arkaner Magier':'rare',
@@ -8606,7 +8649,23 @@ syncHeroResonanceExtra439();
  const available=()=>window.arcaneBoosterInventory322?.read()?.counts||{};
  const basic=Object.fromEntries(starterDeckList);
  const countOwned=name=>Math.min(3,(basic[name]||0)+(available()[name]||0));
- const cardMap=new Map(deck.map(c=>[c.name,c]));
+ const cardMap=new Map(deck.filter(c=>!c.resonance).map(c=>[c.name,c]));
+ const extraCards442=new Map([...arcaneLegacyResonance442,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439].map(c=>[c.name,c]));
+ const extraOwned442=name=>Math.min(3,Math.max(0,Number(available()[name])||0));
+ let chosenExtraSlot442=0;
+ function extraSlots442(d){
+  const prior=Array.isArray(d.extra)?d.extra:
+   (d.id==='chronoresonanz-starter'?window.ARCANE_CHRONORESONANZ_436.extra.map(c=>c.name):[]);
+  const used={};
+  return Array.from({length:6},(_,i)=>{
+   const name=prior[i],card=extraCards442.get(name);
+   if(!card?.resonance||(used[name]||0)>=extraOwned442(name))return null;
+   used[name]=(used[name]||0)+1;
+   return name;
+  });
+ }
+ function extraCompatible442(card,d){return !card.heroResonance439||card.heroResonance439===character(d);}
+
  function isOwnedRecipe(d){return d.cards.every(([name,n])=>n<=countOwned(name))}
  function size(d){return d.cards.reduce((n,[,v])=>n+v,0)}
  function valid(d){return size(d)>=30&&size(d)<=50&&d.cards.every(([name,n])=>n<=3&&n<=countOwned(name))}
@@ -8628,7 +8687,7 @@ syncHeroResonanceExtra439();
   const number=[2,3,4].find(n=>!state.decks.some(d=>d.id===ch+'-'+n));
   if(!number)return;
   const title=(ch==='kael'?'Kael':'Leon')+' – Deck '+number;
-  const newDeck={id:ch+'-'+number,character:ch,title,cards:[]};
+  const newDeck={id:ch+'-'+number,character:ch,title,cards:[],extra:[null,null,null,null,null,null]};
   state.decks.push(newDeck);
   if(!save()){state.decks.pop();return}
   selected=newDeck.id;filter='';autoSeeds.clear();autoMessage='';
@@ -8649,7 +8708,7 @@ syncHeroResonanceExtra439();
   list.innerHTML=['kael',...(leonOpen()?['leon']:[])].map(ch=>{
    const slots=groupDecks(ch),name=ch==='kael'?'Kael':'Leon';
    return '<section class="arcane-deck-character-380"><div class="arcane-deck-character-head-380"><div class="arcane-deck-character-identity-395"><img src="artwork/story/'+ch+'.jpg" alt="Porträt von '+name+'" loading="lazy"><h3>'+name+' · '+slots.length+'/4 Decks</h3></div><button type="button" data-new-deck="'+ch+'" '+(slots.length>=4?'disabled':'')+'>＋ Neues Deck</button></div>'
-    +slots.map(d=>'<div class="arcane-deck-entry-377"><div class="arcane-deck-entry-identity-395"><img src="artwork/story/'+character(d)+'.jpg" alt="" loading="lazy"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div></div>'
+    +slots.map(d=>'<div class="arcane-deck-entry-377"><div class="arcane-deck-entry-identity-395"><img src="artwork/story/'+character(d)+'.jpg" alt="" loading="lazy"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten · Extra '+extraSlots442(d).filter(Boolean).length+'/6'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div></div>'
     +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button>'+(d.id==='kael'||d.id==='leon'?'':'<button type="button" class="arcane-deck-delete-381" data-delete-deck="'+esc(d.id)+'">Löschen</button>')+'</div></div>').join('')
     +'</section>';
   }).join('');
@@ -8707,7 +8766,18 @@ syncHeroResonanceExtra439();
  function drawEditor(){
   const d=getSelected();if(!d){editor.hidden=true;return}
   editor.hidden=false;
-  const filtered=[...cardMap.values()].filter(c=>countOwned(c.name)>0&&c.name.toLowerCase().includes(filter.toLowerCase()));
+  const filtered=[...cardMap.values()].filter(c=>!c.resonance&&countOwned(c.name)>0&&c.name.toLowerCase().includes(filter.toLowerCase()));
+  const slots442=extraSlots442(d);
+  const usedExtra442=name=>slots442.filter(x=>x===name).length;
+  const extras442=[...extraCards442.values()].filter(c=>c.resonance&&extraCompatible442(c,d)&&extraOwned442(c.name)>0);
+  const extraSlotsHTML442=slots442.map((name,i)=>{
+   const card=name?extraCards442.get(name):null;
+   return '<div class="arcane-deck-extra-slot-442"><button type="button" data-extra-slot-442="'+i+'" class="arcane-deck-extra-slot-main-442" aria-pressed="'+(chosenExtraSlot442===i)+'" aria-label="Extra-Deck Feld '+(i+1)+(name?': '+esc(name):': leer')+'"><div class="arcane-deck-extra-preview-442'+(card?'':' empty')+'">'+(card?renderArcaneCard335(card,{size:'collection'}):'＋')+'</div><small>'+(card?esc(card.name):'Feld '+(i+1)+' · leer')+'</small></button>'+(card?'<button type="button" class="arcane-deck-extra-remove-442" aria-label="'+esc(name)+' entfernen" data-extra-remove-442="'+i+'">×</button>':'')+'</div>';
+  }).join('');
+  const extraChoicesHTML442=extras442.map(c=>{
+   const used=usedExtra442(c.name),owned=extraOwned442(c.name),canAdd=used-(slots442[chosenExtraSlot442]===c.name?1:0)<owned;
+   return '<button type="button" class="arcane-deck-extra-choice-442" data-extra-add-442="'+esc(c.name)+'" '+(canAdd?'':'disabled')+'><div class="arcane-deck-extra-preview-442">'+renderArcaneCard335(c,{size:'collection'})+'</div><strong>'+esc(c.name)+'</strong><small>'+used+'/'+owned+' verwendet</small></button>';
+  }).join('');
   const tile=(name,n,mode)=>{
    const card=cardMap.get(name);if(!card)return '';
    const owned=countOwned(name),canAdd=mode==='add'&&n<3&&n<owned&&size(d)<50;
@@ -8730,7 +8800,11 @@ syncHeroResonanceExtra439();
    +'<div class="arcane-auto-controls-379"><strong>Auto-Deck</strong><span>'+autoSeeds.size+'/5 Wunschkarten gewählt</span><p>Wähle unten 1–5 Karten aus deiner Sammlung. Das Auto-Deck ergänzt passende Karten zu einem spielbaren 30-Karten-Deck.</p><button type="button" data-auto-build '+(autoSeeds.size?'':'disabled')+'>✦ Auto-Deck erstellen</button><small>'+esc(autoMessage)+'</small></div>'
    +'<h4>Mein Deck · kompakte Kartenübersicht</h4><div class="arcane-deck-mini-grid-380">'
    +d.cards.map(([name,n])=>tile(name,n,'remove')).join('')
-   +'</div><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
+   +'</div><section class="arcane-deck-extra-section-442" aria-label="Extra-Deck"><div class="arcane-deck-extra-heading-442"><h4>Extra-Deck · Resonanzmonster</h4><span>'+slots442.filter(Boolean).length+' / 6 Felder belegt</span></div>'
+   +'<div class="arcane-deck-extra-slots-442">'+extraSlotsHTML442+'</div>'
+   +'<p class="arcane-deck-extra-note-442">Tippe auf ein Feld und wähle darunter dein Resonanzmonster. Nur Karten aus deiner Sammlung, maximal 3 Exemplare pro Karte. Die 6 Extra-Deck-Plätze zählen nicht zum Hauptdeck.</p>'
+   +(extras442.length?'<div class="arcane-deck-extra-choices-442">'+extraChoicesHTML442+'</div>':'<p class="arcane-deck-extra-note-442">Noch keine passenden Resonanzmonster in der Sammlung. Du kannst sie im Shop ziehen.</p>')
+   +'</section><h4>Aus deiner Sammlung hinzufügen</h4><input id="arcaneDeckSearch377" placeholder="Karte suchen ..." value="'+esc(filter)+'" />'
    +'<div class="arcane-deck-tiles-378">'
    +filtered.map(card=>tile(card.name,d.cards.find(p=>p[0]===card.name)?.[1]||0,'add')).join('')
    +'</div><button class="arcane-deck-activate-377" data-activate '+(valid(d)?'':'disabled')+'>Als aktives Deck wählen</button>'
@@ -8744,7 +8818,7 @@ syncHeroResonanceExtra439();
   const create=e.target.closest('[data-new-deck]');
   if(create){addDeck(create.dataset.newDeck);return}
   const edit=e.target.closest('[data-edit]');
-  if(edit){if(edit.dataset.edit.startsWith('leon')&&!leonOpen())return;selected=edit.dataset.edit;filter='';autoSeeds.clear();autoMessage='';drawEditor();return}
+  if(edit){if(edit.dataset.edit.startsWith('leon')&&!leonOpen())return;selected=edit.dataset.edit;chosenExtraSlot442=0;filter='';autoSeeds.clear();autoMessage='';drawEditor();return}
   const active=e.target.closest('[data-active]');
   if(active){const d=state.decks.find(x=>x.id===active.dataset.active);if(!d||!valid(d)||(character(d)==='leon'&&!leonOpen()))return;state.active=d.id;save();drawList();}
  });
@@ -8752,6 +8826,32 @@ syncHeroResonanceExtra439();
  editor.addEventListener('click',e=>{
   if(e.target.closest('[data-close]')){editor.hidden=true;drawList();return}
   const d=getSelected();if(!d)return;
+  const chooseSlot=e.target.closest('[data-extra-slot-442]');
+  if(chooseSlot){chosenExtraSlot442=Number(chooseSlot.dataset.extraSlot442);drawEditor();return;}
+  const clear=e.target.closest('[data-extra-remove-442]');
+  if(clear){
+   const i=Number(clear.dataset.extraRemove442);
+   if(i>=0&&i<6){
+    const old=d.extra,next=extraSlots442(d);next[i]=null;d.extra=next;
+    if(!save()){d.extra=old;window.alert('Extra-Deck konnte nicht gespeichert werden.');}
+    chosenExtraSlot442=i;drawList();drawEditor();
+   }
+   return;
+  }
+  const put=e.target.closest('[data-extra-add-442]');
+  if(put){
+   const name=put.dataset.extraAdd442,card=extraCards442.get(name),i=chosenExtraSlot442,slots=extraSlots442(d);
+   if(card?.resonance&&extraCompatible442(card,d)&&i>=0&&i<6){
+    const used=slots.filter(x=>x===name).length-(slots[i]===name?1:0);
+    if(used<extraOwned442(name)){
+     const old=d.extra;slots[i]=name;d.extra=slots;
+     if(!save()){d.extra=old;window.alert('Extra-Deck konnte nicht gespeichert werden.');}
+     else{const next=slots.findIndex(x=>!x);if(next>=0)chosenExtraSlot442=next;}
+     drawList();drawEditor();
+    }
+   }
+   return;
+  }
   const seed=e.target.closest('[data-seed]');
   if(seed){
    const name=seed.dataset.seed;
