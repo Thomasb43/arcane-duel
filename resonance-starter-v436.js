@@ -152,6 +152,13 @@ function install(){
  const oldArt=renderCardArt;
  renderCardArt=function(c){
   if(!c?.resonanceShop)return oldArt(c);
+  // v4.37: Use original cropped card illustrations. Existing vector art remains a fallback.
+  const art437=window.ARCANE_CHRONORESONANZ_ART_437?.[c.name];
+  if(art437){
+   return '<span class="chronoresonanz-original-art-437" role="img" aria-label="'+String(c.name).replace(/"/g,'&quot;')+'" style="display:block;width:100%;height:100%;overflow:hidden;background:#131c3a">'
+    +'<img src="'+art437+'" alt="" loading="eager" decoding="async" style="display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center center!important">'
+    +'</span>';
+  }
   const i=cards.findIndex(x=>x.name===c.name),j=extra.findIndex(x=>x.name===c.name),pos=i<0?13+j:i;
   const colors=['#c5edfc','#ded3ff','#f6e3ac','#a8e9ed','#adc8ff','#ecbeff'],color=colors[Math.max(0,pos)%colors.length];
   const glyph=c.resonance?'✦':c.kind==='monster'?(c.resonator?'♫':'◇'):c.kind==='trap'?'❖':'✧';
@@ -174,11 +181,19 @@ function install(){
   function owned(name){
    return Math.min(3,Math.max(0,Number(window.arcaneBoosterInventory322?.owned(name)||0)));
   }
+  const cover437=window.ARCANE_CHRONORESONANZ_ART_437?.['Sphärendrache Cantaris']||null;
+  function packVisual437(){
+   return cover437
+    ?'<div class="arcane-pack-image-375 ice" style="position:relative;display:block;overflow:hidden;border-color:#b4eaff;background:#192751">'
+     +'<img src="'+cover437+'" alt="Sphärendrache Cantaris" loading="eager" decoding="async" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%">'
+     +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px 5px;color:#fff0cf;font-weight:900;font-size:12px;letter-spacing:1px;text-align:center;text-shadow:0 2px 6px #000;background:linear-gradient(transparent,#10162bec)">CHRONORESONANZ</div></div>'
+    :'<div class="arcane-pack-image-375 ice" style="display:grid;place-items:center;background:#18234f"><span style="color:#bbf5ff;font-size:60px">◈</span></div>';
+  }
   function renderProduct(){
    if(productGrid.querySelector('#arcaneResonanceShopProduct436'))return;
    const button=document.createElement('button');button.id='arcaneResonanceShopProduct436';
    button.type='button';button.className='arcane-starter-product-375 ice';
-   button.innerHTML='<div class="arcane-pack-image-375 ice" style="display:grid;place-items:center;background:radial-gradient(circle,#586ec0,#241d5c 72%,#12142b)"><div style="text-align:center;color:#fae5b7;text-shadow:0 0 16px #7bddff"><div style="font-size:13px;letter-spacing:2px">ARCANE DUEL</div><div style="font-size:65px;color:#ace9ff">◈</div><strong>CHRONORESONANZ</strong><div style="font-size:12px">KLANG DER SPHÄREN</div></div></div><div class="arcane-starter-product-label-375"><strong>Chronoresonanz</strong><span>30 Karten + 3 Extra · 💎 '+price()+'</span></div>';
+   button.innerHTML=packVisual437()+'<div class="arcane-starter-product-label-375"><strong>Chronoresonanz</strong><span>30 Karten + 3 Extra · 💎 '+price()+'</span></div>';
    button.addEventListener('click',showDetail);
    productGrid.appendChild(button);
   }
@@ -189,7 +204,7 @@ function install(){
    const newCards=recipe.some(([name,n])=>owned(name)<n)||extra.some(c=>owned(c.name)===0);
    details.hidden=false;details.dataset.activeDeck='chronoresonanz';
    details.innerHTML='<button type="button" id="arcaneChronoBack436" class="arcane-starter-detail-back-375">← Alle Starterpacks</button>'
-    +'<div class="arcane-starter-detail-top-375"><div class="arcane-pack-image-375 ice" style="display:grid;place-items:center;background:radial-gradient(circle,#667ac2,#211a50)"><span style="font-size:75px;color:#b4eaff">◈</span></div><div><h4>Chronoresonanz</h4><p>Klang der Sphären</p><strong>30 Hauptdeck-Karten</strong><p>18 Monster · 7 Zauber · 5 Fallen</p><strong>3 Resonanzmonster im Extra-Deck</strong><p>💎 '+price()+' Arkankristalle</p></div></div>'
+    +'<div class="arcane-starter-detail-top-375">'+packVisual437()+'<div><h4>Chronoresonanz</h4><p>Klang der Sphären</p><strong>30 Hauptdeck-Karten</strong><p>18 Monster · 7 Zauber · 5 Fallen</p><strong>3 Resonanzmonster im Extra-Deck</strong><p>💎 '+price()+' Arkankristalle</p></div></div>'
     +'<h4>Alle Karten im Hauptdeck</h4><div class="arcane-starter-card-list-375">'
     +recipe.map(([name,n])=>'<div class="arcane-starter-card-row-375"><span>'+esc(name)+'</span><small>×'+n+' · Bestand '+owned(name)+'/3</small></div>').join('')+'</div>'
     +'<h4>Extra-Deck · beim Kauf inklusive</h4><div class="arcane-starter-card-list-375">'
