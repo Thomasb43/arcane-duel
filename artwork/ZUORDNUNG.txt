@@ -1,15 +1,3 @@
-KAEL – 10 bestätigte Kartenillustrationen
-
-Arkaner Lehrling: kael-arkaner-lehrling.webp
-Siegelritter: kael-siegelritter.webp
-Lichtfalke: kael-lichtfalke.webp
-Runenwächter: kael-runenwaechter.webp
-Sternenklingen-Ritter: kael-sternenklingen-ritter.webp
-Licht des Siegels: kael-licht-des-siegels.webp
-Runenwissen: kael-runenwissen.webp
-Siegelöffnung: kael-siegeloeffnung.webp
-Magischer Durchbruch: kael-magischer-durchbruch.webp
-Runenbarriere: kael-runenbarriere.webp
-
-Dateien direkt in arcane-duel/artwork/ hochladen.
-Zwei Bossmonster wurden bereits entworfen, sind aber nicht Teil dieser 10er-Dateiserie. Für Siegelgegenstoß und Lichtreflexion fehlen noch fertige Bilder.
+Noctis – 9 Monsterillustrationen für Arcane Duel
+Bitte die PNGs nach artwork/ im GitHub-Repository hochladen.
+Die ZIP enthält keine Zauber-/Fallenkarten.
