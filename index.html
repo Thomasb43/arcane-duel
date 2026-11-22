@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-darian-eight-guardian-art-v407">
+<meta name="arcane-build" content="20261122-noctis-shadow-deck-v408">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5691,6 +5691,8 @@ function createVarekDeck405(level=1){
 function cardsVarekName405(i){return varekPool405[i][0]}
 window.arcaneVarekDeck405={pool:varekPool405.map(([name,count])=>({name,count})),tiers:varekTiers405.map((t,i)=>({level:i+1,label:t.label})),create:createVarekDeck405};
 
+/* v4.08 – Noctis original 17 shadow cards (26 monster + 15 spell + 9 trap copies). */
+deck.push(...[{"name":"Schattennovize Neris","kind":"monster","level":2,"atk":800,"def":1000,"emoji":"🕯️","effectText":"Bei offener Beschwörung: Du erhältst 200 LP.","noctisFx":"heal200","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Nachtkralle Umbren","kind":"monster","level":3,"atk":1300,"def":900,"emoji":"🐺","effectText":"Bei offener Beschwörung: Diese Karte erhält 200 ATK, solange sie auf dem Feld bleibt.","noctisFx":"selfatk200","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Fluchhüter Vesper","kind":"monster","level":4,"atk":1500,"def":1400,"emoji":"⛓️","effectText":"Bei offener Beschwörung: Das stärkste offene gegnerische Monster verliert 300 ATK.","noctisFx":"enemyweak300","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Nebelschleicher","kind":"monster","level":4,"atk":1600,"def":1100,"emoji":"🌫️","effectText":"Bei offener Beschwörung: Diese Karte erhält 300 DEF, solange sie auf dem Feld bleibt.","noctisFx":"selfdef300","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Schattenhexe Nyss","kind":"monster","level":4,"atk":1400,"def":1600,"emoji":"🧙","effectText":"Bei offener Beschwörung: Ziehe 1 Karte von deinem Deck.","noctisFx":"draw1","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Dunkelklingen-Ritter","kind":"monster","level":4,"atk":1750,"def":1200,"emoji":"⚔️","effectText":"Bei offener Beschwörung: Ein eigenes offenes Schattenmonster erhält 200 ATK, solange es auf dem Feld bleibt.","noctisFx":"allyatk200","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Seelenfänger Moros","kind":"monster","level":5,"atk":2100,"def":1600,"emoji":"👁️","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Füge deinem Gegner 300 LP Schaden zu.","noctisFx":"burn300","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Grabhüter der Dämmerung","kind":"monster","level":5,"atk":1900,"def":2100,"emoji":"🪦","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Du erhältst 400 LP.","noctisFx":"heal400","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Noctis, Fürst des Schleiers","kind":"monster","level":7,"atk":2700,"def":2200,"emoji":"👑","effectText":"Benötigt 2 Tribute. Bei offener Beschwörung: Das stärkste offene gegnerische Monster verliert 600 ATK.","noctisFx":"enemyweak600","noctisOriginal":true,"element":"Finsternis","race":"Schattenwesen","skin":"shadow"},{"name":"Fluchnebel","kind":"spell","emoji":"🌫️","effectText":"Das stärkste offene gegnerische Monster verliert 400 ATK, solange es auf dem Feld bleibt.","noctisFx":"weak400","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Dunkler Wissensraub","kind":"spell","emoji":"📜","effectText":"Ziehe bis zu 2 Karten von deinem Deck.","noctisFx":"draw2","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Seelenfunke","kind":"spell","emoji":"🔮","effectText":"Füge dem Gegner 300 LP Schaden zu.","noctisFx":"burn300","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Schattenschild","kind":"spell","emoji":"🛡️","effectText":"Ein eigenes offenes Monster erhält 500 DEF, solange es auf dem Feld bleibt.","noctisFx":"def500","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Flüsternde Finsternis","kind":"spell","emoji":"🕯️","effectText":"Du erhältst 500 LP.","noctisFx":"heal500","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Fessel der Nacht","kind":"trap","emoji":"⛓️","effectText":"Ab dem nächsten gegnerischen Zug: Annulliere einen Angriff.","noctisFx":"stop","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Schattenvergeltung","kind":"trap","emoji":"💀","effectText":"Ab dem nächsten gegnerischen Zug: Annulliere einen Angriff und füge 200 LP Schaden zu.","noctisFx":"stopburn200","noctisOriginal":true,"element":"Finsternis","skin":"shadow"},{"name":"Siegel der Schwäche","kind":"trap","emoji":"🌘","effectText":"Ab dem nächsten gegnerischen Zug: Annulliere einen Angriff und schwäche den Angreifer um 400 ATK.","noctisFx":"stopweak400","noctisOriginal":true,"element":"Finsternis","skin":"shadow"}]);
 /* Darian original guardian cards – effects executed by triggerMonsterEvent. */
 deck.push(...[{"name":"Schildwächter Novar","kind":"monster","emoji":"🛡️","level":3,"atk":1200,"def":1600,"skin":"ice","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Ein eigenes offenes Wächtermonster erhält 300 DEF, solange es auf dem Feld bleibt.","darianFx":"allydef300","darianOriginal":true},{"name":"Frostschild-Wächter","kind":"monster","emoji":"❄️","level":4,"atk":1400,"def":1900,"skin":"ice","element":"Eis","race":"Wächter","effectText":"Bei offener Beschwörung: Diese Karte erhält 300 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef300","darianOriginal":true},{"name":"Steinwächter Bastion","kind":"monster","emoji":"🗿","level":4,"atk":1000,"def":2100,"skin":"fire","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Diese Karte erhält 300 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef300","darianOriginal":true},{"name":"Arkaner Torwächter","kind":"monster","emoji":"🔮","level":4,"atk":1500,"def":1500,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Bei offener Beschwörung: Ziehe 1 Karte von deinem Deck.","darianFx":"draw1","darianOriginal":true},{"name":"Turmwächter Aegor","kind":"monster","emoji":"🏰","level":4,"atk":1700,"def":1700,"skin":"ice","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Kontrollierst du eine Fallenkarte, erhält diese Karte 300 ATK, solange sie auf dem Feld bleibt.","darianFx":"trapatk300","darianOriginal":true},{"name":"Runenwächter Valen","kind":"monster","emoji":"⚔️","level":5,"atk":1900,"def":2000,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Du erhältst 400 LP.","darianFx":"heal400","darianOriginal":true},{"name":"Kristallwächter Seron","kind":"monster","emoji":"💎","level":5,"atk":2000,"def":1800,"skin":"ice","element":"Kristall","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Diese Karte erhält 400 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef400","darianOriginal":true},{"name":"Hochwächter Darions Bollwerk","kind":"monster","emoji":"🛡️","level":6,"atk":2400,"def":2200,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Alle eigenen offenen Wächtermonster erhalten 300 ATK und DEF, solange sie auf dem Feld bleiben.","darianFx":"allboost300","darianOriginal":true}]);
 /* v4.06 – Darian: 50-card guardian/control collection, 4 legal 30-card challenge decks.
@@ -5731,11 +5733,36 @@ window.arcaneDarianDeck406={
  create:createDarianDeck406
 };
 
+/* v4.08 – Noctis: individual 50-card shadow curse pool, four 30-card tiers. */
+const noctisPool408=[["Schattennovize Neris",3],["Nachtkralle Umbren",3],["Fluchhüter Vesper",3],["Nebelschleicher",3],["Schattenhexe Nyss",3],["Dunkelklingen-Ritter",3],["Seelenfänger Moros",3],["Grabhüter der Dämmerung",3],["Noctis, Fürst des Schleiers",2],["Fluchnebel",3],["Dunkler Wissensraub",3],["Seelenfunke",3],["Schattenschild",3],["Flüsternde Finsternis",3],["Fessel der Nacht",3],["Schattenvergeltung",3],["Siegel der Schwäche",3]];
+const noctisTiers408=[
+ {label:"Einsteiger",n:[0,1,2,3,4,5,9,10,14,15]},
+ {label:"Fortgeschritten",n:[0,1,2,4,5,6,9,11,14,16]},
+ {label:"Experte",n:[1,2,3,4,5,7,9,10,12,16]},
+ {label:"Meister",n:[1,2,4,5,6,7,9,12,16],boss:[8,2],extra:[10,1]}
+];
+function createNoctisDeck408(level=1){
+ const tier=noctisTiers408[Math.max(1,Math.min(4,Math.trunc(Number(level)||1)))-1];
+ const counts=new Map(tier.n.map(i=>[noctisPool408[i][0],3]));
+ if(tier.boss)counts.set(noctisPool408[tier.boss[0]][0],tier.boss[1]);
+ if(tier.extra)counts.set(noctisPool408[tier.extra[0]][0],tier.extra[1]);
+ const pool=new Map(noctisPool408),cards=[];
+ for(const [name,count] of counts){
+  if(count<1||count>3||count>pool.get(name))throw Error("Noctis Kopienlimit "+name);
+  const original=deck.find(c=>c.noctisOriginal&&c.name===name);
+  if(!original)throw Error("Noctis Karte fehlt: "+name);
+  for(let n=0;n<count;n++)cards.push({...original});
+ }
+ if(cards.length!==30)throw Error("Noctis: erwartet 30 Karten, gefunden "+cards.length);
+ return shuffleCards(cards);
+}
+window.arcaneNoctisDeck408={pool:noctisPool408.map(([name,count])=>({name,count})),tiers:noctisTiers408.map((t,i)=>({level:i+1,label:t.label})),create:createNoctisDeck408};
 function createStoryOpponentDeck362(index){
  if(index===0)return createLeonDeck363();
  if(index===1)return createElaraDeck400(window.arcaneStoryDifficulty400||1);
  if(index===2)return createVarekDeck405(window.arcaneStoryDifficulty405||1);
  if(index===3)return createDarianDeck406(window.arcaneStoryDifficulty406||1);
+ if(index===4)return createNoctisDeck408(window.arcaneStoryDifficulty408||1);
  const recipe=storyDeckRecipes362[index];
  if(!recipe)throw new Error("Unbekannte Story-Mission "+index);
  const counts=new Map(), cards=[];
@@ -5763,7 +5790,7 @@ window.arcaneApplyStoryOpponent362=(index)=>{
  aiDeck=cards;
  aiHand=aiDeck.splice(0,5);
  aiTurn=0;
- window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{}),...(index===3?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty406)||1))),difficultyReady:4}:{})};
+ window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{}),...(index===3?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty406)||1))),difficultyReady:4}:{}),...(index===4?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty408)||1))),difficultyReady:4}:{})};
  return true;
 };
 
@@ -5983,6 +6010,21 @@ function monsterDestructionFx(card,owner){
 }
 function triggerMonsterEvent(card,event,owner="player",index=-1){
  if(!card||card.kind!=="monster")return;
+ if(card.noctisOriginal){
+  const own=owner==='opponent'?oppMon:myMon,enemy=owner==='opponent'?myMon:oppMon,fx=card.noctisFx;
+  if(event==='summon'&&!card.faceDown){
+   const strongest=enemy.filter(c=>c&&!c.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+   if(fx==='heal200'||fx==='heal400'){const n=fx==='heal200'?200:400;if(owner==='opponent')oppLP+=n;else myLP+=n;}
+   else if(fx==='selfatk200')card.tempAtkBonus=(card.tempAtkBonus||0)+200;
+   else if(fx==='selfdef300')card.tempDefBonus=(card.tempDefBonus||0)+300;
+   else if(fx==='enemyweak300'||fx==='enemyweak600'){if(strongest)strongest.tempAtkBonus=(strongest.tempAtkBonus||0)-(fx==='enemyweak300'?300:600);}
+   else if(fx==='draw1'){const pile=owner==='opponent'?aiDeck:drawPile,dest=owner==='opponent'?aiHand:hand,drawn=pile.shift();if(drawn)dest.push(drawn);}
+   else if(fx==='allyatk200'){const target=own.find(c=>c&&c.noctisOriginal&&!c.faceDown&&c!==card)||card;target.tempAtkBonus=(target.tempAtkBonus||0)+200;}
+   else if(fx==='burn300'){if(owner==='opponent')myLP=Math.max(0,myLP-300);else oppLP=Math.max(0,oppLP-300);}
+   log('🌑 '+card.name+' aktiviert seinen Schatteneffekt.');
+  }
+ }
+
  if(card.darianOriginal&&event==='summon'&&!card.faceDown){
   const allies=owner==='opponent'?oppMon:myMon;
   const spells=owner==='opponent'?oppSpell:mySpell;
@@ -6343,6 +6385,18 @@ $("oppSpell").addEventListener('click',e=>{
 });
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 
+function activateNoctisTrap408(){
+ if(window.arcaneStoryOpponentInfo362?.name!=='Noctis')return false;
+ const i=oppSpell.findIndex(c=>c&&c.noctisOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
+ if(i<0)return false;
+ const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ if(c.noctisFx==='stopburn200')myLP=Math.max(0,myLP-200);
+ if(c.noctisFx==='stopweak400'){
+  const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;
+ }
+ log('🌘 Noctis aktiviert '+c.name+' und stoppt den Angriff.');
+ return true;
+}
 function activateVarekTrap405(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Varek')return false;
  const i=oppSpell.findIndex(c=>c&&c.varekOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
@@ -6383,7 +6437,7 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  if(attacker.varekLockedUntil>=turn){log("⛓️ Schattenketten: Dieses Monster kann in diesem Zug nicht angreifen.");return;}
  if(attacker.position==="defense"||attacker.faceDown){log("Nur ein offenes Monster in Angriffsposition kann direkt angreifen.");return;}
  if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log("Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.");return;}
- if(activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
+ if(activateNoctisTrap408()||activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
  const damage=effectiveAtk(attacker);
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
@@ -6538,7 +6592,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelReflectAttack367=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
  }else if(c.name==='Löwenmut-Schild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if(activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if(activateNoctisTrap408()||activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let trapDecisionPending205=false;
@@ -6703,13 +6757,35 @@ async function opponentTurn(){
    sendToGraveyard(c,'opponent');log('🌑 Varek aktiviert '+c.name+'.');
   }
  }
+
+ // Noctis spielt eigene Flüche aktiv aus, statt sie wirkungslos zu setzen.
+ if(window.arcaneStoryOpponentInfo362?.name==='Noctis'){
+  const options=aiHand.map((c,i)=>({c,i})).filter(x=>x.c.noctisOriginal&&x.c.kind==='spell');
+  const own=oppMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+  const enemy=myMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+  const choice=options.find(x=>x.c.noctisFx==='weak400'&&enemy)
+   ||options.find(x=>x.c.noctisFx==='def500'&&own)
+   ||options.find(x=>x.c.noctisFx==='draw2')
+   ||options.find(x=>x.c.noctisFx==='heal500'&&oppLP<=3500)
+   ||options.find(x=>x.c.noctisFx==='burn300');
+  if(choice){
+   const c=aiHand.splice(choice.i,1)[0],fx=c.noctisFx;
+   if(fx==='weak400'&&enemy)enemy.tempAtkBonus=(enemy.tempAtkBonus||0)-400;
+   if(fx==='def500'&&own)own.tempDefBonus=(own.tempDefBonus||0)+500;
+   if(fx==='draw2')for(let n=0;n<2;n++){const d=aiDeck.shift();if(d)aiHand.push(d);}
+   if(fx==='heal500')oppLP+=500;
+   if(fx==='burn300')myLP=Math.max(0,myLP-300);
+   sendToGraveyard(c,'opponent');
+   log('🌑 Noctis aktiviert '+c.name+'.');
+  }
+ }
  // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
  // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
  const freeAiSpellZone=oppSpell.findIndex(x=>!x);
  if(freeAiSpellZone>=0){
-  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&x.name!=="Flammenstoß"));
+  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&!x.noctisOriginal&&x.name!=="Flammenstoß"));
   if(setIndex<0){
-   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&x.name!=="Flammenstoß"));
+   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&!x.noctisOriginal&&x.name!=="Flammenstoß"));
    if(deckIndex>=0){aiHand.push(aiDeck.splice(deckIndex,1)[0]);setIndex=aiHand.length-1;}
   }
   if(setIndex>=0){
