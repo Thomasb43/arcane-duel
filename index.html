@@ -5819,7 +5819,13 @@ function createChapter2OpponentDeck444(index,tier=1){
   for(let k=0;k<3;k++)out.push({...template});
  }
  if(out.length!==30)throw Error('Kapitel-2-Deck muss 30 Karten haben');
- return shuffleCards(out);
+ const ready=shuffleCards(out);
+ // Meister: das stärkere Signaturmonster ist erst nach den ersten Zügen erreichbar.
+ if(level===4){
+  const sig=recipe.monsters[7],position=ready.findIndex(c=>c.name===sig);
+  if(position>=0){const [card]=ready.splice(position,1);ready.splice(6,0,card);}
+ }
+ return ready;
 }
 window.arcaneChapter2Decks444={recipes:chapter2Recipes444,tiers:chapter2TierNames444,create:createChapter2OpponentDeck444};
 /* v4.00 – Elara: 50 physical cards in her collection, 30 per duel.
