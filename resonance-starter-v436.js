@@ -182,7 +182,14 @@ function install(){
    return Math.min(3,Math.max(0,Number(window.arcaneBoosterInventory322?.owned(name)||0)));
   }
   const cover437=window.ARCANE_CHRONORESONANZ_ART_437?.['Sphärendrache Cantaris']||null;
+  const packCover438=window.ARCANE_CHRONORESONANZ_PACK_438||null;
   function packVisual437(){
+   if(packCover438){
+    return '<div class="arcane-pack-image-375 ice" style="position:relative;overflow:hidden;border-color:#e2c082;background:#19173a">'
+     +'<img src="'+packCover438+'" alt="Arcane Duel Starterdeck Chronoresonanz – Klang der Sphären, Beispiel 1" loading="eager" decoding="async" '
+     +'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:7px">'
+     +'</div>';
+   }
    return cover437
     ?'<div class="arcane-pack-image-375 ice" style="position:relative;display:block;overflow:hidden;border-color:#b4eaff;background:#192751">'
      +'<img src="'+cover437+'" alt="Sphärendrache Cantaris" loading="eager" decoding="async" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%">'
