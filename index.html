@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-story-kapitel3-v445">
+<meta name="arcane-build" content="20261122-intro-zum-originalstart-v446">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -9015,10 +9015,30 @@ syncHeroResonanceExtra439();
    });
   }
  }
+ // v4.46: When the opening finishes, return to the existing fantasy-city hub
+ // instead of leaving the last video frame covering the start screen.
+ function showOriginalStartScreen446(){
+  if(intro.hidden)return;
+  intro.hidden=true;
+  try{video.pause()}catch(_){}
+  const mainMenu=document.getElementById('arcaneHome307');
+  if(mainMenu){
+   mainMenu.hidden=false;
+   const oldDetail=mainMenu.querySelector('#arcaneHomeDetail307');
+   const characterPicker=mainMenu.querySelector('#arcaneCharacterPicker391');
+   const characterQuick=mainMenu.querySelector('#arcaneCharacterQuick392');
+   if(oldDetail)oldDetail.hidden=true;
+   if(characterPicker)characterPicker.hidden=true;
+   if(characterQuick)characterQuick.hidden=true;
+   mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
+  }
+  const menuButton=document.getElementById('arcaneReturnMenu307');
+  if(menuButton)menuButton.hidden=true;
+ }
  video.addEventListener('playing',showVideo);
  video.addEventListener('canplay',()=>{if(!intro.hidden&&video.paused)playVideo(false)});
  video.addEventListener('error',showFallback);
- video.addEventListener('ended',()=>{replayButton.textContent='↺ Intro wiederholen'});
+ video.addEventListener('ended',showOriginalStartScreen446);
  function replay(){
   intro.hidden=false;
   playVideo(true);
@@ -9028,12 +9048,7 @@ syncHeroResonanceExtra439();
   if(video.error){video.load()}
   replay();
  });
- startButton.addEventListener('click',()=>{
-  intro.hidden=true;
-  video.pause();
-  const mainMenu=document.getElementById('arcaneHome307');
-  if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
- });
+ startButton.addEventListener('click',showOriginalStartScreen446);
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)intro.classList.add('motion-reduced-385');
  video.load();
  playVideo(false);
