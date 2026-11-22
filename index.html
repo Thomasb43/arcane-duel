@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-home-characters-crystals-rewards-v391">
+<meta name="arcane-build" content="20261122-kael-portrait-character-deck-menu-v392">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5338,6 +5338,18 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-character-card-391.selected-391{border:2px solid #f4d17e;box-shadow:0 0 18px #ad70ed55}.arcane-character-card-391:disabled{opacity:.55}
 .arcane-character-card-391 img{width:100%;height:180px;object-fit:cover;object-position:top;border-radius:9px;background:#33254d}.arcane-character-card-391 strong{font:700 21px Georgia,serif}.arcane-character-card-391 small{font-size:11px;text-align:center}
 @media(max-width:380px){.arcane-hub-wallet-391{font-size:12px;padding:8px}.arcane-hub-character-391{font-size:13px}.arcane-character-card-391 img{height:145px}}
+
+/* v3.92: compact Kael portrait in bottom left with pop-out actions */
+.arcane-hub-character-dock-392{position:absolute;z-index:9;left:max(12px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:9px;pointer-events:none}
+.arcane-hub-character-dock-392>*{pointer-events:auto}
+.arcane-hub-character-dock-392 .arcane-hub-character-391{position:relative!important;top:auto!important;left:auto!important;transform:none!important;width:78px!important;height:90px!important;min-height:0!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;overflow:hidden!important;white-space:normal!important;border:2px solid #eed28a!important;border-radius:42px 42px 16px 16px!important;background:linear-gradient(145deg,#53317b,#19122c)!important;box-shadow:0 0 15px #a25ffb88,0 4px 13px #0009!important;cursor:pointer}
+.arcane-hub-character-391 img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center top;pointer-events:none}
+.arcane-hub-character-391 span{position:relative;z-index:1;display:block;width:100%;padding:3px 1px;background:#241438e8;color:#ffe9b4;text-align:center;font:700 15px Georgia,serif;text-shadow:0 1px 4px #000}
+.arcane-character-quick-392[hidden]{display:none!important}
+.arcane-character-quick-392{width:min(235px,calc(100vw - 118px));display:flex;flex-direction:column;gap:5px;padding:8px;border:1.5px solid #e8c581;border-radius:14px;background:linear-gradient(140deg,#382357f5,#190f33f7);box-shadow:0 0 18px #af66fc66,0 6px 20px #0008;margin-bottom:6px}
+.arcane-character-quick-392 button{width:100%;border:1px solid #b38acb;border-radius:9px;padding:10px 8px;background:#34204eee;color:#fff0c7;font:700 14px Georgia,serif;white-space:nowrap;cursor:pointer}
+.arcane-character-quick-392 button:active{background:#69458f}
+@media(max-height:570px){.arcane-hub-character-dock-392 .arcane-hub-character-391{width:60px!important;height:67px!important}.arcane-hub-character-391 span{font-size:12px}.arcane-character-quick-392{width:185px}.arcane-character-quick-392 button{font-size:12px;padding:7px}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7528,7 +7540,16 @@ window.setArenaCharacterTheme('magierin');
  home.innerHTML=`<div class="arcane-home-shell-307 arcane-world-hub-314">
  <div class="arcane-hub-shimmer-314" aria-hidden="true"></div>
  <div class="arcane-hub-wallet-391" aria-label="Arkankristalle">💎 <strong id="arcaneHubCrystals391">1.000</strong></div>
- <button type="button" class="arcane-hub-character-391" id="arcaneHubCharacter391">✦ Charakter: Kael</button>
+ <div class="arcane-hub-character-dock-392" id="arcaneCharacterDock392">
+  <button type="button" class="arcane-hub-character-391" id="arcaneHubCharacter391" aria-label="Kaels Charakter- und Deckmenü öffnen" aria-expanded="false" aria-controls="arcaneCharacterQuick392">
+    <img id="arcaneHubCharacterPortrait392" src="artwork/story/kael.jpg" alt="" onerror="this.hidden=true">
+    <span id="arcaneHubCharacterName392">Kael</span>
+  </button>
+  <div class="arcane-character-quick-392" id="arcaneCharacterQuick392" hidden>
+    <button type="button" id="arcaneQuickCharacters392">♟ Charakterauswahl</button>
+    <button type="button" id="arcaneQuickDecks392">▤ Deckauswahl</button>
+  </div>
+ </div>
  <div class="arcane-hub-title-314"><div class="arcane-hub-kicker-314">DIE WELT DER CHRONIK</div><div class="arcane-hub-logo-314" role="img" aria-label="Arcane Duel"></div></div>
  
  <div class="arcane-home-choices-307 arcane-hub-buildings-314">
@@ -7572,15 +7593,32 @@ window.setArenaCharacterTheme('magierin');
    +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):'🔒 Freischaltung ab Kael Level 10')+'</small></button>'
   ).join('');
  }
- function openCharacters391(){renderCharacter391();characterPicker.hidden=false}
- characterButton391.addEventListener('click',openCharacters391);
+ function openCharacters391(){renderCharacter391();characterPicker.hidden=false;closeQuick392()}
+ const quick392=home.querySelector('#arcaneCharacterQuick392');
+ const name392=home.querySelector('#arcaneHubCharacterName392');
+ const portrait392=home.querySelector('#arcaneHubCharacterPortrait392');
+ function closeQuick392(){quick392.hidden=true;characterButton391.setAttribute('aria-expanded','false')}
+ function syncPortrait392(){
+  const ch=selected391();
+  name392.textContent=ch;
+  portrait392.src='artwork/story/'+ch.toLowerCase()+'.jpg';
+  characterButton391.setAttribute('aria-label',ch+' – Charakter- und Deckauswahl öffnen');
+ }
+ characterButton391.addEventListener('click',()=>{syncPortrait392();quick392.hidden=!quick392.hidden;characterButton391.setAttribute('aria-expanded',String(!quick392.hidden))});
+ home.querySelector('#arcaneQuickCharacters392').addEventListener('click',openCharacters391);
+ home.querySelector('#arcaneQuickDecks392').addEventListener('click',()=>{
+  closeQuick392();
+  if(typeof window.openArcaneDeckManager377==='function')window.openArcaneDeckManager377();
+  else home.querySelector('[data-arcane-mode="deck"]')?.click();
+ });
+ document.addEventListener('pointerdown',e=>{if(!home.querySelector('#arcaneCharacterDock392').contains(e.target))closeQuick392()});
  home.querySelector('#arcaneCharacterClose391').addEventListener('click',()=>characterPicker.hidden=true);
  characterPicker.addEventListener('click',e=>{if(e.target===characterPicker)characterPicker.hidden=true});
  cards391.addEventListener('click',e=>{
   const b=e.target.closest('[data-home-character-391]');
   if(!b||b.disabled)return;
   try{localStorage.setItem(characterKey391,b.dataset.homeCharacter391)}catch(_){}
-  renderCharacter391();characterPicker.hidden=true;
+  renderCharacter391();syncPortrait392();characterPicker.hidden=true;
  });
  const bank391=window.arcaneTestCrystals320;
  if(bank391){
@@ -7593,7 +7631,7 @@ window.setArenaCharacterTheme('magierin');
  function setMenu(open){
   home.hidden=!open;
   menuButton.hidden=open;
-  if(open){detail.hidden=true;characterPicker.hidden=true;updateWallet391();renderCharacter391();home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
+  if(open){detail.hidden=true;characterPicker.hidden=true;closeQuick392();updateWallet391();renderCharacter391();syncPortrait392();home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
  }
  home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>setMenu(false));
  menuButton.addEventListener('click',()=>setMenu(true));
