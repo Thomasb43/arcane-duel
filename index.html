@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-valtor-deck-ai-v430">
+<meta name="arcane-build" content="20261122-valtor-base64-loader-v431">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5415,7 +5415,8 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <div id="tributePanel"><b id="tributeText">Tribut auswählen</b><small id="tributeCount"></small><div class="controls"><button id="confirmTribute" type="button">Tribut bestätigen</button><button id="cancelTribute" type="button">Abbrechen</button></div></div>
 <div class="log" id="log" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
-<div id="handLimitOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Handkartenlimit überschritten"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>⚠️ Maximal 7 Handkarten</strong></div><p id="handLimitMessage">Wähle eine Karte, die auf deinen Friedhof gelegt wird.</p><div id="handLimitCards" class="hand-limit-grid"></div></div></div><div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script>
+<div id="handLimitOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Handkartenlimit überschritten"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>⚠️ Maximal 7 Handkarten</strong></div><p id="handLimitMessage">Wähle eine Karte, die auf deinen Friedhof gelegt wird.</p><div id="handLimitCards" class="hand-limit-grid"></div></div></div><div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script src="valtor-images.js?v=431"></script>
+<script>
 // VERSION 1.42
 const APP_VERSION='2.36';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
@@ -6141,6 +6142,10 @@ function renderAstraArtwork420(c){
 }
 const VALTOR_ART_FILES_429={"Valtor, Fürst der Schatten":"valtor_der_schattenfuerst.webp","Schattenritter von Valtor":"schattenritter_von_valtor.webp","Dunkler Wächter":"dunkler_waechter.webp","Mystischer Schattenmagier":"mystischer_schattenmagier.webp","Schattenlanze":"schattenlanze.webp","Düstere Seelenwache":"duestere_seelenwache.webp","Valtors Macht":"valtors_macht.webp","Schattenportal":"schattenportal.webp","Dunkle Allianz":"dunkle_allianz.webp","Macht der Schatten":"macht_der_schatten.webp","Seelenbindung":"seelenbindung.webp","Dimensionaler Riss":"dimensionaler_riss.webp","Schattenfalle":"schattenfalle.webp","Valtors Bannkreis":"valtors_bannkreis.webp","Letzter Widerstand":"letzter_widerstand.webp","Schattenversiegelung":"schattenversiegelung.webp","Dämmerungsruf":"daemmerungsruf.webp","Ewige Dunkelheit":"ewige_dunkelheit.webp"};
 function renderValtorArt429(c){
+ const key=String(VALTOR_ART_FILES_429[c.name]||'').replace(/\.webp$/,'');
+ const embedded=window.ARCANE_VALTOR_IMAGES_431?.[key];
+ if(embedded)return '<img src="'+embedded+'" alt="" decoding="async" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%">';
+
  const filename=VALTOR_ART_FILES_429[c.name];
  // Keep an illustrated SVG fallback until the approved WebP files are uploaded.
  return '<span style="position:relative;display:block;width:100%;height:100%;overflow:hidden;background:#17112c">'
