@@ -5691,10 +5691,48 @@ function createVarekDeck405(level=1){
 function cardsVarekName405(i){return varekPool405[i][0]}
 window.arcaneVarekDeck405={pool:varekPool405.map(([name,count])=>({name,count})),tiers:varekTiers405.map((t,i)=>({level:i+1,label:t.label})),create:createVarekDeck405};
 
+/* v4.06 – Darian: 50-card guardian/control collection, 4 legal 30-card challenge decks.
+   Reuses only cards whose effects already exist in the duel engine; story remains untouched. */
+const darianPool406=[
+ ["Erdwächter",3],["Frostwächter",3],["Aschenritter",3],
+ ["Arkaner Magier",3],["Donnerfalke",3],["Schattenwolf",3],
+ ["Flammendrache",3],["Glutkoloss",2],
+ ["Kristallschild",3],["Arkaner Rückschlag",3],["Heilende Quelle",3],
+ ["Frostpanzer",3],["Arkaner Segen",3],["Schattenfessel",3],
+ ["Geisterruf",3],["Eisiger Rückstoß",3],["Seelenbergung",3]
+];
+const darianTiers406=[
+ {label:"Einsteiger",n:[0,1,2,3,4,5,8,9,10,11]},
+ {label:"Fortgeschritten",n:[0,1,2,3,4,6,8,9,11,12]},
+ {label:"Experte",n:[0,1,3,4,5,6,8,9,13,15]},
+ {label:"Meister",n:[0,1,3,4,6,8,9,13,16],boss:[7,2],extra:[11,1]}
+];
+function createDarianDeck406(level=1){
+ const tier=darianTiers406[Math.max(1,Math.min(4,Math.trunc(Number(level)||1)))-1];
+ const quantities=new Map(tier.n.map(i=>[darianPool406[i][0],3]));
+ if(tier.boss)quantities.set(darianPool406[tier.boss[0]][0],tier.boss[1]);
+ if(tier.extra)quantities.set(darianPool406[tier.extra[0]][0],tier.extra[1]);
+ const available=new Map(darianPool406),cards=[];
+ for(const [name,count] of quantities){
+  if(count<1||count>3||count>available.get(name))throw Error('Darian Kopienlimit: '+name);
+  const original=deck.find(c=>c.name===name);
+  if(!original)throw Error('Darian Karte fehlt: '+name);
+  for(let i=0;i<count;i++)cards.push({...original});
+ }
+ if(cards.length!==30)throw Error('Darian: 30 Karten erwartet, erhalten '+cards.length);
+ return shuffleCards(cards);
+}
+window.arcaneDarianDeck406={
+ pool:darianPool406.map(([name,count])=>({name,count})),
+ tiers:darianTiers406.map((tier,i)=>({level:i+1,label:tier.label})),
+ create:createDarianDeck406
+};
+
 function createStoryOpponentDeck362(index){
  if(index===0)return createLeonDeck363();
  if(index===1)return createElaraDeck400(window.arcaneStoryDifficulty400||1);
  if(index===2)return createVarekDeck405(window.arcaneStoryDifficulty405||1);
+ if(index===3)return createDarianDeck406(window.arcaneStoryDifficulty406||1);
  const recipe=storyDeckRecipes362[index];
  if(!recipe)throw new Error("Unbekannte Story-Mission "+index);
  const counts=new Map(), cards=[];
@@ -5722,7 +5760,7 @@ window.arcaneApplyStoryOpponent362=(index)=>{
  aiDeck=cards;
  aiHand=aiDeck.splice(0,5);
  aiTurn=0;
- window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{})};
+ window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{}),...(index===3?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty406)||1))),difficultyReady:4}:{})};
  return true;
 };
 
