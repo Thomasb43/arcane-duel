@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-astra-art-focus-and-card-labels-v427">
+<meta name="arcane-build" content="20261122-valtor-story-portrait-v428">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5419,6 +5419,29 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 // VERSION 1.42
 const APP_VERSION='2.36';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
+
+/* v4.28 – Unique Valtor portrait for Kael mission 1-9.
+   The repository asset is an SVG with a bundled AVIF illustration; on iOS
+   it is unpacked and displayed as a direct AVIF data image to avoid
+   WebKit's nested-raster-in-SVG image limitations. */
+const arcaneValtorArt428={
+ src:'artwork/story/valtor.svg?v=428',loading:false,ready:false,
+ load(){
+  if(this.ready||this.loading)return;
+  this.loading=true;
+  fetch('artwork/story/valtor.svg?v=428',{cache:'force-cache'}).then(r=>{
+   if(!r.ok)throw new Error('Valtor portrait '+r.status);
+   return r.text();
+  }).then(svg=>{
+   const m=svg.match(/href="(data:image\/avif;base64,[A-Za-z0-9+/=]+)"/);
+   if(!m)throw new Error('Valtor portrait format');
+   this.src=m[1];this.ready=true;
+   document.querySelectorAll('img[data-valtor-portrait-428]').forEach(img=>{img.src=this.src});
+  }).catch(()=>{this.loading=false});
+ }
+};
+window.arcaneValtorArt428=arcaneValtorArt428;
+
 let availableBuild=null;
 async function checkForUpdates(){
  try{
@@ -8638,16 +8661,18 @@ window.setArenaCharacterTheme('magierin');
  const portraits360={
   'Kael':'kael','Leon':'leon','Elara':'elara','Varek':'varek','Darian':'darian-shadow',
   'Noctis':'noctis','Seraphine':'seraphine','Riven':'riven-shadow',
-  'Astra':'astra','Valtor':null,'Eldric':'eldric','Gefallener Eldric':'eldric-shadow','Malachar':null
+  'Astra':'astra','Valtor':'valtor','Eldric':'eldric','Gefallener Eldric':'eldric-shadow','Malachar':null
  };
  function resolvePortrait360(name){
   const lookup=portraits360[name];
+  if(name==='Valtor')return window.arcaneValtorArt428.src;
   return lookup?'artwork/story/'+lookup+'.jpg':null;
  }
  function portraitHTML360(name,side,speaking){
   const file=resolvePortrait360(name);
+  if(name==='Valtor')window.arcaneValtorArt428.load();
   return '<div class="arcane-story-portrait-360 '+(side==='right'?'is-right-360 ':'')+(speaking?'is-speaking-360':'')+'">'
-   +(file?'<img src="'+file+'" alt="" loading="eager" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')
+   +(file?'<img src="'+file+'" alt="" '+(name==='Valtor'?'data-valtor-portrait-428="1" ':'')+'loading="eager" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')
    +'<div class="arcane-story-portrait-fallback-360" '+(file?'hidden':'')+'>'+escapeText((name||'?').slice(0,1))+'</div>'
    +'<div class="arcane-story-portrait-label-360">'+escapeText(name)+'</div></div>';
  }
@@ -8779,7 +8804,7 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
  const storyPortraits397={
   'Kael':'kael','Leon':'leon','Elara':'elara','Varek':'varek',
   'Darian':'darian-shadow','Noctis':'noctis','Seraphine':'seraphine',
-  'Riven':'riven-shadow','Astra':'astra','Eldric':'eldric',
+  'Riven':'riven-shadow','Astra':'astra','Valtor':'valtor','Eldric':'eldric',
   'Gefallener Eldric':'eldric-shadow'
  };
  function update(){
@@ -8794,7 +8819,10 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
     const filename=storyPortraits397[ch];
     // Some later bosses do not have a portrait yet: preserve an existing image rather than showing a broken asset.
     if(!filename){img.alt=ch;img.title=ch;return}
-    const url='artwork/story/'+filename+'.jpg';
+    const isValtor=ch==='Valtor';
+    const url=isValtor?window.arcaneValtorArt428.src:('artwork/story/'+filename+'.jpg');
+    if(isValtor){img.setAttribute('data-valtor-portrait-428','1');window.arcaneValtorArt428.load()}
+    else img.removeAttribute('data-valtor-portrait-428');
     if(img.getAttribute('src')!==url)img.setAttribute('src',url);
     img.alt=ch;img.title=ch;
    });
