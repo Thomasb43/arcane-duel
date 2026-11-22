@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-astra-17-artwork-paths-v420">
+<meta name="arcane-build" content="20261122-astra-verified-artwork-fix-v421">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6027,37 +6027,43 @@ for(const card of deck){
 }
 /* v4.19: Astra art fallback – no empty frames on not-yet-illustrated cards.
    Temporary distinct seal art, replaced automatically by real artwork when attached. */
-function astralSealArt419(c){
- const name=String(c.name||'');
- let n=0;for(const ch of name)n=(n*31+ch.codePointAt(0))>>>0;
- const motifs=['✦','✧','☼','❖','✵','◇','⚜','✥','✶'];
- const emblem=motifs[n%motifs.length],rot=n%90;
- const isMonster=c.kind==='monster';
- const hue=isMonster?240:c.kind==='spell'?205:275;
- const glyph='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">'
-  +'<defs><radialGradient id="b"><stop stop-color="#9e9bd0"/><stop offset=".5" stop-color="#3b3676"/><stop offset="1" stop-color="#0d133e"/></radialGradient><linearGradient id="g"><stop stop-color="#fff6cb"/><stop offset=".5" stop-color="#e3af59"/><stop offset="1" stop-color="#b8843f"/></linearGradient></defs>'
-  +'<rect width="300" height="400" fill="url(#b)"/>'
-  +'<g stroke="url(#g)" fill="none" opacity=".8" stroke-width="2"><circle cx="150" cy="190" r="113"/><circle cx="150" cy="190" r="97" stroke-dasharray="8 7"/>'
-  +'<path d="M150 58L180 157L280 190L180 223L150 321L120 223L20 190L120 157Z" transform="rotate('+rot+' 150 190)"/>'
-  +'<circle cx="150" cy="190" r="62"/><path d="M150 90L237 240H63Z"/><path d="M150 290L237 140H63Z"/></g>'
-  +'<text x="150" y="216" fill="#fff1c7" font-size="90" text-anchor="middle" font-family="serif">'+emblem+'</text>'
-  +'<path d="M16 16h62m-62 0v62m268-62h-62m62 0v62M16 384h62m-62 0v-62m268 62h-62m62 0v-62" stroke="#e8b65d" stroke-width="5" fill="none"/>'
-  +'<g fill="#faf4da" opacity=".9"><circle cx="46" cy="70" r="3"/><circle cx="250" cy="95" r="3"/><circle cx="60" cy="300" r="2"/><circle cx="243" cy="333" r="3"/></g></svg>';
- return '<span class="card-art-loader arcane-fullbleed-343" role="img" aria-label="Provisorisches Siegelmotiv für '+name.replace(/"/g,'&quot;')+'" style="display:block;width:100%;height:100%;background:#19173c">'
-  +'<img src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent(glyph)+'" alt="" loading="eager" style="width:100%;height:100%;object-fit:cover;display:block"></span>';
-}
-/* v4.20: image paths are ready, show seal art while high-res files are not yet uploaded. */
+/* v4.21 – Only verified Astra image files are loaded; missing files get crisp SVG art. */
 const ASTRA_ART_FILES_420={"Siegelbotin Elya":"siegelbotin_elya.webp","Goldfeder-Greif":"goldfeder_greif.webp","Mondrunen-Hüter":"mondrunen_hueter.webp","Sonnenklingen-Paladin":"sonnenklingen_paladin.webp","Sternenpriesterin Lyra":"sternenpriesterin_lyra.webp","Prismenwächter Solen":"prismenwaechter_solen.webp","Engel des goldenen Siegels":"engel_des_goldenen_siegels.webp","Himmelsrichter Aurelion":"himmelsrichter_aurelion.webp","Astra, Wächterin des ersten Siegels":"astra_waechterin_des_ersten_siegels.webp","Goldener Schutzkreis":"goldener_schutzkreis.webp","Chronik des Morgensterns":"chronik_des_morgensterns.webp","Strahl der sieben Runen":"strahl_der_sieben_runen.webp","Bannlicht":"bannlicht.webp","Segen des Siegels":"segen_des_siegels.webp","Siegelbarriere":"siegelbarriere.webp","Himmlischer Rückstoß":"himmlischer_rueckstoss.webp","Runengericht":"runengericht.webp"};
+const ASTRA_VERIFIED_ART_421={
+ "Siegelbotin Elya":"artwork/astra_siegelbotin_elya.svg",
+ "Astra, Wächterin des ersten Siegels":"artwork/story/astra.jpg"
+};
+function astralSealArt419(c){
+ const name=String(c.name||"Astra");
+ let n=0;for(const ch of name)n=(n*31+ch.codePointAt(0))>>>0;
+ const hue=n%4;
+ const outline=hue%2===0?"#f5d68a":"#bfcafa";
+ const ornaments=[
+  '<path d="M150 105L168 173L232 190L168 207L150 275L132 207L68 190L132 173Z" fill="url(#gold)" stroke="#fff9e7" stroke-width="3"/>',
+  '<path d="M150 90L236 142L221 247L150 297L79 247L64 142Z" fill="#7068bc" stroke="url(#gold)" stroke-width="10"/><path d="M150 125L150 265M110 190H190" stroke="#fff4cf" stroke-width="10"/>',
+  '<path d="M150 107L215 245L85 245Z" stroke="url(#gold)" fill="none" stroke-width="10"/><circle cx="150" cy="195" r="39" stroke="#fff6d5" stroke-width="7" fill="none"/>',
+  '<path d="M108 250L150 116L192 250L150 223Z" fill="#b5c8f3" stroke="url(#gold)" stroke-width="7"/><path d="M150 138V265" stroke="#fff4d1" stroke-width="7"/>'
+ ];
+ const glyph=ornaments[n%ornaments.length];
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">'
+ +'<defs><radialGradient id="sky"><stop stop-color="#7269b0"/><stop offset=".65" stop-color="#252c67"/><stop offset="1" stop-color="#101537"/></radialGradient><linearGradient id="gold"><stop stop-color="#fff9d8"/><stop offset=".5" stop-color="#ecc377"/><stop offset="1" stop-color="#95612d"/></linearGradient></defs>'
+ +'<rect width="300" height="400" fill="url(#sky)"/>'
+ +'<g fill="none" stroke="url(#gold)" stroke-width="3"><circle cx="150" cy="190" r="122"/><circle cx="150" cy="190" r="106" stroke-dasharray="8 7"/><circle cx="150" cy="190" r="82"/><path d="M150 49V332M9 190H291M52 92L248 288M248 92L52 288" opacity=".5"/></g>'
+ +'<g opacity=".97">'+glyph+'</g>'
+ +'<g stroke="'+outline+'" fill="none" stroke-width="4" opacity=".85"><path d="M24 24H88M24 24V88M276 24H212M276 24V88M24 376H88M24 376V312M276 376H212M276 376V312"/></g>'
+ +'<g fill="#fff5cf"><circle cx="46" cy="101" r="3"/><circle cx="263" cy="84" r="3"/><circle cx="45" cy="287" r="2"/><circle cx="256" cy="319" r="3"/></g></svg>';
+ return '<span class="card-art-loader arcane-fullbleed-343" role="img" aria-label="Provisorisches Siegelmotiv für '+name.replace(/"/g,'&quot;')+'" style="display:block;position:relative;width:100%;height:100%;background:#14173a;overflow:hidden">'
+  +'<img src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)+'" alt="" loading="eager" style="width:100%;height:100%;object-fit:cover;display:block"></span>';
+}
 function renderAstraArtwork420(c){
- const filename=ASTRA_ART_FILES_420[c.name];
- if(!filename)return astralSealArt419(c);
- const backup=c.name==='Siegelbotin Elya'?'artwork/astra_siegelbotin_elya.svg':'';
+ const confirmed=ASTRA_VERIFIED_ART_421[c.name];
+ if(!confirmed)return astralSealArt419(c);
  return '<span class="astra-art-frame-420" style="position:relative;display:block;width:100%;height:100%;overflow:hidden">'
   +'<span class="astra-fallback-420" style="position:absolute;inset:0">'+astralSealArt419(c)+'</span>'
-  +'<img src="artwork/'+filename+'" data-backup="'+backup+'" alt="" loading="lazy" decoding="async"'
+  +'<img src="'+confirmed+'" alt="" loading="eager" decoding="async"'
   +' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"'
   +' onload="this.previousElementSibling.style.display=\'none\'"'
-  +' onerror="if(this.dataset.backup&&!this.dataset.usedBackup){this.dataset.usedBackup=\'1\';this.src=this.dataset.backup;}else{this.style.display=\'none\'}">'
+  +' onerror="this.style.display=\'none\'">'
   +'</span>';
 }
 function renderCardArt(c){
