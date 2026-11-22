@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-story-opponent-portraits-v397">
+<meta name="arcane-build" content="20261122-story-portrait-script-fix-v398">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -8106,7 +8106,6 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
  window.arcaneStory357={open:showMap};
 })();
 
-</script>
 /* v3.96 – duel portraits follow the selected playable character. */
 (function initDuelCharacterPortraits396(){
  function selected(){try{return localStorage.getItem('arcane-duel-selected-character-v1')==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael'}catch(_){return 'Kael'}}
@@ -8144,4 +8143,5 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
  update();
  window.syncDuelCharacterPortraits396=update;
 })();
+</script>
 </body></html>
