@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-noctis-nine-monster-art-v409">
+<meta name="arcane-build" content="20261122-noctis-all-seventeen-art-v410">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5926,6 +5926,15 @@ for(const card of deck){
 const NOCTIS_ART_FILES_409={"Schattennovize Neris":"01_schattennovize_neris.png","Nachtkralle Umbren":"02_nachtkralle_umbren.png","Fluchhüter Vesper":"03_fluchhueter_vesper.png","Nebelschleicher":"04_nebelschleicher.png","Schattenhexe Nyss":"05_schattenhexe_nyss.png","Dunkelklingen-Ritter":"06_dunkelklingen_ritter.png","Seelenfänger Moros":"07_seelenfaenger_moros.png","Grabhüter der Dämmerung":"08_grabhueter_der_daemmerung.png","Noctis, Fürst des Schleiers":"09_noctis_fuerst_des_schleiers.png"};
 for(const card of deck){
  const filename=NOCTIS_ART_FILES_409[card.name];
+ if(!card.noctisOriginal||!filename)continue;
+ const key='noctis-art-'+filename.replace(/\.png$/,'');
+ card.artwork=key;
+ CARD_ART_FILES[key]=filename;
+}
+/* v4.10 – verified Noctis spell/trap uploads; original deck and story untouched. */
+const NOCTIS_SPELL_TRAP_ART_410={"Fluchnebel":"verfluchter_ritter_im_violetten_nebel.png","Dunkler Wissensraub":"verbotenes_wissen_im_mondlicht.png","Seelenfunke":"seelenfunke_im_mondlicht.png","Schattenschild":"schattenritter_im_runenschildgewitter.png","Flüsternde Finsternis":"mondlicht_ritual_im_geisterdom.png","Fessel der Nacht":"fessel_der_nacht_im_mondkathedralen_ruinenreich.png","Schattenvergeltung":"dunkle_magie_im_mondlichtkatedralenruin.png","Siegel der Schwäche":"verfluchter_krieger_im_violetten_mondwirbel.png"};
+for(const card of deck){
+ const filename=NOCTIS_SPELL_TRAP_ART_410[card.name];
  if(!card.noctisOriginal||!filename)continue;
  const key='noctis-art-'+filename.replace(/\.png$/,'');
  card.artwork=key;
