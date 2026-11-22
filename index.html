@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-lightdragon-hueter-effect-v402">
+<meta name="arcane-build" content="20261122-elara-ten-card-art-linked-v403">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5795,6 +5795,15 @@ const ARCANE_ART_FRAMING_343={
  'schattenresonator':{x:50,y:50},
  'schattenbestie-umbra':{x:50,y:50}
 };
+/* v4.03 – Elara illustrations verified in artwork/ on GitHub. */
+const ELARA_ART_FILES_403={"Kristallfüchsin":"kristallfuechsin.png","Prismengolem":"prismengolem.png","Lichtsplitter-Magierin":"lichtsplitter_magierin.png","Spiegelritterin":"spiegelritterin.png","Mondquarz-Wächter":"mondquarz_waechter.png","Smaragdgeist":"smaragdgeist.png","Sternenprisma-Drache":"sternenprisma_drache.png","Quarzseherin":"quarzseherin.png","Aurorakönigin":"aurorakoenigin.png","Prismenschild":"zauberschild.png"};
+for(const card of deck){
+ const filename=ELARA_ART_FILES_403[card.name];
+ if(!card.elaraOriginal||!filename)continue;
+ const key='elara-art-'+filename.replace(/\.png$/,'');
+ card.artwork=key;
+ CARD_ART_FILES[key]=filename;
+}
 function renderCardArt(c){
  if(!c)return '';
  const focus=ARCANE_ART_FRAMING_343[c.artwork]||ARCANE_ART_FOCUS_339[c.artwork]||{x:50,y:50};
