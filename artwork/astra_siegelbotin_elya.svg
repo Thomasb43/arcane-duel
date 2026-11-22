@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-label="Siegelbotin Elya, ein leuchtender goldener Runenbote">
+<defs><radialGradient id="sky"><stop stop-color="#415b9b"/><stop offset=".6" stop-color="#1b2358"/><stop offset="1" stop-color="#080c2e"/></radialGradient><linearGradient id="gold" x2="1" y2="1"><stop stop-color="#fff8d8"/><stop offset=".42" stop-color="#e2b15c"/><stop offset=".75" stop-color="#fff1b7"/><stop offset="1" stop-color="#98703d"/></linearGradient><linearGradient id="robe" x2=".8" y2="1"><stop stop-color="#f8f8ff"/><stop offset=".55" stop-color="#c1c8eb"/><stop offset="1" stop-color="#655d9f"/></linearGradient><filter id="halo"><feGaussianBlur stdDeviation="13"/></filter></defs>
+<rect width="600" height="800" fill="url(#sky)"/><g fill="#efdcad" opacity=".42"><circle cx="65" cy="70" r="3"/><circle cx="507" cy="102" r="5"/><circle cx="540" cy="390" r="3"/><circle cx="120" cy="260" r="2"/><circle cx="438" cy="42" r="4"/></g>
+<g stroke="url(#gold)" fill="none"><circle cx="302" cy="335" r="205" stroke-width="4" opacity=".7"/><circle cx="302" cy="335" r="188" stroke-width="1.6" stroke-dasharray="8 9"/><circle cx="302" cy="335" r="153" stroke-width="3"/><path d="M302 125V540M90 335H510M152 185L452 485M452 185L152 485" opacity=".65"/><path d="M302 156L340 300L475 335L340 370L302 514L264 370L129 335L264 300Z" stroke-width="4"/></g>
+<circle cx="300" cy="337" r="124" fill="#fef0b8" opacity=".35" filter="url(#halo)"/>
+<path d="M160 650Q80 485 196 355L239 425L300 363L361 425L404 355Q518 505 440 650L543 796H60Z" fill="url(#robe)" stroke="url(#gold)" stroke-width="8"/>
+<path d="M250 352Q218 294 238 225Q268 180 319 198Q382 205 365 291L341 355Q297 399 250 352Z" fill="#f4dacb" stroke="#bb9d7d" stroke-width="3"/>
+<path d="M235 286Q216 195 285 178Q360 162 384 250L357 218L320 217L285 248L255 235Z" fill="#e8e4f3" stroke="#c6a866" stroke-width="3"/>
+<path d="M216 278Q168 360 150 448M375 263Q419 369 440 444" fill="none" stroke="#ece6ff" stroke-width="25" stroke-linecap="round"/>
+<path d="M245 295L268 287M325 286L349 295" stroke="#66527b" stroke-width="5"/><path d="M271 340Q299 353 329 340" fill="none" stroke="#ae6a76" stroke-width="3"/>
+<path d="M170 563Q200 445 241 410L300 493L359 410Q412 447 433 563L302 632Z" fill="#f8f5ff" stroke="url(#gold)" stroke-width="6"/><path d="M302 470L326 509L302 558L278 509Z" fill="#7b87e3" stroke="url(#gold)" stroke-width="6"/>
+<path d="M170 596Q120 634 140 693Q177 728 215 699L257 618M430 596Q475 634 455 693Q418 728 380 699L343 618" stroke="url(#gold)" stroke-width="14" fill="none" stroke-linecap="round"/>
+<circle cx="301" cy="591" r="38" fill="#f7e2ad" filter="url(#halo)"/><circle cx="301" cy="591" r="27" stroke="url(#gold)" stroke-width="6" fill="#f7f3ff"/><path d="M301 563V619M273 591H329" stroke="#ae8846" stroke-width="5"/>
+<g stroke="url(#gold)" stroke-width="8" fill="none" opacity=".7"><path d="M32 32H130M32 32V130M568 32H470M568 32V130M32 768H130M32 768V670M568 768H470M568 768V670"/></g>
+</svg>
