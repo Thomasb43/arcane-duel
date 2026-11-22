@@ -6184,8 +6184,24 @@ function renderValtorArt429(c){
  +'<img src="artwork/'+filename+'?v=429" alt="" loading="eager" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%" onload="if(this.previousElementSibling)this.previousElementSibling.remove()" onerror="this.remove()">'
  +'</span>';
 }
+/* v4.33 – Verified per-card art naming for Eldric; use uploaded WebP only when present. */
+const ELDRIC_ART_FILES_433={"Siegelakolyth des Abgrunds":"siegelakolyth_des_abgrunds.webp","Schattenschreiber Neral":"schattenschreiber_neral.webp","Bannkreis-Wächter":"bannkreis_waechter.webp","Runenbrecher Kaor":"runenbrecher_kaor.webp","Seelenleser der Tiefe":"seelenleser_der_tiefe.webp","Obsidian-Golem":"obsidian_golem.webp","Phantom der Sieben Risse":"phantom_der_sieben_risse.webp","Kettenarchon Malvyr":"kettenarchon_malvyr.webp","Gefallener Eldric – Meister des Siegels":"gefallener_eldric_meister_des_siegels.webp","Verbotene Chronik Eldrics":"verbotene_chronik_eldrics.webp","Bruchsiegel des Direktors":"bruchsiegel_des_direktors.webp","Opferflamme des Siegels":"opferflamme_des_siegels.webp","Krone der Schattenrunen":"krone_der_schattenrunen.webp","Malachars Flüstern":"malachars_fluestern.webp","Vergeltung des Erstsiegels":"vergeltung_des_erstsiegels.webp","Riss im Bannkreis":"riss_im_bannkreis.webp","Ungebrochenes Verbot":"ungebrochenes_verbot.webp"};
+function renderEldricArtwork433(card){
+ const file=ELDRIC_ART_FILES_433[card.name];
+ if(!file)return '';
+ const backup=(card.eldricFx==='bossseal')
+   ?'<img src="artwork/story/eldric-shadow.jpg?v=432" alt="" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 13%">'
+   :astralSealArt419(card);
+ return '<span style="position:relative;display:block;width:100%;height:100%;overflow:hidden;background:#140e28">'
+  +'<span style="position:absolute;inset:0">'+backup+'</span>'
+  +'<img src="artwork/'+file+'?v=433" alt="" loading="eager" decoding="async" '
+  +'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%" '
+  +'onload="if(this.previousElementSibling)this.previousElementSibling.remove()" onerror="this.remove()">'
+  +'</span>';
+}
 function renderCardArt(c){
  if(!c)return '';
+  if(c.eldricOriginal)return renderEldricArtwork433(c);
 
  // Originales Story-Porträt als Boss-Kartenmotiv, ohne zusätzlichen Upload.
  if(c.eldricOriginal&&c.eldricFx==='bossseal')return '<span role="img" aria-label="Gefallener Eldric" style="display:block;width:100%;height:100%;overflow:hidden;background:#180b24">'
