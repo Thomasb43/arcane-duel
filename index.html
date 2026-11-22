@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-riven-storm-deck-v415">
+<meta name="arcane-build" content="20261122-riven-original-art-grid-v416">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5994,8 +5994,18 @@ for(const card of deck){
  card.artwork=key;
  CARD_ART_FILES[key]=filename;
 }
+/* v4.16: Rivens previously uploaded 5-by-5 overview is an immediately usable
+   individual artwork atlas; each of the 25 unique cards gets its own grid tile. */
+const RIVEN_GRID_ART_416=Object.fromEntries(rivenPool415.map(([name],index)=>[name,{col:index%5,row:Math.floor(index/5)}]));
 function renderCardArt(c){
  if(!c)return '';
+ if(c.rivenOriginal&&RIVEN_GRID_ART_416[c.name]){
+  const {col,row}=RIVEN_GRID_ART_416[c.name];
+  const x=col*25,y=row*25;
+  return '<span class="card-art-loader arcane-fullbleed-343 riven-art-416" role="img" aria-label="'+c.name.replace(/"/g,'&quot;')+'" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#132d60">'
+    +'<span style="position:absolute;inset:0;background-image:url(&quot;artwork/riven_kartenuebersicht.png&quot;);background-repeat:no-repeat;background-size:500% 500%;background-position:'+x+'% '+y+'%"></span></span>';
+ }
+
  const focus=ARCANE_ART_FRAMING_343[c.artwork]||ARCANE_ART_FOCUS_339[c.artwork]||{x:50,y:50};
  const replacements344={
   'schattenbestie-umbra':'schattenbestie-umbra-neu.webp',
