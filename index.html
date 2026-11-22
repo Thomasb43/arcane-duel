@@ -6180,6 +6180,11 @@ function renderValtorArt429(c){
 }
 function renderCardArt(c){
  if(!c)return '';
+
+ // Originales Story-Porträt als Boss-Kartenmotiv, ohne zusätzlichen Upload.
+ if(c.eldricOriginal&&c.eldricFx==='bossseal')return '<span role="img" aria-label="Gefallener Eldric" style="display:block;width:100%;height:100%;overflow:hidden;background:#180b24">'
+  +'<img src="artwork/story/eldric-shadow.jpg?v=432" alt="" loading="eager" decoding="async" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%"></span>';
+
  if(c.valtorOriginal)return renderValtorArt429(c);
  if(c.astraOriginal)return renderAstraArtwork420(c);
  if(c.rivenOriginal&&RIVEN_GRID_ART_416[c.name]){
