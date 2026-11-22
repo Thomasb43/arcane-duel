@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-eldric-finale-v432">
+<meta name="arcane-build" content="20261122-eldric-artworks-v434">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5416,6 +5416,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <div class="log" id="log" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Willkommen in der Testarena! Wähle eine Karte aus deiner Hand.</div>
 </main>
 <div id="handLimitOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Handkartenlimit überschritten"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>⚠️ Maximal 7 Handkarten</strong></div><p id="handLimitMessage">Wähle eine Karte, die auf deinen Friedhof gelegt wird.</p><div id="handLimitCards" class="hand-limit-grid"></div></div></div><div id="graveyardOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Karten im Friedhof"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong id="graveyardOverlayTitle">Friedhof</strong><button type="button" id="graveyardOverlayClose" aria-label="Schließen">✕</button></div><p id="graveyardOverlayCount"></p><div id="graveyardOverlayCards"></div></div></div><div id="resonanceExtraOverlay" class="resonance-extra-overlay" hidden role="dialog" aria-modal="true" aria-label="Resonanzmonster im Extra-Deck"><div class="resonance-extra-panel"><div class="resonance-extra-header"><strong>✦ Resonanzmonster</strong><button type="button" id="resonanceExtraClose" aria-label="Schließen">✕</button></div><p>Wähle ein Monster aus deinem Extra-Deck.</p><div id="resonanceExtraCards"></div></div></div><script src="valtor-images.js?v=431"></script>
+<script src="eldric-images.js?v=434"></script>
 <script>
 // VERSION 1.42
 const APP_VERSION='2.36';
@@ -6189,6 +6190,16 @@ const ELDRIC_ART_FILES_433={"Siegelakolyth des Abgrunds":"siegelakolyth_des_abgr
 function renderEldricArtwork433(card){
  const file=ELDRIC_ART_FILES_433[card.name];
  if(!file)return '';
+ // Direct high-resolution original WebP art, embedded in eldric-images.js.
+ // This also works for the collection, card detail view and field cards.
+ const embedded=window.ARCANE_ELDRIC_IMAGES_434?.[file];
+ if(embedded){
+  const focus=card.eldricFx==='bossseal'?'50% 15%':(card.kind==='monster'?'50% 21%':'50% 38%');
+  return '<span class="eldric-card-art-434" role="img" aria-label="'+String(card.name||'').replace(/"/g,'&quot;')+'" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#170e28">'
+   +'<img src="'+embedded+'" alt="" loading="eager" decoding="async" '
+   +'style="display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:'+focus+'!important">'
+   +'</span>';
+ }
  const backup=(card.eldricFx==='bossseal')
    ?'<img src="artwork/story/eldric-shadow.jpg?v=432" alt="" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 13%">'
    :astralSealArt419(card);
