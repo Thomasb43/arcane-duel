@@ -8672,7 +8672,7 @@ window.setArenaCharacterTheme('magierin');
   const file=resolvePortrait360(name);
   if(name==='Valtor')window.arcaneValtorArt428.load();
   return '<div class="arcane-story-portrait-360 '+(side==='right'?'is-right-360 ':'')+(speaking?'is-speaking-360':'')+'">'
-   +(file?'<img src="'+file+'" alt="" '+(name==='Valtor'?'data-valtor-portrait-428="1" ':'')+'loading="eager" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')
+   +(file?'<img src="'+file+'" alt="" '+(name==='Valtor'?'data-valtor-portrait-428="1" ':'')+'loading="eager" onload="if(this.hasAttribute(\'data-valtor-portrait-428\')){this.hidden=false;this.nextElementSibling.hidden=true}" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')
    +'<div class="arcane-story-portrait-fallback-360" '+(file?'hidden':'')+'>'+escapeText((name||'?').slice(0,1))+'</div>'
    +'<div class="arcane-story-portrait-label-360">'+escapeText(name)+'</div></div>';
  }
