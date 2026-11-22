@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "characterId": "riven",
+  "characterName": "Riven – Herr der Stürme",
+  "deckName": "Zorn des Himmels",
+  "status": "design-data-not-yet-connected-to-game",
+  "deckPoolSize": 50,
+  "duelDeckSize": 30,
+  "theme": "Wind und Blitz",
+  "notes": [
+    "25 unterschiedliche Karten, jeweils 2 Kopien; keine Karte öfter als dreimal.",
+    "Fallen werden nur nach Spielerentscheidung beziehungsweise KI-Entscheidung aktiviert, nicht automatisch beim Setzen.",
+    "Karteneffekte sind Designspezifikationen und erfordern Integration in die Engine."
+  ],
+  "cards": [
+    {
+      "id": "riven-storm-scout",
+      "name": "Sturmspäher",
+      "type": "monster",
+      "level": 3,
+      "atk": 1100,
+      "def": 900,
+      "attribute": "storm",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Bei Beschwörung: Sieh dir die oberste Karte deines Decks an. Du darfst sie unten ins Deck legen."
+    },
+    {
+      "id": "riven-spark-fox",
+      "name": "Funkenfuchs",
+      "type": "monster",
+      "level": 2,
+      "atk": 900,
+      "def": 700,
+      "attribute": "storm",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Wenn diese Karte durch Kampf zerstört wird: Füge dem Gegner 200 LP Schaden zu."
+    },
+    {
+      "id": "riven-windblade",
+      "name": "Windklingen-Ritter",
+      "type": "monster",
+      "level": 4,
+      "atk": 1600,
+      "def": 1200,
+      "attribute": "storm",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Bei Beschwörung: Ein gegnerisches Monster verliert bis Zugende 300 ATK."
+    },
+    {
+      "id": "riven-cloud-serpent",
+      "name": "Wolkenschlange",
+      "type": "monster",
+      "level": 4,
+      "atk": 1400,
+      "def": 1500,
+      "attribute": "storm",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Wenn du eine Wind-Zauberkarte aktivierst: Diese Karte erhält bis Zugende 300 ATK."
+    },
+    {
+      "id": "riven-thunder-mage",
+      "name": "Donner-Magierin",
+      "type": "monster",
+      "level": 4,
+      "atk": 1300,
+      "def": 1600,
+      "attribute": "storm",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Einmal pro Zug: Wenn du eine Blitz-Zauberkarte aktivierst, füge dem Gegner 200 LP Schaden zu."
+    },
+    {
+      "id": "riven-gale-wolf",
+      "name": "Orkanwolf",
+      "type": "monster",
+      "level": 3,
+      "atk": 1200,
+      "def": 800,
+      "attribute": "storm",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Bei Beschwörung: Ein eigenes Sturm-Monster erhält bis Zugende 200 ATK."
+    },
+    {
+      "id": "riven-static-golem",
+      "name": "Blitzstein-Golem",
+      "type": "monster",
+      "level": 4,
+      "atk": 1000,
+      "def": 2000,
+      "attribute": "storm",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Solange diese Karte in Verteidigung liegt, erhält sie 300 DEF."
+    },
+    {
+      "id": "riven-sky-rider",
+      "name": "Himmelsreiterin",
+      "type": "monster",
+      "level": 4,
+      "atk": 1700,
+      "def": 1000,
+      "attribute": "storm",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Wenn diese Karte einem Monster Kampfschaden zufügt, erhältst du 200 LP."
+    },
+    {
+      "id": "riven-thunder-hawk",
+      "name": "Donnerfalke",
+      "type": "monster",
+      "level": 3,
+      "atk": 1200,
+      "def": 900,
+      "attribute": "storm",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Bei Beschwörung: Ein gegnerisches Monster verliert bis Zugende 200 DEF."
+    },
+    {
+      "id": "riven-cyclone-guard",
+      "name": "Zyklonwächter",
+      "type": "monster",
+      "level": 4,
+      "atk": 1500,
+      "def": 1700,
+      "attribute": "storm",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Einmal pro Zug: Verhindere die Zerstörung eines eigenen Sturm-Monsters durch einen Karteneffekt."
+    },
+    {
+      "id": "riven-storm-lion",
+      "name": "Sturmlöwe",
+      "type": "monster",
+      "level": 5,
+      "atk": 2100,
+      "def": 1500,
+      "attribute": "storm",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Benötigt 1 Tribut. Bei Beschwörung: Füge dem Gegner 300 LP Schaden zu."
+    },
+    {
+      "id": "riven-tempest-knight",
+      "name": "Tempestritter",
+      "type": "monster",
+      "level": 6,
+      "atk": 2300,
+      "def": 1800,
+      "attribute": "storm",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Benötigt 1 Tribut. Einmal pro Zug: Ein eigenes Sturm-Monster erhält bis Zugende 400 ATK."
+    },
+    {
+      "id": "riven-lightning-griffin",
+      "name": "Blitzgreif",
+      "type": "monster",
+      "level": 6,
+      "atk": 2400,
+      "def": 1600,
+      "attribute": "storm",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Benötigt 1 Tribut. Wenn diese Karte ein Monster im Kampf zerstört, füge dem Gegner 200 LP Schaden zu."
+    },
+    {
+      "id": "riven-storm-queen",
+      "name": "Königin des Gewitters",
+      "type": "monster",
+      "level": 7,
+      "atk": 2600,
+      "def": 2100,
+      "attribute": "storm",
+      "rarity": "legendary",
+      "copiesInPool": 2,
+      "effect": "Benötigt 2 Tribute. Einmal pro Zug: Wähle ein gegnerisches offenes Monster; es verliert bis Zugende 500 ATK."
+    },
+    {
+      "id": "riven-eternal-sky-dragon",
+      "name": "Himmelsdrache des ewigen Sturms",
+      "type": "monster",
+      "level": 8,
+      "atk": 2900,
+      "def": 2400,
+      "attribute": "storm",
+      "rarity": "legendary",
+      "copiesInPool": 2,
+      "effect": "Benötigt 2 Tribute. Einmal pro Zug: Wähle ein gegnerisches offenes Monster; es verliert bis Zugende 600 ATK. Dieser Effekt kann nicht im selben Zug wie ein direkter Angriff dieser Karte verwendet werden."
+    },
+    {
+      "id": "riven-thunderbolt",
+      "name": "Donnerschlag",
+      "type": "spell",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Wähle ein offenes Monster: Es verliert bis Zugende 500 ATK."
+    },
+    {
+      "id": "riven-tailwind",
+      "name": "Rückenwind",
+      "type": "spell",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Ein eigenes offenes Monster erhält bis Zugende 400 ATK."
+    },
+    {
+      "id": "riven-cyclone",
+      "name": "Zyklonstoß",
+      "type": "spell",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Wähle ein gegnerisches offenes Monster der Stufe 4 oder niedriger und gib es auf die Hand zurück."
+    },
+    {
+      "id": "riven-storm-sanctuary",
+      "name": "Schrein des Sturms",
+      "type": "spell",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Dauerhaft: Einmal pro eigenem Zug, wenn du ein Sturm-Monster beschwörst, erhält dieses bis Zugende 200 ATK."
+    },
+    {
+      "id": "riven-charged-skies",
+      "name": "Geladener Himmel",
+      "type": "spell",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Ziehe 1 Karte, falls du mindestens 2 eigene offene Sturm-Monster kontrollierst. Nur einmal pro Zug aktivierbar."
+    },
+    {
+      "id": "riven-eye-of-tempest",
+      "name": "Auge des Orkans",
+      "type": "spell",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Wähle ein eigenes Sturm-Monster: Es kann in diesem Zug nicht durch Karteneffekte zerstört werden."
+    },
+    {
+      "id": "riven-lightning-net",
+      "name": "Blitznetz",
+      "type": "trap",
+      "rarity": "normal",
+      "copiesInPool": 2,
+      "effect": "Wenn ein gegnerisches Monster angreift: Das angreifende Monster verliert bis zum Ende des Kampfes 500 ATK."
+    },
+    {
+      "id": "riven-storm-barrier",
+      "name": "Sturmbarriere",
+      "type": "trap",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Wenn ein eigenes Monster angegriffen wird: Verhindere einmalig seine Zerstörung durch diesen Kampf. Kampfschaden wird normal berechnet."
+    },
+    {
+      "id": "riven-thunder-counter",
+      "name": "Donnerkonter",
+      "type": "trap",
+      "rarity": "epic",
+      "copiesInPool": 2,
+      "effect": "Wenn der Gegner eine Zauberkarte aktiviert: Annulliere deren Effekt. Nur einmal pro Zug."
+    },
+    {
+      "id": "riven-wind-trap",
+      "name": "Windfalle",
+      "type": "trap",
+      "rarity": "rare",
+      "copiesInPool": 2,
+      "effect": "Wenn ein gegnerisches Monster einen Angriff deklariert: Beende diesen Angriff und ändere es in offene Verteidigung."
+    }
+  ],
+  "difficulty": [
+    {
+      "level": 1,
+      "name": "Leicht",
+      "deckRule": "30 Karten, bevorzugt Stufe-1-bis-4-Monster und einfache Zauber; keine legendären Bossmonster"
+    },
+    {
+      "level": 2,
+      "name": "Normal",
+      "deckRule": "30 Karten, enthält Tributmonster, Fallen und begrenzte Kombinationen"
+    },
+    {
+      "level": 3,
+      "name": "Schwer",
+      "deckRule": "30 Karten, effiziente Kombinationen mit Zyklonstoß, Sturmbarriere und Blitzgreif"
+    },
+    {
+      "level": 4,
+      "name": "Meister",
+      "deckRule": "30 Karten, stärkste Sturmkombinationen einschließlich Himmelsdrache und Donnerkonter"
+    }
+  ],
+  "story": {
+    "location": "Schwebende Ruinen des Sturmtempels",
+    "unlock": "Nach Abschluss des vorherigen Story-Kapitels",
+    "reward": "Story-Fortschritt und thematische Kartenbelohnung (Menge noch festzulegen)"
+  }
+}
