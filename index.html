@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-chronoresonanz-pack-v438">
+<meta name="arcane-build" content="20261122-kael-leon-resonanz-booster-v439">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5642,6 +5642,24 @@ function createDuelDeck(){
 }
 // Single source of truth: resonance-starter-v436.js, loaded before this script.
 deck.push(...window.ARCANE_CHRONORESONANZ_436.cards.map(c=>({...c})));
+
+/* v4.39: Kaels Siegel- und Leons Arena-Resonanz – Booster-exklusive Karten.
+   Vorlaeufig die bestehenden Charakter-Artworks, bis eigene Motive angefertigt sind. */
+const arcaneHeroResonators439=[
+ {name:"Siegelstern-Resonator",artwork:"kael-arkaner-lehrling",kind:"monster",emoji:"✧",atk:700,def:1000,level:2,element:"Licht",race:"Resonator",skin:"ice",resonator:true,heroResonance439:"kael",effectText:"Kaels Resonator. Mit einem offenen Monster aus Kaels Siegeldeck als Material für eine Resonanzbeschwörung verwendbar."},
+ {name:"Arena-Taktgeber",artwork:"leon-loewenrekrut",kind:"monster",emoji:"🦁",atk:850,def:750,level:2,element:"Feuer",race:"Resonator",skin:"fire",resonator:true,heroResonance439:"leon",effectText:"Leons Resonator. Mit einem offenen Monster aus Leons Löwendeck als Material für eine Resonanzbeschwörung verwendbar."}
+];
+deck.push(...arcaneHeroResonators439);
+const arcaneHeroMaterials439={
+ kael:new Set(["Arkaner Lehrling","Siegelritter","Lichtfalke","Runenwächter","Sternenklingen-Ritter","Hüter des ersten Siegels","Arkaner Lichtdrache"]),
+ leon:new Set(["Arenenlöwe Leonis","Löwenrekrut","Sonnenmähnen-Krieger","Flammenbanner-Löwe","Arena-Paladin","König der Löwenarena"])
+};
+const arcaneHeroResonanceBosses439=[
+ {name:"Siegellichtdrache Auralion",artwork:"kael-arkaner-lichtdrache",kind:"monster",emoji:"🐉",atk:2400,def:1900,level:6,element:"Licht",race:"Resonanz",skin:"ice",resonance:true,heroResonance439:"kael",recipe:"hero-kael-439",effectText:"Kaels Resonanzmonster. Siegelstern-Resonator + ein offenes Kael-Monster, zusammen Stufe 6. Bei Resonanzbeschwörung erhältst du 400 LP."},
+ {name:"Erstsiegel-Hüter Solarian",artwork:"kael-hueter-des-ersten-siegels",kind:"monster",emoji:"🛡️",atk:2950,def:2400,level:8,element:"Licht",race:"Resonanz",skin:"ice",resonance:true,heroResonance439:"kael",recipe:"hero-kael-439",effectText:"Kaels Resonanzmonster. Siegelstern-Resonator + ein offenes Kael-Monster, zusammen Stufe 8. Bei Resonanzbeschwörung erhältst du 700 LP."},
+ {name:"Sonnenmähnen-Löwe Raigon",artwork:"leon-arenenloewe-leonis",kind:"monster",emoji:"🦁",atk:2500,def:1900,level:6,element:"Feuer",race:"Resonanz",skin:"fire",resonance:true,heroResonance439:"leon",recipe:"hero-leon-439",effectText:"Leons Resonanzmonster. Arena-Taktgeber + ein offenes Leon-Monster, zusammen Stufe 6. Bei Resonanzbeschwörung verliert der Gegner 300 LP."},
+ {name:"Löwenkönig Ignarion",artwork:"leon-koenig-der-loewenarena",kind:"monster",emoji:"👑",atk:3250,def:2500,level:9,element:"Feuer",race:"Resonanz",skin:"fire",resonance:true,heroResonance439:"leon",recipe:"hero-leon-439",effectText:"Leons Resonanzmonster. Arena-Taktgeber + ein offenes Leon-Monster, zusammen Stufe 9. Bei Resonanzbeschwörung verliert der Gegner 600 LP."}
+];
 let drawPile=createDuelDeck();
 const testOpeningHand=drawPile.splice(0,5);
 
@@ -5656,6 +5674,19 @@ let resonanceExtraDeck=[{name:"Resonanzfürst Nocthar",artwork:"resonanzfuerst-n
 {name:"Nyxara, Königin der Schatten",artwork:"nyxara-schattenkoenigin",kind:"monster",emoji:"🌙",atk:2600,def:2100,level:7,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,recipe:"nyxara",effectText:"Resonanz: Schattenresonator + Nachtklinge. Bei Beschwörung zerstört sie eine gegnerische Zauber- oder Fallenkarte."},
 {name:"Noctharion, Herrscher der Finsternis",artwork:"noctharion-herrscher",kind:"monster",emoji:"🐉",atk:3200,def:2600,level:9,element:"Finsternis",race:"Resonanz",skin:"shadow",resonance:true,recipe:"noctharion",effectText:"Resonanz: Nyxara + ein weiteres Schattenmonster. Kann zweimal pro Zug angreifen. Nach dem zweiten Angriff verlierst du 500 LP."}
 ];
+
+/* Neue Resonanzmonster bleiben im Extra-Deck, nicht im Hauptdeck.
+   Bereits auf dem Spielfeld liegende Exemplare werden mitgezaehlt. */
+function syncHeroResonanceExtra439(){
+ const counts=window.arcaneBoosterInventory322?.read()?.counts||{};
+ for(const boss of arcaneHeroResonanceBosses439){
+  const target=Math.min(3,Math.max(0,Number(counts[boss.name])||0));
+  const present=resonanceExtraDeck.filter(c=>c.name===boss.name).length+myMon.filter(c=>c&&c.name===boss.name).length;
+  for(let i=present;i<target;i++)resonanceExtraDeck.push({...boss});
+ }
+ renderExtraDeckCounts();updateExtraDeckGlow();
+}
+window.arcaneSyncHeroResonance439=syncHeroResonanceExtra439;
 
 // Only the active Resonance Starter uses its three associated Extra-Deck monsters.
 if(window.ARCANE_CHRONORESONANZ_436.active()){
@@ -5674,7 +5705,11 @@ function summonResonanceTest(index=0){
  const boss={...resonanceExtraDeck.splice(index,1)[0],position:"attack",faceDown:false};
  myMon[target>=0?target:a]=boss;
  let result="";
- if(boss.name==="Resonanzfürst Nocthar"){
+ if(boss.heroResonance439==="kael"){
+  const heal=boss.level>=8?700:400;myLP+=heal;result=" Du erhältst "+heal+" LP.";
+ }else if(boss.heroResonance439==="leon"){
+  const damage=boss.level>=9?600:300;oppLP=Math.max(0,oppLP-damage);result=" Gegner verliert "+damage+" LP.";
+ }else if(boss.name==="Resonanzfürst Nocthar"){
   const trap=oppSpell.findIndex(c=>c&&c.faceDown);
   if(trap>=0){sendToGraveyard(oppSpell[trap],"opponent");oppSpell[trap]=null;result=" Gesetzte gegnerische Karte zerstört.";}
  }else if(boss.name==="Schattenbestie Umbra"){
@@ -6531,7 +6566,11 @@ function availableResonanceMaterials(card){
   const first=myMon[a];if(!first||first.faceDown)continue;
   for(let b=0;b<myMon.length;b++){
    const second=myMon[b];if(a===b||!second||second.faceDown)continue;
-   if(card.recipe==="nyxara"){
+   if(card.heroResonance439){
+     if(first.resonator&&first.heroResonance439===card.heroResonance439
+       &&second.kind==="monster"&&!second.resonance&&arcaneHeroMaterials439[card.heroResonance439]?.has(second.name)
+       &&first.level+second.level===card.level)return [a,b];
+    }else if(card.recipe==="nyxara"){
     if(first.name==="Schattenresonator"&&second.name==="Nachtklinge")return [a,b];
    }else if(card.recipe==="noctharion"){
     if(first.name==="Nyxara, Königin der Schatten"&&second.element==="Finsternis"&&!second.resonance)return [a,b];
@@ -6543,6 +6582,9 @@ function availableResonanceMaterials(card){
  return null;
 }
 function resonanceRequirement(card){
+ if(card.heroResonance439){
+  return (card.heroResonance439==="kael"?"Siegelstern-Resonator + offenes Kael-Monster":"Arena-Taktgeber + offenes Leon-Monster")+", Stufensumme "+card.level;
+ }
  if(card.recipe==="nyxara")return "Schattenresonator + Nachtklinge (Spezialrezept)";
  if(card.recipe==="noctharion")return "Nyxara + ein weiteres offenes Schattenmonster";
  return "Offener Resonator + weiteres offenes Monster, Levelsumme "+card.level;
@@ -7543,14 +7585,15 @@ window.setArenaCharacterTheme('magierin');
  }
  window.arcaneBoosterInventory322={read,save,owned:name=>read().counts[name]||0};
 })();
+syncHeroResonanceExtra439();
 
 /* v3.16 – Collection: card catalogue and starter-deck test holdings.
    A persistent earned inventory does not yet exist; do not fabricate saved rewards. */
 (function initCollection316(){
  const testNames=new Map(starterDeckList.map(([name,count])=>[name,count]));
  for(const c of resonanceTestCards)testNames.set(c.name,Math.max(1,testNames.get(c.name)||0));
- const extraNames=new Set([...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra].map(c=>c.name));
- const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra]
+ const extraNames=new Set([...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439].map(c=>c.name));
+ const allCards=[...deck,...resonanceTestCards,...resonanceExtraDeck,...window.ARCANE_CHRONORESONANZ_436.extra,...arcaneHeroResonanceBosses439]
   .filter((c,i,arr)=>arr.findIndex(d=>d.name===c.name)===i);
  const rarities={
   'Glutkoloss':'legendary','Flammendrache':'epic','Arkaner Magier':'rare',
@@ -7560,7 +7603,9 @@ window.setArenaCharacterTheme('magierin');
   'Noctharion, Herrscher der Finsternis':'mythic','Schattenfessel':'rare',
   'Kristallschild':'rare','Arkaner Rückschlag':'rare',
   'Arkaner Sturm':'epic','Geisterruf':'rare',
-  'Schattenresonator':'rare','Nachtklinge':'rare','Sternklang-Novizin':'rare','Echo-Dirigent':'rare'
+  'Schattenresonator':'rare','Nachtklinge':'rare','Sternklang-Novizin':'rare','Echo-Dirigent':'rare',
+   'Siegelstern-Resonator':'rare','Arena-Taktgeber':'rare','Siegellichtdrache Auralion':'epic','Sonnenmähnen-Löwe Raigon':'epic',
+   'Erstsiegel-Hüter Solarian':'legendary','Löwenkönig Ignarion':'legendary'
  };
  const rarityData={
   normal:{label:'Normal',color:'#c3c5d1'},
@@ -7768,7 +7813,7 @@ window.setArenaCharacterTheme('magierin');
    <div class="arcane-booster-title-322">Schatten &amp; Flammen</div>
    <div class="arcane-booster-product-322"><div class="arcane-booster-product-shine-322">✦</div><div class="arcane-booster-product-name-322">ARCANE DUEL</div></div>
    <div class="arcane-booster-price-322">💎 100 Arkankristalle</div>
-   <div class="arcane-booster-sub-322">5 Karten pro Pack · mindestens 1 Seltene oder höher.<br>Gekaufte Karten werden in deiner Sammlung gespeichert.</div>
+   <div class="arcane-booster-sub-322">5 Karten pro Pack · mindestens 1 Seltene oder höher.<br>Jetzt mit Kaels Siegelresonanz und Leons Arena-Resonanz. Alle gezogenen Karten werden gespeichert.</div>
    <button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button">▣ Karten anzeigen &amp; Packs wählen</button>
    <div class="arcane-booster-feedback-322" id="arcaneBoosterFeedback322" role="status" aria-live="polite"></div>
  </div>
@@ -7776,7 +7821,7 @@ window.setArenaCharacterTheme('magierin');
   <div class="arcane-booster-catalogue-panel-324">
    <div class="arcane-booster-catalogue-heading-324"><div class="arcane-booster-catalogue-kicker-324">ARCANE DUEL · BOOSTER-SET</div>
     <h3>Schatten &amp; Flammen</h3><button type="button" id="arcaneBoosterCatalogueClose324" aria-label="Schließen">×</button>
-    <p>Mögliche Inhalte · Karten aus diesem Booster</p>
+    <p>Mögliche Inhalte · auch Kaels und Leons Resonanzkarten</p>
    </div>
    <div class="arcane-booster-filters-324" id="arcaneBoosterFilters324">
     <button type="button" data-rarity="all" class="active">Alle</button>
@@ -7903,8 +7948,8 @@ window.setArenaCharacterTheme('magierin');
  const inventory=()=>window.arcaneBoosterInventory322;
  const bank=()=>window.arcaneTestCrystals320;
  const catalog=()=>window.arcaneCollectionCatalog322;
- // One fixed set: the existing main-deck pool. Boss/resonance cards are not sold in this pack.
- const pool=()=>catalog()?.cards.filter(c=>!c.resonance&&!c.resonator&&c.kind&&c.name)||[];
+ // Schatten & Flammen: inklusive exklusiver Kael-/Leon-Resonatoren und -Resonanzbosse.
+ const pool=()=>catalog()?.cards.filter(c=>c.kind&&c.name&&(c.heroResonance439||(!c.resonance&&!c.resonator)))||[];
  function selectCard(guaranteed){
   const cards=pool();
   const options=WEIGHTS.filter(([key])=>cards.some(c=>catalog().rarity(c)===key)&&(!guaranteed||key!=='normal'));
@@ -8122,6 +8167,7 @@ window.setArenaCharacterTheme('magierin');
    updated.opened+=amount;updated.pendingPack=names;
    if(!inventory().save(updated)){label.textContent='Speichern fehlgeschlagen. Kein Kauf durchgeführt.';return}
    bank().set(balance-price);bank().refresh();
+   syncHeroResonanceExtra439();
    feedback.textContent=amount+' Pack'+(amount===1?'':'s')+' gekauft · '+names.length+' Karten gespeichert.';
    openReveal(names);sync();
   }catch(error){label.textContent='Kauf fehlgeschlagen: '+error.message}
