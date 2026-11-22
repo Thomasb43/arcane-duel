@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-deck-portraits-v395">
+<meta name="arcane-build" content="20261122-duel-kael-leon-portraits-v396">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5365,6 +5365,10 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-deck-entry-identity-395 img{display:block;flex:none;width:47px;height:58px;object-fit:cover;object-position:center top;border:1px solid #cdb176;border-radius:10px;background:#302242}
 .arcane-deck-entry-identity-395>div{min-width:0}
 @media(max-width:430px){.arcane-deck-character-identity-395{gap:8px}.arcane-deck-character-identity-395 img{width:46px;height:56px}.arcane-deck-entry-identity-395 img{width:40px;height:50px}.arcane-deck-entry-identity-395{gap:8px}.arcane-deck-entry-377{padding:10px;gap:8px}}
+
+/* v3.96 – character portraits: clear face crop for Kael and Leon */
+main.arcane-responsive .duel-lp-face img{object-fit:cover!important;object-position:50% 20%!important;transform:none!important;max-width:100%!important}
+main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsive .player-fixed-ui .duel-lp-face img{object-position:50% 20%!important;transform:none!important}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -5372,12 +5376,12 @@ transform:none!important;filter:none!important;z-index:2!important;
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
 
-<div class="arena-fixed-ui opponent-fixed-ui"><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div><div class="duel-sidezones opponent-sidezones"><div class="sidezone deck-sidezone" id="oppDeckZone" aria-label="Verbleibende Karten im gegnerischen Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="oppDeckCount">0</span><span class="sidezone-label">Deck</span></div><div class="sidezone grave-sidezone" id="oppGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><button type="button" class="sidezone extra-sidezone" id="oppExtraDeck" aria-label="Extra-Deck des Gegners"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/duelist-sorceress.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="duel-lp-hud"><div class="duel-lp-face"><img src="artwork/duelist-sorceress.webp" alt="Gegner"></div><span class="lp" id="oppLP">4000 LP</span></div></div></div>
+<div class="arena-fixed-ui opponent-fixed-ui"><div class="turn-hud"><span>ZUG <b id="turn">1</b></span><button id="phase" class="phase-button" type="button" aria-label="Phase wechseln">Hauptphase 1</button></div><div class="duel-sidezones opponent-sidezones"><div class="sidezone deck-sidezone" id="oppDeckZone" aria-label="Verbleibende Karten im gegnerischen Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="oppDeckCount">0</span><span class="sidezone-label">Deck</span></div><div class="sidezone grave-sidezone" id="oppGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile opponent-pile" id="oppGraveButton" aria-label="Karten des Gegners"></div></div><button type="button" class="sidezone extra-sidezone" id="oppExtraDeck" aria-label="Extra-Deck des Gegners"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button></div><div class="duelist-portrait duelist-opponent" aria-hidden="true"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><div class="opponent-hand-wrap"><span>GEGNERISCHE HAND</span><div class="opponent-hand" id="oppHand" aria-label="Verdeckte Handkarten des Gegners"></div></div><div class="field-topline"><div class="duel-lp-hud"><div class="duel-lp-face"><img src="artwork/story/leon.jpg" alt="Leon"></div><span class="lp" id="oppLP">4000 LP</span></div></div></div>
 <div class="arena-stage"><div class="arena-world">
 <section class="board"><h2>GEGNERISCHES FELD</h2><div class="zones" id="oppSpell"></div><div class="middle">✦ ZAUBER- & FALLENZONE DES GEGNERS ✦</div><div class="zones" id="oppMon"></div></section>
 <section class="board"><h2>DEIN FELD</h2><div class="zones" id="myMon"></div><div class="middle">✦ DEINE ZAUBER & FALLEN ✦</div><div class="zones" id="mySpell"></div></section>
 </div></div>
-<div class="arena-fixed-ui player-fixed-ui"><div class="duel-sidezones player-sidezones"><div class="sidezone deck-sidezone" id="myDeckZone" aria-label="Verbleibende Karten in deinem Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="myDeckCount">0</span><span class="sidezone-label">Deck</span></div><button type="button" class="sidezone extra-sidezone" id="myExtraDeck" aria-label="Dein Extra-Deck"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button><div class="sidezone grave-sidezone" id="myGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/duelist-warrior.webp" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><button id="end" class="end-turn field-end-turn">Zug beenden</button><div class="field-bottomline"><div class="duel-lp-hud"><div class="duel-lp-face"><img src="artwork/duelist-warrior.webp" alt="Spieler"></div><span class="lp" id="myLP">4000 LP</span></div></div></div>
+<div class="arena-fixed-ui player-fixed-ui"><div class="duel-sidezones player-sidezones"><div class="sidezone deck-sidezone" id="myDeckZone" aria-label="Verbleibende Karten in deinem Deck"><span class="deck-symbol">▣</span><span class="deck-counter" id="myDeckCount">0</span><span class="sidezone-label">Deck</span></div><button type="button" class="sidezone extra-sidezone" id="myExtraDeck" aria-label="Dein Extra-Deck"><span class="sidezone-symbol">◎</span><span class="sidezone-label">Extra-Karten</span><span class="sidezone-count">0</span></button><div class="sidezone grave-sidezone" id="myGraveZone"><span class="sidezone-symbol">♰</span><span class="sidezone-label">Friedhof</span><div class="grave-pile player-pile" id="myGraveButton" aria-label="Deine abgelegten Karten"></div></div></div><div class="duelist-portrait duelist-player" aria-hidden="true"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display='none'"><span class="duelist-aura"></span></div><button id="end" class="end-turn field-end-turn">Zug beenden</button><div class="field-bottomline"><div class="duel-lp-hud"><div class="duel-lp-face"><img src="artwork/story/kael.jpg" alt="Kael"></div><span class="lp" id="myLP">4000 LP</span></div></div></div>
 <section><div class="handtitle"><h2>DEINE HANDKARTEN</h2><small id="handCount">5 Karten</small></div><div class="hand" id="hand"></div><div class="controls legacy-control"><button id="position">Position</button><button id="effect">Effekt</button><button id="activate">Aktivieren</button></div><div class="controls legacy-control"><button id="summon">Im Angriffsmodus beschwören</button><button id="defend">Verdeckt verteidigen</button><button id="set">Zauber/Falle setzen</button><button id="phaseAdvance">Kampfphase starten</button><button id="attack">Ausgewähltes Ziel angreifen</button></div></section>
 
 <div class="card-info-overlay" id="cardInfo" role="dialog" aria-modal="true" aria-labelledby="cardInfoName"><div class="card-info-panel"><h3 id="cardInfoName">Karteninformation</h3><div class="info-type" id="cardInfoType"></div><div class="info-effect" id="cardInfoEffect"></div><div class="info-actions"><button id="cardInfoPrimary" type="button">Karte auswählen</button><button id="cardInfoClose" class="secondary" type="button">Schließen</button></div></div></div>
@@ -8100,4 +8104,27 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
  window.arcaneStory357={open:showMap};
 })();
 
-</script></body></html>
+</script>
+/* v3.96 – duel portraits follow the selected playable character. */
+(function initDuelCharacterPortraits396(){
+ function selected(){try{return localStorage.getItem('arcane-duel-selected-character-v1')==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael'}catch(_){return 'Kael'}}
+ function update(){
+  const own=selected(),enemy=own==='Kael'?'Leon':'Kael';
+  const set=(selector,ch)=>{
+   document.querySelectorAll(selector).forEach(img=>{
+    const url='artwork/story/'+ch.toLowerCase()+'.jpg';
+    if(img.getAttribute('src')!==url)img.setAttribute('src',url);
+    img.setAttribute('alt',ch);
+   });
+  };
+  set('.player-fixed-ui .duel-lp-face img, .duelist-player img',own);
+  set('.opponent-fixed-ui .duel-lp-face img, .duelist-opponent img',enemy);
+ }
+ document.addEventListener('click',e=>{
+  if(e.target.closest('#arcaneStartDuel307, [data-home-character-391], #arcaneReturnMenu307'))update();
+ },true);
+ window.addEventListener('storage',e=>{if(e.key==='arcane-duel-selected-character-v1')update()});
+ update();
+ window.syncDuelCharacterPortraits396=update;
+})();
+</body></html>
