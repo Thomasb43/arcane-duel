@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-elara-all-seventeen-art-linked-v404">
+<meta name="arcane-build" content="20261122-varek-shadow-deck-v405">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5636,7 +5636,7 @@ let aiHand=aiDeck.splice(0,5),aiTurn=0;
 const storyDeckRecipes362=[
  {name:"Leon",theme:"Krieger & Feuer",base:["Aschenritter","Flammendrache","Erdwächter","Glutkoloss"],support:["Flammenstoß","Arkaner Segen","Drachenatem","Arkaner Rückschlag","Funkenregen","Kristallschild"]},
  {name:"Elara",theme:"Kristallchronik – Spiegel & Licht",base:["Kristallfüchsin","Prismengolem","Lichtsplitter-Magierin","Spiegelritterin"],support:["Kristallheilung","Prismenwissen","Prismenschild","Spiegelbann","Lichtbrechung","Kristallnebel"]},
- {name:"Varek",theme:"Schatten & Störung",base:["Schattenwolf","Arkaner Magier","Aschenritter","Flammendrache"],support:["Schattenfessel","Gedankenraub","Geisterruf","Seelenbergung","Arkaner Rückschlag","Arkaner Sturm"]},
+ {name:"Varek",theme:"Schattenketten & Fluchfeuer",base:["Schattenketten-Häscher","Nachtklingen-Ritter","Fluchwolf Umbra","Kettenrufer der Finsternis"],support:["Ketten des Abgrunds","Fluch der Nacht","Schattenruf","Kettenbruch der Verdammnis"]},
  {name:"Darian",theme:"Wächter & Verteidigung",base:["Erdwächter","Frostwächter","Aschenritter","Arkaner Magier"],support:["Kristallschild","Arkaner Rückschlag","Heilende Quelle","Frostpanzer","Arkaner Segen","Schattenfessel"]},
  {name:"Noctis",theme:"Schattenfürst",base:["Schattenwolf","Arkaner Magier","Glutkoloss","Aschenritter"],support:["Schattenfessel","Geisterruf","Gedankenraub","Seelenbergung","Arkaner Sturm","Flammenstoß"]},
  {name:"Seraphine",theme:"Arkanes Wissen",base:["Arkaner Magier","Frostwächter","Donnerfalke","Erdwächter"],support:["Arkaner Wissensstrom","Arkaner Segen","Kristallschild","Heilende Quelle","Seelenbergung","Eisiger Rückstoß"]},
@@ -5669,9 +5669,32 @@ function createElaraDeck400(tier=1){
 }
 window.arcaneElaraDeck400={pool:elaraCardPool400.map(([name,count])=>({name,count})),presets:elaraDifficultyPresets400.map((p,i)=>({level:i+1,label:p.label,deckSize:30})),create:createElaraDeck400};
 
+/* v4.05 Varek: 17 own cards, 50 in collection, 30 in each duel. */
+deck.push(...[{"name":"Schattenketten-Häscher","kind":"monster","level":4,"atk":1500,"def":1300,"emoji":"⛓️","effectText":"Bei Beschwörung verliert das stärkste offene gegnerische Monster 300 ATK.","varekFx":"weak300","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Nachtklingen-Ritter","kind":"monster","level":4,"atk":1700,"def":1200,"emoji":"⚔️","effectText":"Bei Beschwörung: Sind gegnerische Monster geschwächt, erhält er 300 ATK.","varekFx":"knight","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Fluchwolf Umbra","kind":"monster","level":4,"atk":1600,"def":900,"emoji":"🐺","effectText":"Wenn er ein Monster im Kampf zerstört, erhält er 200 ATK.","varekFx":"wolf","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Kettenrufer der Finsternis","kind":"monster","level":4,"atk":1200,"def":1600,"emoji":"🔗","effectText":"Bei Beschwörung sperrt er das stärkste offene gegnerische Monster für dessen nächsten Zug.","varekFx":"lock","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Dämmergreif","kind":"monster","level":4,"atk":1800,"def":1000,"emoji":"🦅","effectText":"Bei Beschwörung: Das stärkste offene gegnerische Monster verliert 200 DEF.","varekFx":"defweak","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Seelenwächter Morvyn","kind":"monster","level":4,"atk":1100,"def":2000,"emoji":"🛡️","effectText":"Beim Aufdecken durch Angriff erhält er 500 DEF.","varekFx":"flipdef","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Schattenpriesterin Nyra","kind":"monster","level":3,"atk":1300,"def":1400,"emoji":"🌑","effectText":"Bei Beschwörung: Ein anderes offenes Schattenmonster erhält 300 ATK.","varekFx":"allyboost","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Abysskonstrukt","kind":"monster","level":4,"atk":900,"def":2200,"emoji":"🗿","effectText":"Beim Aufdecken schwächt es den Angreifer um 300 ATK.","varekFx":"flipweak","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Vareks Abyssdrache","kind":"monster","level":7,"atk":2600,"def":2100,"emoji":"🐉","effectText":"Benötigt 2 Tribute. Bei Beschwörung verliert das stärkste offene gegnerische Monster 600 ATK.","varekFx":"bossweak","varekOriginal":true,"skin":"shadow","element":"Finsternis","race":"Schattenwesen"},{"name":"Ketten des Abgrunds","kind":"spell","emoji":"⛓️","effectText":"Schwächt das stärkste offene gegnerische Monster um 500 ATK.","varekFx":"minus500","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Fluch der Nacht","kind":"spell","emoji":"🌘","effectText":"Gegner verliert 300 LP.","varekFx":"burn300","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Schattenruf","kind":"spell","emoji":"🌀","effectText":"Ziehe 2 Karten.","varekFx":"draw2","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Düstere Opferung","kind":"spell","emoji":"🩸","effectText":"Opfere ein eigenes Monster und ziehe 2 Karten.","varekFx":"sacrifice2","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Schwarzer Nebelschleier","kind":"spell","emoji":"🌫️","effectText":"Alle offenen gegnerischen Monster verlieren 200 ATK.","varekFx":"fog200","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Abgrundssiegel","kind":"spell","emoji":"🔮","effectText":"Ein eigenes offenes Monster erhält 400 ATK.","varekFx":"boost400","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Kettenbruch der Verdammnis","kind":"trap","emoji":"⚡","effectText":"Ab dem nächsten Zug: Stoppe einen Angriff und füge 300 LP Schaden zu.","varekFx":"stopburn","varekOriginal":true,"skin":"shadow","element":"Finsternis"},{"name":"Schattenumkehr","kind":"trap","emoji":"🪞","effectText":"Ab dem nächsten Zug: Stoppe einen Angriff und reduziere die ATK des Angreifers um 400.","varekFx":"stopweak","varekOriginal":true,"skin":"shadow","element":"Finsternis"}]);
+const varekPool405=[["Schattenketten-Häscher",3],["Nachtklingen-Ritter",3],["Fluchwolf Umbra",3],["Kettenrufer der Finsternis",3],["Dämmergreif",3],["Seelenwächter Morvyn",3],["Schattenpriesterin Nyra",3],["Abysskonstrukt",3],["Vareks Abyssdrache",2],["Ketten des Abgrunds",3],["Fluch der Nacht",3],["Schattenruf",3],["Düstere Opferung",3],["Schwarzer Nebelschleier",3],["Abgrundssiegel",3],["Kettenbruch der Verdammnis",3],["Schattenumkehr",3]];
+const varekTiers405=[{"label":"Einsteiger","n":[0,1,2,3,4,5,9,10,11,15]},{"label":"Fortgeschritten","n":[0,1,2,3,6,7,9,11,13,16]},{"label":"Experte","n":[0,1,3,4,6,7,9,11,14,16]},{"label":"Meister","n":[0,1,3,6,7,9,11,14,16],"boss":2,"extra":2}];
+function createVarekDeck405(level=1){
+ const tier=varekTiers405[Math.max(1,Math.min(4,Math.trunc(Number(level)||1)))-1];
+ const quantities=new Map(tier.n.map(i=>[cardsVarekName405(i),3]));
+ if(tier.boss)quantities.set('Vareks Abyssdrache',2);
+ if(tier.extra)quantities.set('Fluchwolf Umbra',tier.extra);
+ const original=new Map(varekPool405),result=[];
+ for(const [name,count] of quantities){
+  if(count>3||count>original.get(name))throw Error('Varek Kopienlimit: '+name);
+  const card=deck.find(x=>x.varekOriginal&&x.name===name);
+  if(!card)throw Error('Varek Karte fehlt: '+name);
+  for(let i=0;i<count;i++)result.push({...card});
+ }
+ if(result.length!==30)throw Error('Varek: 30 Karten erwartet, stattdessen '+result.length);
+ return shuffleCards(result);
+}
+function cardsVarekName405(i){return varekPool405[i][0]}
+window.arcaneVarekDeck405={pool:varekPool405.map(([name,count])=>({name,count})),tiers:varekTiers405.map((t,i)=>({level:i+1,label:t.label})),create:createVarekDeck405};
+
 function createStoryOpponentDeck362(index){
  if(index===0)return createLeonDeck363();
  if(index===1)return createElaraDeck400(window.arcaneStoryDifficulty400||1);
+ if(index===2)return createVarekDeck405(window.arcaneStoryDifficulty405||1);
  const recipe=storyDeckRecipes362[index];
  if(!recipe)throw new Error("Unbekannte Story-Mission "+index);
  const counts=new Map(), cards=[];
@@ -5901,6 +5924,24 @@ function monsterDestructionFx(card,owner){
 }
 function triggerMonsterEvent(card,event,owner="player",index=-1){
  if(!card||card.kind!=="monster")return;
+ if(card.varekOriginal){
+  const fx=card.varekFx,enemy=owner==='opponent'?myMon:oppMon,ally=owner==='opponent'?oppMon:myMon;
+  const strongest=enemy.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+  if(event==='summon'&&!card.faceDown){
+   const loss=fx==='weak300'?300:fx==='bossweak'?600:0;
+   if(loss&&strongest)strongest.tempAtkBonus=(strongest.tempAtkBonus||0)-loss;
+   if(fx==='defweak'&&strongest)strongest.tempDefBonus=(strongest.tempDefBonus||0)-200;
+   if(fx==='knight'&&enemy.some(m=>m&&(m.tempAtkBonus||0)<0))card.tempAtkBonus=(card.tempAtkBonus||0)+300;
+   if(fx==='allyboost'){const friend=ally.find(m=>m&&m!==card&&!m.faceDown);if(friend)friend.tempAtkBonus=(friend.tempAtkBonus||0)+300;}
+   if(fx==='lock'&&strongest){strongest.varekLockedUntil=owner==='opponent'?turn+1:aiTurn+1;}
+   log('🌑 '+card.name+' aktiviert seinen Schatteneffekt.');
+  }
+  if(event==='flip'&&!card.varekFlipUsed){
+   card.varekFlipUsed=true;
+   if(fx==='flipdef')card.tempDefBonus=(card.tempDefBonus||0)+500;
+   if(fx==='flipweak'&&strongest)strongest.tempAtkBonus=(strongest.tempAtkBonus||0)-300;
+  }
+ }
  if(card.elaraOriginal){
   const ef=card.elaraEffect;
   if(event==='summon'&&!card.faceDown){
@@ -6217,6 +6258,15 @@ $("oppSpell").addEventListener('click',e=>{
 });
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 
+function activateVarekTrap405(){
+ if(window.arcaneStoryOpponentInfo362?.name!=='Varek')return false;
+ const i=oppSpell.findIndex(c=>c&&c.varekOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
+ if(i<0)return false;
+ const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ if(c.varekFx==='stopburn'){myLP=Math.max(0,myLP-300);log('⛓️ Kettenbruch stoppt den Angriff und verursacht 300 LP Schaden.');}
+ else{const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;log('🌑 Schattenumkehr stoppt den Angriff und schwächt den Angreifer.');}
+ return true;
+}
 function activateElaraDefenseTrap401(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Elara')return false;
  const i=oppSpell.findIndex(c=>c&&c.elaraOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
@@ -6245,9 +6295,10 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  // Eine freie einzelne Zone zählt nicht als freies Gegnerfeld. Ohne ausdrücklichen Effekt müssen ALLE Gegner-Monsterzonen leer sein.
  if(oppMon.some(monster=>monster!==null&&monster!==undefined)){log("Direktangriff nicht möglich: Der Gegner hat noch ein Monster auf dem Feld. Wähle ein gegnerisches Monster als Angriffsziel.");chosenMonster=-1;chosenTarget=-1;return;}
  if(phase!=="battle"){phase="battle";render();}
+ if(attacker.varekLockedUntil>=turn){log("⛓️ Schattenketten: Dieses Monster kann in diesem Zug nicht angreifen.");return;}
  if(attacker.position==="defense"||attacker.faceDown){log("Nur ein offenes Monster in Angriffsposition kann direkt angreifen.");return;}
  if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log("Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.");return;}
- if(activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
+ if(activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
  const damage=effectiveAtk(attacker);
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
@@ -6402,7 +6453,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelReflectAttack367=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
  }else if(c.name==='Löwenmut-Schild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if(activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let trapDecisionPending205=false;
@@ -6548,13 +6599,32 @@ async function opponentTurn(){
    log('💎 Elara aktiviert '+c.name+'!');
   }
  }
+ // Varek setzt eigene Zauber aktiv ein; keine bloße Deko.
+ if(window.arcaneStoryOpponentInfo362?.name==='Varek'){
+  const opts=aiHand.map((c,i)=>({c,i})).filter(x=>x.c.varekOriginal&&x.c.kind==='spell');
+  const enemy=myMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+  const own=oppMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+  const action=opts.find(x=>x.c.varekFx==='minus500'&&enemy)||opts.find(x=>x.c.varekFx==='fog200'&&enemy)
+   ||opts.find(x=>x.c.varekFx==='boost400'&&own)||opts.find(x=>x.c.varekFx==='draw2')
+   ||opts.find(x=>x.c.varekFx==='burn300')||opts.find(x=>x.c.varekFx==='sacrifice2'&&own);
+  if(action){
+   const c=aiHand.splice(action.i,1)[0],fx=c.varekFx;
+   if(fx==='minus500')enemy.tempAtkBonus=(enemy.tempAtkBonus||0)-500;
+   if(fx==='fog200')myMon.forEach(m=>{if(m&&!m.faceDown)m.tempAtkBonus=(m.tempAtkBonus||0)-200});
+   if(fx==='boost400')own.tempAtkBonus=(own.tempAtkBonus||0)+400;
+   if(fx==='burn300')myLP=Math.max(0,myLP-300);
+   if(fx==='sacrifice2'){const z=oppMon.findIndex(Boolean);if(z>=0){sendToGraveyard(oppMon[z],'opponent');oppMon[z]=null;}}
+   if(fx==='draw2'||fx==='sacrifice2')for(let k=0;k<2;k++){const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn)}
+   sendToGraveyard(c,'opponent');log('🌑 Varek aktiviert '+c.name+'.');
+  }
+ }
  // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
  // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
  const freeAiSpellZone=oppSpell.findIndex(x=>!x);
  if(freeAiSpellZone>=0){
-  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&x.name!=="Flammenstoß"));
+  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&x.name!=="Flammenstoß"));
   if(setIndex<0){
-   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&x.name!=="Flammenstoß"));
+   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&!x.varekOriginal&&x.name!=="Flammenstoß"));
    if(deckIndex>=0){aiHand.push(aiDeck.splice(deckIndex,1)[0]);setIndex=aiHand.length-1;}
   }
   if(setIndex>=0){
@@ -6595,7 +6665,7 @@ async function opponentTurn(){
  }
  const attackers=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&x.m.position!=="defense"&&x.m.summonedTurn!==aiTurn);
  for(const entry of attackers){
-  const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;if(a.shadowBlockedAiTurn===aiTurn){log("⛓️ "+a.name+" kann wegen Schattenfessel in diesem Zug nicht angreifen.");a.shadowBlockedAiTurn=-1;render();continue;}
+  const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;if(a.varekLockedUntil>=aiTurn){log("⛓️ "+a.name+" kann nicht angreifen.");continue;}if(a.shadowBlockedAiTurn===aiTurn){log("⛓️ "+a.name+" kann wegen Schattenfessel in diesem Zug nicht angreifen.");a.shadowBlockedAiTurn=-1;render();continue;}
   // v3.66: Die KI wägt Angriffe anhand sichtbarer ATK/DEF ab.
   // Verdeckte Verteidiger darf sie nicht vorher ansehen.
   const targets=myMon.map((m,i)=>({m,i})).filter(x=>x.m);
@@ -6653,7 +6723,7 @@ async function opponentTurn(){
    else if(effectiveAtk(a)<effectiveDef(d)){const damage=effectiveDef(d)-effectiveAtk(a);oppLP=Math.max(0,oppLP-damage);log("Deine Verteidigung hält stand! Der angreifende Gegner verliert "+damage+" LP.");}
    else{log("Dein Monster hält dem KI-Angriff stand.");}
   }else if(effectiveAtk(a)>effectiveAtk(d)){
-   sendToGraveyard(d);myMon[di]=null;const damage=effectiveAtk(a)-effectiveAtk(d);
+   sendToGraveyard(d);myMon[di]=null;if(a.varekFx==="wolf")a.tempAtkBonus=(a.tempAtkBonus||0)+200;const damage=effectiveAtk(a)-effectiveAtk(d);
    if(crystalShield){crystalShield=false;log("Dein Monster wird zerstört, Kristallschild verhindert aber "+damage+" LP-Schaden!");}
    else{myLP=Math.max(0,myLP-damage);log("Die KI besiegt "+d.name+"! Du verlierst "+damage+" LP.");}
   }else if(effectiveAtk(a)<effectiveAtk(d)){const damage=effectiveAtk(d)-effectiveAtk(a);sendToGraveyard(a,"opponent");oppMon[entry.i]=null;oppLP=Math.max(0,oppLP-damage);log("Dein "+d.name+" ist stärker und besiegt das angreifende KI-Monster! Der Gegner verliert "+damage+" LP.");}
