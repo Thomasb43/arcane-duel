@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-seraphine-arcane-seals-v412">
+<meta name="arcane-build" content="20261122-seraphine-seventeen-art-v413">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5965,6 +5965,15 @@ for(const card of deck){
  const filename=NOCTIS_SPELL_TRAP_ART_410[card.name];
  if(!card.noctisOriginal||!filename)continue;
  const key='noctis-art-'+filename.replace(/\.png$/,'');
+ card.artwork=key;
+ CARD_ART_FILES[key]=filename;
+}
+/* v4.13: all 17 Seraphine illustrations verified in artwork/ on GitHub. */
+const SERAPHINE_ART_FILES_413={"Siegelnovizin Liora":"siegelnovizin_liora.png","Runenfuchs Auriel":"runenfuchs_auriel.png","Chronikwächter Thalen":"chronikwaechter_thalen.png","Sternenschreiberin Mira":"sternenschreiberin_mira.png","Glyphenritter Caelis":"glyphenritter_caelis.png","Archivgolem Ordon":"archivgolem_ordon.png","Hüterin der Sieben Siegel":"hueterin_der_sieben_siegel.png","Richter des Sternenarchivs":"richter_des_sternenarchivs.png","Seraphines Chronikdrache":"seraphines_chronikdrache.png","Arkanes Siegel":"arkanes_siegel.png","Verbotene Chronik":"verbotene_chronik.png","Runenheilung":"runenheilung.png","Prismenbann":"prismenbann.png","Archivschutz":"archivschutz.png","Siegelkreis der Abwehr":"siegelkreis_der_abwehr.png","Sternenrückschlag":"sternenrueckschlag.png","Runenfessel":"runenfessel.png"};
+for(const card of deck){
+ const filename=SERAPHINE_ART_FILES_413[card.name];
+ if(!card.seraphineOriginal||!filename)continue;
+ const key='seraphine-art-'+filename.replace(/\.png$/,'');
  card.artwork=key;
  CARD_ART_FILES[key]=filename;
 }
