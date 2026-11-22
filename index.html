@@ -5051,6 +5051,15 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-story-chapter2-banner-444 p{font-size:12px;line-height:1.55;margin:7px 0}
 .arcane-story-candidate-444{display:inline-block;border:1px solid #adc98d;color:#e1f7bd;border-radius:6px;padding:2px 5px;font-size:10px;margin-top:5px}
 .arcane-story-portrait-fallback-360.forest-face-444{font-size:64px;background:radial-gradient(ellipse at 50% 30%,#6fa783,#122c3f)}
+/* v4.45 – Vulkanische Orte in Kapitel 3 */
+.arcane-story-chapter3-banner-445{margin:16px 0 10px;padding:16px;border:1px solid #df9e69;border-radius:12px;background:linear-gradient(125deg,#54251c,#261b32 75%);color:#fbe7d3}
+.arcane-story-chapter3-banner-445 strong{display:block;font:700 19px Georgia,serif;color:#ffdc9e}
+.arcane-story-chapter3-banner-445 p{font-size:12px;line-height:1.6;margin:8px 0}
+.arcane-story-stage-360.arcane-scene-ashes-445{background:radial-gradient(ellipse at 60% 20%,#fca76d8c,transparent 52%),repeating-linear-gradient(100deg,#4a2f3c 0 21px,#201d32 26px 49px,#693e35 51px 59px,#1c1d30 66px 93px)}
+.arcane-story-stage-360.arcane-scene-lava-445{background:radial-gradient(ellipse at 50% 70%,#ff9a40c9,transparent 53%),repeating-linear-gradient(125deg,#38232d 0 30px,#aa482c 34px 46px,#211b2a 52px 78px)}
+.arcane-story-stage-360.arcane-scene-forge-445{background:radial-gradient(circle at 53% 43%,#ffbd5b93,transparent 42%),repeating-linear-gradient(90deg,#352337 0 15px,#805442 18px 21px,#27243a 23px 58px)}
+.arcane-story-stage-360.arcane-scene-obsidian-445{background:repeating-conic-gradient(from 10deg at 50% 42%,#c7696040 0 8deg,transparent 10deg 29deg),radial-gradient(ellipse at 50% 60%,#50354d,#121526 70%)}
+.arcane-story-stage-360.arcane-scene-flamesigil-445{background:repeating-conic-gradient(from 0deg at 50% 42%,#ffd38a59 0 8deg,transparent 10deg 34deg),radial-gradient(ellipse at 50% 44%,#bc613f,#31283b 66%,#171324)}
 /* v3.59 – ensure story dialog cannot be blocked by generic duel outcome */
 .arcane-story-357{z-index:110000!important}
 .duel-outcome-306[hidden],.duel-outcome-306.story-consumed-359{display:none!important;pointer-events:none!important}
@@ -9052,18 +9061,25 @@ syncHeroResonanceExtra439();
  ];
  const missions2=window.ARCANE_STORY_CHAPTER2_444?.missions||[];
  const prologue2=window.ARCANE_STORY_CHAPTER2_444?.prologue||[];
- missions.push(...missions2);
+ const missions3=window.ARCANE_STORY_CHAPTER3_445?.missions||[];
+ const prologue3=window.ARCANE_STORY_CHAPTER3_445?.prologue||[];
+ missions.push(...missions2,...missions3);
  const CH2KEY='arcane-duel-story-chapter2-v444',PROLOGUEKEY='arcane-duel-story2-prologue-v444';
  const read2=()=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(CH2KEY))||1)))}catch(_){return 1}};
  const save2=n=>{try{localStorage.setItem(CH2KEY,String(Math.max(read2(),Math.min(11,n))))}catch(_){}};
  const seen2=()=>{try{return localStorage.getItem(PROLOGUEKEY)==='1'}catch(_){return false}};
  const markSeen2=()=>{try{localStorage.setItem(PROLOGUEKEY,'1')}catch(_){}};
- const labelMission=i=>i<10?'1-'+(i+1):'2-'+(i-9);
- const unlockedMission=i=>i<10?(i+1<=read()):(read()>10&&i-9<=read2());
- const clearedMission=i=>i<10?(i+1<read()):(read()>10&&i-9<read2());
+ const CH3KEY='arcane-duel-story-chapter3-v445',PROLOGUE3KEY='arcane-duel-story3-prologue-v445';
+ const read3=()=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(CH3KEY))||1)))}catch(_){return 1}};
+ const save3=n=>{try{localStorage.setItem(CH3KEY,String(Math.max(read3(),Math.min(11,n))))}catch(_){}};
+ const seen3=()=>{try{return localStorage.getItem(PROLOGUE3KEY)==='1'}catch(_){return false}};
+ const markSeen3=()=>{try{localStorage.setItem(PROLOGUE3KEY,'1')}catch(_){}};
+ const labelMission=i=>i<10?'1-'+(i+1):i<20?'2-'+(i-9):'3-'+(i-19);
+ const unlockedMission=i=>i<10?(i+1<=read()):i<20?(read()>10&&i-9<=read2()):(read()>10&&read2()>10&&i-19<=read3());
+ const clearedMission=i=>i<10?(i+1<read()):i<20?(read()>10&&i-9<read2()):(read()>10&&read2()>10&&i-19<read3());
  const escapeText=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
- const forestIcons444={Lyra:'🌿',Fenrik:'🐺',Miren:'🌫️',Dornenfürst:'🌑'};
+ const forestIcons444={Lyra:'🌿',Fenrik:'🐺',Miren:'🌫️',Dornenfürst:'🌑',Arion:'🐲',Pyrathos:'🐉','Aschenwächter Korr':'🛡️','Magmaseherin Veyra':'🔥','General Tharos':'⚔️'};
  const portraits360={
   'Kael':'kael','Leon':'leon','Elara':'elara','Varek':'varek','Darian':'darian-shadow',
   'Noctis':'noctis','Seraphine':'seraphine','Riven':'riven-shadow',
@@ -9097,22 +9113,27 @@ syncHeroResonanceExtra439();
   scene='map';activeIndex=null;completedResult=null;show();
   stage.querySelector('#arcaneStoryHeading357').textContent='Die Chronik der Sieben Siegel';
   back.textContent='Zur Stadt';
-  const ch1=read(),ch2=read2(),open2=ch1>10;
+  const ch1=read(),ch2=read2(),ch3=read3(),open2=ch1>10,open3=ch1>10&&ch2>10;
   const buttons=(from,to)=>missions.slice(from,to).map((m,j)=>{
    const i=from+j,locked=!unlockedMission(i),cleared=clearedMission(i);
    return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+labelMission(i)+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small>'+(m.candidate&&cleared?'<span class="arcane-story-candidate-444">✦ Möglicher Charakter entdeckt</span>':'')+'</div></button>';
   }).join('');
   const progress=window.arcaneCharacterProgress382?.levelProgress();
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Die Chronik der Sieben Siegel</strong></div><p class="arcane-story-copy-357">Von Arkanis zum Verlorenen Wald: Jede Mission enthält Dialoge, ein Duell und vier Schwierigkeitsstufen.</p>'
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Die Chronik der Sieben Siegel</strong></div><p class="arcane-story-copy-357">Von Arkanis durch den Verlorenen Wald bis zu den Aschengipfeln: Jede Mission enthält Dialoge, ein Duell und vier Schwierigkeitsstufen.</p>'
    +'<div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(progress?.percent||0)+'%"></span></div><small>'+(progress?.current||0)+' / '+(progress?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 gewinnen · Kael Level 10 erreichen')+'</p></div>'
    +'<div class="arcane-story-chapter-357"><strong>Kapitel 1 · Akademie von Arkanis</strong><p class="arcane-story-note-357">Das erste Siegel ist gefallen. Malachar zieht weiter.</p></div><div class="arcane-story-grid-357">'+buttons(0,10)+'</div>'
    +'<div class="arcane-story-chapter2-banner-444"><strong>Kapitel 2 · Der verlorene Wald</strong><p>'+(open2?'Das Wurzelherz erwartet euch. Fortschritt: '+(ch2-1)+' / 10 Missionen.':'Schließe zuerst Kapitel 1 (Mission 1-10) ab.')+'</p>'
    +(open2?'<button type="button" class="arcane-story-action-357" id="arcaneChapter2Replay444">📜 Geschichte vor 2-1 '+(seen2()?'erneut ansehen':'ansehen')+'</button>':'')+'</div>'
    +(open2?'<div class="arcane-story-grid-357">'+buttons(10,20)+'</div>':'')
    +(open2&&ch2>5?'<p class="arcane-story-note-357">✦ Lyra kennengelernt'+(ch2>10?' · Fenrik kennengelernt':'')+' – mögliche zukünftige spielbare Charaktere, noch nicht freigeschaltet.</p>':'')
+   +'<div class="arcane-story-chapter3-banner-445"><strong>Kapitel 3 · Die Aschengipfel</strong><p>'+(open3?'Die Urflamme ruft. Fortschritt: '+(ch3-1)+' / 10 Missionen. Malachar jagt den dritten Siegelkern.':'Schließe Kapitel 2 (Mission 2-10) ab, um die Aschengipfel freizuschalten.')+'</p>'
+   +(open3?'<button type="button" class="arcane-story-action-357" id="arcaneChapter3Replay445">📜 Geschichte vor 3-1 '+(seen3()?'erneut ansehen':'ansehen')+'</button>':'')+'</div>'
+   +(open3?'<div class="arcane-story-grid-357">'+buttons(20,30)+'</div>':'')
+   +(open3&&ch3>5?'<p class="arcane-story-note-357">✦ Arion kennengelernt'+(ch3>10?' · Pyrathos kennengelernt':'')+' – mögliche spätere Charaktere, noch nicht spielbar.</p>':'')
    +'<p class="arcane-story-note-357">Deine Fortschritte und Siege werden auf diesem Gerät gespeichert.</p>';
   content.querySelector('#arcaneLevelOpen384')?.addEventListener('click',()=>window.openArcaneLevelRewards384?.());
   content.querySelector('#arcaneChapter2Replay444')?.addEventListener('click',()=>openPrologue2(true));
+  content.querySelector('#arcaneChapter3Replay445')?.addEventListener('click',()=>openPrologue3(true));
   content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
  }
  let prologueToMap=false,duelFinishedHere=false;
@@ -9139,11 +9160,35 @@ syncHeroResonanceExtra439();
   content.querySelector('#arcaneChapter2Skip444').addEventListener('click',endPrologue2);
   content.querySelector('#arcaneChapter2Next444').addEventListener('click',()=>{if(dialogStep+1<prologue2.length){dialogStep++;drawPrologue2()}else endPrologue2()});
  }
+ let prologue3ToMap=false;
+ function openPrologue3(toMap=false){
+  if(read2()<11||read()<11)return;
+  activeIndex=20;scene='prologue3';dialogStep=0;prologue3ToMap=toMap;drawPrologue3();
+ }
+ function finishPrologue3(){
+  markSeen3();
+  if(prologue3ToMap){prologue3ToMap=false;showMap();return;}
+  activeIndex=20;scene='pre';dialogStep=0;drawDialog();
+ }
+ function drawPrologue3(){
+  if(scene!=='prologue3')return;
+  const entry=prologue3[dialogStep],speaker=entry?.[0]||'Erzähler',other=speaker==='Kael'?'Astra':'Kael';
+  show();back.textContent='Zur Kapitelübersicht';
+  stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 3 · Die Aschengipfel';
+  content.innerHTML='<div class="arcane-story-chapter3-banner-445"><strong>Prolog · Der Ruf der Urflamme</strong><p>Die Geschichte vor Mission 3-1</p></div>'
+   +'<div class="arcane-story-dialog-357"><div class="arcane-story-stage-360 arcane-scene-ashes-445">'+portraitHTML360(speaker,'left',true)+portraitHTML360(other,'right',false)+'</div>'
+   +'<div class="arcane-story-dialog-box-360"><div class="arcane-story-speaker-357">'+escapeText(speaker)+'</div><div class="arcane-story-line-357">'+escapeText(entry?.[1]||'')+'</div><div class="arcane-story-dialog-progress-357">Prolog '+(dialogStep+1)+' / '+prologue3.length+'</div></div></div>'
+   +'<div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneChapter3Skip445">Prolog überspringen</button>'
+   +'<button type="button" class="arcane-story-action-357 primary-357" id="arcaneChapter3Next445">'+(dialogStep+1<prologue3.length?'Weiter':'Kapitel 3 beginnen')+'</button></div>';
+  content.querySelector('#arcaneChapter3Skip445').addEventListener('click',finishPrologue3);
+  content.querySelector('#arcaneChapter3Next445').addEventListener('click',()=>{if(dialogStep+1<prologue3.length){dialogStep++;drawPrologue3()}else finishPrologue3()});
+ }
  function openMission(index){
   if(!Number.isInteger(index)||index<0||index>=missions.length||!unlockedMission(index))return;
   if(duelFinishedHere||document.getElementById('duelOutcome306')){restartForStory(index);return}
   activeIndex=index;completedResult=null;dialogStep=0;
   if(index===10&&!seen2()){openPrologue2(false);return}
+  if(index===20&&!seen3()){openPrologue3(false);return}
   scene='pre';drawDialog();
  }
  function drawDialog(){
@@ -9153,15 +9198,15 @@ syncHeroResonanceExtra439();
   stage.querySelector('#arcaneStoryHeading357').textContent=labelMission(activeIndex)+' · '+m.title;
   const locations361=['Akademiehof','Kristalllabor','Verlassener Akademieflügel','Westtor','Unterirdisches Heiligtum','Verbotene Bibliothek','Alter Glockenturm','Kammer des ersten Siegels','Versiegeltes Tor','Heiligtum des ersten Siegels'];
   const atmospheres361=['academy','crystal','shadow','gate','sanctuary','library','tower','seal','shadow','final'];
-  const isForest=activeIndex>=10;
-  const stageClass361=isForest?'arcane-scene-'+m.mood+'-444':'arcane-scene-'+atmospheres361[activeIndex]+'-361';
+  const isForest=activeIndex>=10&&activeIndex<20,isVolcano=activeIndex>=20;
+  const stageClass361=isVolcano?'arcane-scene-'+m.mood+'-445':isForest?'arcane-scene-'+m.mood+'-444':'arcane-scene-'+atmospheres361[activeIndex]+'-361';
   const textMood361=entry[1].toLowerCase();
   const mood361=/vernicht|macht|schatten|du musst|verrat|belogen|verzaubert|aufhalten|zerstör|befehl|duell|niemals|opfer|stören|falle|gefängnis|warn|unmöglich/.test(textMood361)?'danger':/helfen|danke|vertrau|gemeinsam|rette|verzeih|vergib|freund|würd|hoffnung/.test(textMood361)?'hope':'mystery';
   const speaker360=entry[0];
   const partner360=speaker360==='Kael'?m.opponent:'Kael';
   const left360=speaker360==='Kael'?'Kael':partner360;
   const right360=speaker360==='Kael'?partner360:speaker360;
-  content.innerHTML='<p class="arcane-story-copy-357">'+(scene==='post'?'Nach dem Sieg':'Vor dem Duell')+' · '+escapeText(m.opponent)+' · '+escapeText(m.deck)+'</p><div class="arcane-story-dialog-357"><div class="arcane-story-stage-360 '+stageClass361+' is-'+mood361+'-361"><div class="arcane-story-location-361">✦ '+escapeText(isForest?m.location:locations361[activeIndex])+'</div>'+portraitHTML360(left360,'left',speaker360===left360)+portraitHTML360(right360,'right',speaker360===right360)+'</div><div class="arcane-story-dialog-box-360 is-'+mood361+'-361"><div class="arcane-story-speaker-357"></div><div class="arcane-story-line-357"></div><div class="arcane-story-dialog-progress-357">Dialog '+(dialogStep+1)+' / '+lines.length+'</div></div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneStorySkip357">Dialog überspringen</button><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryAdvance357">'+(dialogStep+1<lines.length?'Weiter':scene==='post'?'Mission abschließen':'⚔ Duell starten')+'</button></div>';
+  content.innerHTML='<p class="arcane-story-copy-357">'+(scene==='post'?'Nach dem Sieg':'Vor dem Duell')+' · '+escapeText(m.opponent)+' · '+escapeText(m.deck)+'</p><div class="arcane-story-dialog-357"><div class="arcane-story-stage-360 '+stageClass361+' is-'+mood361+'-361"><div class="arcane-story-location-361">✦ '+escapeText(isForest||isVolcano?m.location:locations361[activeIndex])+'</div>'+portraitHTML360(left360,'left',speaker360===left360)+portraitHTML360(right360,'right',speaker360===right360)+'</div><div class="arcane-story-dialog-box-360 is-'+mood361+'-361"><div class="arcane-story-speaker-357"></div><div class="arcane-story-line-357"></div><div class="arcane-story-dialog-progress-357">Dialog '+(dialogStep+1)+' / '+lines.length+'</div></div></div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357" id="arcaneStorySkip357">Dialog überspringen</button><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryAdvance357">'+(dialogStep+1<lines.length?'Weiter':scene==='post'?'Mission abschließen':'⚔ Duell starten')+'</button></div>';
   content.querySelector('.arcane-story-speaker-357').textContent=entry[0];content.querySelector('.arcane-story-line-357').textContent=entry[1];
   content.querySelector('#arcaneStorySkip357').addEventListener('click',()=>{if(scene==='post')finishMission();else beginDuel()});
   content.querySelector('#arcaneStoryAdvance357').addEventListener('click',()=>{if(dialogStep+1<lines.length){dialogStep++;drawDialog()}else if(scene==='post')finishMission();else beginDuel()});
