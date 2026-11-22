@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-intro-full-frame-v388">
+<meta name="arcane-build" content="20261122-manual-trap-reactions-v389">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6353,6 +6353,40 @@ async function offerShadowFetter212(attacker){
   $("shadowYes212").addEventListener("click",accept);$("shadowNo212").addEventListener("click",decline);
  });
 }
+// v3.89: Give players a choice when an eligible Kael trap could respond to an AI attack.
+function offerKaelAttackTrap389(card){
+ return new Promise(resolve=>{
+  trapDecisionPending205=true;
+  const overlay=document.createElement('div');
+  overlay.className='arcane-trap-prompt-389';
+  overlay.setAttribute('role','dialog');
+  overlay.setAttribute('aria-modal','true');
+  overlay.setAttribute('aria-label','Fallenkarte aktivieren?');
+  overlay.style.cssText='position:fixed;inset:0;z-index:2147483640;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(3,6,22,.85)';
+  const box=document.createElement('div');
+  box.style.cssText='width:min(100%,390px);padding:22px 18px;border:2px solid #81b4ff;border-radius:16px;background:linear-gradient(160deg,#172a54,#0b1025);color:#fff;text-align:center;box-shadow:0 0 36px #173b7b;font-family:inherit';
+  const heading=document.createElement('h3');
+  heading.textContent='Falle aktivieren?';
+  heading.style.cssText='margin:0 0 10px;font-size:22px';
+  const description=document.createElement('p');
+  const effects={'Siegelgegenstoß':'Annulliert diesen Angriff.','Lichtreflexion':'Der Angreifer verliert 500 ATK.','Runenbarriere':'Das angegriffene Monster erhält 700 DEF.'};
+  description.textContent=card.name+' — '+(effects[card.name]||'');
+  description.style.cssText='line-height:1.5;margin:0 0 18px;font-size:16px';
+  const actions=document.createElement('div');
+  actions.style.cssText='display:flex;gap:10px;justify-content:center';
+  const yes=document.createElement('button'),no=document.createElement('button');
+  yes.type=no.type='button';
+  yes.textContent='Aktivieren';
+  no.textContent='Nicht aktivieren';
+  yes.style.cssText='flex:1;padding:12px 8px;border-radius:10px;border:1px solid #b3caff;background:#477be2;color:white;font-size:15px;font-weight:700';
+  no.style.cssText='flex:1;padding:12px 8px;border-radius:10px;border:1px solid #8394bb;background:#293755;color:white;font-size:15px;font-weight:700';
+  function decide(value){overlay.remove();trapDecisionPending205=false;$("end").disabled=false;resolve(value)}
+  yes.addEventListener('click',()=>decide(true),{once:true});
+  no.addEventListener('click',()=>decide(false),{once:true});
+  actions.append(yes,no);box.append(heading,description,actions);overlay.append(box);document.body.appendChild(overlay);
+  $("end").disabled=true;
+ });
+}
 let kaelNegateAttack367=false,kaelReflectAttack367=false;
 let aiFxQueue=[];
 async function opponentTurn(){
@@ -6435,13 +6469,22 @@ async function opponentTurn(){
   // Nur unbekannte, verdeckte Karten sind eine bewusste Risikoentscheidung.
   const target=safeTargets[0]||hiddenTargets[0]||null;
   if(targets.length&&!target){log("🧠 Die KI verzichtet auf den Angriff: Dein offenes Monster ist stärker oder nicht sicher zu besiegen.");continue;}
-  // Kaels neue Fallen reagieren automatisch auf einen echten Angriff.
-  const kaelTrapIndex=mySpell.findIndex(c=>c&&['Siegelgegenstoß','Lichtreflexion','Runenbarriere'].includes(c.name)&&turn>c.setTurn&&(c.name!=='Runenbarriere'||(target&&target.m&&!target.m.faceDown)));
-  if(kaelTrapIndex>=0){
-   const trap=mySpell[kaelTrapIndex];mySpell[kaelTrapIndex]=null;sendToGraveyard(trap);
-   if(trap.name==='Siegelgegenstoß')kaelNegateAttack367=true;
-   else if(trap.name==='Lichtreflexion')kaelReflectAttack367=true;
-   else if(target&&target.m&&!target.m.faceDown){target.m.tempDefBonus=(target.m.tempDefBonus||0)+700;log("🛡️ Runenbarriere: "+target.m.name+" erhält +700 DEF.");}
+  // v3.89: Player traps NEVER trigger automatically. Ask before consuming each eligible trap.
+  const eligibleKaelTrapZones=mySpell.map((card,i)=>({card,i})).filter(({card})=>
+   card&&card.kind==='trap'&&
+   ['Siegelgegenstoß','Lichtreflexion','Runenbarriere'].includes(card.name)&&
+   turn>card.setTurn&&
+   (card.name!=='Runenbarriere'||(target&&target.m&&!target.m.faceDown))
+  );
+  for(const {card,i} of eligibleKaelTrapZones){
+   if(!mySpell[i]||mySpell[i]!==card)continue;
+   if(!(await offerKaelAttackTrap389(card)))continue;
+   mySpell[i]=null;sendToGraveyard(card);
+   if(card.name==='Siegelgegenstoß'){kaelNegateAttack367=true;log('⚡ Siegelgegenstoß aktiviert.');}
+   else if(card.name==='Lichtreflexion'){kaelReflectAttack367=true;log('🌠 Lichtreflexion aktiviert.');}
+   else if(target&&target.m&&!target.m.faceDown){target.m.tempDefBonus=(target.m.tempDefBonus||0)+700;log('🛡️ Runenbarriere: '+target.m.name+' erhält +700 DEF.');}
+   render();
+   break;
   }
   if(kaelNegateAttack367){kaelNegateAttack367=false;a.attacksThisTurn=1;log("⚡ Siegelgegenstoß annulliert den KI-Angriff!");continue;}
   if(kaelReflectAttack367){kaelReflectAttack367=false;a.tempAtkBonus=(a.tempAtkBonus||0)-500;log("🌠 Lichtreflexion: Angreifer verliert 500 ATK.");}
