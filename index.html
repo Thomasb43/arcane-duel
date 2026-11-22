@@ -9131,7 +9131,7 @@ syncHeroResonanceExtra439();
  function beginDuel(){
   if(activeIndex===null)return;
   if(typeof window.arcaneApplyStoryOpponent362==='function'){
-   try{window.arcaneApplyStoryOpponent362(activeIndex)}catch(e){console.error('Story-Gegnerdeck:',e);return}
+   try{if(!window.arcaneApplyStoryOpponent362(activeIndex))throw Error('Gegnerdeck nicht vorbereitet');}catch(e){console.error('Story-Gegnerdeck:',e);window.alert('Duell konnte nicht gestartet werden: '+e.message);return}
   }
   scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
   window.arcaneCurrentStoryOpponent397=missions[activeIndex].opponent;
@@ -9143,11 +9143,17 @@ syncHeroResonanceExtra439();
  }
  function finishMission(){
   if(activeIndex===null)return;
-  save(activeIndex+2);try{sessionStorage.removeItem('arcane-story-post-win-358')}catch(e){}const isLast=activeIndex===9;
-  show();scene='finished';
-  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(isLast?'KAPITEL 1 ABGESCHLOSSEN':'MISSION 1-'+(activeIndex+1)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+(isLast?'Das erste Siegel ist gefallen. Die Reise geht im verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.')+'</div>'+(lastMissionReward?.first?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · 💎 +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')+'</div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(isLast?'Zur Kapitelübersicht':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
+  if(activeIndex<10)save(activeIndex+2);else save2(activeIndex-8);
+  try{sessionStorage.removeItem('arcane-story-post-win-358')}catch(e){}
+  const lastOne=activeIndex===9,lastTwo=activeIndex===19;
+  const text=lastTwo?'Das Wurzelherz ist befreit und Fenrik erneuert seinen Schwur. Malachar ist mit einem Splitter in Richtung der Aschengipfel entkommen.':lastOne?'Das erste Siegel ist gefallen. Die Reise geht im Verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.';
+  scene='finished';show();
+  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(lastTwo?'KAPITEL 2 ABGESCHLOSSEN':lastOne?'KAPITEL 1 ABGESCHLOSSEN':'MISSION '+labelMission(activeIndex)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+text+'</div>'
+   +(missions[activeIndex]?.candidate?'<p class="arcane-story-note-357">✦ '+escapeText(missions[activeIndex].opponent)+' ist ein möglicher künftiger Charakter (noch nicht spielbar).</p>':'')
+   +(lastMissionReward?.first?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · 💎 +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')
+   +'</div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(lastTwo?'Zur Kapitelübersicht':lastOne?'Kapitel 2 beginnen':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
   content.querySelector('#arcaneStoryMap357').addEventListener('click',showMap);
-  content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(isLast)showMap();else restartForStory(activeIndex+1)});
+  content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{if(lastTwo)showMap();else restartForStory(activeIndex+1)});
  }
  // Called by the existing duel outcome display. Each result is processed only once.
  window.arcaneStoryResult357=(won,draw)=>{
@@ -9159,20 +9165,20 @@ syncHeroResonanceExtra439();
    if(pending===null||!Number.isInteger(index)||index<0||index>=missions.length)return false;
    activeIndex=index;scene='duel';
   }
-  completedResult=won?'win':draw?'draw':'loss';
+  completedResult=won?'win':draw?'draw':'loss';duelFinishedHere=true;
   const outcome=document.getElementById('duelOutcome306');
   if(outcome)outcome.remove();
   if(won){
    // Award first-clear XP/crystals before saving the mission unlock.
    lastMissionReward=window.arcaneCharacterProgress382?.rewardMission(activeIndex)||null;
    // Unlock immediately when the duel is won; do not depend on the epilogue button.
-   save(activeIndex+2);
+   if(activeIndex<10)save(activeIndex+2);else save2(activeIndex-8);
    try{sessionStorage.setItem('arcane-story-post-win-358',String(activeIndex));sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
    scene='post';dialogStep=0;home.hidden=true;drawDialog();return true;
   }
   try{sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
   scene='lost';show();
-  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(draw?'UNENTSCHIEDEN':'DUELL VERLOREN')+'</div><div class="arcane-story-line-357">Versuche Mission 1-'+(activeIndex+1)+' erneut. Dein Story-Fortschritt bleibt erhalten.</div></div><div class="arcane-story-actions-357"><button class="arcane-story-action-357 primary-357" id="arcaneStoryRetry357">⚔ Erneut duellieren</button><button class="arcane-story-action-357" id="arcaneStoryLostMap357">Zur Übersicht</button></div>';
+  content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(draw?'UNENTSCHIEDEN':'DUELL VERLOREN')+'</div><div class="arcane-story-line-357">Versuche Mission '+labelMission(activeIndex)+' erneut. Dein Story-Fortschritt bleibt erhalten.</div></div><div class="arcane-story-actions-357"><button class="arcane-story-action-357 primary-357" id="arcaneStoryRetry357">⚔ Erneut duellieren</button><button class="arcane-story-action-357" id="arcaneStoryLostMap357">Zur Übersicht</button></div>';
   content.querySelector('#arcaneStoryRetry357').addEventListener('click',()=>restartForStory(activeIndex));
   content.querySelector('#arcaneStoryLostMap357').addEventListener('click',showMap);
   return true;
@@ -9187,7 +9193,7 @@ syncHeroResonanceExtra439();
  // In the current UI, the outcome dialog already closes the gameplay via the Story panel.
  try{
   const pending=sessionStorage.getItem(CONTINUE);
-  if(pending!==null){sessionStorage.removeItem(CONTINUE);sessionStorage.removeItem('arcane-story-post-win-358');sessionStorage.removeItem('arcane-story-active-duel-358');const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='pre';dialogStep=0;drawDialog()}}
+  if(pending!==null){sessionStorage.removeItem(CONTINUE);sessionStorage.removeItem('arcane-story-post-win-358');sessionStorage.removeItem('arcane-story-active-duel-358');const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;openMission(index)}}
   else {
    const post=sessionStorage.getItem('arcane-story-post-win-358');
    if(post!==null){const index=Number(post);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;activeIndex=index;scene='post';dialogStep=0;completedResult='win';drawDialog()}}
@@ -9199,7 +9205,7 @@ syncHeroResonanceExtra439();
   if(completedResult==='loss'||completedResult==='draw'){restartForStory(activeIndex);return true}
   return false;
  };
- window.arcaneStory357={open:showMap};
+ window.arcaneStory357={open:showMap,chapter2Progress:read2,chapter2Intro:()=>read()>10?openPrologue2(true):showMap()};
 })();
 
 /* v3.96 – duel portraits follow the selected playable character. */
@@ -9215,14 +9221,22 @@ syncHeroResonanceExtra439();
   const own=selected();
   let storyEnemy=window.arcaneCurrentStoryOpponent397||null;
   if(!storyEnemy){
-   try{const index=sessionStorage.getItem('arcane-story-active-duel-358');const names=['Leon','Elara','Varek','Darian','Noctis','Seraphine','Riven','Astra','Valtor','Gefallener Eldric'];if(index!==null&&Number.isInteger(Number(index)))storyEnemy=names[Number(index)]||null}catch(_){}
+   try{const index=sessionStorage.getItem('arcane-story-active-duel-358');const names=['Leon','Elara','Varek','Darian','Noctis','Seraphine','Riven','Astra','Valtor','Gefallener Eldric',...((window.ARCANE_STORY_CHAPTER2_444?.missions||[]).map(m=>m.opponent))];if(index!==null&&Number.isInteger(Number(index)))storyEnemy=names[Number(index)]||null}catch(_){}
   }
   const enemy=storyEnemy||(own==='Kael'?'Leon':'Kael');
   const set=(selector,ch)=>{
    document.querySelectorAll(selector).forEach(img=>{
     const filename=storyPortraits397[ch];
-    // Some later bosses do not have a portrait yet: preserve an existing image rather than showing a broken asset.
-    if(!filename){img.alt=ch;img.title=ch;return}
+    // Kapitel-2-Neuzugänge erhalten eigene Symbolszenen bis zu Portraitillustrationen.
+    if(!filename){
+     const symbol={Lyra:'L',Fenrik:'F',Miren:'M',Dornenfürst:'D'}[ch];
+     if(symbol){
+      const colors=ch==='Lyra'?['#234d3c','#8bc894']:ch==='Fenrik'?['#25364d','#9cb7c9']:['#332741','#b6a2c8'];
+      const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><rect width="160" height="160" fill="'+colors[0]+'"/><circle cx="80" cy="80" r="64" stroke="'+colors[1]+'" stroke-width="5" fill="none"/><text x="80" y="106" text-anchor="middle" font-family="Georgia" font-size="86" fill="#f6e6bc">'+symbol+'</text></svg>';
+      img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+     }
+     img.alt=ch;img.title=ch;return;
+    }
     const isValtor=ch==='Valtor';
     const url=isValtor?window.arcaneValtorArt428.src:('artwork/story/'+filename+'.jpg');
     if(isValtor){img.setAttribute('data-valtor-portrait-428','1');window.arcaneValtorArt428.load()}
