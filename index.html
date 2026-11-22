@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261121-anime-film-intro-v386">
+<meta name="arcane-build" content="20261122-iphone-video-start-v387">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -7720,7 +7720,7 @@ window.setArenaCharacterTheme('magierin');
  intro.setAttribute('role','dialog');
  intro.setAttribute('aria-modal','true');
  intro.setAttribute('aria-label','Arcane Duel Spielintro');
- intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" playsinline muted preload="auto" aria-label="Arcane Duel Anime-Intro"><source src="artwork/arcane-duel-opening.mp4" type="video/mp4"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
+ intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" autoplay muted playsinline webkit-playsinline preload="auto" src="artwork/arcane-duel-opening.mp4?v=3.87" aria-label="Arcane Duel Anime-Intro"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
   +'<div class="arcane-cinema-stars-385"></div>'
   +'<div class="arcane-cinema-character-385 kael"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display=\'none\'"><strong>KAEL</strong></div>'
   +'<div class="arcane-cinema-character-385 leon"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display=\'none\'"><strong>LEON</strong></div>'
@@ -7735,40 +7735,58 @@ window.setArenaCharacterTheme('magierin');
   +'<button id="arcaneIntroStart308" type="button">SPIEL STARTEN</button></div>';
  document.body.appendChild(intro);
  const video=intro.querySelector('#arcaneIntroVideo386');
- function replay(){
-  if(intro.classList.contains('has-video-386')){
-   video.currentTime=0;
-   const playing=video.play();
-   playing?.catch?.(()=>{intro.classList.remove('has-video-386');replay()});
-   return;
-  }
+ const replayButton=intro.querySelector('#arcaneIntroReplay385');
+ const startButton=intro.querySelector('#arcaneIntroStart308');
+ video.muted=true;
+ video.defaultMuted=true;
+ video.playsInline=true;
+ function showFallback(){
+  intro.classList.remove('has-video-386');
   intro.classList.remove('is-playing-385');
   void intro.offsetWidth;
   intro.classList.add('is-playing-385');
+  replayButton.textContent='▶ Video erneut versuchen';
  }
- video.addEventListener('loadeddata',()=>{
+ function showVideo(){
   intro.classList.add('has-video-386');
   intro.classList.remove('is-playing-385');
-  video.currentTime=0;
-  video.play()?.catch?.(()=>{intro.classList.remove('has-video-386');replay()});
- });
- video.addEventListener('error',()=>{
-  intro.classList.remove('has-video-386');
+  replayButton.textContent='↺ Intro wiederholen';
+ }
+ function playVideo(reset){
+  if(reset){try{video.currentTime=0}catch(_e){}}
+  video.muted=true;
+  video.playsInline=true;
+  // iOS Safari may ignore preload/loadeddata without an explicit play request.
+  const attempt=video.play();
+  if(attempt&&typeof attempt.then==='function'){
+   attempt.then(showVideo).catch(()=>{
+    // Keep the replay button available: a user tap can unlock iOS playback.
+    showFallback();
+   });
+  }
+ }
+ video.addEventListener('playing',showVideo);
+ video.addEventListener('canplay',()=>{if(!intro.hidden&&video.paused)playVideo(false)});
+ video.addEventListener('error',showFallback);
+ video.addEventListener('ended',()=>{replayButton.textContent='↺ Intro wiederholen'});
+ function replay(){
+  intro.hidden=false;
+  playVideo(true);
+ }
+ replayButton.addEventListener('click',()=>{
+  // This click is a direct user gesture, allowing playback even when Safari blocks autoplay.
+  if(video.error){video.load()}
   replay();
  });
- video.querySelector('source')?.addEventListener('error',()=>{
-  intro.classList.remove('has-video-386');
-  replay();
- });
- intro.querySelector('#arcaneIntroReplay385').addEventListener('click',replay);
- intro.querySelector('#arcaneIntroStart308').addEventListener('click',()=>{
+ startButton.addEventListener('click',()=>{
   intro.hidden=true;
   video.pause();
   const mainMenu=document.getElementById('arcaneHome307');
   if(mainMenu)mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
  });
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)intro.classList.add('motion-reduced-385');
- else replay();
+ video.load();
+ playVideo(false);
  window.arcaneReplayIntro385=()=>{intro.hidden=false;replay()};
 })();
 
