@@ -157,5 +157,5 @@ if(container){
  new MutationObserver(decorate).observe(container,{childList:true});
  decorate();
 }
-window.arcaneStoryDifficulty435={tiers:LABELS.slice(),wins:readWins,select:choose};
+window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,select:choose};
 })();
