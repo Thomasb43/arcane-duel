@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-varek-seventeen-art-linked-v406">
+<meta name="arcane-build" content="20261122-darian-eight-guardian-art-v407">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5885,6 +5885,15 @@ for(const card of deck){
  const key='varek-art-'+filename.replace(/\.png$/,'');
  card.artwork=key;
  CARD_ART_FILES[key]=filename;
+}
+/* v4.07: 8 Darian guardian illustrations, uploaded to artwork/ on main. */
+const DARIAN_ART_FILES_407={"Schildwächter Novar":"01_schildwaechter_novar.png","Frostschild-Wächter":"02_frostschild_waechter.png","Steinwächter Bastion":"03_steinwaechter_bastion.png","Arkaner Torwächter":"04_arkaner_torwaechter.png","Turmwächter Aegor":"05_turmwaechter_aegor.png","Runenwächter Valen":"06_runenwaechter_valen.png","Kristallwächter Seron":"07_kristallwaechter_seron.png","Hochwächter Darions Bollwerk":"08_hochwaechter_darions_bollwerk.png"};
+for(const card of deck){
+ const file=DARIAN_ART_FILES_407[card.name];
+ if(!card.darianOriginal||!file)continue;
+ const key='darian-art-'+file.replace(/\.png$/,'');
+ card.artwork=key;
+ CARD_ART_FILES[key]=file;
 }
 function renderCardArt(c){
  if(!c)return '';
