@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-leon-unlock-level10-v390">
+<meta name="arcane-build" content="20261122-home-characters-crystals-rewards-v391">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5252,7 +5252,7 @@ transform:none!important;filter:none!important;z-index:2!important;
 
 /* v3.84 – Level reward roadmap */
 .arcane-level-rewards-384[hidden]{display:none!important}
-.arcane-level-rewards-384{position:fixed;inset:0;z-index:9700;overflow-y:auto;padding:14px max(14px,env(safe-area-inset-left));background:radial-gradient(ellipse at top,#263b65,#10182d 66%,#080b1b);color:#fbe9c4}
+.arcane-level-rewards-384{position:fixed;inset:0;z-index:11050;overflow-y:auto;padding:14px max(14px,env(safe-area-inset-left));background:radial-gradient(ellipse at top,#263b65,#10182d 66%,#080b1b);color:#fbe9c4}
 .arcane-level-header-384{display:flex;gap:13px;align-items:center;border-bottom:1px solid #826e4e;padding-bottom:10px}
 .arcane-level-rewards-384 button,.arcane-level-open-384{border:1px solid #c4a169;border-radius:9px;background:#362b4b;color:#ffe0a2;padding:10px;cursor:pointer}
 .arcane-level-rewards-384 button:disabled{opacity:.55;cursor:default}
@@ -5325,6 +5325,19 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-cinematic-385.has-video-386 .arcane-cinema-video-386{display:block}
 .arcane-cinematic-385.has-video-386 .arcane-cinema-scene-385{visibility:hidden}
 .arcane-cinematic-385.has-video-386 .arcane-cinema-controls-385{z-index:4}
+
+/* v3.91 – readable wallet and character selection on the fantasy city */
+.arcane-hub-wallet-391{position:absolute;z-index:7;top:max(10px,env(safe-area-inset-top));left:12px;min-height:37px;padding:8px 11px;background:linear-gradient(#452a76,#1f153d);border:1px solid #e5c18b;border-radius:11px;box-shadow:0 0 14px #8b41dd88;color:#fff1ca;font-weight:800;font-size:14px;display:flex;align-items:center;gap:6px}
+.arcane-hub-character-391{position:absolute;z-index:7;top:29%;left:50%;transform:translateX(-50%);border:1px solid #e5c18b;border-radius:12px;padding:9px 15px;background:linear-gradient(#452a76,#20133a);color:#fff1ca;font:700 15px Georgia,serif;box-shadow:0 0 14px #7a36d488;white-space:nowrap;cursor:pointer}
+.arcane-character-picker-391[hidden]{display:none!important}
+.arcane-character-picker-391{position:fixed;inset:0;z-index:11100;display:grid;place-items:center;padding:18px;background:#09051de8;backdrop-filter:blur(6px)}
+.arcane-character-picker-panel-391{width:min(100%,460px);padding:18px;border:2px solid #dabb79;border-radius:19px;background:linear-gradient(160deg,#292048,#10172c);box-shadow:0 16px 60px #000b;color:#ffe9b9}
+.arcane-character-picker-head-391{display:flex;align-items:center;justify-content:space-between;gap:10px}.arcane-character-picker-head-391 h2{margin:0 0 12px;font:700 23px Georgia,serif}.arcane-character-picker-head-391 button{border:1px solid #dabb79;border-radius:10px;background:#382b54;color:#fff1ca;padding:7px 12px}
+.arcane-character-cards-391{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.arcane-character-card-391{min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px;border:1px solid #9d80b3;border-radius:14px;background:#201939;color:#fff2c9}
+.arcane-character-card-391.selected-391{border:2px solid #f4d17e;box-shadow:0 0 18px #ad70ed55}.arcane-character-card-391:disabled{opacity:.55}
+.arcane-character-card-391 img{width:100%;height:180px;object-fit:cover;object-position:top;border-radius:9px;background:#33254d}.arcane-character-card-391 strong{font:700 21px Georgia,serif}.arcane-character-card-391 small{font-size:11px;text-align:center}
+@media(max-width:380px){.arcane-hub-wallet-391{font-size:12px;padding:8px}.arcane-hub-character-391{font-size:13px}.arcane-character-card-391 img{height:145px}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7501,7 +7514,7 @@ window.setArenaCharacterTheme('magierin');
   if(claimButton&&!claimButton.disabled)claim(Number(claimButton.dataset.claimLevel));
  });
  screen.querySelector('#arcaneLevelBack384').addEventListener('click',()=>screen.hidden=true);
- window.openArcaneLevelRewards384=(ch='Kael')=>{current=ch==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael';render();screen.hidden=false;screen.scrollTop=0};
+ window.openArcaneLevelRewards384=(ch='Kael')=>{current=ch==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael';render();screen.hidden=false;screen.scrollTop=0;screen.focus?.({preventScroll:true})};
 })();
 
 /* v3.07 – Entry menu: only the duel is active while other modes are developed. */
@@ -7514,6 +7527,8 @@ window.setArenaCharacterTheme('magierin');
  home.setAttribute('aria-label','Arcane Duel Hauptmenü');
  home.innerHTML=`<div class="arcane-home-shell-307 arcane-world-hub-314">
  <div class="arcane-hub-shimmer-314" aria-hidden="true"></div>
+ <div class="arcane-hub-wallet-391" aria-label="Arkankristalle">💎 <strong id="arcaneHubCrystals391">1.000</strong></div>
+ <button type="button" class="arcane-hub-character-391" id="arcaneHubCharacter391">✦ Charakter: Kael</button>
  <div class="arcane-hub-title-314"><div class="arcane-hub-kicker-314">DIE WELT DER CHRONIK</div><div class="arcane-hub-logo-314" role="img" aria-label="Arcane Duel"></div></div>
  
  <div class="arcane-home-choices-307 arcane-hub-buildings-314">
@@ -7523,6 +7538,7 @@ window.setArenaCharacterTheme('magierin');
   <button type="button" class="arcane-hub-building-314 arcane-hub-shop-314" data-arcane-mode="shop" aria-label="Magischer Laden – Shop"><span>◇ Shop</span></button>
  </div>
  <button type="button" class="arcane-hub-deck-314" data-arcane-mode="deck" aria-label="Deckverwaltung">▤ Decks</button>
+ <div class="arcane-character-picker-391" id="arcaneCharacterPicker391" hidden role="dialog" aria-modal="true" aria-label="Charakter auswählen"><div class="arcane-character-picker-panel-391"><div class="arcane-character-picker-head-391"><h2>Charakterauswahl</h2><button type="button" id="arcaneCharacterClose391" aria-label="Schließen">✕</button></div><div id="arcaneCharacterCards391" class="arcane-character-cards-391"></div></div></div>
  <div id="arcaneHomeDetail307" class="arcane-home-detail-307 arcane-hub-detail-314" hidden>
   <div class="arcane-hub-dialog-314"><h3 id="arcaneHomeDetailTitle307"></h3><p id="arcaneHomeDetailText307"></p><button type="button" id="arcaneHomeDetailBack307">Zurück zur Stadt</button></div>
  </div>
@@ -7536,10 +7552,48 @@ window.setArenaCharacterTheme('magierin');
  menuButton.hidden=true;
  document.querySelector('header')?.appendChild(menuButton);
  const detail=home.querySelector('#arcaneHomeDetail307');
+ const characterPicker=home.querySelector('#arcaneCharacterPicker391');
+ const cards391=home.querySelector('#arcaneCharacterCards391');
+ const characterButton391=home.querySelector('#arcaneHubCharacter391');
+ const crystalCount391=home.querySelector('#arcaneHubCrystals391');
+ const characterKey391='arcane-duel-selected-character-v1';
+ const leonUnlocked391=()=>!!window.arcaneCharacterProgress382?.leonUnlocked();
+ function selected391(){try{return localStorage.getItem(characterKey391)==='Leon'&&leonUnlocked391()?'Leon':'Kael'}catch(_){return 'Kael'}}
+ function updateWallet391(){
+  const n=window.arcaneTestCrystals320?.get();
+  crystalCount391.textContent=Number.isFinite(n)?n.toLocaleString('de-DE'):'—';
+ }
+ function renderCharacter391(){
+  const selected=selected391(),level=window.arcaneCharacterProgress382?.level()||1,leonOpen=leonUnlocked391();
+  characterButton391.textContent='✦ Charakter: '+selected;
+  cards391.innerHTML=[{name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},{name:'Leon',image:'artwork/story/leon.jpg',level:1,unlocked:leonOpen}].map(ch=>
+   '<button type="button" class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+'" data-home-character-391="'+ch.name+'" '+(ch.unlocked?'':'disabled')+'>'
+   +'<img src="'+ch.image+'" alt="'+ch.name+'" onerror="this.hidden=true"><strong>'+ch.name+'</strong>'
+   +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):'🔒 Freischaltung ab Kael Level 10')+'</small></button>'
+  ).join('');
+ }
+ function openCharacters391(){renderCharacter391();characterPicker.hidden=false}
+ characterButton391.addEventListener('click',openCharacters391);
+ home.querySelector('#arcaneCharacterClose391').addEventListener('click',()=>characterPicker.hidden=true);
+ characterPicker.addEventListener('click',e=>{if(e.target===characterPicker)characterPicker.hidden=true});
+ cards391.addEventListener('click',e=>{
+  const b=e.target.closest('[data-home-character-391]');
+  if(!b||b.disabled)return;
+  try{localStorage.setItem(characterKey391,b.dataset.homeCharacter391)}catch(_){}
+  renderCharacter391();characterPicker.hidden=true;
+ });
+ const bank391=window.arcaneTestCrystals320;
+ if(bank391){
+  const oldRefresh391=bank391.refresh;
+  bank391.refresh=function(...args){const result=oldRefresh391.apply(this,args);updateWallet391();return result};
+  const oldSet391=bank391.set;
+  bank391.set=function(...args){const result=oldSet391.apply(this,args);updateWallet391();return result};
+ }
+ window.addEventListener('storage',e=>{if(e.key==='arcane-duel-test-crystals-v1')updateWallet391()});
  function setMenu(open){
   home.hidden=!open;
   menuButton.hidden=open;
-  if(open){detail.hidden=true;home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
+  if(open){detail.hidden=true;characterPicker.hidden=true;updateWallet391();renderCharacter391();home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
  }
  home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>setMenu(false));
  menuButton.addEventListener('click',()=>setMenu(true));
