@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-character-portrait-dom-fix-v394">
+<meta name="arcane-build" content="20261122-deck-portraits-v395">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5356,6 +5356,15 @@ transform:none!important;filter:none!important;z-index:2!important;
 #arcaneHubCharacterPortrait392{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 18%!important;z-index:2!important;background:#332154}
 #arcaneHubCharacterName392{position:relative!important;z-index:3!important;font-size:15px!important;line-height:1.15!important}
 #arcaneCharacterCards391 img{display:block!important}
+
+/* v3.95: character portraits in deck selection, tied to deck owner */
+.arcane-deck-character-identity-395{display:flex;align-items:center;gap:12px;min-width:0}
+.arcane-deck-character-identity-395 img{display:block;flex:none;width:60px;height:72px;object-fit:cover;object-position:center top;border:2px solid #dfb978;border-radius:14px;background:#34204b;box-shadow:0 0 12px #9a55ed55}
+.arcane-deck-character-identity-395 h3{margin:0}
+.arcane-deck-entry-identity-395{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.arcane-deck-entry-identity-395 img{display:block;flex:none;width:47px;height:58px;object-fit:cover;object-position:center top;border:1px solid #cdb176;border-radius:10px;background:#302242}
+.arcane-deck-entry-identity-395>div{min-width:0}
+@media(max-width:430px){.arcane-deck-character-identity-395{gap:8px}.arcane-deck-character-identity-395 img{width:46px;height:56px}.arcane-deck-entry-identity-395 img{width:40px;height:50px}.arcane-deck-entry-identity-395{gap:8px}.arcane-deck-entry-377{padding:10px;gap:8px}}
 </style></head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7729,8 +7738,8 @@ window.setArenaCharacterTheme('magierin');
  function drawList(){
   list.innerHTML=['kael',...(leonOpen()?['leon']:[])].map(ch=>{
    const slots=groupDecks(ch),name=ch==='kael'?'Kael':'Leon';
-   return '<section class="arcane-deck-character-380"><div class="arcane-deck-character-head-380"><h3>'+name+' · '+slots.length+'/4 Decks</h3><button type="button" data-new-deck="'+ch+'" '+(slots.length>=4?'disabled':'')+'>＋ Neues Deck</button></div>'
-    +slots.map(d=>'<div class="arcane-deck-entry-377"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div>'
+   return '<section class="arcane-deck-character-380"><div class="arcane-deck-character-head-380"><div class="arcane-deck-character-identity-395"><img src="artwork/story/'+ch+'.jpg" alt="Porträt von '+name+'" loading="lazy"><h3>'+name+' · '+slots.length+'/4 Decks</h3></div><button type="button" data-new-deck="'+ch+'" '+(slots.length>=4?'disabled':'')+'>＋ Neues Deck</button></div>'
+    +slots.map(d=>'<div class="arcane-deck-entry-377"><div class="arcane-deck-entry-identity-395"><img src="artwork/story/'+character(d)+'.jpg" alt="" loading="lazy"><div><strong>'+esc(d.title)+'</strong><small>'+size(d)+' Karten'+(d.id===state.active?' · AKTIVES DECK':'')+'</small></div></div>'
     +'<div><button data-edit="'+esc(d.id)+'">Bearbeiten</button><button data-active="'+esc(d.id)+'" '+(valid(d)?'':'disabled')+'>'+(d.id===state.active?'Aktiv':'Auswählen')+'</button>'+(d.id==='kael'||d.id==='leon'?'':'<button type="button" class="arcane-deck-delete-381" data-delete-deck="'+esc(d.id)+'">Löschen</button>')+'</div></div>').join('')
     +'</section>';
   }).join('');
