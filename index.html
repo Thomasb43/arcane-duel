@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-manual-trap-reactions-v389">
+<meta name="arcane-build" content="20261122-leon-unlock-level10-v390">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6800,7 +6800,7 @@ window.setArenaCharacterTheme('magierin');
   const next=lvl>=30?0:100+50*(lvl-1);
   return {level:lvl,xp:read().xp,current:xp,next,percent:lvl>=30?100:Math.min(100,Math.round(xp/next*100))};
  }
- const unlocked=name=>name==='Kael'||(name==='Leon'&&completed()>=1&&level()>=2);
+ const unlocked=name=>name==='Kael'||(name==='Leon'&&completed()>=1&&level()>=10);
  function rewardMission(index){
   if(!Number.isInteger(index)||index<0||index>=10)return {xp:0,crystals:0,first:false};
   const progress=read();
@@ -7427,8 +7427,8 @@ window.setArenaCharacterTheme('magierin');
  function charState(store,ch){if(!store.characters[ch])store.characters[ch]={claimed:[],tickets:0,cosmetics:[]};return store.characters[ch]}
  const charLevel=ch=>ch==='Kael'?(window.arcaneCharacterProgress382?.level()||1):1;
  function rewards(lvl){
-  if(lvl===2)return [{type:'character',label:'Leon freischalten',value:'Leon'}];
-  if(lvl===10)return [{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
+  if(lvl===2)return [{type:'ticket',label:'Booster-Ticket',value:1}];
+  if(lvl===10)return [{type:'character',label:'Leon freischalten',value:'Leon'},{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
   if(lvl===15)return [{type:'card',label:'Seltene Karte',value:'rare'}];
   if(lvl===20)return [{type:'cosmetic',label:'Exklusive Kartenvariante',value:'Arkaner Glanz'}];
   if(lvl===25)return [{type:'card',label:'Legendäre Karte',value:'legendary'}];
@@ -7886,7 +7886,7 @@ window.setArenaCharacterTheme('magierin');
   stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 1 · Akademie von Arkanis';
   back.textContent='Zur Stadt';
   const unlocked=read();
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(window.arcaneCharacterProgress382?.levelProgress()?.percent||0)+'%"></span></div><small>'+(window.arcaneCharacterProgress382?.levelProgress()?.current||0)+' / '+(window.arcaneCharacterProgress382?.levelProgress()?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 2 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Das Erwachen des ersten Siegels</strong></div><p class="arcane-story-copy-357">Kaels Geschichte beginnt in der Akademie. Jede Mission enthält ein vollständiges Duell sowie Dialoge davor und danach.</p><div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(window.arcaneCharacterProgress382?.levelProgress()?.percent||0)+'%"></span></div><small>'+(window.arcaneCharacterProgress382?.levelProgress()?.current||0)+' / '+(window.arcaneCharacterProgress382?.levelProgress()?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 „Die erste Prüfung“ gewinnen · Kael Level 10 erreichen')+'</p></div><div class="arcane-story-grid-357">'+missions.map((m,i)=>{
    const n=i+1,locked=n>unlocked,cleared=n<unlocked;
    return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+'1-'+n+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small></div></button>';
   }).join('')+'</div><div class="arcane-story-chapter-357"><strong>Kapitel 2 · Der verlorene Wald</strong><p class="arcane-story-note-357">'+(unlocked>10?'Kapitel 1 abgeschlossen! Kapitel 2 folgt in einer späteren Version.':'Wird nach Mission 1-10 freigeschaltet. Die spielbaren Missionen von Kapitel 2 folgen später.')+'</p></div><p class="arcane-story-note-357">Testversion: Die Story verwendet vorerst die vorhandene Duell-KI und das bestehende Testdeck. Individuelle Gegnerdecks und Kartenbelohnungen folgen später. Dein Story-Fortschritt wird auf diesem Gerät gespeichert.</p>';
