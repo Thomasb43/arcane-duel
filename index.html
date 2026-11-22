@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-character-portrait-image-fix-v393">
+<meta name="arcane-build" content="20261122-character-portrait-dom-fix-v394">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -7548,7 +7548,7 @@ window.setArenaCharacterTheme('magierin');
  <div class="arcane-hub-wallet-391" aria-label="Arkankristalle">💎 <strong id="arcaneHubCrystals391">1.000</strong></div>
  <div class="arcane-hub-character-dock-392" id="arcaneCharacterDock392">
   <button type="button" class="arcane-hub-character-391" id="arcaneHubCharacter391" aria-label="Kaels Charakter- und Deckmenü öffnen" aria-expanded="false" aria-controls="arcaneCharacterQuick392">
-    <img id="arcaneHubCharacterPortrait392" src="https://raw.githubusercontent.com/Thomasb43/arcane-duel/main/artwork/story/kael.jpg" alt="Kael" loading="eager" decoding="async">
+    <img id="arcaneHubCharacterPortrait392" src="artwork/story/kael.jpg" alt="Kael" loading="eager" decoding="async">
     <span id="arcaneHubCharacterName392">Kael</span>
   </button>
   <div class="arcane-character-quick-392" id="arcaneCharacterQuick392" hidden>
@@ -7592,10 +7592,11 @@ window.setArenaCharacterTheme('magierin');
  }
  function renderCharacter391(){
   const selected=selected391(),level=window.arcaneCharacterProgress382?.level()||1,leonOpen=leonUnlocked391();
-  characterButton391.textContent='✦ Charakter: '+selected;
+  // Keep portrait markup intact; replacing button.textContent removed the img and name elements.
+  characterButton391.setAttribute('aria-label',selected+' – Charakter- und Deckauswahl öffnen');
   cards391.innerHTML=[{name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},{name:'Leon',image:'artwork/story/leon.jpg',level:1,unlocked:leonOpen}].map(ch=>
    '<button type="button" class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+'" data-home-character-391="'+ch.name+'" '+(ch.unlocked?'':'disabled')+'>'
-   +'<img src="https://raw.githubusercontent.com/Thomasb43/arcane-duel/main/'+ch.image+'" alt="'+ch.name+'" loading="eager"><strong>'+ch.name+'</strong>'
+   +'<img src="'+ch.image+'" alt="'+ch.name+'" loading="eager"><strong>'+ch.name+'</strong>'
    +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):'🔒 Freischaltung ab Kael Level 10')+'</small></button>'
   ).join('');
  }
@@ -7609,7 +7610,7 @@ window.setArenaCharacterTheme('magierin');
   name392.textContent=ch;
   portrait392.hidden=false;
   portrait392.alt=ch;
-  portrait392.src='https://raw.githubusercontent.com/Thomasb43/arcane-duel/main/artwork/story/'+ch.toLowerCase()+'.jpg';
+  portrait392.src='artwork/story/'+ch.toLowerCase()+'.jpg';
   characterButton391.setAttribute('aria-label',ch+' – Charakter- und Deckauswahl öffnen');
  }
  characterButton391.addEventListener('click',()=>{syncPortrait392();quick392.hidden=!quick392.hidden;characterButton391.setAttribute('aria-expanded',String(!quick392.hidden))});
