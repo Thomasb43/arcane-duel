@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-astra-first-seal-deck-v417">
+<meta name="arcane-build" content="20261122-astra-direct-image-test-v418">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6018,6 +6018,13 @@ for(const card of deck){
 /* v4.16: Rivens previously uploaded 5-by-5 overview is an immediately usable
    individual artwork atlas; each of the 25 unique cards gets its own grid tile. */
 const RIVEN_GRID_ART_416=Object.fromEntries(rivenPool415.map(([name],index)=>[name,{col:index%5,row:Math.floor(index/5)}]));
+/* v4.18: direct GitHub image upload test — Astra's Siegelbotin Elya. */
+for(const card of deck){
+ if(card.astraOriginal&&card.name==='Siegelbotin Elya'){
+  card.artwork='astra-elya-direct-v418';
+  CARD_ART_FILES['astra-elya-direct-v418']='astra_siegelbotin_elya.svg';
+ }
+}
 function renderCardArt(c){
  if(!c)return '';
  if(c.rivenOriginal&&RIVEN_GRID_ART_416[c.name]){
