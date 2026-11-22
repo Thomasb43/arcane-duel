@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-astra-anime-art-atlas-v422">
+<meta name="arcane-build" content="20261122-astra-atlas-background-crop-v423">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6059,17 +6059,20 @@ function astralSealArt419(c){
   5 columns x 4 rows, 17 illustrations in the original card order. */
 const ASTRA_ART_ORDER_422=["Siegelbotin Elya","Goldfeder-Greif","Mondrunen-Hüter","Sonnenklingen-Paladin","Sternenpriesterin Lyra","Prismenwächter Solen","Engel des goldenen Siegels","Himmelsrichter Aurelion","Astra, Wächterin des ersten Siegels","Goldener Schutzkreis","Chronik des Morgensterns","Strahl der sieben Runen","Bannlicht","Segen des Siegels","Siegelbarriere","Himmlischer Rückstoß","Runengericht"];
 const ASTRA_ATLAS_422="artwork/astra_original_cards_atlas.webp";
+/* v4.23 – Correct Astra atlas crops. <img> width/height were forcibly
+   set to 100% by global .arcane-card-art-335 img !important CSS,
+   making the previously-positioned atlas image invisible in many cards.
+   Background image cropping is independent from those rules. */
 function renderAstraArtwork420(c){
  const index=ASTRA_ART_ORDER_422.indexOf(c.name);
  if(index<0)return astralSealArt419(c);
  const col=index%5,row=Math.floor(index/5);
- return '<span class="astra-art-frame-422" role="img" aria-label="'+String(c.name).replace(/"/g,'&quot;')+'" style="position:relative;display:block;width:100%;height:100%;overflow:hidden;background:#161b43">'
- +'<span class="astra-fallback-422" style="position:absolute;inset:0">'+astralSealArt419(c)+'</span>'
- +'<img src="'+ASTRA_ATLAS_422+'" loading="eager" decoding="async" alt=""'
- +' style="position:absolute;max-width:none;max-height:none;width:500%;height:400%;object-fit:fill;left:-'+(col*100)+'%;top:-'+(row*100)+'%"'
- +' onload="this.previousElementSibling.style.display=\'none\'"'
- +' onerror="this.style.display=\'none\'">'
- +'</span>';
+ const x=col*25,y=row*(100/3);
+ const alt=String(c.name).replace(/"/g,'&quot;');
+ return '<span class="astra-art-frame-423" role="img" aria-label="'+alt+'" style="position:relative;display:block;width:100%;height:100%;overflow:hidden;background:#171a44">'
+   +'<span style="position:absolute;inset:0">'+astralSealArt419(c)+'</span>'
+   +'<span class="astra-atlas-tile-423" style="position:absolute;inset:0;display:block;background-image:url(&quot;'+ASTRA_ATLAS_422+'&quot;);background-repeat:no-repeat;background-size:500% 400%;background-position:'+x+'% '+y+'%"></span>'
+   +'</span>';
 }
 function renderCardArt(c){
  if(!c)return '';
