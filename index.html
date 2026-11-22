@@ -5902,7 +5902,13 @@ function createEldricDeck432(level=4){
   for(let n=0;n<count;n++)cards.push({...original});
  }
  if(eldricPool432.reduce((n,[,count])=>n+count,0)!==50||cards.length!==30)throw Error('Eldric Deckgröße '+cards.length);
- return shuffleCards(cards);
+ const ready=shuffleCards(cards);
+ // Final boss: draw the signature monster after the AI has time to summon two tributes.
+ if(Math.max(1,Math.min(4,Math.trunc(Number(level)||4)))===4){
+  const pos=ready.findIndex(c=>c.eldricFx==='bossseal');
+  if(pos>=0){const [boss]=ready.splice(pos,1);ready.splice(6,0,boss);}
+ }
+ return ready;
 }
 window.arcaneEldricDeck432={pool:eldricPool432.map(([name,count])=>({name,count})),tiers:eldricTiers432.map((t,i)=>({level:i+1,label:t.label})),create:createEldricDeck432};
 
