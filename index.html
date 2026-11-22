@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-intro-zum-originalstart-v446">
+<meta name="arcane-build" content="20261122-drehende-startkarte-zurueck-v447">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5319,7 +5319,7 @@ transform:none!important;filter:none!important;z-index:2!important;
 .arcane-cinema-title-385 em{font-style:normal;color:#f7e3ff}.arcane-cinema-title-385 small{letter-spacing:3px;font-size:clamp(8px,1.9vw,15px)}.arcane-cinema-title-385 span{font-size:clamp(9px,1.8vw,16px);letter-spacing:2px}
 .arcane-cinema-controls-385{position:absolute;bottom:max(9px,env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:3}
 .arcane-cinematic-385 .arcane-cinema-controls-385 button{padding:9px 18px;border:1px solid #dfbd78;border-radius:9px;color:#fbe6ad;background:#17142de8;font-weight:900;font-size:clamp(11px,2.4vw,14px);box-shadow:0 3px 13px #000b;cursor:pointer}
-.arcane-cinematic-385 #arcaneIntroStart308{background:linear-gradient(120deg,#957344,#4b3165);color:#fff4d9}
+.arcane-cinematic-385 #arcaneIntroSkipVideo447{background:linear-gradient(120deg,#957344,#4b3165);color:#fff4d9}
 .is-playing-385 .arcane-cinema-character-385.kael{animation:cinKael385 9s ease both}
 .is-playing-385 .arcane-cinema-character-385.leon{animation:cinLeon385 9s ease both}
 .is-playing-385 .arcane-cinema-monster-385.kael{animation:cinMonsterKael385 9s ease both}
@@ -8982,11 +8982,48 @@ syncHeroResonanceExtra439();
   +'<div class="arcane-cinema-title-385"><small>✦ DIE CHRONIK ERWACHT ✦</small><strong>ARCANE <em>DUEL</em></strong><span>ZWEI HELDEN · EIN SCHICKSAL</span></div>'
   +'</div><div class="arcane-cinema-controls-385">'
   +'<button id="arcaneIntroReplay385" type="button">↺ Intro wiederholen</button>'
-  +'<button id="arcaneIntroStart308" type="button">SPIEL STARTEN</button></div>';
+  +'<button id="arcaneIntroSkipVideo447" type="button">Intro überspringen</button></div>';
  document.body.appendChild(intro);
  const video=intro.querySelector('#arcaneIntroVideo386');
  const replayButton=intro.querySelector('#arcaneIntroReplay385');
- const startButton=intro.querySelector('#arcaneIntroStart308');
+ const startButton=intro.querySelector('#arcaneIntroSkipVideo447');
+ // v4.47: Restore the original v3.13 3D-card start screen after the video.
+ // The rotating Vesperion card, crest, background and start button are kept intact.
+ const title=document.createElement('div');
+ title.id='arcaneTitleScreen447';
+ title.className='arcane-intro-308';
+ title.hidden=true;
+ title.setAttribute('role','dialog');
+ title.setAttribute('aria-modal','true');
+ title.setAttribute('aria-label','Arcane Duel Startbildschirm');
+ title.innerHTML=`<div class="arcane-intro-inner-308">
+  <div class="arcane-intro-logo-308"><span>ARCANE</span><span>DUEL</span></div>
+  <div class="arcane-intro-caption-308">DIE CHRONIK ERWACHT</div>
+  <div class="arcane-intro-card-area-308" aria-hidden="true">
+   <div class="arcane-intro-ring-308"></div>
+   <div class="arcane-intro-card-float-308"><div class="arcane-intro-card-308">
+    <div class="arcane-intro-card-face-308 arcane-intro-card-back-308"></div>
+    <div class="arcane-intro-card-face-308 arcane-intro-card-front-308">
+     <div class="arcane-legendary-heading-313">✦ LEGENDÄR ✦</div>
+     <div class="arcane-legendary-art-313"></div>
+     <div class="arcane-legendary-name-313">VESPERION</div>
+     <div class="arcane-legendary-subtitle-313">Der Sternenverschlinger</div>
+    </div>
+   </div></div>
+  </div>
+  <button class="arcane-intro-start-308" id="arcaneIntroStart308" type="button">SPIEL STARTEN</button>
+ </div>`;
+ document.body.appendChild(title);
+ title.querySelector('#arcaneIntroStart308').addEventListener('click',()=>{
+  title.hidden=true;
+  const mainMenu=document.getElementById('arcaneHome307');
+  if(mainMenu){
+   mainMenu.hidden=false;
+   mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
+  }
+  const menuButton=document.getElementById('arcaneReturnMenu307');
+  if(menuButton)menuButton.hidden=true;
+ });
  video.muted=true;
  video.defaultMuted=true;
  video.playsInline=true;
@@ -9017,28 +9054,22 @@ syncHeroResonanceExtra439();
  }
  // v4.46: When the opening finishes, return to the existing fantasy-city hub
  // instead of leaving the last video frame covering the start screen.
- function showOriginalStartScreen446(){
+ function showRotatingTitle447(){
   if(intro.hidden)return;
   intro.hidden=true;
   try{video.pause()}catch(_){}
-  const mainMenu=document.getElementById('arcaneHome307');
-  if(mainMenu){
-   mainMenu.hidden=false;
-   const oldDetail=mainMenu.querySelector('#arcaneHomeDetail307');
-   const characterPicker=mainMenu.querySelector('#arcaneCharacterPicker391');
-   const characterQuick=mainMenu.querySelector('#arcaneCharacterQuick392');
-   if(oldDetail)oldDetail.hidden=true;
-   if(characterPicker)characterPicker.hidden=true;
-   if(characterQuick)characterQuick.hidden=true;
-   mainMenu.querySelector('#arcaneStartDuel307')?.focus({preventScroll:true});
-  }
+  // The original start button must be pressed before opening the city.
+  const home=document.getElementById('arcaneHome307');
+  if(home)home.hidden=false; // keep the established city ready behind the title
+  title.hidden=false;
+  title.querySelector('#arcaneIntroStart308')?.focus({preventScroll:true});
   const menuButton=document.getElementById('arcaneReturnMenu307');
   if(menuButton)menuButton.hidden=true;
  }
  video.addEventListener('playing',showVideo);
  video.addEventListener('canplay',()=>{if(!intro.hidden&&video.paused)playVideo(false)});
  video.addEventListener('error',showFallback);
- video.addEventListener('ended',showOriginalStartScreen446);
+ video.addEventListener('ended',showRotatingTitle447);
  function replay(){
   intro.hidden=false;
   playVideo(true);
@@ -9048,11 +9079,11 @@ syncHeroResonanceExtra439();
   if(video.error){video.load()}
   replay();
  });
- startButton.addEventListener('click',showOriginalStartScreen446);
+ startButton.addEventListener('click',showRotatingTitle447);
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)intro.classList.add('motion-reduced-385');
  video.load();
  playVideo(false);
- window.arcaneReplayIntro385=()=>{intro.hidden=false;replay()};
+ window.arcaneReplayIntro385=()=>{title.hidden=true;intro.hidden=false;replay()};
 })();
 
 /* v3.57 – first playable chapter: ten consecutive duels with dialogue */
