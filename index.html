@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-duel-kael-leon-portraits-v396">
+<meta name="arcane-build" content="20261122-story-opponent-portraits-v397">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -8038,6 +8038,8 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
    try{window.arcaneApplyStoryOpponent362(activeIndex)}catch(e){console.error('Story-Gegnerdeck:',e);return}
   }
   scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
+  window.arcaneCurrentStoryOpponent397=missions[activeIndex].opponent;
+  window.syncDuelCharacterPortraits396?.();
   try{sessionStorage.setItem('arcane-story-active-duel-358',String(activeIndex))}catch(e){}
   // Die KI übernimmt vor dem ersten Gegnerzug das missionsspezifische Deck.
   document.getElementById('arcaneReturnMenu307').hidden=false;
@@ -8108,20 +8110,35 @@ content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click'
 /* v3.96 – duel portraits follow the selected playable character. */
 (function initDuelCharacterPortraits396(){
  function selected(){try{return localStorage.getItem('arcane-duel-selected-character-v1')==='Leon'&&window.arcaneCharacterProgress382?.leonUnlocked()?'Leon':'Kael'}catch(_){return 'Kael'}}
+ const storyPortraits397={
+  'Kael':'kael','Leon':'leon','Elara':'elara','Varek':'varek',
+  'Darian':'darian-shadow','Noctis':'noctis','Seraphine':'seraphine',
+  'Riven':'riven-shadow','Astra':'astra','Eldric':'eldric',
+  'Gefallener Eldric':'eldric-shadow'
+ };
  function update(){
-  const own=selected(),enemy=own==='Kael'?'Leon':'Kael';
+  const own=selected();
+  let storyEnemy=window.arcaneCurrentStoryOpponent397||null;
+  if(!storyEnemy){
+   try{const index=sessionStorage.getItem('arcane-story-active-duel-358');const names=['Leon','Elara','Varek','Darian','Noctis','Seraphine','Riven','Astra','Valtor','Gefallener Eldric'];if(index!==null&&Number.isInteger(Number(index)))storyEnemy=names[Number(index)]||null}catch(_){}
+  }
+  const enemy=storyEnemy||(own==='Kael'?'Leon':'Kael');
   const set=(selector,ch)=>{
    document.querySelectorAll(selector).forEach(img=>{
-    const url='artwork/story/'+ch.toLowerCase()+'.jpg';
+    const filename=storyPortraits397[ch];
+    // Some later bosses do not have a portrait yet: preserve an existing image rather than showing a broken asset.
+    if(!filename){img.alt=ch;img.title=ch;return}
+    const url='artwork/story/'+filename+'.jpg';
     if(img.getAttribute('src')!==url)img.setAttribute('src',url);
-    img.setAttribute('alt',ch);
+    img.alt=ch;img.title=ch;
    });
   };
   set('.player-fixed-ui .duel-lp-face img, .duelist-player img',own);
   set('.opponent-fixed-ui .duel-lp-face img, .duelist-opponent img',enemy);
  }
  document.addEventListener('click',e=>{
-  if(e.target.closest('#arcaneStartDuel307, [data-home-character-391], #arcaneReturnMenu307'))update();
+  if(e.target.closest('#arcaneStartDuel307')){window.arcaneCurrentStoryOpponent397=null;try{sessionStorage.removeItem('arcane-story-active-duel-358')}catch(_){}update();return}
+  if(e.target.closest('[data-home-character-391], #arcaneReturnMenu307'))update();
  },true);
  window.addEventListener('storage',e=>{if(e.key==='arcane-duel-selected-character-v1')update()});
  update();
