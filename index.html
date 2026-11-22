@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-astra-missing-art-fallback-v419">
+<meta name="arcane-build" content="20261122-astra-17-artwork-paths-v420">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6046,9 +6046,23 @@ function astralSealArt419(c){
  return '<span class="card-art-loader arcane-fullbleed-343" role="img" aria-label="Provisorisches Siegelmotiv für '+name.replace(/"/g,'&quot;')+'" style="display:block;width:100%;height:100%;background:#19173c">'
   +'<img src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent(glyph)+'" alt="" loading="eager" style="width:100%;height:100%;object-fit:cover;display:block"></span>';
 }
+/* v4.20: image paths are ready, show seal art while high-res files are not yet uploaded. */
+const ASTRA_ART_FILES_420={"Siegelbotin Elya":"siegelbotin_elya.webp","Goldfeder-Greif":"goldfeder_greif.webp","Mondrunen-Hüter":"mondrunen_hueter.webp","Sonnenklingen-Paladin":"sonnenklingen_paladin.webp","Sternenpriesterin Lyra":"sternenpriesterin_lyra.webp","Prismenwächter Solen":"prismenwaechter_solen.webp","Engel des goldenen Siegels":"engel_des_goldenen_siegels.webp","Himmelsrichter Aurelion":"himmelsrichter_aurelion.webp","Astra, Wächterin des ersten Siegels":"astra_waechterin_des_ersten_siegels.webp","Goldener Schutzkreis":"goldener_schutzkreis.webp","Chronik des Morgensterns":"chronik_des_morgensterns.webp","Strahl der sieben Runen":"strahl_der_sieben_runen.webp","Bannlicht":"bannlicht.webp","Segen des Siegels":"segen_des_siegels.webp","Siegelbarriere":"siegelbarriere.webp","Himmlischer Rückstoß":"himmlischer_rueckstoss.webp","Runengericht":"runengericht.webp"};
+function renderAstraArtwork420(c){
+ const filename=ASTRA_ART_FILES_420[c.name];
+ if(!filename)return astralSealArt419(c);
+ const backup=c.name==='Siegelbotin Elya'?'artwork/astra_siegelbotin_elya.svg':'';
+ return '<span class="astra-art-frame-420" style="position:relative;display:block;width:100%;height:100%;overflow:hidden">'
+  +'<span class="astra-fallback-420" style="position:absolute;inset:0">'+astralSealArt419(c)+'</span>'
+  +'<img src="artwork/'+filename+'" data-backup="'+backup+'" alt="" loading="lazy" decoding="async"'
+  +' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"'
+  +' onload="this.previousElementSibling.style.display=\'none\'"'
+  +' onerror="if(this.dataset.backup&&!this.dataset.usedBackup){this.dataset.usedBackup=\'1\';this.src=this.dataset.backup;}else{this.style.display=\'none\'}">'
+  +'</span>';
+}
 function renderCardArt(c){
  if(!c)return '';
- if(c.astraOriginal&&!c.artwork)return astralSealArt419(c);
+ if(c.astraOriginal)return renderAstraArtwork420(c);
  if(c.rivenOriginal&&RIVEN_GRID_ART_416[c.name]){
   const {col,row}=RIVEN_GRID_ART_416[c.name];
   const x=col*25,y=row*25;
