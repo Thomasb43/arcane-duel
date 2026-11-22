@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-extra-deck-kartenformat-v443">
+<meta name="arcane-build" content="20261122-story-kapitel2-v444">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5447,6 +5447,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <script src="chronoresonanz-pack-v438.js?v=438"></script>
  <script src="resonance-starter-v436.js?v=438"></script>
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
+<script src="story-chapter2-v444.js?v=444"></script>
 <script>
 // VERSION 1.42
 const APP_VERSION='2.36';
@@ -5788,6 +5789,27 @@ const storyDeckRecipes362=[
  {name:"Valtor",theme:"Zerstörung & Opfer",base:["Glutkoloss","Flammendrache","Schattenwolf","Aschenritter"],support:["Flammenstoß","Drachenatem","Arkaner Zerstörungsstrahl","Arkaner Sturm","Schattenfessel","Geisterruf"]},
  {name:"Eldric",theme:"Verbotene Siegelmagie · Erstsiegel",base:["Arkaner Magier","Schattenwolf","Glutkoloss","Flammendrache"],support:["Arkaner Sturm","Arkaner Zerstörungsstrahl","Schattenfessel","Kristallschild","Geisterruf","Arkaner Wissensstrom"]}
 ];
+/* Kapitel 2: Zehn Gegnerdecks mit vier vollständigen Stufen. */
+const chapter2Data444=window.ARCANE_STORY_CHAPTER2_444;
+const chapter2Recipes444=chapter2Data444?.recipes||[];
+storyDeckRecipes362.push(...chapter2Recipes444);
+const chapter2TierNames444=['Einsteiger','Fortgeschritten','Experte','Meister'];
+function createChapter2OpponentDeck444(index,tier=1){
+ const recipe=chapter2Recipes444[index-10],sets=chapter2Data444?.tiers;
+ if(!recipe||!sets?.length)throw new Error('Kapitel-2-Deck fehlt: '+index);
+ const level=Math.max(1,Math.min(4,Math.trunc(Number(tier)||1))),group=sets[level-1];
+ const names=[...group.monster.map(i=>recipe.monsters[i]),...group.support.map(i=>recipe.support[i])];
+ if(names.length!==10||new Set(names).size!==10)throw Error('Doppelte Karten in Mission 2-'+(index-9));
+ const out=[];
+ for(const name of names){
+  const template=deck.find(c=>c.name===name&&!c.resonance);
+  if(!template)throw Error('Story-Karte fehlt: '+name);
+  for(let k=0;k<3;k++)out.push({...template});
+ }
+ if(out.length!==30)throw Error('Kapitel-2-Deck muss 30 Karten haben');
+ return shuffleCards(out);
+}
+window.arcaneChapter2Decks444={recipes:chapter2Recipes444,tiers:chapter2TierNames444,create:createChapter2OpponentDeck444};
 /* v4.00 – Elara: 50 physical cards in her collection, 30 per duel.
    The four 30-card loadouts are prepared for future difficulty selection.
    No difficulty selector is exposed yet; story 1-2 currently uses tier 1. */
@@ -6006,6 +6028,7 @@ function createEldricDeck432(level=4){
 window.arcaneEldricDeck432={pool:eldricPool432.map(([name,count])=>({name,count})),tiers:eldricTiers432.map((t,i)=>({level:i+1,label:t.label})),create:createEldricDeck432};
 
 function createStoryOpponentDeck362(index){
+ if(index>=10&&index<20)return createChapter2OpponentDeck444(index,window.arcaneStoryDifficultyChapter2444||1);
  if(index===0)return createLeonDeck363();
  if(index===1)return createElaraDeck400(window.arcaneStoryDifficulty400||1);
  if(index===2)return createVarekDeck405(window.arcaneStoryDifficulty405||1);
@@ -6044,6 +6067,10 @@ window.arcaneApplyStoryOpponent362=(index)=>{
  aiHand=aiDeck.splice(0,5);
  aiTurn=0;
  window.arcaneStoryOpponentInfo362={name:storyDeckRecipes362[index].name,theme:storyDeckRecipes362[index].theme,deckSize:30,...(index===1?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty400)||1))),difficultyReady:4}:{}),...(index===3?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty406)||1))),difficultyReady:4}:{}),...(index===4?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty408)||1))),difficultyReady:4}:{}),...(index===5?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty411)||1))),difficultyReady:4}:{}),...(index===6?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty415)||1))),difficultyReady:4}:{}),...(index===7?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty417)||1))),difficultyReady:4}:{}),...(index===9?{poolSize:50,difficulty:Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficulty432)||4))),difficultyReady:4,finalBoss:true}:{})};
+ if(index>=10){
+  const tier=Math.max(1,Math.min(4,Number(window.arcaneStoryDifficultyChapter2444)||1));
+  Object.assign(window.arcaneStoryOpponentInfo362,{chapter:2,mission:index-9,deckSize:30,difficulty:tier,difficultyName:chapter2TierNames444[tier-1],difficultyReady:4,possibleCharacter:index===14||index===19});
+ }
  return true;
 };
 
@@ -7764,7 +7791,7 @@ syncHeroResonanceExtra439();
   let saved=null;
   try{saved=JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){}
   if(!saved||!Array.isArray(saved.cleared)||!Number.isFinite(saved.xp))saved={xp:0,cleared:[]};
-  const cleared=[...new Set(saved.cleared.filter(x=>Number.isInteger(x)&&x>=0&&x<10))];
+  const cleared=[...new Set(saved.cleared.filter(x=>Number.isInteger(x)&&x>=0&&x<20))];
   // Migrate achievements from earlier game versions without re-awarding crystals.
   for(let i=0;i<completed();i++)if(!cleared.includes(i))cleared.push(i);
   const xp=Math.max(0,Math.floor(saved.xp),cleared.length*100);
@@ -7785,7 +7812,7 @@ syncHeroResonanceExtra439();
  }
  const unlocked=name=>name==='Kael'||(name==='Leon'&&completed()>=1&&level()>=10);
  function rewardMission(index){
-  if(!Number.isInteger(index)||index<0||index>=10)return {xp:0,crystals:0,first:false};
+  if(!Number.isInteger(index)||index<0||index>=20)return {xp:0,crystals:0,first:false};
   const progress=read();
   if(progress.cleared.includes(index))return {xp:0,crystals:0,first:false};
   const beforeLevel=level();
