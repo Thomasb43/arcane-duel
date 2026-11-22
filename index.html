@@ -5691,21 +5691,24 @@ function createVarekDeck405(level=1){
 function cardsVarekName405(i){return varekPool405[i][0]}
 window.arcaneVarekDeck405={pool:varekPool405.map(([name,count])=>({name,count})),tiers:varekTiers405.map((t,i)=>({level:i+1,label:t.label})),create:createVarekDeck405};
 
+/* Darian original guardian cards – effects executed by triggerMonsterEvent. */
+deck.push(...[{"name":"Schildwächter Novar","kind":"monster","emoji":"🛡️","level":3,"atk":1200,"def":1600,"skin":"ice","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Ein eigenes offenes Wächtermonster erhält 300 DEF, solange es auf dem Feld bleibt.","darianFx":"allydef300","darianOriginal":true},{"name":"Frostschild-Wächter","kind":"monster","emoji":"❄️","level":4,"atk":1400,"def":1900,"skin":"ice","element":"Eis","race":"Wächter","effectText":"Bei offener Beschwörung: Diese Karte erhält 300 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef300","darianOriginal":true},{"name":"Steinwächter Bastion","kind":"monster","emoji":"🗿","level":4,"atk":1000,"def":2100,"skin":"fire","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Diese Karte erhält 300 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef300","darianOriginal":true},{"name":"Arkaner Torwächter","kind":"monster","emoji":"🔮","level":4,"atk":1500,"def":1500,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Bei offener Beschwörung: Ziehe 1 Karte von deinem Deck.","darianFx":"draw1","darianOriginal":true},{"name":"Turmwächter Aegor","kind":"monster","emoji":"🏰","level":4,"atk":1700,"def":1700,"skin":"ice","element":"Erde","race":"Wächter","effectText":"Bei offener Beschwörung: Kontrollierst du eine Fallenkarte, erhält diese Karte 300 ATK, solange sie auf dem Feld bleibt.","darianFx":"trapatk300","darianOriginal":true},{"name":"Runenwächter Valen","kind":"monster","emoji":"⚔️","level":5,"atk":1900,"def":2000,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Du erhältst 400 LP.","darianFx":"heal400","darianOriginal":true},{"name":"Kristallwächter Seron","kind":"monster","emoji":"💎","level":5,"atk":2000,"def":1800,"skin":"ice","element":"Kristall","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Diese Karte erhält 400 DEF, solange sie auf dem Feld bleibt.","darianFx":"selfdef400","darianOriginal":true},{"name":"Hochwächter Darions Bollwerk","kind":"monster","emoji":"🛡️","level":6,"atk":2400,"def":2200,"skin":"shadow","element":"Arkan","race":"Wächter","effectText":"Benötigt 1 Tribut. Bei offener Beschwörung: Alle eigenen offenen Wächtermonster erhalten 300 ATK und DEF, solange sie auf dem Feld bleiben.","darianFx":"allboost300","darianOriginal":true}]);
 /* v4.06 – Darian: 50-card guardian/control collection, 4 legal 30-card challenge decks.
    Reuses only cards whose effects already exist in the duel engine; story remains untouched. */
 const darianPool406=[
- ["Erdwächter",3],["Frostwächter",3],["Aschenritter",3],
- ["Arkaner Magier",3],["Donnerfalke",3],["Schattenwolf",3],
- ["Flammendrache",3],["Glutkoloss",2],
+ ["Schildwächter Novar",3],["Frostschild-Wächter",3],
+ ["Steinwächter Bastion",3],["Arkaner Torwächter",3],
+ ["Turmwächter Aegor",3],["Runenwächter Valen",3],
+ ["Kristallwächter Seron",3],["Hochwächter Darions Bollwerk",2],
  ["Kristallschild",3],["Arkaner Rückschlag",3],["Heilende Quelle",3],
  ["Frostpanzer",3],["Arkaner Segen",3],["Schattenfessel",3],
  ["Geisterruf",3],["Eisiger Rückstoß",3],["Seelenbergung",3]
 ];
 const darianTiers406=[
- {label:"Einsteiger",n:[0,1,2,3,4,5,8,9,10,11]},
- {label:"Fortgeschritten",n:[0,1,2,3,4,6,8,9,11,12]},
+ {label:"Einsteiger",n:[0,1,2,3,4,6,8,9,10,11]},
+ {label:"Fortgeschritten",n:[0,1,2,3,4,5,8,9,11,12]},
  {label:"Experte",n:[0,1,3,4,5,6,8,9,13,15]},
- {label:"Meister",n:[0,1,3,4,6,8,9,13,16],boss:[7,2],extra:[11,1]}
+ {label:"Meister",n:[0,1,3,4,5,8,9,13,16],boss:[7,2],extra:[11,1]}
 ];
 function createDarianDeck406(level=1){
  const tier=darianTiers406[Math.max(1,Math.min(4,Math.trunc(Number(level)||1)))-1];
@@ -5971,6 +5974,32 @@ function monsterDestructionFx(card,owner){
 }
 function triggerMonsterEvent(card,event,owner="player",index=-1){
  if(!card||card.kind!=="monster")return;
+ if(card.darianOriginal&&event==='summon'&&!card.faceDown){
+  const allies=owner==='opponent'?oppMon:myMon;
+  const spells=owner==='opponent'?oppSpell:mySpell;
+  const fx=card.darianFx;
+  if(fx==='allydef300'){
+   const target=allies.find(m=>m&&m.darianOriginal&&!m.faceDown&&m!==card)||card;
+   target.tempDefBonus=(target.tempDefBonus||0)+300;
+  }else if(fx==='selfdef300'||fx==='selfdef400'){
+   card.tempDefBonus=(card.tempDefBonus||0)+(fx==='selfdef300'?300:400);
+  }else if(fx==='draw1'){
+   const pile=owner==='opponent'?aiDeck:drawPile;
+   const dest=owner==='opponent'?aiHand:hand;
+   const drawn=pile.shift();if(drawn)dest.push(drawn);
+  }else if(fx==='trapatk300'){
+   if(spells.some(c=>c&&c.kind==='trap'))card.tempAtkBonus=(card.tempAtkBonus||0)+300;
+  }else if(fx==='heal400'){
+   if(owner==='opponent')oppLP+=400;else myLP+=400;
+  }else if(fx==='allboost300'){
+   allies.filter(m=>m&&m.darianOriginal&&!m.faceDown).forEach(m=>{
+    m.tempAtkBonus=(m.tempAtkBonus||0)+300;
+    m.tempDefBonus=(m.tempDefBonus||0)+300;
+   });
+  }
+  log('🛡️ '+card.name+' aktiviert seinen Wächtereffekt.');
+ }
+
  if(card.varekOriginal){
   const fx=card.varekFx,enemy=owner==='opponent'?myMon:oppMon,ally=owner==='opponent'?oppMon:myMon;
   const strongest=enemy.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
