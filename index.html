@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261122-elara-50-card-pool-four-level-presets-v400">
+<meta name="arcane-build" content="20261122-elara-original-crystal-cards-v401">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5635,7 +5635,7 @@ let aiHand=aiDeck.splice(0,5),aiTurn=0;
    Nur vorhandene Karten verwenden: KI-Effekte und vorhandene Duellregeln bleiben gültig. */
 const storyDeckRecipes362=[
  {name:"Leon",theme:"Krieger & Feuer",base:["Aschenritter","Flammendrache","Erdwächter","Glutkoloss"],support:["Flammenstoß","Arkaner Segen","Drachenatem","Arkaner Rückschlag","Funkenregen","Kristallschild"]},
- {name:"Elara",theme:"Kristall & Schutz",base:["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke"],support:["Kristallschild","Eisiger Rückstoß","Heilende Quelle","Frostpanzer","Arkaner Segen","Arkaner Wissensstrom"]},
+ {name:"Elara",theme:"Kristallchronik – Spiegel & Licht",base:["Kristallfüchsin","Prismengolem","Lichtsplitter-Magierin","Spiegelritterin"],support:["Kristallheilung","Prismenwissen","Prismenschild","Spiegelbann","Lichtbrechung","Kristallnebel"]},
  {name:"Varek",theme:"Schatten & Störung",base:["Schattenwolf","Arkaner Magier","Aschenritter","Flammendrache"],support:["Schattenfessel","Gedankenraub","Geisterruf","Seelenbergung","Arkaner Rückschlag","Arkaner Sturm"]},
  {name:"Darian",theme:"Wächter & Verteidigung",base:["Erdwächter","Frostwächter","Aschenritter","Arkaner Magier"],support:["Kristallschild","Arkaner Rückschlag","Heilende Quelle","Frostpanzer","Arkaner Segen","Schattenfessel"]},
  {name:"Noctis",theme:"Schattenfürst",base:["Schattenwolf","Arkaner Magier","Glutkoloss","Aschenritter"],support:["Schattenfessel","Geisterruf","Gedankenraub","Seelenbergung","Arkaner Sturm","Flammenstoß"]},
@@ -5648,8 +5648,10 @@ const storyDeckRecipes362=[
 /* v4.00 – Elara: 50 physical cards in her collection, 30 per duel.
    The four 30-card loadouts are prepared for future difficulty selection.
    No difficulty selector is exposed yet; story 1-2 currently uses tier 1. */
-const elaraCardPool400=[["Frostwächter",3],["Arkaner Magier",3],["Erdwächter",3],["Donnerfalke",3],["Runenwächter",3],["Lichtfalke",3],["Arkaner Lehrling",3],["Kristallschild",3],["Eisiger Rückstoß",3],["Heilende Quelle",3],["Frostpanzer",3],["Arkaner Segen",3],["Arkaner Wissensstrom",3],["Doppelter Segen",3],["Seelenbergung",3],["Arkaner Rückschlag",3],["Lebensfunke",2]];
-const elaraDifficultyPresets400=[{"label":"Einsteiger","monster":["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke","Runenwächter","Arkaner Lehrling"],"support":["Heilende Quelle","Frostpanzer","Arkaner Segen","Kristallschild"]},{"label":"Fortgeschritten","monster":["Frostwächter","Arkaner Magier","Donnerfalke","Runenwächter","Lichtfalke","Arkaner Lehrling"],"support":["Heilende Quelle","Arkaner Wissensstrom","Eisiger Rückstoß","Kristallschild"]},{"label":"Experte","monster":["Frostwächter","Arkaner Magier","Erdwächter","Donnerfalke","Runenwächter","Lichtfalke"],"support":["Arkaner Wissensstrom","Eisiger Rückstoß","Arkaner Rückschlag","Seelenbergung"]},{"label":"Meister","monster":["Frostwächter","Arkaner Magier","Donnerfalke","Runenwächter","Lichtfalke","Arkaner Lehrling"],"support":["Arkaner Wissensstrom","Eisiger Rückstoß","Arkaner Rückschlag","Kristallschild"]}];
+/* v4.01 – Elaras originäre Kristallchronik-Karten. Illustrationen folgen getrennt. */
+deck.push(...[{"name":"Kristallfüchsin","kind":"monster","emoji":"🦊","level":3,"atk":1200,"def":1100,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält Elara 200 LP.","elaraEffect":"heal200","elaraOriginal":true},{"name":"Prismengolem","kind":"monster","emoji":"💎","level":4,"atk":900,"def":2000,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält dieses Monster 300 DEF.","elaraEffect":"def300","elaraOriginal":true},{"name":"Lichtsplitter-Magierin","kind":"monster","emoji":"🪄","level":4,"atk":1500,"def":1200,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält dieses Monster 200 ATK.","elaraEffect":"atk200","elaraOriginal":true},{"name":"Spiegelritterin","kind":"monster","emoji":"🛡️","level":4,"atk":1600,"def":1200,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält dieses Monster 200 DEF.","elaraEffect":"def200","elaraOriginal":true},{"name":"Mondquarz-Wächter","kind":"monster","emoji":"🌙","level":4,"atk":1100,"def":1900,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Beim Aufdecken durch einen Angriff erhält dieses Monster 400 DEF.","elaraEffect":"flip400","elaraOriginal":true},{"name":"Smaragdgeist","kind":"monster","emoji":"💚","level":3,"atk":1300,"def":1400,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Wenn dieses Monster vom Feld auf den Friedhof gelangt, erhält Elara 200 LP.","elaraEffect":"grave200","elaraOriginal":true},{"name":"Sternenprisma-Drache","kind":"monster","emoji":"🐉","level":4,"atk":1800,"def":1000,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält dieses Monster 200 ATK.","elaraEffect":"atk200","elaraOriginal":true},{"name":"Quarzseherin","kind":"monster","emoji":"🔮","level":3,"atk":1000,"def":1300,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält Elara 300 LP.","elaraEffect":"heal300","elaraOriginal":true},{"name":"Aurorakönigin","kind":"monster","emoji":"👑","level":6,"atk":2100,"def":2100,"skin":"ice","element":"Kristall","race":"Kristallwesen","effectText":"Bei offener Beschwörung erhält Elara 500 LP.","elaraEffect":"heal500","elaraOriginal":true},{"name":"Kristallheilung","kind":"spell","emoji":"💠","skin":"ice","effectText":"Erhalte 600 LP.","elaraEffect":"heal600","elaraOriginal":true},{"name":"Prismenwissen","kind":"spell","emoji":"📜","skin":"ice","effectText":"Ziehe 2 Karten.","elaraEffect":"draw2","elaraOriginal":true},{"name":"Spiegelglanz","kind":"spell","emoji":"✨","skin":"ice","effectText":"Ein eigenes offenes Monster erhält 500 DEF bis zum Ende des Zuges.","elaraEffect":"def500","elaraOriginal":true},{"name":"Lichtbrechung","kind":"spell","emoji":"🌈","skin":"ice","effectText":"Ein eigenes offenes Monster erhält 400 ATK bis zum Ende des Zuges.","elaraEffect":"atk400","elaraOriginal":true},{"name":"Quarzsegen","kind":"spell","emoji":"🪷","skin":"ice","effectText":"Erhalte 300 LP und ziehe eine Karte.","elaraEffect":"heal300draw1","elaraOriginal":true},{"name":"Kristallnebel","kind":"spell","emoji":"❄️","skin":"ice","effectText":"Ein gegnerisches offenes Monster verliert 400 ATK bis zum Ende des Zuges.","elaraEffect":"enemyatkminus400","elaraOriginal":true},{"name":"Prismenschild","kind":"trap","emoji":"🛡️","skin":"ice","effectText":"Ab dem nächsten Zug: Stoppe einen gegnerischen Angriff.","elaraEffect":"stop","elaraOriginal":true},{"name":"Spiegelbann","kind":"trap","emoji":"🪞","skin":"ice","effectText":"Ab dem nächsten Zug: Stoppe einen gegnerischen Angriff und füge dem Angreifer 200 LP Schaden zu.","elaraEffect":"reflect","elaraOriginal":true}]);
+const elaraCardPool400=[["Kristallfüchsin",3],["Prismengolem",3],["Lichtsplitter-Magierin",3],["Spiegelritterin",3],["Mondquarz-Wächter",3],["Smaragdgeist",3],["Sternenprisma-Drache",3],["Quarzseherin",3],["Aurorakönigin",2],["Kristallheilung",3],["Prismenwissen",3],["Spiegelglanz",3],["Lichtbrechung",3],["Quarzsegen",3],["Kristallnebel",3],["Prismenschild",3],["Spiegelbann",3]];
+const elaraDifficultyPresets400=[{"label":"Einsteiger","monster":["Kristallfüchsin","Prismengolem","Lichtsplitter-Magierin","Spiegelritterin","Mondquarz-Wächter","Quarzseherin"],"support":["Kristallheilung","Spiegelglanz","Quarzsegen","Prismenschild"]},{"label":"Fortgeschritten","monster":["Kristallfüchsin","Prismengolem","Lichtsplitter-Magierin","Spiegelritterin","Smaragdgeist","Sternenprisma-Drache"],"support":["Kristallheilung","Prismenwissen","Lichtbrechung","Prismenschild"]},{"label":"Experte","monster":["Prismengolem","Lichtsplitter-Magierin","Spiegelritterin","Mondquarz-Wächter","Smaragdgeist","Sternenprisma-Drache"],"support":["Prismenwissen","Lichtbrechung","Kristallnebel","Spiegelbann"]},{"label":"Meister","monster":["Kristallfüchsin","Lichtsplitter-Magierin","Spiegelritterin","Mondquarz-Wächter","Smaragdgeist","Sternenprisma-Drache"],"support":["Prismenwissen","Lichtbrechung","Kristallnebel","Spiegelbann"]}];
 function createElaraDeck400(tier=1){
  const chosen=Math.max(1,Math.min(4,Math.trunc(Number(tier)||1)));
  const preset=elaraDifficultyPresets400[chosen-1];
@@ -5881,6 +5883,20 @@ function monsterDestructionFx(card,owner){
 }
 function triggerMonsterEvent(card,event,owner="player",index=-1){
  if(!card||card.kind!=="monster")return;
+ if(card.elaraOriginal){
+  const ef=card.elaraEffect;
+  if(event==='summon'&&!card.faceDown){
+   if(ef==='heal200'||ef==='heal300'||ef==='heal500'){
+    const amount=ef==='heal200'?200:ef==='heal300'?300:500;
+    if(owner==='opponent')oppLP+=amount;else myLP+=amount;
+    log('💠 '+card.name+': +'+amount+' LP.');
+   }
+   if(ef==='def300'||ef==='def200'){card.tempDefBonus=(card.tempDefBonus||0)+(ef==='def300'?300:200);log('💎 '+card.name+': DEF erhöht.')}
+   if(ef==='atk200'){card.tempAtkBonus=(card.tempAtkBonus||0)+200;log('✨ '+card.name+': +200 ATK.')}
+  }
+  if(event==='flip'&&ef==='flip400'&&!card.elaraFlipUsed){card.elaraFlipUsed=true;card.tempDefBonus=(card.tempDefBonus||0)+400;log('🌙 '+card.name+': +400 DEF beim Aufdecken.')}
+  if(event==='grave'&&ef==='grave200'&&!card.elaraGraveUsed){card.elaraGraveUsed=true;if(owner==='opponent')oppLP+=200;else myLP+=200;log('💚 '+card.name+': +200 LP.')}
+ }
  if(event==="summon"&&!card.faceDown){
   const name=card.name;
   const burn=name==="Arenenlöwe Leonis"?300:name==="Löwenrekrut"?200:name==="König der Löwenarena"?500:0;
@@ -6183,6 +6199,15 @@ $("oppSpell").addEventListener('click',e=>{
 });
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 
+function activateElaraDefenseTrap401(){
+ if(window.arcaneStoryOpponentInfo362?.name!=='Elara')return false;
+ const i=oppSpell.findIndex(c=>c&&c.elaraOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
+ if(i<0)return false;
+ const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ if(c.name==='Spiegelbann'){myLP=Math.max(0,myLP-200);log('🪞 Elara aktiviert Spiegelbann: Angriff gestoppt und 200 LP Schaden!');}
+ else log('💠 Elara aktiviert Prismenschild und stoppt den Angriff!');
+ return true;
+}
 function activateLeonDefenseTrap363(){
  if(window.arcaneStoryOpponentInfo362?.name!=="Leon")return false;
  const i=oppSpell.findIndex(c=>c&&["Löwenmut-Schild","Glutwall","Kampf der Arena","Heldenbrüllen"].includes(c.name)&&aiTurn>c.setTurn);
@@ -6204,7 +6229,7 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  if(phase!=="battle"){phase="battle";render();}
  if(attacker.position==="defense"||attacker.faceDown){log("Nur ein offenes Monster in Angriffsposition kann direkt angreifen.");return;}
  if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log("Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.");return;}
- if(activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
+ if(activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
  const damage=effectiveAtk(attacker);
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
@@ -6359,7 +6384,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelReflectAttack367=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
  }else if(c.name==='Löwenmut-Schild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let trapDecisionPending205=false;
@@ -6475,13 +6500,43 @@ async function opponentTurn(){
    const c=aiHand.splice(call,1)[0],revived=oppGraveyard.splice(grave,1)[0];revived.position="defense";revived.faceDown=false;revived.summonedTurn=aiTurn;revived.attacksThisTurn=1;oppMon[space]=revived;sendToGraveyard(c,"opponent");log("📯 Leon aktiviert Löwenruf und holt "+revived.name+" zurück!");
   }
  }
+ // Elara setzt ihre eigenen Kristallzauber aktiv ein, statt sie wirkungslos zu verdecken.
+ if(window.arcaneStoryOpponentInfo362?.name==='Elara'){
+  const candidates=aiHand.map((c,i)=>({c,i})).filter(({c})=>c.elaraOriginal&&c.kind==='spell');
+  const hasMonster=oppMon.some(m=>m&&!m.faceDown),hasEnemy=myMon.some(Boolean);
+  const pick=candidates.find(({c})=>c.elaraEffect==='heal600'&&oppLP<=3500)
+   ||candidates.find(({c})=>c.elaraEffect==='heal300draw1')
+   ||candidates.find(({c})=>c.elaraEffect==='draw2')
+   ||candidates.find(({c})=>(c.elaraEffect==='atk400'||c.elaraEffect==='def500')&&hasMonster)
+   ||candidates.find(({c})=>c.elaraEffect==='enemyatkminus400'&&hasEnemy)
+   ||candidates.find(({c})=>c.elaraEffect==='heal600');
+  if(pick){
+   const c=aiHand.splice(pick.i,1)[0],ef=c.elaraEffect;
+   if(ef==='heal600')oppLP+=600;
+   if(ef==='heal300draw1')oppLP+=300;
+   if(ef==='draw2'||ef==='heal300draw1'){
+    const count=ef==='draw2'?2:1;
+    for(let n=0;n<count;n++){const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn)}
+   }
+   if(ef==='atk400'||ef==='def500'){
+    const target=oppMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+    if(target){if(ef==='atk400')target.tempAtkBonus=(target.tempAtkBonus||0)+400;else target.tempDefBonus=(target.tempDefBonus||0)+500;}
+   }
+   if(ef==='enemyatkminus400'){
+    const target=myMon.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
+    if(target)target.tempAtkBonus=(target.tempAtkBonus||0)-400;
+   }
+   sendToGraveyard(c,'opponent');
+   log('💎 Elara aktiviert '+c.name+'!');
+  }
+ }
  // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
  // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
  const freeAiSpellZone=oppSpell.findIndex(x=>!x);
  if(freeAiSpellZone>=0){
-  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&x.name!=="Flammenstoß"));
+  let setIndex=aiHand.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&x.name!=="Flammenstoß"));
   if(setIndex<0){
-   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&x.name!=="Flammenstoß"));
+   const deckIndex=aiDeck.findIndex(x=>x.kind==="trap"||(x.kind==="spell"&&!x.elaraOriginal&&x.name!=="Flammenstoß"));
    if(deckIndex>=0){aiHand.push(aiDeck.splice(deckIndex,1)[0]);setIndex=aiHand.length-1;}
   }
   if(setIndex>=0){
