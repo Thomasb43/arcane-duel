@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-waldkarte-missionspfad-v457">
+<meta name="arcane-build" content="20261123-waldkarte-und-dialoge-v458">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5504,7 +5504,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 }
 </style>
 <link rel="stylesheet" href="artwork/vesperion-startkarte-illustration.css?v=4.48">
-<link rel="stylesheet" href="forest-story-map-v457.css?v=457">
+<link rel="stylesheet" href="forest-story-map-v457.css?v=458">
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -9309,7 +9309,7 @@ syncHeroResonanceExtra439();
  const content=stage.querySelector('#arcaneStoryContent357'),back=stage.querySelector('#arcaneStoryBack357');
  let activeIndex=null,dialogStep=0,scene='map',completedResult=null,lastMissionReward=null;
  function show(){stage.hidden=false;stage.scrollTop=0}
- function close(){stage.classList.remove('is-forest-map-457');stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
+ function close(){stage.classList.remove('is-forest-map-457','is-forest-dialog-457');stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
  back.addEventListener('click',()=>{
   if(scene==='map')close();
   else if(scene==='forest-map')showMap();
@@ -9358,6 +9358,7 @@ function showForestMap457(selectIndex){
  const defaultIndex=10+Math.min(9,Math.max(0,read2()-1));
  const chosen=Number.isInteger(selectIndex)&&selectIndex>=10&&selectIndex<=19?selectIndex:defaultIndex;
  scene='forest-map';activeIndex=null;completedResult=null;show();
+ stage.classList.remove('is-forest-dialog-457');
  stage.classList.add('is-forest-map-457');
  stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 2 · Der verlorene Wald';
  back.textContent='← Kapitelübersicht';
@@ -9386,7 +9387,7 @@ function showForestMap457(selectIndex){
 }
 
  function showMap(){
-  stage.classList.remove('is-forest-map-457');
+  stage.classList.remove('is-forest-map-457','is-forest-dialog-457');
   scene='map';activeIndex=null;completedResult=null;show();
   stage.querySelector('#arcaneStoryHeading357').textContent='Die Chronik der Sieben Siegel';
   back.textContent='Zur Stadt';
@@ -9426,6 +9427,7 @@ function showForestMap457(selectIndex){
  function drawPrologue2(){
   if(scene!=='prologue2')return;
   stage.classList.remove('is-forest-map-457');
+  stage.classList.add('is-forest-dialog-457');
   const entry=prologue2[dialogStep],speaker=entry?.[0]||'Erzähler',other=speaker==='Kael'?'Astra':'Kael';
   show();back.textContent='Zur Kapitelübersicht';
   stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel 2 · Vor dem Verlorenen Wald';
@@ -9471,6 +9473,7 @@ function showForestMap457(selectIndex){
  function drawDialog(){
   if(activeIndex===null)return;
   stage.classList.remove('is-forest-map-457');
+  stage.classList.toggle('is-forest-dialog-457',activeIndex>=10&&activeIndex<20);
   const m=missions[activeIndex],lines=scene==='post'?m.post:m.pre,entry=lines[dialogStep];
   show();back.textContent='Missionsübersicht';
   stage.querySelector('#arcaneStoryHeading357').textContent=labelMission(activeIndex)+' · '+m.title;
@@ -9509,6 +9512,7 @@ function showForestMap457(selectIndex){
   const lastOne=activeIndex===9,lastTwo=activeIndex===19,lastThree=activeIndex===29;
   const text=lastThree?'Pyrathos ist befreit und die Urflamme bleibt geschützt. Malachar flieht mit einem Splitter zur versunkenen Stadt.':lastTwo?'Das Wurzelherz ist befreit und Fenrik erneuert seinen Schwur. Malachar ist mit einem Splitter in Richtung der Aschengipfel entkommen.':lastOne?'Das erste Siegel ist gefallen. Die Reise geht im Verlorenen Wald weiter.':'Du hast '+escapeText(missions[activeIndex].opponent)+' besiegt. Die nächste Mission ist freigeschaltet.';
   scene='finished';show();
+  stage.classList.toggle('is-forest-dialog-457',activeIndex>=10&&activeIndex<20);
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(lastThree?'KAPITEL 3 ABGESCHLOSSEN':lastTwo?'KAPITEL 2 ABGESCHLOSSEN':lastOne?'KAPITEL 1 ABGESCHLOSSEN':'MISSION '+labelMission(activeIndex)+' GESCHAFFT')+'</div><div class="arcane-story-line-357">'+text+'</div>'
    +(missions[activeIndex]?.candidate?'<p class="arcane-story-note-357">✦ '+escapeText(missions[activeIndex].opponent)+' ist ein möglicher künftiger Charakter (noch nicht spielbar).</p>':'')
    +(lastMissionReward?.first?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · 💎 +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')
