@@ -57,7 +57,7 @@ function readWins(){
  return saved;
 }
 function highestUnlocked(index,wins){
- if(index>=30&&window.arcaneStoryReview469)return 4;
+ if(window.arcaneStoryReview469)return 4;
  const marks=(wins||readWins())[index]||0;
  let tier=1;
  // Jede Mission erfordert Siege in lückenloser Reihenfolge.
@@ -155,7 +155,7 @@ function showChoice(index,continueButton){
  const wins=readWins(),marks=wins[index];
  const maxTier=highestUnlocked(index,wins);
  // Nach einem Erfolg die nächste spielbare Stufe bevorzugen.
- let picked=maxTier;
+ let picked=window.arcaneStoryReview469?1:maxTier;
  try{
   if(Number(sessionStorage.getItem(MISSION_KEY))===index){
    const previous=clamp(sessionStorage.getItem(TIER_KEY));
@@ -207,7 +207,7 @@ function showChoice(index,continueButton){
  heading.textContent='✦ Schwierigkeitsgrad wählen ✦';
  const help=document.createElement('p');
  help.className='arcane-briefing-help-465';
- help.textContent=index>=30&&window.arcaneStoryReview469?'TESTMODUS: Alle vier Schwierigkeitsgrade können ausprobiert werden.':'Gewinne jede Stufe, um die nächste freizuschalten: Einsteiger → Fortgeschritten → Experte → Meister.';
+ help.textContent=window.arcaneStoryReview469?'TESTMODUS: Alle vier Schwierigkeitsgrade können ausprobiert werden.':'Gewinne jede Stufe, um die nächste freizuschalten: Einsteiger → Fortgeschritten → Experte → Meister.';
  const grid=document.createElement('div');
  grid.className='arcane-difficulty-grid-435';
  const tierGlyphs=['⚔','⚔⚔','⚔⚔⚔','♛'];
@@ -224,7 +224,7 @@ function showChoice(index,continueButton){
   const name=document.createElement('strong');name.textContent=LABELS[tier-1];
   const description=document.createElement('small');description.textContent=DETAILS[tier-1];
   const state=document.createElement('span');state.className='tier-state';
-  state.textContent=index>=30&&window.arcaneStoryReview469?'🔎 Zum Testen verfügbar':!unlocked?'🔒 Erst '+LABELS[tier-2]+' besiegen':won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
+  state.textContent=window.arcaneStoryReview469?'🔎 Zum Testen verfügbar':!unlocked?'🔒 Erst '+LABELS[tier-2]+' besiegen':won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
   if(!unlocked)button.title='Besiege zuerst '+LABELS[tier-2]+' in dieser Mission.';
   button.append(number,name,description,state);
   button.addEventListener('click',()=>{
@@ -243,10 +243,10 @@ function showChoice(index,continueButton){
  }
  const rewards=document.createElement('div');
  rewards.className='arcane-briefing-rewards-465';
- rewards.innerHTML=index>=30&&window.arcaneStoryReview469?'<strong>🔎 Testmodus</strong><span>Keine Belohnungen</span>':'<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
+ rewards.innerHTML=window.arcaneStoryReview469?'<strong>🔎 Testmodus</strong><span>Keine Belohnungen</span>':'<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
  const note=document.createElement('p');
  note.className='arcane-briefing-note-465';
- note.textContent=index>=30&&window.arcaneStoryReview469?'Die Vorschau verändert weder deinen Story-Fortschritt noch deine Kristalle.':'Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
+ note.textContent=window.arcaneStoryReview469?'Die Vorschau verändert weder deinen Story-Fortschritt noch deine Kristalle.':'Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
  const actions=document.createElement('div');
  actions.className='arcane-briefing-actions-465';
  actions.innerHTML='<button type="button" class="cancel">← Zurück</button><button type="button" class="start">⚔ Mission starten</button>';
