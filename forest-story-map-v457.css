@@ -1,7 +1,7 @@
 /* Arcane Duel v4.57 · Kapitel 2 Waldkarte, interaktive Missionsroute.
    Die Kapitel 1 und 3 sowie der ursprüngliche Dialog-/Duellablauf bleiben erhalten. */
 #arcaneStory357.is-forest-map-457{
- background:linear-gradient(180deg,#04111bab 0%,#09232643 36%,#051019d9 100%),url('artwork/story/forest-story-map-v457.svg') center center/cover fixed!important;
+ background:linear-gradient(180deg,#03101763 0%,#09232622 36%,#05101991 100%),url('artwork/story/forest-magical-v460.jpg') center center/cover fixed!important;
 }
 #arcaneStory357.is-forest-map-457 .arcane-story-shell-357{
  max-width:800px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0 5px 20px!important;
@@ -21,13 +21,13 @@
 .arcane-forest-route-457{
  position:relative;width:100%;height:clamp(575px,77svh,760px);
  overflow:hidden;isolation:isolate;border:2px solid #a6a16abb;border-radius:19px;
- background:linear-gradient(180deg,#071b2855,#0e253514 43%,#0519285e 100%),url('artwork/story/forest-story-map-v457.svg') center/cover no-repeat;
+ background:linear-gradient(180deg,#071b2830,#0e253508 43%,#05192831 100%),url('artwork/story/forest-magical-v460.jpg') center/cover no-repeat;
  box-shadow:inset 0 0 40px #0007,0 5px 30px #0009;
 }
 .arcane-forest-route-457:after{
  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
- background:linear-gradient(90deg,#020c179a,transparent 19% 81%,#020c179a),
- linear-gradient(180deg,#0a14274d,transparent 18% 80%,#05162769);
+ background:linear-gradient(90deg,#020c1755,transparent 19% 81%,#020c1755),
+ linear-gradient(180deg,#0a142728,transparent 18% 80%,#0516273a);
 }
 .arcane-forest-path-svg-457{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;filter:drop-shadow(0 0 9px #e2c36b88)}
 .arcane-forest-node-457{
@@ -99,7 +99,7 @@
 
 /* v4.58: Wald bleibt sichtbar, wenn ein Kapitel-2-Prolog oder Dialog läuft. */
 #arcaneStory357.is-forest-dialog-457{
- background:linear-gradient(180deg,#061019bd,#09252ab7,#060e1aeb),url('artwork/story/forest-story-map-v457.svg') center center/cover fixed!important;
+ background:linear-gradient(180deg,#06101970,#09252a45,#060e1aba),url('artwork/story/forest-magical-v460.jpg') center center/cover fixed!important;
 }
 #arcaneStory357.is-forest-dialog-457 .arcane-story-shell-357{
  background:linear-gradient(150deg,#152733e6,#151b2ee7 75%)!important;
@@ -113,8 +113,12 @@
 #arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-crystalwood-444,
 #arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-roots-444,
 #arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-wildseal-444{
- background:linear-gradient(180deg,#163c423b,#061b2855),url('artwork/story/forest-story-map-v457.svg') center 45%/cover no-repeat!important;
+ background:linear-gradient(180deg,#163c4220,#061b2840),url('artwork/story/forest-magical-v460.jpg') center 45%/cover no-repeat!important;
 }
 #arcaneStory357.is-forest-dialog-457 .arcane-story-dialog-box-360{
  background:linear-gradient(140deg,#1f3e39f2,#222544f4)!important;border-color:#a2bf8f!important;
 }
+
+/* v4.60: cinematic forest illustration, brighter light and legible route. */
+.arcane-forest-route-457{border-color:#dfc685!important;box-shadow:inset 0 0 22px #020f2060,0 0 18px #e8cf8055,0 8px 35px #0008!important}
+.arcane-forest-path-svg-457{filter:drop-shadow(0 0 10px #ffe191c9)!important}
