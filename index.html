@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-characterbadge-beispiel2-v451">
+<meta name="arcane-build" content="20261123-charakterauswahl-sechs-v452">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5486,6 +5486,22 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
  #arcaneHubCharacterName392{font-size:15px!important;bottom:13px!important}
  #arcaneHubCharacterLevel392{font-size:10px!important;left:12px!important;width:calc(100% - 24px)!important}
 }
+
+/* v4.52: Sechs Charaktere in der Auswahl – neue Charaktere vorerst gesperrt. */
+.arcane-character-picker-panel-391{max-height:min(92svh,850px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.arcane-character-card-391.pending-452:disabled{opacity:.95;cursor:not-allowed;border-color:#8a719d;background:linear-gradient(160deg,#2a1e42,#18152d)}
+.arcane-character-card-391.pending-452 img{filter:saturate(.84) brightness(.90)}
+.arcane-character-card-391.pending-452 small{color:#d8bcdf}
+.arcane-character-card-391 small{min-height:28px;display:flex;align-items:center;justify-content:center;line-height:1.25}
+@media(max-width:600px){
+ .arcane-character-picker-391{padding:10px}
+ .arcane-character-picker-panel-391{padding:12px;max-height:calc(100svh - 20px)}
+ .arcane-character-cards-391{gap:8px}
+ .arcane-character-card-391{padding:7px;gap:4px}
+ .arcane-character-card-391 img{height:clamp(105px,17svh,155px)}
+ .arcane-character-card-391 strong{font-size:18px}
+ .arcane-character-card-391 small{font-size:10px}
+}
 </style>
 <link rel="stylesheet" href="artwork/vesperion-startkarte-illustration.css?v=4.48">
 </head>
@@ -8691,10 +8707,20 @@ syncHeroResonanceExtra439();
   const selected=selected391(),level=window.arcaneCharacterProgress382?.level()||1,leonOpen=leonUnlocked391();
   // Keep portrait markup intact; replacing button.textContent removed the img and name elements.
   characterButton391.setAttribute('aria-label',selected+' – Charakter- und Deckauswahl öffnen');
-  cards391.innerHTML=[{name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},{name:'Leon',image:'artwork/story/leon.jpg',level:1,unlocked:leonOpen}].map(ch=>
-   '<button type="button" class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+'" data-home-character-391="'+ch.name+'" '+(ch.unlocked?'':'disabled')+'>'
-   +'<img src="'+ch.image+'" alt="'+ch.name+'" loading="eager"><strong>'+ch.name+'</strong>'
-   +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):'🔒 Freischaltung ab Kael Level 10')+'</small></button>'
+  // Neue Charaktere sind bereits sichtbar, ihre Freischaltungen bleiben ausdrücklich offen.
+  // Für Kael und Leon gelten die vorhandenen Regeln unverändert.
+  const characters391=[
+   {name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},
+   {name:'Leon',image:'artwork/story/leon.jpg',level:1,unlocked:leonOpen,requirement:'🔒 Freischaltung ab Kael Level 10'},
+   {name:'Riven',image:'artwork/story/riven.jpg',unlocked:false,pending:true},
+   {name:'Elara',image:'artwork/story/elara.jpg',unlocked:false,pending:true},
+   {name:'Noctis',image:'artwork/story/noctis.jpg',unlocked:false,pending:true},
+   {name:'Astra',image:'artwork/story/astra.jpg',unlocked:false,pending:true}
+  ];
+  cards391.innerHTML=characters391.map(ch=>
+   '<button type="button" class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+(ch.pending?'pending-452 ':'')+'" data-home-character-391="'+ch.name+'" '+(ch.unlocked?'':'disabled')+'>'
+   +'<img src="'+ch.image+'" alt="'+ch.name+'" loading="eager" decoding="async"><strong>'+ch.name+'</strong>'
+   +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):(ch.pending?'🔒 Freischaltung noch offen':ch.requirement))+'</small></button>'
   ).join('');
  }
  function openCharacters391(){renderCharacter391();characterPicker.hidden=false;closeQuick392()}
