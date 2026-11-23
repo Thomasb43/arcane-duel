@@ -6,7 +6,7 @@
 #arcaneStory357[data-expansion-chapter="4"]{--world:#b6fff3;--accent:#4ddcc9;--exp-art:url('artwork/story/nymaris-chapter4-hd-v479.avif?v=479')}
 #arcaneStory357[data-expansion-chapter="5"]{--world:#fff0ba;--accent:#b4b0ff;--exp-art:url('artwork/story/aerion-chapter5-hd-v480.avif?v=480')}
 #arcaneStory357[data-expansion-chapter="6"]{--world:#e6d3ff;--accent:#b1a0ff;--exp-art:url('artwork/story/time-palace-chapter6-hd-v481.avif?v=481')}
-#arcaneStory357[data-expansion-chapter="7"]{--world:#ffbddf;--accent:#d56bb8;--exp-art:url('artwork/story/dark-throne-v469.svg')}
+#arcaneStory357[data-expansion-chapter="7"]{--world:#ffbddf;--accent:#d56bb8;--exp-art:url('artwork/story/dark-throne-chapter7-hd-v482.avif?v=482')}
 #arcaneStory357.is-expansion-map-469 .arcane-story-shell-357{max-width:800px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0 5px 20px!important}
 #arcaneStory357.is-expansion-map-469 .arcane-story-head-357{padding:12px!important;margin-bottom:12px!important;border:1.5px solid var(--world);border-radius:14px;background:linear-gradient(130deg,#0c1c38eb,#281737eb)!important;box-shadow:0 8px 28px #0007}
 #arcaneStory357.is-expansion-map-469 .arcane-story-kicker-357,
@@ -33,9 +33,9 @@
 .arcane-briefing-overlay-465.is-chapter-4-465{background-image:linear-gradient(#081b2cb1,#0c1a32c5),url('artwork/story/nymaris-chapter4-hd-v479.avif?v=479')}
 .arcane-briefing-overlay-465.is-chapter-5-465{background-image:linear-gradient(#131a3baf,#161a3cc4),url('artwork/story/aerion-chapter5-hd-v480.avif?v=480')}
 .arcane-briefing-overlay-465.is-chapter-6-465{background-image:linear-gradient(#16112eaf,#16122ec4),url('artwork/story/time-palace-chapter6-hd-v481.avif?v=481')}
-.arcane-briefing-overlay-465.is-chapter-7-465{background-image:linear-gradient(#180923b2,#150622cd),url('artwork/story/dark-throne-v469.svg')}
+.arcane-briefing-overlay-465.is-chapter-7-465{background-image:linear-gradient(#180923b2,#150622cd),url('artwork/story/dark-throne-chapter7-hd-v482.avif?v=482')}
 .is-chapter-4-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#081b2900,#111a32c4),url('artwork/story/nymaris-chapter4-hd-v479.avif?v=479')}
 .is-chapter-5-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#121c3700,#14132cc4),url('artwork/story/aerion-chapter5-hd-v480.avif?v=480')}
 .is-chapter-6-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#18103400,#111122c4),url('artwork/story/time-palace-chapter6-hd-v481.avif?v=481')}
-.is-chapter-7-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#150b1d00,#150a25d8),url('artwork/story/dark-throne-v469.svg')}
+.is-chapter-7-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#150b1d00,#150a25d8),url('artwork/story/dark-throne-chapter7-hd-v482.avif?v=482')}
 @media(max-width:460px){.arcane-expansion-chapters-469{grid-template-columns:1fr}.arcane-expansion-card-469{padding:11px}}
