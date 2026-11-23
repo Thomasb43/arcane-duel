@@ -104,35 +104,122 @@ function missionIndex(){
  return Number.isInteger(index)&&index>=0&&index<30?index:-1;
 }
 function showChoice(index,continueButton){
- if(opened)return;
+ if(opened||index<0||index>=30)return;
  opened=true;
+ const chapter=index<10?1:index<20?2:3;
+ const label=chapter+'-'+(index%10+1);
  const marks=readWins()[index];
+ let picked=1;
+ try{if(Number(sessionStorage.getItem(MISSION_KEY))===index)picked=clamp(sessionStorage.getItem(TIER_KEY))}catch(_){}
+ const story=document.getElementById('arcaneStoryContent357');
+ const pageTitle=document.getElementById('arcaneStoryHeading357')?.textContent?.trim()||('Mission '+label);
+ const speaker=story?.querySelector('.arcane-story-speaker-357')?.textContent?.trim()||'Erzähler';
+ const storyLine=story?.querySelector('.arcane-story-line-357')?.textContent?.trim()||'Bereite dich auf dein nächstes Duell vor.';
+ const image=story?.querySelector('.arcane-story-portrait-360.is-speaking-360 img:not([hidden])');
+ const art=image?.getAttribute('src')||null;
+ const chapterNames=['','Die Akademie von Arkanis','Der verlorene Wald','Die Aschengipfel'];
  const modal=document.createElement('div');
- modal.id='arcaneStoryDifficulty435';modal.className='arcane-difficulty-overlay-435';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Schwierigkeit wählen');
- const panel=document.createElement('div');panel.className='arcane-difficulty-panel-435';
- const heading=document.createElement('h2');heading.className='arcane-difficulty-title-435';heading.textContent='Schwierigkeit wählen';
- const intro=document.createElement('p');intro.className='arcane-difficulty-intro-435';intro.textContent='Mission '+(index<10?'1-'+(index+1):index<20?'2-'+(index-9):'3-'+(index-19))+' · Wähle eine der vier Deckstufen. Jede Stufe hat einen eigenen Siegstatus.';
- const grid=document.createElement('div');grid.className='arcane-difficulty-grid-435';
+ modal.id='arcaneStoryDifficulty435';
+ modal.className='arcane-difficulty-overlay-435 arcane-briefing-overlay-465 is-chapter-'+chapter+'-465';
+ modal.setAttribute('role','dialog');
+ modal.setAttribute('aria-modal','true');
+ modal.setAttribute('aria-labelledby','arcaneBriefTitle465');
+ const panel=document.createElement('div');
+ panel.className='arcane-briefing-panel-465';
+ const top=document.createElement('div');
+ top.className='arcane-briefing-heading-465';
+ top.innerHTML='<div><p>✦ ARCANE DUEL · KAPITEL '+chapter+'</p><h2 id="arcaneBriefTitle465"></h2><div class="arcane-briefing-chapter-465"></div></div><button type="button" class="arcane-briefing-back-465">← Zurück</button>';
+ top.querySelector('h2').textContent=pageTitle;
+ top.querySelector('.arcane-briefing-chapter-465').textContent=chapterNames[chapter];
+ const scene=document.createElement('div');
+ scene.className='arcane-briefing-scene-465';
+ scene.innerHTML='<div class="arcane-briefing-person-465"></div><div class="arcane-briefing-dialog-465"><strong class="arcane-briefing-speaker-465"></strong><blockquote></blockquote></div>';
+ const portrait=scene.querySelector('.arcane-briefing-person-465');
+ const fallback=()=>{
+  portrait.replaceChildren();
+  const avatar=document.createElement('span');
+  avatar.className='arcane-briefing-avatar-465';
+  avatar.textContent=speaker.slice(0,1)||'?';
+  portrait.appendChild(avatar);
+ };
+ if(art){
+  const img=document.createElement('img');
+  img.alt=speaker;
+  img.src=art;
+  img.onerror=fallback;
+  portrait.appendChild(img);
+ }else fallback();
+ scene.querySelector('.arcane-briefing-speaker-465').textContent=speaker;
+ scene.querySelector('blockquote').textContent=storyLine;
+ const heading=document.createElement('h3');
+ heading.className='arcane-briefing-title-465';
+ heading.textContent='✦ Schwierigkeitsgrad wählen ✦';
+ const help=document.createElement('p');
+ help.className='arcane-briefing-help-465';
+ help.textContent='Vier Gegnerdeck-Stufen · Wähle deine Herausforderung und starte dann das Duell.';
+ const grid=document.createElement('div');
+ grid.className='arcane-difficulty-grid-435';
+ const tierGlyphs=['⚔','⚔⚔','⚔⚔⚔','♛'];
+ const buttons=[];
  for(let tier=1;tier<=4;tier++){
   const won=!!(marks&(1<<(tier-1))),button=document.createElement('button');
-  button.type='button';button.className='arcane-difficulty-option-435'+(won?' is-cleared':'')+(tier===4?' is-master':'');
-  const number=document.createElement('span');number.className='tier-number';number.textContent='STUFE '+tier;
-  const name=document.createElement('strong');name.textContent=(tier===4?'♛ ':'')+LABELS[tier-1];
+  button.type='button';
+  button.dataset.tier=String(tier);
+  button.className='arcane-difficulty-option-435 arcane-briefing-option-465'+(won?' is-cleared':'')+(tier===4?' is-master':'');
+  button.setAttribute('aria-pressed',String(tier===picked));
+  const number=document.createElement('span');number.className='tier-number';number.textContent='STUFE '+tier+' · '+tierGlyphs[tier-1];
+  const name=document.createElement('strong');name.textContent=LABELS[tier-1];
   const description=document.createElement('small');description.textContent=DETAILS[tier-1];
-  const state=document.createElement('span');state.className='tier-state';state.textContent=won?'✓ Bereits besiegt':'⚔ Duell starten';
+  const state=document.createElement('span');state.className='tier-state';
+  state.textContent=won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
   button.append(number,name,description,state);
   button.addEventListener('click',()=>{
-   choose(index,tier);
-   modal.remove();opened=false;
-   ignoreButton=continueButton;
-   continueButton.click();
+   picked=tier;
+   updatePicked();
   });
-  grid.appendChild(button);
+  buttons.push(button);grid.appendChild(button);
  }
- const cancel=document.createElement('button');cancel.type='button';cancel.className='arcane-difficulty-cancel-435';cancel.textContent='Zurück';
- cancel.addEventListener('click',()=>{modal.remove();opened=false});
- panel.append(heading,intro,grid,cancel);modal.appendChild(panel);document.body.appendChild(modal);
- grid.querySelector('button')?.focus();
+ function updatePicked(){
+  buttons.forEach((b,i)=>{
+   const yes=i+1===picked;
+   b.classList.toggle('is-picked-465',yes);
+   b.setAttribute('aria-pressed',String(yes));
+  });
+ }
+ const rewards=document.createElement('div');
+ rewards.className='arcane-briefing-rewards-465';
+ rewards.innerHTML='<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
+ const note=document.createElement('p');
+ note.className='arcane-briefing-note-465';
+ note.textContent='Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
+ const actions=document.createElement('div');
+ actions.className='arcane-briefing-actions-465';
+ actions.innerHTML='<button type="button" class="cancel">← Zurück</button><button type="button" class="start">⚔ Mission starten</button>';
+ let active=true;
+ function close(){
+  if(!active)return;
+  active=false;opened=false;
+  modal.remove();
+  document.removeEventListener('keydown',onKey);
+  try{continueButton.focus({preventScroll:true})}catch(_){}
+ }
+ function onKey(event){if(event.key==='Escape'){event.preventDefault();close()}}
+ function launch(){
+  if(!active)return;
+  // The existing 4-tier deck selection and the original duel controls stay authoritative.
+  choose(index,picked);
+  close();
+  ignoreButton=continueButton;
+  continueButton.click();
+ }
+ top.querySelector('.arcane-briefing-back-465').addEventListener('click',close);
+ actions.querySelector('.cancel').addEventListener('click',close);
+ actions.querySelector('.start').addEventListener('click',launch);
+ panel.append(top,scene,heading,help,grid,rewards,note,actions);
+ modal.appendChild(panel);document.body.appendChild(modal);
+ document.addEventListener('keydown',onKey);
+ updatePicked();
+ buttons[picked-1]?.focus({preventScroll:true});
 }
 document.addEventListener('click',event=>{
  const button=event.target.closest?.('button');
