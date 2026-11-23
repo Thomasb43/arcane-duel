@@ -1,4 +1,4 @@
-/* Arcane Duel v4.65 – Design 3: Storydialog + vier Schwierigkeitsgrade auf einer Missions-Startseite. */
+/* Arcane Duel v4.68 – Design 3: Storydialog + vier Schwierigkeitsgrade auf einer Missions-Startseite. */
 .arcane-difficulty-overlay-435.arcane-briefing-overlay-465{
  --brief-gold:#eacb8a;--brief-ink:#fff1d6;
  display:grid;place-items:center;overflow-y:auto;overscroll-behavior:contain;
@@ -8,7 +8,7 @@
  backdrop-filter:blur(4px);
 }
 .arcane-briefing-overlay-465.is-chapter-1-465{
- background-image:linear-gradient(180deg,#070c1a9e,#080e26a8),url('artwork/story/academy-magical-v461.avif');
+ background-image:linear-gradient(180deg,#070c1a9e,#080e26a8),url('artwork/arcane-world-hub-final-v315.webp');
 }
 .arcane-briefing-overlay-465.is-chapter-2-465{
  background-image:linear-gradient(180deg,#07172181,#07131aab),url('artwork/story/forest-magical-v460.jpg');
@@ -39,7 +39,7 @@
  background-size:cover;background-position:center;overflow:hidden;
  isolation:isolate;
 }
-.is-chapter-1-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#08142b00,#11122aba 72%),url('artwork/story/academy-magical-v461.avif')}
+.is-chapter-1-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#08142b00,#11122aba 72%),url('artwork/arcane-world-hub-final-v315.webp')}
 .is-chapter-2-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#071c1900,#0b1729c4 74%),url('artwork/story/forest-magical-v460.jpg')}
 .is-chapter-3-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#1e0c2000,#190d26c5 75%),url('artwork/story/ashes-magical-v461.avif')}
 .arcane-briefing-person-465{position:absolute;left:0;bottom:0;top:0;width:47%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
