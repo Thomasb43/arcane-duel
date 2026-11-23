@@ -7184,10 +7184,21 @@ function arcaneFastGrid490(type,cards){
  for(let i=0;i<4;i++){
   const card=cards[i];
   const identity=arcaneCardVisual490(card);
+  // Nur lokale Zustandsänderungen eines bestimmten Feldes lösen einen Austausch aus.
+  // Zielauswahl oder Zugwechsel dürfen die Bilder auf den anderen Feldern nicht neu laden.
+  const monsterReady=!!(type==='myMon'&&card&&card.kind==='monster'&&!card.faceDown&&
+   card.effectUsedTurn!==turn&&['Flammendrache','Frostwächter','Schattenwolf','Arkaner Lichtdrache'].includes(card.name));
+  const spellReady=!!(type==='mySpell'&&card&&
+   (card.kind==='spell'||(card.kind==='trap'&&turn>card.setTurn)));
+  const chained=!!(type==='oppMon'&&card&&card.shadowBlockedAiTurn>=aiTurn);
+  const placement=!!(!card&&((type==='myMon'&&pendingPlacement==='monster')||
+   (type==='mySpell'&&pendingPlacement==='spell')));
   const key=JSON.stringify([
-   identity,turn,aiTurn,chosenTarget,chosenSpell,pendingPlacement,
-   type==='myMon'&&pendingSwipeSummon?pendingSwipeSummon.zoneIndex:null,
-   type==='myMon'&&pendingTribute?pendingTribute.selected.includes(i):false
+   identity,monsterReady,spellReady,chained,placement,
+   type==='oppMon'&&chosenTarget===i,
+   type==='mySpell'&&chosenSpell===i,
+   !!(type==='myMon'&&pendingSwipeSummon&&pendingSwipeSummon.zoneIndex===i),
+   !!(type==='myMon'&&pendingTribute&&pendingTribute.selected.includes(i))
   ]);
   const slot=type+':'+i;
   const existing=root.children[i];
