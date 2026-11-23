@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-story-duel-worlds-v484">
+<meta name="arcane-build" content="20261123-schicksalsmuenze-first-turn-v485">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5594,6 +5594,121 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
  opacity:.16!important;
 }
 </style>
+
+<style>
+/* Arcane Duel v4.85 – Schicksalsmünze: flüssige 3D-Eröffnung vor jedem neuen Duell. */
+.arcane-toss-overlay-485{
+ position:fixed;inset:0;z-index:2147483000;isolation:isolate;
+ display:flex;align-items:center;justify-content:center;
+ padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));
+ box-sizing:border-box;color:#fff0d1;
+ background:radial-gradient(ellipse at 50% 53%,#5a328c72,#080c27ee 70%,#030713fb);
+ overflow:hidden;overscroll-behavior:contain;touch-action:none;
+}
+.arcane-toss-overlay-485::before{
+ content:"";position:absolute;inset:-20%;
+ background:radial-gradient(ellipse at 50% 45%,#ffc36a23,transparent 33%),radial-gradient(ellipse at 27% 47%,#527dff3a,transparent 43%),radial-gradient(ellipse at 74% 47%,#b46eff3a,transparent 43%);
+ pointer-events:none;animation:arcaneTossAura485 5s ease-in-out infinite alternate;
+}
+.arcane-toss-overlay-485::after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background-image:radial-gradient(circle,#ffe8a1cc 1px,transparent 2px),radial-gradient(circle,#ce9dff99 1px,transparent 2px);
+ background-size:85px 73px,137px 119px;
+ opacity:.38;animation:arcaneTossStars485 12s linear infinite;
+}
+.arcane-toss-scene-485{
+ position:relative;z-index:1;width:min(920px,100%);max-height:98dvh;height:min(480px,97dvh);
+ display:grid;grid-template-columns:minmax(92px,1fr) minmax(145px,1.35fr) minmax(92px,1fr);
+ grid-template-rows:auto minmax(0,1fr) auto;
+ gap:4px 8px;align-items:center;justify-items:center;
+ padding:clamp(9px,1.6vh,20px);border-radius:21px;border:1px solid #eec881a8;
+ background:linear-gradient(145deg,#172442bf,#29173c80 49%,#101c36be);
+ box-shadow:inset 0 0 25px #a67bf334,0 8px 45px #02030bd9;
+}
+.arcane-toss-header-485{
+ grid-column:1/-1;text-align:center;color:#ffe2a3;font:900 clamp(17px,3.7vw,28px) Georgia,serif;
+ letter-spacing:.11em;text-shadow:0 0 17px #f5b9638c;margin:0;padding:0;
+}
+.arcane-toss-portrait-485{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+ width:100%;min-width:0;color:#fff3d9;font-size:clamp(10px,2.4vw,15px);font-weight:800;
+ text-shadow:0 2px 6px #000;max-height:100%;
+}
+.arcane-toss-photo-485{
+ position:relative;width:min(100%,clamp(84px,21vh,160px));aspect-ratio:4/5;overflow:hidden;
+ border-radius:14px 14px 27px 27px;border:2px solid #ffdca3;
+ background:linear-gradient(135deg,#2b3663,#120e31);
+ box-shadow:inset 0 0 20px #0008,0 0 22px #6baeff66;
+}
+.arcane-toss-portrait-485.is-foe-485 .arcane-toss-photo-485{border-color:#daabff;box-shadow:inset 0 0 20px #0008,0 0 22px #b56bff77}
+.arcane-toss-photo-485 img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+.arcane-toss-photo-485::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#11102c89,transparent 45%)}
+.arcane-toss-portrait-485 strong{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arcane-toss-center-485{
+ position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;
+ perspective:1100px;min-width:0;max-height:100%;width:100%;
+}
+.arcane-toss-orbit-485{
+ position:absolute;width:min(38vw,270px);height:min(18vw,115px);border-radius:50%;
+ border:2px solid #e9bc71a9;box-shadow:0 0 20px #e2b05b77,inset 0 0 20px #e2b05b44;
+ transform:rotate(-18deg);animation:arcaneTossOrbit485 4.3s linear infinite;pointer-events:none;
+}
+.arcane-toss-coin-485{
+ position:relative;display:block;width:clamp(90px,27vh,174px);aspect-ratio:1;
+ transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+ transform:rotateY(0deg);will-change:transform;backface-visibility:visible;
+ filter:drop-shadow(0 4px 13px #f4c675ad);
+}
+.arcane-toss-coin-485.is-spinning-485{
+ animation:arcaneTossSpin485 2.35s cubic-bezier(.19,.12,.16,1) both;
+}
+.arcane-toss-face-485{
+ position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+ border:5px ridge #f5cd78;border-radius:50%;background:
+ radial-gradient(circle at 36% 24%,#fff5d7 0%,#ffcf60 15%,#e19c2a 44%,#754313 82%,#e9b553 100%);
+ box-shadow:inset 0 0 0 4px #754116,inset 0 0 0 8px #ffe19c66,inset 0 0 22px #6b2e0c;
+ -webkit-backface-visibility:hidden;backface-visibility:hidden;
+ font-size:clamp(52px,14vh,102px);color:#fff4cb;text-shadow:0 2px 13px #fcae3f;
+}
+.arcane-toss-face-485.is-moon-485{
+ transform:rotateY(180deg);
+ background:radial-gradient(circle at 36% 24%,#c7d3ff,#5368ca 30%,#282259 69%,#13153c);
+ border-color:#d6c0fd;box-shadow:inset 0 0 0 5px #1b1847,inset 0 0 0 9px #af9beb66,0 0 20px #b098fc88;
+ color:#dfe4ff;text-shadow:0 0 17px #b8acff;
+}
+.arcane-toss-status-485{
+ grid-column:1/-1;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;
+ width:100%;min-height:56px;justify-content:center;
+}
+.arcane-toss-result-485{
+ display:block;font:900 clamp(17px,4.4vw,32px) Georgia,serif;letter-spacing:.06em;
+ color:#ffe39b;text-shadow:0 0 15px #ffd57f8e;min-height:1.2em;
+}
+.arcane-toss-overlay-485.is-result-485 .arcane-toss-result-485{animation:arcaneTossResult485 .5s cubic-bezier(.16,1.25,.3,1) both}
+.arcane-toss-subtitle-485{display:block;color:#c9c9ef;font-size:clamp(10px,2.4vw,13px)}
+.arcane-toss-skip-485{
+ position:absolute;z-index:3;right:12px;bottom:8px;
+ background:#121634d9;color:#e6d1ae;border:1px solid #d1ac7292;border-radius:9px;
+ padding:5px 9px;font:700 11px system-ui,sans-serif;cursor:pointer;
+}
+@keyframes arcaneTossSpin485{
+ 0%{transform:rotateY(0deg) rotateX(-10deg) scale(.86)}
+ 15%{transform:rotateY(320deg) rotateX(3deg) scale(1.06)}
+ 45%{transform:rotateY(920deg) rotateX(-7deg) scale(1.13)}
+ 75%{transform:rotateY(1500deg) rotateX(4deg) scale(1.04)}
+ 100%{transform:rotateY(var(--toss-final-485,1800deg)) rotateX(0deg) scale(1)}
+}
+@keyframes arcaneTossOrbit485{from{transform:rotate(-18deg) rotate(0deg)}to{transform:rotate(-18deg) rotate(360deg)}}
+@keyframes arcaneTossResult485{from{opacity:0;transform:scale(.78);filter:brightness(3)}to{opacity:1;transform:scale(1);filter:brightness(1)}}
+@keyframes arcaneTossAura485{to{transform:scale(1.14) rotate(3deg)}}
+@keyframes arcaneTossStars485{to{background-position:125px -92px,235px 111px}}
+@media(orientation:portrait){.arcane-toss-scene-485{height:min(560px,96dvh);grid-template-columns:minmax(72px,1fr) minmax(125px,1.45fr) minmax(72px,1fr)}.arcane-toss-photo-485{width:min(100%,135px)}}
+@media(max-height:450px){.arcane-toss-scene-485{grid-template-rows:auto minmax(0,1fr) auto}.arcane-toss-status-485{min-height:40px}.arcane-toss-photo-485{width:min(100%,125px)}}
+@media(prefers-reduced-motion:reduce){
+ .arcane-toss-overlay-485::before,.arcane-toss-overlay-485::after,.arcane-toss-orbit-485{animation:none!important}
+ .arcane-toss-coin-485.is-spinning-485{animation:none!important;transform:rotateY(var(--toss-final-485,1800deg))}
+}
+</style>
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -7754,6 +7869,101 @@ $("end").onclick=async()=>{if(myLP<=0||oppLP<=0){syncDuelOutcome();return;}if(tr
  if(drawn)log("Du ziehst "+drawn.name+". Die gegnerische KI bereitet ihren Zug vor.");else log("Dein Deck ist leer. Die gegnerische KI ist am Zug.");
  render();if(myLP>0&&oppLP>0)await opponentTurn();
 };
+
+/* v4.85 – echte 50/50-Schicksalsmünze vor dem ersten Zug. */
+let arcaneCoinTossStarted485=false,arcaneCoinTossActive485=false;
+function randomFirstPlayer485(){
+ try{
+  const values=new Uint32Array(1);
+  if(window.crypto&&typeof window.crypto.getRandomValues==="function"){
+   window.crypto.getRandomValues(values);
+   return (values[0]&1)===0;
+  }
+ }catch(_){}
+ return Math.random()<.5;
+}
+function startArcaneCoinToss485(){
+ // Bereits laufende Duelle werden beim erneuten Betreten nicht erneut ausgelost.
+ if(arcaneCoinTossStarted485||arcaneCoinTossActive485)return false;
+ arcaneCoinTossStarted485=true;
+ arcaneCoinTossActive485=true;
+ const playerFirst=randomFirstPlayer485();
+ const main=document.querySelector("main");
+ if(main)main.inert=true;
+ const overlay=document.createElement("div");
+ overlay.id="arcaneCoinToss485";
+ overlay.className="arcane-toss-overlay-485";
+ overlay.setAttribute("role","dialog");
+ overlay.setAttribute("aria-modal","true");
+ overlay.setAttribute("aria-label","Schicksalsmünze – Wer beginnt das Duell?");
+ overlay.innerHTML=
+ '<section class="arcane-toss-scene-485">'+
+ '<h2 class="arcane-toss-header-485">✦ SCHICKSALSMÜNZE ✦</h2>'+
+ '<div class="arcane-toss-portrait-485 is-player-485"><div class="arcane-toss-photo-485"><img class="toss-own-image-485" alt=""></div><strong class="toss-own-name-485">DU</strong></div>'+
+ '<div class="arcane-toss-center-485"><span class="arcane-toss-orbit-485" aria-hidden="true"></span>'+
+ '<span class="arcane-toss-coin-485" aria-hidden="true"><span class="arcane-toss-face-485 is-sun-485">☀</span><span class="arcane-toss-face-485 is-moon-485">☾</span></span></div>'+
+ '<div class="arcane-toss-portrait-485 is-foe-485"><div class="arcane-toss-photo-485"><img class="toss-foe-image-485" alt=""></div><strong class="toss-foe-name-485">GEGNER</strong></div>'+
+ '<div class="arcane-toss-status-485" aria-live="polite"><strong class="arcane-toss-result-485">Die Münze entscheidet …</strong><span class="arcane-toss-subtitle-485">Sonne: Du beginnst · Mond: Gegner beginnt</span></div>'+
+ '<button class="arcane-toss-skip-485" type="button">Überspringen</button>'+
+ '</section>';
+ const ownImage=document.querySelector(".duelist-player img"),foeImage=document.querySelector(".duelist-opponent img");
+ overlay.querySelector(".toss-own-image-485").src=ownImage?.src||"artwork/story/kael.jpg";
+ overlay.querySelector(".toss-foe-image-485").src=foeImage?.src||"artwork/story/leon.jpg";
+ overlay.querySelector(".toss-own-name-485").textContent=document.getElementById("arcaneHubCharacterName392")?.textContent||"DU";
+ overlay.querySelector(".toss-foe-name-485").textContent=window.arcaneCurrentStoryOpponent397||document.querySelector(".opponent-fixed-ui .duel-lp-face img")?.alt||"GEGNER";
+ overlay.style.setProperty("--toss-final-485",playerFirst?"1800deg":"1980deg");
+ document.body.appendChild(overlay);
+ let revealed=false,completed=false;
+ const duration=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?120:2450;
+ function finish(){
+  if(completed)return;
+  completed=true;
+  overlay.remove();
+  (async()=>{
+   try{
+    if(!playerFirst&&myLP>0&&oppLP>0){
+     // Die KI darf tatsächlich den ersten Zug ausführen, nicht nur die Ergebnisanzeige.
+     // Erst danach ist der Spieler wieder am Zug.
+     await opponentTurn();
+     if(myLP>0&&oppLP>0){
+      turn++;
+      phase="main1";
+      normalSummonUsed=false;
+      const drawn=drawPile.shift();
+      if(drawn){hand.push(drawn);newlyDrawnCard=drawn}
+      log("Schicksalsmünze: Der Gegner begann. Jetzt bist du am Zug"+(drawn?" – du ziehst "+drawn.name+".":"."));
+      render();
+     }
+    }else{
+     log("Schicksalsmünze: Du beginnst! Viel Erfolg.");
+     render();
+    }
+   }catch(error){
+    console.error("Schicksalsmünze / erster KI-Zug:",error);
+    log("Der erste Zug konnte nicht vollständig vorbereitet werden.");
+   }finally{
+    if(main)main.inert=false;
+    arcaneCoinTossActive485=false;
+   }
+  })();
+ }
+ function reveal(){
+  if(revealed)return;
+  revealed=true;
+  overlay.classList.add("is-result-485");
+  overlay.querySelector(".arcane-toss-result-485").textContent=playerFirst?"☀ DU BEGINNST!":"☾ GEGNER BEGINNT!";
+  overlay.querySelector(".arcane-toss-subtitle-485").textContent=playerFirst?"Du hast den ersten Zug.":"Die KI führt ihren ersten Zug aus.";
+  overlay.querySelector(".arcane-toss-skip-485").textContent="Duell starten";
+  window.setTimeout(finish,duration<500?350:950);
+ }
+ overlay.querySelector(".arcane-toss-skip-485").addEventListener("click",()=>{
+  if(!revealed)reveal();else finish();
+ });
+ window.setTimeout(()=>overlay.querySelector(".arcane-toss-coin-485")?.classList.add("is-spinning-485"),40);
+ window.setTimeout(reveal,duration);
+ return true;
+}
+window.arcaneCoinToss485={start:startArcaneCoinToss485};
 render();
 
 /* Monsterposition direkt beim Antippen auswählen (v1. Positionstasten). */
@@ -8948,7 +9158,7 @@ syncHeroResonanceExtra439();
   menuButton.hidden=open;
   if(open){detail.hidden=true;characterPicker.hidden=true;closeQuick392();updateWallet391();renderCharacter391();syncPortrait392();home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
  }
- home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>setMenu(false));
+ home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>{setMenu(false);window.arcaneCoinToss485?.start()});
  menuButton.addEventListener('click',()=>setMenu(true));
  home.querySelector('#arcaneHomeDetailBack307').addEventListener('click',()=>{detail.hidden=true});
  const names={story:'Story',deck:'Deckverwaltung',collection:'Kartensammlung',shop:'Shop'};
@@ -9994,6 +10204,7 @@ function showExtraMap469(ch,selectedIndex){
   try{sessionStorage.setItem('arcane-story-active-duel-358',String(activeIndex))}catch(e){}
   // Die KI übernimmt vor dem ersten Gegnerzug das missionsspezifische Deck.
   document.getElementById('arcaneReturnMenu307').hidden=false;
+  window.arcaneCoinToss485?.start();
   // The existing prototype duel is reused without altering its rules or inventory.
  }
  function finishMission(){
