@@ -95,3 +95,26 @@
  .arcane-forest-reward-457{font-size:11px}
 }
 @media(max-height:540px) and (orientation:landscape){.arcane-forest-route-457{height:540px}}
+
+
+/* v4.58: Wald bleibt sichtbar, wenn ein Kapitel-2-Prolog oder Dialog läuft. */
+#arcaneStory357.is-forest-dialog-457{
+ background:linear-gradient(180deg,#061019bd,#09252ab7,#060e1aeb),url('artwork/story/forest-story-map-v457.svg') center center/cover fixed!important;
+}
+#arcaneStory357.is-forest-dialog-457 .arcane-story-shell-357{
+ background:linear-gradient(150deg,#152733e6,#151b2ee7 75%)!important;
+ border-color:#9fc18b!important;box-shadow:0 0 25px #2b695b77!important;
+}
+#arcaneStory357.is-forest-dialog-457 .arcane-story-head-357{
+ border-bottom:1px solid #819c80;padding-bottom:9px;margin-bottom:10px;
+}
+#arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-forest-444,
+#arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-mist-444,
+#arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-crystalwood-444,
+#arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-roots-444,
+#arcaneStory357.is-forest-dialog-457 .arcane-story-stage-360.arcane-scene-wildseal-444{
+ background:linear-gradient(180deg,#163c423b,#061b2855),url('artwork/story/forest-story-map-v457.svg') center 45%/cover no-repeat!important;
+}
+#arcaneStory357.is-forest-dialog-457 .arcane-story-dialog-box-360{
+ background:linear-gradient(140deg,#1f3e39f2,#222544f4)!important;border-color:#a2bf8f!important;
+}
