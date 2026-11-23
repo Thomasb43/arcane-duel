@@ -208,3 +208,55 @@
  #arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473{transition:border-color .2s ease,box-shadow .2s ease}
  #arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473:not(:disabled):active{transform:scale(.98)}
 }
+
+
+/* v4.75 – mobile touch targets and selectable chapter overview hero. */
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{
+ grid-template-columns:124px minmax(0,1fr)!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475{
+ display:flex;align-items:center;justify-content:center;gap:2px;min-width:0;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475 button{
+ flex:0 0 26px;width:26px;height:68px;border:1px solid #e5c48b;border-radius:8px;
+ color:#ffe8ab;background:#40305d;font-size:25px;font-weight:900;cursor:pointer;
+ touch-action:manipulation;pointer-events:auto!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475 .arcane-campaign-portrait-473{
+ width:67px;height:80px;flex:0 1 67px;min-width:0;object-fit:cover;object-position:center top;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-activate-475{
+ margin-top:7px;min-height:32px;padding:6px 12px;border:1px solid #f1cf94;border-radius:8px;
+ background:linear-gradient(120deg,#6d458f,#27244c);color:#fff0c5;font-weight:800;
+ cursor:pointer;touch-action:manipulation;pointer-events:auto!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-preview-475{
+ display:block;margin-top:5px;color:#b6bbd9;font-size:11px;line-height:1.35;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473,
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473{
+ position:relative;z-index:2;
+}
+#arcaneStory357.is-seven-overview-473 button.arcane-campaign-btn-473{
+ position:relative;z-index:5;pointer-events:auto!important;touch-action:manipulation!important;
+ -webkit-user-select:none;user-select:none;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473{pointer-events:auto!important}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473:active,
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475 button:active{
+ filter:brightness(1.25);
+}
+@media(max-width:700px){
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{
+  grid-template-columns:104px minmax(0,1fr)!important;gap:8px!important;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475 button{
+  flex-basis:22px;width:22px;height:62px;font-size:23px;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-hero-swap-475 .arcane-campaign-portrait-473{
+  width:56px;height:72px;flex-basis:56px;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-progress-473 strong{
+  font-size:clamp(15px,4.4vw,20px);
+ }
+}
