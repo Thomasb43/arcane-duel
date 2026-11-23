@@ -236,6 +236,14 @@
        '<button class="ac-story-btn454" data-cs454="battle" data-hero454="'+hero+'" data-index454="'+index+'">⚔ Duell starten</button>')
     +'<button class="ac-story-btn454 alt" data-cs454="hero" data-hero454="'+hero+'">Missionsübersicht</button></div>';
  }
+ function renderEpilogue(hero){
+  const item=stories[hero];if(!item)return;
+  state={view:'epilogue',hero,index:9,page:0};heading.textContent=hero+' · Kapitel abgeschlossen';open();
+  body.innerHTML=heroBox(hero)
+   +'<h3>✦ Kapitel 1 abgeschlossen ✦</h3>'
+   +'<div class="ac-story-dialog454"><strong>Erzähler</strong><p>'+esc(item.end)+'</p></div>'
+   +'<div class="ac-story-actions454"><button class="ac-story-btn454" data-cs454="hero" data-hero454="'+hero+'">Zur Kapitelübersicht</button></div>';
+ }
  function renderResult(hero,index,win,draw=false){
   if(win){renderDialogue(hero,index,true);return}
   state={view:'lost',hero,index,page:0};heading.textContent=hero+' · Duell beendet';open();
@@ -278,6 +286,7 @@
   if(!choose(hero))return;
   const mission=stories[hero].missions[index];
   try{
+   window.arcaneCharacterChain453?.resetVictory?.();
    prepareBoard();
    if(!window.arcaneApplyStoryOpponent362?.(mission[1]))throw Error('Gegnerdeck konnte nicht geladen werden');
    active={hero,index};processed=false;clearSessions();sessionClear(POST_KEY);
@@ -307,7 +316,7 @@
  };
  function next(hero,index){
   sessionClear(POST_KEY);
-  if(index===9){renderHero(hero);return}
+  if(index===9){renderEpilogue(hero);return}
   if(!canPlay(hero)){renderHero(hero);return}
   // Reload to reset the existing duel state, as Kael's campaign already does.
   if(sessionSet(ACTIVE_KEY,{hero,index:index+1})){window.location.reload();return}
