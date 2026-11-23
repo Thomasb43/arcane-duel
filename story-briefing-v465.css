@@ -1,0 +1,119 @@
+/* Arcane Duel v4.65 – Design 3: Storydialog + vier Schwierigkeitsgrade auf einer Missions-Startseite. */
+.arcane-difficulty-overlay-435.arcane-briefing-overlay-465{
+ --brief-gold:#eacb8a;--brief-ink:#fff1d6;
+ display:grid;place-items:center;overflow-y:auto;overscroll-behavior:contain;
+ padding:clamp(6px,2vw,16px);
+ background:linear-gradient(180deg,#09091b8a,#07081ab0),radial-gradient(circle at 45% 33%,#352c57,#070a14);
+ background-size:cover;background-position:center;
+ backdrop-filter:blur(4px);
+}
+.arcane-briefing-overlay-465.is-chapter-1-465{
+ background-image:linear-gradient(180deg,#070c1a9e,#080e26a8),url('artwork/story/academy-magical-v461.avif');
+}
+.arcane-briefing-overlay-465.is-chapter-2-465{
+ background-image:linear-gradient(180deg,#07172181,#07131aab),url('artwork/story/forest-magical-v460.jpg');
+}
+.arcane-briefing-overlay-465.is-chapter-3-465{
+ background-image:linear-gradient(180deg,#10081e95,#160c1cad),url('artwork/story/ashes-magical-v461.avif');
+}
+.arcane-briefing-panel-465{
+ box-sizing:border-box;width:min(100%,710px);max-height:min(97dvh,1000px);
+ margin:auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ border:2px solid #e1b878;border-radius:17px;
+ background:linear-gradient(150deg,#1b1735f0,#1a1832ef 72%,#211735f0);
+ padding:clamp(10px,2.5vw,18px);
+ box-shadow:0 10px 60px #000e,0 0 30px #9852c451;
+ color:#fff1d6;
+}
+.arcane-briefing-heading-465{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.arcane-briefing-heading-465 p{margin:0 0 4px;color:#ccbbef;letter-spacing:1.4px;font-size:10px;font-weight:800}
+.arcane-briefing-heading-465 h2{margin:0;color:#ffe3a1;font:700 clamp(17px,4.5vw,25px)/1.15 Georgia,serif}
+.arcane-briefing-chapter-465{color:#ddccf8;font-size:11px;margin-top:3px}
+.arcane-briefing-back-465{
+ flex-shrink:0;background:#30264b;color:#ffe6b1;border:1px solid #c9a477;
+ border-radius:9px;padding:7px 10px;font-size:12px;font-weight:800;cursor:pointer
+}
+.arcane-briefing-scene-465{
+ position:relative;display:flex;align-items:stretch;justify-content:flex-end;
+ min-height:clamp(140px,23dvh,232px);border:1px solid #c4a87b;border-radius:14px;
+ background-size:cover;background-position:center;overflow:hidden;
+ isolation:isolate;
+}
+.is-chapter-1-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#08142b00,#11122aba 72%),url('artwork/story/academy-magical-v461.avif')}
+.is-chapter-2-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#071c1900,#0b1729c4 74%),url('artwork/story/forest-magical-v460.jpg')}
+.is-chapter-3-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#1e0c2000,#190d26c5 75%),url('artwork/story/ashes-magical-v461.avif')}
+.arcane-briefing-person-465{position:absolute;left:0;bottom:0;top:0;width:47%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.arcane-briefing-person-465 img{
+ height:100%;max-width:100%;width:100%;object-fit:cover;object-position:center 17%;
+ -webkit-mask-image:linear-gradient(#000 58%,transparent 100%);mask-image:linear-gradient(#000 58%,transparent 100%);
+ filter:drop-shadow(0 0 12px #ba96fa9c)
+}
+.arcane-briefing-person-465 .arcane-briefing-avatar-465{
+ font:700 68px Georgia,serif;color:#dbbaff;text-shadow:0 0 15px #b56aff;
+ border-radius:35% 35% 0 0;padding:16px 30px;
+ background:linear-gradient(160deg,#292c54aa,#191b3280)
+}
+.arcane-briefing-dialog-465{
+ position:relative;z-index:1;width:65%;align-self:flex-end;margin:9px 9px 9px 0;
+ background:linear-gradient(145deg,#1b1739d9,#25203bef);border:1px solid #d8b87e;
+ border-radius:12px;padding:clamp(8px,2vw,13px);
+ box-shadow:0 5px 17px #000a;line-height:1.4
+}
+.arcane-briefing-speaker-465{
+ display:inline-block;margin-bottom:5px;font:700 clamp(14px,3vw,19px) Georgia,serif;
+ color:#ffe1a7;border-bottom:1px solid #e9bc7c6b;padding-bottom:3px
+}
+.arcane-briefing-dialog-465 blockquote{padding:0;margin:0;color:#f8efff;font-size:clamp(11px,2.6vw,15px);line-height:1.46}
+.arcane-briefing-title-465{text-align:center;color:#ffe7ab;font:700 clamp(17px,4vw,23px) Georgia,serif;margin:12px 0 5px}
+.arcane-briefing-help-465{text-align:center;color:#e1d9ee;font-size:11px;margin:0 0 10px}
+.arcane-briefing-panel-465 .arcane-difficulty-grid-435{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(6px,1.7vw,10px)}
+.arcane-briefing-option-465.arcane-difficulty-option-435{
+ box-sizing:border-box;display:flex;flex-direction:column;gap:5px;
+ min-width:0;min-height:105px;padding:clamp(9px,2vw,14px);
+ border:1.5px solid #7e719c;border-radius:12px;
+ background:linear-gradient(150deg,#322d52ed,#19182de8);
+ color:#fff4dc;text-align:left;position:relative;
+ box-shadow:inset 0 0 17px #1712289c;
+}
+.arcane-briefing-option-465 .tier-number{font-size:10px;color:#c5bded}
+.arcane-briefing-option-465 strong{font-size:clamp(14px,3.2vw,19px)!important;line-height:1.12;overflow-wrap:anywhere}
+.arcane-briefing-option-465 small{font-size:clamp(10px,2.2vw,12px)!important;line-height:1.35;color:#e2d8ee}
+.arcane-briefing-option-465 .tier-state{font-size:10px;line-height:1.2;color:#c7dbcb;margin-top:auto}
+.arcane-briefing-option-465[data-tier="1"]{border-color:#67ad8b;background:linear-gradient(130deg,#254a42dd,#1c2837ed)}
+.arcane-briefing-option-465[data-tier="2"]{border-color:#c8ad62;background:linear-gradient(135deg,#564433e9,#24243ded)}
+.arcane-briefing-option-465[data-tier="3"]{border-color:#cf7d7b;background:linear-gradient(135deg,#5b2939e9,#291b38f0)}
+.arcane-briefing-option-465[data-tier="4"]{border-color:#ae81e6;background:linear-gradient(135deg,#51377ee9,#291c4be9)}
+.arcane-briefing-option-465.is-picked-465{
+ border:2.5px solid #ffe8a4;
+ outline:2px solid #d8ae5d93;outline-offset:1px;
+ box-shadow:0 0 20px #c378e9a6,0 0 9px #f5d57eab,inset 0 0 20px #a474d03f;
+ transform:translateY(-1px)
+}
+.arcane-briefing-option-465:focus-visible{outline:3px solid #fff4c7;outline-offset:2px}
+.arcane-briefing-rewards-465{
+ border:1px solid #a58dba;border-radius:12px;
+ background:linear-gradient(135deg,#251a3ed9,#16192dd9);
+ margin-top:10px;padding:9px 10px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px
+}
+.arcane-briefing-rewards-465 strong{color:#ffe1a0;font-size:14px;margin-right:3px}
+.arcane-briefing-rewards-465 span{border:1px solid #806eaa;background:#302443b8;padding:6px 9px;border-radius:7px;font-size:12px;font-weight:800}
+.arcane-briefing-note-465{font-size:10px;color:#d5cddd;text-align:center;margin:6px 0}
+.arcane-briefing-actions-465{display:flex;gap:9px;margin-top:12px}
+.arcane-briefing-actions-465 button{min-width:0;flex:1 1 40%;padding:11px;border-radius:11px;min-height:42px;font-size:clamp(12px,3.1vw,16px);font-weight:900;cursor:pointer}
+.arcane-briefing-actions-465 .cancel{background:linear-gradient(160deg,#38244d,#18192c);color:#f4e3d6;border:1px solid #a794a9}
+.arcane-briefing-actions-465 .start{flex:2 1 60%;background:linear-gradient(130deg,#a656ba,#4a2483);border:2px solid #ecc68d;color:#fff0c9;box-shadow:0 0 15px #b55de277;text-shadow:0 1px 4px #000}
+.arcane-briefing-actions-465 .start:disabled{opacity:.55;cursor:not-allowed}
+@media(min-width:600px){.arcane-briefing-scene-465{min-height:270px}.arcane-briefing-dialog-465{width:60%}}
+@media(max-width:360px){
+ .arcane-briefing-panel-465{padding:8px}
+ .arcane-briefing-option-465.arcane-difficulty-option-435{min-height:112px;padding:7px}
+ .arcane-briefing-dialog-465{padding:7px}
+ .arcane-briefing-rewards-465{gap:4px}
+ .arcane-briefing-rewards-465 span{padding:5px}
+}
+@media(max-height:600px) and (orientation:landscape){
+ .arcane-briefing-panel-465{max-width:760px;max-height:95dvh}
+ .arcane-briefing-scene-465{min-height:132px}
+ .arcane-briefing-option-465.arcane-difficulty-option-435{min-height:78px}
+}
+@media(prefers-reduced-motion:reduce){.arcane-briefing-option-465{transition:none}}
