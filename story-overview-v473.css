@@ -1,0 +1,210 @@
+/* Arcane Duel v4.73 – Story-Menü: Design 3 / sieben bebilderte Siegelkarten. */
+/* Only active in the overview, all mission maps and dialogs remain unchanged. */
+#arcaneStory357.is-seven-overview-473 {
+ --story-gold:#f4d493;
+ --story-night:#0b1025;
+ --story-purple:#a27bfb;
+ background:radial-gradient(ellipse at 48% -8%,#483975 0%,#18182e 34%,#0b1025 77%,#090b1a 100%)!important;
+ padding:max(12px,env(safe-area-inset-top)) clamp(7px,1.4vw,16px) max(24px,env(safe-area-inset-bottom))!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-shell-357 {
+ width:100%;max-width:1080px!important;margin:auto;
+ padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-head-357 {
+ position:relative;isolation:isolate;min-height:172px;
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ margin:0 0 10px;padding:20px clamp(12px,2.5vw,30px);
+ overflow:hidden;border-radius:17px;
+ border:1.5px solid #e4c38c;box-shadow:inset 0 0 0 1px #e8cb7340,0 8px 30px #0009;
+ background:linear-gradient(92deg,#101431f5 0%,#111631e5 45%,#11163176 75%,#11122e64 100%),url('artwork/arcane-world-hub-final-v315.webp') center 30%/cover no-repeat!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-head-357:before {
+ content:"✦ ARCANE DUEL ✦";position:absolute;top:14px;left:clamp(12px,2.5vw,30px);
+ font:900 10px system-ui;letter-spacing:4px;color:#ffe2a8;text-shadow:0 0 11px #dd80fa99;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-head-357:after {
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:linear-gradient(0deg,#10102771,transparent 45%),radial-gradient(ellipse at 86% 80%,#ad70ff2d,transparent 48%);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-head-357>div{position:relative;z-index:1;min-width:0;max-width:80%;padding-top:24px}
+#arcaneStory357.is-seven-overview-473 .arcane-story-kicker-357 {font-size:10px;letter-spacing:2.5px;color:#d8c1f7!important}
+#arcaneStory357.is-seven-overview-473 #arcaneStoryHeading357 {
+ margin:9px 0 0!important;color:var(--story-gold)!important;
+ font:700 clamp(25px,4.7vw,45px)/1.05 Georgia,serif!important;
+ text-shadow:0 3px 14px #090719d9;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-story-back-357 {
+ flex:0 0 auto;position:relative;z-index:1;border-radius:11px;
+ border:1px solid #e6c88f;color:#ffe8b7;font-size:12px;min-height:43px;
+ padding:10px 14px!important;background:linear-gradient(115deg,#513578ed,#201b49ed)!important;
+ box-shadow:0 2px 12px #0008;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-tagline-473 {
+ font-size:clamp(11px,2vw,14px);line-height:1.4;color:#dfd8f6;
+ text-align:center;margin:0 0 12px;padding:0 8px;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473 {
+ display:grid;grid-template-columns:74px minmax(0,1fr) auto;
+ align-items:center;gap:12px;min-height:103px;margin-bottom:14px;
+ padding:9px 12px;border-radius:15px;border:1.5px solid #d6b879;
+ background:linear-gradient(116deg,#282344f4,#141a34f7 70%);
+ box-shadow:0 5px 15px #0005,inset 0 0 17px #ab79ff16;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-portrait-473 {
+ width:70px;height:84px;object-fit:cover;object-position:center 14%;
+ border-radius:12px;border:1px solid #e7c58b;
+ background:radial-gradient(circle,#8467bc,#211435);box-shadow:0 0 12px #bc7cff5c;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-progress-473{min-width:0}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-progress-473 strong{
+ display:block;color:#ffe1a2;font:700 clamp(16px,2.5vw,22px) Georgia,serif;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-track-473 {
+ height:10px;margin:8px 0 5px;border-radius:15px;overflow:hidden;
+ background:#090f26;border:1px solid #7180aa;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-track-473 span {
+ display:block;height:100%;min-width:0%;border-radius:inherit;
+ background:linear-gradient(90deg,#8d83ff,#dac0ff,#f9e19e);
+ box-shadow:0 0 7px #b9b0ff98;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-exp-473 {display:block;color:#c9cfed;font-size:11px}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-unlock-473 {
+ display:block;color:#d3d5f1;font-size:11px;line-height:1.35;margin-top:5px;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-rewards-473 {
+ border:1px solid #f0cb84;min-height:52px;max-width:177px;
+ background:linear-gradient(120deg,#62408d,#211e44);color:#fff0c9;
+ border-radius:10px;padding:10px 12px;font-weight:900;font-size:12px;line-height:1.2;cursor:pointer;
+ box-shadow:0 3px 10px #0006;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapters-473{display:flex;flex-direction:column;gap:10px}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473 {
+ --chapter-accent:#d4b4ff;
+ position:relative;isolation:isolate;
+ display:grid;grid-template-columns:minmax(135px,30%) minmax(0,1fr) minmax(150px,185px);
+ gap:14px;align-items:stretch;min-height:142px;
+ border:1.4px solid #b8a6bb;border-radius:15px;
+ overflow:hidden;color:#fff2d8;background:linear-gradient(125deg,#252443,#10142c 70%);
+ box-shadow:inset 0 0 0 1px #fff3d51c,0 5px 14px #0006;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473:after{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(ellipse at 27% 50%,var(--chapter-accent),transparent 53%);
+ opacity:.11;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473.is-selected-473 {
+ border-color:#ffe09b;box-shadow:0 0 0 1px #e8bb7b,0 0 19px #e8bc7b73;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="1"]{--chapter-accent:#de97ff}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="2"]{--chapter-accent:#69dfbb}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="3"]{--chapter-accent:#ff9e73}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="4"]{--chapter-accent:#64e6f0}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="5"]{--chapter-accent:#c9b4ff}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="6"]{--chapter-accent:#ba95ff}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473[data-chapter="7"]{--chapter-accent:#ed7bbd}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-art-473{
+ position:relative;min-height:138px;overflow:hidden;background:linear-gradient(150deg,#3f3861,#101333);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-art-473:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,transparent 62%,#17183294 100%),linear-gradient(0deg,#0b102638,transparent 50%);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-art-473 img{
+ width:100%;height:100%;position:absolute;inset:0;display:block;object-fit:cover;object-position:center 44%;filter:saturate(1.12) contrast(1.07);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-copy-473{
+ display:flex;flex-direction:column;justify-content:center;min-width:0;gap:4px;
+ padding:12px 0 12px 0;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-eyebrow-473{
+ color:#d9b9ea;font-weight:900;font-size:10px;line-height:1.25;letter-spacing:1.1px;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-copy-473 h3{
+ color:#ffe3a4;font:700 clamp(17px,2.4vw,25px)/1.09 Georgia,serif;
+ margin:2px 0;text-wrap:balance;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-desc-473{
+ margin:0;color:#e3e1ef;font-size:clamp(11px,1.4vw,13px);line-height:1.35;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-progress-tag-473{
+ font-weight:800;font-size:11px;color:#e0d8f2;line-height:1.3;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-tag-473{
+ display:inline-flex;align-items:center;justify-content:center;gap:4px;
+ border-radius:24px;padding:4px 8px;border:1px solid #a5a3be;
+ font-size:10px;font-weight:900;color:#f4efff;background:#22223d;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-tag-473.is-done-473 {
+ color:#e5ffe7;background:#18543bd9;border-color:#59d38f;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-tag-473.is-ready-473 {
+ color:#ddffee;background:#1e4750bb;border-color:#6ecfcb;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-tag-473.is-locked-473 {
+ color:#d5cfe2;background:#202137a8;border-color:#9591a8;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473{
+ display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:9px;
+ padding:11px 12px 11px 0;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473 .arcane-campaign-status-tag-473{align-self:flex-end}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473{
+ display:flex;align-items:center;justify-content:center;gap:5px;
+ min-height:40px;width:100%;border:1px solid #e6c78e;border-radius:9px;
+ padding:8px 7px;color:#fff0cf;background:linear-gradient(130deg,#684391,#2d2459);
+ font-size:12px;font-weight:850;line-height:1.2;cursor:pointer;
+ text-shadow:0 1px 3px #0a0619;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473.is-preview-473{
+ background:linear-gradient(130deg,#47345e,#211c44);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473:disabled{
+ opacity:.62;cursor:not-allowed;filter:grayscale(.38);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473:not(:disabled):focus-visible,
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-rewards-473:focus-visible,
+#arcaneStory357.is-seven-overview-473 .arcane-story-back-357:focus-visible{
+ outline:3px solid #ffe5a1;outline-offset:2px;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-bottom-note-473{
+ text-align:center;color:#bdb8d8;font-size:11px;margin:14px 4px 0;
+}
+@media(max-width:700px){
+ #arcaneStory357.is-seven-overview-473 .arcane-story-head-357{min-height:155px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{grid-template-columns:61px minmax(0,1fr);gap:9px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-portrait-473{width:58px;height:72px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-rewards-473{grid-column:1/-1;min-height:37px;max-width:none;width:100%;padding:8px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473{
+  grid-template-columns:minmax(104px,31%) minmax(0,1fr);gap:9px;min-height:170px;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-art-473{grid-row:1/3;min-height:172px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-copy-473{padding:10px 10px 0 0;justify-content:flex-end}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-copy-473 h3{font-size:clamp(17px,4.4vw,22px)}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-desc-473{font-size:11px;line-height:1.25}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473{
+  grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;
+  justify-content:stretch;padding:0 9px 9px 0;gap:6px;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473 .arcane-campaign-status-tag-473{
+  order:-1;width:100%;align-self:auto;
+ }
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473{
+  flex:1 1 47%;min-width:0;min-height:37px;padding:6px 4px;font-size:10px;
+ }
+}
+@media(max-width:380px){
+ #arcaneStory357.is-seven-overview-473 .arcane-story-head-357{min-height:148px;padding:16px 11px}
+ #arcaneStory357.is-seven-overview-473 .arcane-story-head-357:before{left:11px;font-size:9px}
+ #arcaneStory357.is-seven-overview-473 .arcane-story-head-357>div{max-width:76%;padding-top:18px}
+ #arcaneStory357.is-seven-overview-473 #arcaneStoryHeading357{font-size:26px!important}
+ #arcaneStory357.is-seven-overview-473 .arcane-story-back-357{padding:8px!important;font-size:10px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473{grid-template-columns:94px minmax(0,1fr)}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-eyebrow-473{font-size:9px;letter-spacing:.6px}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-copy-473 h3{font-size:17px}
+}
+@media(prefers-reduced-motion:no-preference){
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473{transition:border-color .2s ease,box-shadow .2s ease}
+ #arcaneStory357.is-seven-overview-473 .arcane-campaign-btn-473:not(:disabled):active{transform:scale(.98)}
+}
