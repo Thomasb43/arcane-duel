@@ -15,7 +15,8 @@
  background-attachment:scroll!important;
 }
 #arcaneStory357.is-volcano-map-461{
- background-image:linear-gradient(180deg,#1b0c2c8c,#2a0b1b3b,#0c0716b2),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ background-image:linear-gradient(180deg,#1b0c2c52,#2a0b1b20,#0c071680),url('artwork/story/ashes-chapter3-hd-v478.avif?v=478'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ background-repeat:no-repeat!important;
 }
 #arcaneStory357.is-academy-map-461 .arcane-story-shell-357,
 #arcaneStory357.is-volcano-map-461 .arcane-story-shell-357{
@@ -46,7 +47,10 @@
  border-color:#e7ca83!important;
 }
 #arcaneStory357.is-volcano-map-461 .arcane-forest-route-457{
- background-image:linear-gradient(180deg,#2711252c,#200d212b 60%,#160b2549),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ /* Originales scharfes 941x1672-Kapitelmotiv, ohne Blur oder Stretch-Miniatur. */
+ background-image:linear-gradient(180deg,#2711251f,#200d211b 60%,#160b2538),url('artwork/story/ashes-chapter3-hd-v478.avif?v=478'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ background-size:cover!important;background-position:center center!important;
+ background-repeat:no-repeat!important;filter:none!important;backdrop-filter:none!important;
  border-color:#e3af75!important;
 }
 #arcaneStory357.is-academy-map-461 .arcane-forest-intro-457{
@@ -72,7 +76,7 @@
  background-attachment:scroll!important;
 }
 #arcaneStory357.is-volcano-dialog-461{
- background-image:linear-gradient(180deg,#160b20d3,#1c101bd6),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ background-image:linear-gradient(180deg,#160b20d3,#1c101bd6),url('artwork/story/ashes-chapter3-hd-v478.avif?v=478'),url('artwork/story/ashes-story-map-v461.svg')!important;
 }
 #arcaneStory357.is-academy-dialog-461 .arcane-story-shell-357,
 #arcaneStory357.is-volcano-dialog-461 .arcane-story-shell-357{
@@ -84,7 +88,7 @@
  background-size:cover!important;background-position:center 36%!important;
 }
 #arcaneStory357.is-volcano-dialog-461 .arcane-story-stage-360{
- background-image:linear-gradient(180deg,#211a2941,#3017214b),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
+ background-image:linear-gradient(180deg,#211a2941,#3017214b),url('artwork/story/ashes-chapter3-hd-v478.avif?v=478'),url('artwork/story/ashes-story-map-v461.svg')!important;
  background-size:cover!important;background-position:center 35%!important;
 }
 #arcaneStory357.is-academy-dialog-461 .arcane-story-dialog-box-360,
