@@ -142,7 +142,7 @@
  let state={view:'hub',hero:null,index:null,page:0},active=null,processed=false;
  function chain(){return window.arcaneCharacterChain453}
  function canPlay(hero){return hero==='Kael'||!!chain()?.available(hero)}
- function selected(){try{return localStorage.getItem(SELECTED_KEY)||'Kael'}catch(_){return 'Kael'}}
+ function selectedHero454(){try{return localStorage.getItem(SELECTED_KEY)||'Kael'}catch(_){return 'Kael'}}
  function storyProgress(hero){
   let stored=null;try{stored=JSON.parse(localStorage.getItem(STORY_KEY+hero)||'null')}catch(_){}
   return {cleared:Array.isArray(stored?.cleared)?[...new Set(stored.cleared.filter(n=>Number.isInteger(n)&&n>=0&&n<10))]:[]};
@@ -173,8 +173,14 @@
   const kaelStage=byId('arcaneStory357');if(kaelStage)kaelStage.hidden=true;
   modal.hidden=false;modal.querySelector('.ac-story-shell454').scrollTop=0;
  }
+ function resetFinishedGame(){
+  if(!processed)return;
+  processed=false;active=null;
+  try{prepareBoard();render()}catch(err){console.warn('Duell konnte nicht neu initialisiert werden:',err)}
+ }
  function close(){
   modal.hidden=true;state={view:'hub',hero:null,index:null,page:0};
+  resetFinishedGame();
   HOME.hidden=false;
  }
  function renderHub(){
@@ -187,6 +193,7 @@
    }).join('')+'</div>';
  }
  function openKael(){
+  resetFinishedGame();
   modal.hidden=true;PICKER.hidden=true;HOME.hidden=true;
   try{localStorage.setItem(SELECTED_KEY,'Kael')}catch(_){}
   window.syncDuelCharacterPortraits396?.();
@@ -203,7 +210,7 @@
    +'<div class="ac-story-track454"><span style="width:'+(next*10)+'%"></span></div>'
    +'<div class="ac-story-status454">'+esc(unlockStatus(hero))+(playable?' · Eigene Siege: '+next+'/10':' · Geschichte als Vorschau lesbar, Duelle gesperrt')+'</div>'
    +'<div class="ac-story-actions454"><button class="ac-story-btn454" data-cs454="prologue" data-hero454="'+hero+'">📖 Prolog lesen</button>'
-   +(playable?'<button class="ac-story-btn454 alt" data-cs454="select" data-hero454="'+hero+'">✦ '+(selected()===hero?'Ausgewählt':'Als '+hero+' spielen')+'</button>':'')+'</div>'
+   +(playable?'<button class="ac-story-btn454 alt" data-cs454="select" data-hero454="'+hero+'">✦ '+(selectedHero454()===hero?'Ausgewählt':'Als '+hero+' spielen')+'</button>':'')+'</div>'
    +'<h3>Kapitel 1 · '+esc(item.title)+'</h3>'
    +'<div class="ac-story-list454">'+item.missions.map((m,i)=>{
       const complete=progress.cleared.includes(i),unlocked=playable&&(i===0||progress.cleared.includes(i-1));
@@ -220,7 +227,7 @@
  function renderDialogue(hero,index,post=false){
   const item=stories[hero];if(!item||!item.missions[index])return;
   const mission=item.missions[index],speaker=post?hero:enemy[mission[1]],line=post?mission[3]:mission[2];
-  state={view:post?'post':'pre',hero,index,page:0};heading.textContent=hero+' · '+(index+1)+'-'+1;open();
+  state={view:post?'post':'pre',hero,index,page:0};heading.textContent=hero+' · Mission '+(index+1);open();
   body.innerHTML=heroBox(hero)
     +'<h3>Mission '+(index+1)+'/10 · '+esc(mission[0])+'</h3>'
     +'<div class="ac-story-dialog454"><strong>'+esc(speaker)+'</strong><p>'+esc(line)+'</p>'
@@ -255,7 +262,7 @@
   // Starts an actual duel with existing cards, interactions, effects and 4000 LP.
   if(typeof createDuelDeck!=='function'||typeof render!=='function')throw Error('Duellsteuerung nicht verfügbar');
   drawPile=createDuelDeck();hand=drawPile.splice(0,5);
-  aiDeck=[];aiHand=[];aiTurn=0;
+  aiDeck=createDuelDeck();aiHand=aiDeck.splice(0,5);aiTurn=0;
   myMon=Array(4).fill(null);mySpell=Array(4).fill(null);
   oppMon=Array(4).fill(null);oppSpell=Array(4).fill(null);
   myGraveyard=[];oppGraveyard=[];myLP=4000;oppLP=4000;
@@ -289,8 +296,8 @@
  }
  const previousResult=window.arcaneStoryResult357;
  window.arcaneStoryResult357=function(won,draw){
-  if(!active)return typeof previousResult==='function'?previousResult(won,draw):false;
   if(processed)return true;
+  if(!active)return typeof previousResult==='function'?previousResult(won,draw):false;
   processed=true;
   const {hero,index}=active;active=null;
   sessionClear(ACTIVE_KEY);
@@ -338,6 +345,8 @@
    e.stopImmediatePropagation();e.preventDefault();renderHub();
   }
  },true);
+ const arenaButton=byId('arcaneStartDuel307');
+ arenaButton?.addEventListener('click',resetFinishedGame,true);
  const returnButton=byId('arcaneReturnMenu307');
  returnButton?.addEventListener('click',()=>{
   if(active){active=null;processed=false;sessionClear(ACTIVE_KEY);sessionClear(POST_KEY)}
