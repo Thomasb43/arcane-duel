@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-seven-seals-review-all-v472">
+<meta name="arcane-build" content="20261123-story-overview-design3-v473">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5508,6 +5508,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <link rel="stylesheet" href="chapter-route-maps-v461.css?v=468">
 <link rel="stylesheet" href="story-briefing-v465.css?v=468">
 <link rel="stylesheet" href="story-expansion-v469.css?v=469">
+<link rel="stylesheet" href="story-overview-v473.css?v=473">
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -9431,7 +9432,7 @@ const arcaneChapters461={
 function chapterMapClear461(){
  stage.classList.remove('is-academy-map-461','is-volcano-map-461',
   'is-academy-dialog-461','is-volcano-dialog-461',
-  'is-expansion-map-469','is-expansion-dialog-469');
+  'is-expansion-map-469','is-expansion-dialog-469','is-seven-overview-473');
  stage.removeAttribute('data-expansion-chapter');
 }
 function selectChapterMission461(chapter,index){
@@ -9599,49 +9600,89 @@ function showExtraMap469(ch,selectedIndex){
   setReview469(false);
   chapterMapClear461();
   stage.classList.remove('is-forest-map-457','is-forest-dialog-457');
+  stage.classList.add('is-seven-overview-473');
   scene='map';activeIndex=null;completedResult=null;show();
   stage.querySelector('#arcaneStoryHeading357').textContent='Die Chronik der Sieben Siegel';
-  back.textContent='Zur Stadt';
-  const ch1=read(),ch2=read2(),ch3=read3(),open2=ch1>10,open3=ch1>10&&ch2>10;
-  const buttons=(from,to)=>missions.slice(from,to).map((m,j)=>{
-   const i=from+j,locked=!unlockedMission(i),cleared=clearedMission(i);
-   return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+labelMission(i)+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small>'+(m.candidate&&cleared?'<span class="arcane-story-candidate-444">✦ Möglicher Charakter entdeckt</span>':'')+'</div></button>';
-  }).join('');
+  back.textContent='⌂ Zur Stadt';
+
   const progress=window.arcaneCharacterProgress382?.levelProgress();
-  const expansionHtml469='<div class="arcane-expansion-chapters-469">'+expansionChapters469.map(c=>{
-   const ready=previousChapterDone469(c.number),value=readExtra469(c.number);
-   return '<div class="arcane-expansion-card-469"><strong>'+escapeText(c.icon+' Kapitel '+c.number+' · '+c.title)+'</strong>'
-    +'<small>'+escapeText(c.short)+' · '+(value-1)+'/10 Missionen abgeschlossen</small>'
-    +(ready?'<button type="button" data-extra-chapter469="'+c.number+'" data-mode469="normal">⚔ Kapitel betreten</button>':'<p>🔒 Regulär nach Kapitel '+(c.number-1)+' spielbar</p>')
-    +'<button type="button" class="preview" data-extra-chapter469="'+c.number+'" data-mode469="review">🔎 Kapitel testen</button>'
-    +'</div>';
-  }).join('')+'</div>';
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Die Chronik der Sieben Siegel</strong></div><p class="arcane-story-copy-357">Sieben Siegel, sieben Welten und 70 Missionen: Jede Mission enthält Dialoge, ein Duell und vier Schwierigkeitsstufen.</p>'
-   +'<div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(progress?.percent||0)+'%"></span></div><small>'+(progress?.current||0)+' / '+(progress?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 gewinnen · Kael Level 10 erreichen')+'</p></div>'
-   +'<div class="arcane-story-chapter-357"><strong>Kapitel 1 · Die Akademie von Arkanis</strong><p class="arcane-story-note-357">Die Reise beginnt mit zehn Prüfungen an der Akademie. Fortschritt: '+(ch1-1)+' / 10.</p><button type="button" class="arcane-story-action-357" id="arcaneChapter1Map461">✨ Akademie betreten · Missionskarte</button><button type="button" class="arcane-story-action-357" data-review-old469="1">🔎 Kapitel 1 testen</button></div>'
-   +'<div class="arcane-story-chapter2-banner-444"><strong>Kapitel 2 · Der verlorene Wald</strong><p>'+(open2?'Das Wurzelherz erwartet euch. Fortschritt: '+(ch2-1)+' / 10 Missionen.':'Schließe zuerst Kapitel 1 (Mission 1-10) ab.')+'</p>'
-   +(open2?'<button type="button" class="arcane-story-action-357" id="arcaneChapter2Map457">🌲 Wald betreten · Missionskarte</button>':'<small>🔒 Waldkarte regulär nach Kapitel 1 verfügbar</small>')+'<button type="button" class="arcane-story-action-357" data-review-old469="2">🔎 Kapitel 2 testen</button></div>'
-   +(open2&&ch2>5?'<p class="arcane-story-note-357">✦ Lyra kennengelernt'+(ch2>10?' · Fenrik kennengelernt':'')+' – mögliche zukünftige spielbare Charaktere, noch nicht freigeschaltet.</p>':'')
-   +'<div class="arcane-story-chapter3-banner-445"><strong>Kapitel 3 · Die Aschengipfel</strong><p>'+(open3?'Die Urflamme ruft. Fortschritt: '+(ch3-1)+' / 10 Missionen. Malachar jagt den dritten Siegelkern.':'Schließe Kapitel 2 (Mission 2-10) ab, um die Aschengipfel freizuschalten.')+'</p>'
-   +(open3?'<button type="button" class="arcane-story-action-357" id="arcaneChapter3Map461">🌋 Aschengipfel betreten · Missionskarte</button>':'<small>🔒 Kapitel 3 regulär nach Kapitel 2 verfügbar</small>')+'<button type="button" class="arcane-story-action-357" data-review-old469="3">🔎 Kapitel 3 testen</button></div>'
-   +(open3&&ch3>5?'<p class="arcane-story-note-357">✦ Arion kennengelernt'+(ch3>10?' · Pyrathos kennengelernt':'')+' – mögliche spätere Charaktere, noch nicht spielbar.</p>':'')
-   +'<p class="arcane-story-note-357">Kapitel 4 bis 7 kannst du im Testmodus auch ohne vorherige Siege anschauen.</p>'
-   +expansionHtml469
-   +'<p class="arcane-story-note-357">Deine regulären Fortschritte und Siege werden auf diesem Gerät gespeichert.</p>';
+  const kaelLevel=window.arcaneCharacterProgress382?.level()||1;
+  const ch1=read(),ch2=read2(),ch3=read3();
+  const oldProgress=[ch1,ch2,ch3];
+  const chapters473=[
+   {number:1,title:'Die Akademie von Arkanis',sigil:'Siegel der Magie',icon:'✨',
+    desc:'Die Reise beginnt mit zehn Prüfungen an der Akademie.',
+    art:'artwork/arcane-world-hub-final-v315.webp'},
+   {number:2,title:'Der verlorene Wald',sigil:'Siegel der Natur',icon:'🌲',
+    desc:'Das Wurzelherz erwartet euch zwischen uralten Bäumen.',
+    art:'artwork/story/forest-magical-v460.jpg'},
+   {number:3,title:'Die Aschengipfel',sigil:'Siegel des Feuers',icon:'🔥',
+    desc:'In den brennenden Gipfeln erwacht eine uralte Macht.',
+    art:'artwork/story/ashes-story-map-v461.svg'},
+   {number:4,title:'Die versunkene Stadt Nymaris',sigil:'Siegel des Wassers',icon:'🌊',
+    desc:'Eine vergessene Zivilisation ruht in den Tiefen des Ozeans.',
+    art:'artwork/story/nymaris-ocean-v469.svg'},
+   {number:5,title:'Das Königreich über den Wolken',sigil:'Siegel des Himmels',icon:'☁️',
+    desc:'Schwebende Inseln, Himmelstempel und die Macht der Stürme.',
+    art:'artwork/story/aerion-sky-v469.svg'},
+   {number:6,title:'Der zerbrochene Zeitpalast',sigil:'Siegel der Zeit',icon:'⌛',
+    desc:'Hier verliert die Zeit ihre Ordnung.',
+    art:'artwork/story/time-palace-v469.svg'},
+   {number:7,title:'Der Thron der Finsternis',sigil:'Das letzte Siegel',icon:'👑',
+    desc:'Der finale Kampf um alle sieben Siegel beginnt.',
+    art:'artwork/story/dark-throne-v469.svg'}
+  ].map(c=>{
+   const val=c.number<=3?oldProgress[c.number-1]:readExtra469(c.number);
+   const ready=c.number===1?true:c.number===2?ch1>10:c.number===3?ch1>10&&ch2>10:previousChapterDone469(c.number);
+   return {...c,done:val>10,ready,completed:val-1};
+  });
+  const highlighted=chapters473.find(c=>c.ready&&!c.done)?.number||1;
+  const badge=c=>c.done?'<span class="arcane-campaign-status-tag-473 is-done-473">✓ Abgeschlossen</span>':
+   c.ready?'<span class="arcane-campaign-status-tag-473 is-ready-473">✓ Verfügbar</span>':
+   '<span class="arcane-campaign-status-tag-473 is-locked-473">🔒 Gesperrt</span>';
+  const cards=chapters473.map(c=>
+   '<article class="arcane-campaign-chapter-473'+(highlighted===c.number?' is-selected-473':'')+'" data-chapter="'+c.number+'">'
+   +'<div class="arcane-campaign-art-473"><img src="'+escapeText(c.art)+'" loading="lazy" decoding="async" alt="'+escapeText('Kapitelillustration: '+c.title)+'"></div>'
+   +'<div class="arcane-campaign-copy-473">'
+   +'<span class="arcane-campaign-eyebrow-473">KAPITEL '+c.number+' · '+escapeText(c.sigil.toUpperCase())+'</span>'
+   +'<h3>'+escapeText(c.title)+'</h3>'
+   +'<p class="arcane-campaign-desc-473">'+escapeText(c.desc)+'</p>'
+   +'<span class="arcane-campaign-progress-tag-473">Fortschritt: '+c.completed+' / 10</span>'
+   +'</div>'
+   +'<div class="arcane-campaign-side-473">'
+   +badge(c)
+   +'<button type="button" class="arcane-campaign-btn-473" data-campaign-open-473="'+c.number+'" '+(!c.ready?'disabled title="Zuerst Kapitel '+(c.number-1)+' abschließen"':'')+'>'
+   +(c.ready?c.icon+' Missionskarte':'🔒 Missionskarte')+'</button>'
+   +'<button type="button" class="arcane-campaign-btn-473 is-preview-473" data-campaign-test-473="'+c.number+'">🔎 Kapitel testen</button>'
+   +'</div></article>'
+  ).join('');
+  const unlockedLeon=!!window.arcaneCharacterProgress382?.leonUnlocked?.();
+  content.innerHTML=
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade</p>'
+   +'<section class="arcane-campaign-status-473" aria-label="Kaels Fortschritt">'
+   +'<img class="arcane-campaign-portrait-473" src="artwork/story/kael.jpg" alt="Kael">'
+   +'<div class="arcane-campaign-progress-473"><strong>Kael · Level '+kaelLevel+' / 30</strong>'
+   +'<div class="arcane-campaign-track-473"><span style="width:'+Math.max(0,Math.min(100,Number(progress?.percent)||0))+'%"></span></div>'
+   +'<small class="arcane-campaign-exp-473">'+(progress?.current||0)+' / '+(progress?.next||'MAX')+' EP bis zum nächsten Level</small>'
+   +'<span class="arcane-campaign-unlock-473">'+(unlockedLeon?'✓ Leon freigeschaltet':'🔒 Leon freischalten: Mission 1 gewinnen und Kael Level 10')+'</span></div>'
+   +'<button type="button" class="arcane-campaign-rewards-473" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button></section>'
+   +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
+   +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
   content.querySelector('#arcaneLevelOpen384')?.addEventListener('click',()=>window.openArcaneLevelRewards384?.());
-  content.querySelector('#arcaneChapter1Map461')?.addEventListener('click',()=>showChapterRoute461(1));
-  content.querySelector('#arcaneChapter2Map457')?.addEventListener('click',()=>showForestMap457());
-  content.querySelector('#arcaneChapter3Map461')?.addEventListener('click',()=>showChapterRoute461(3));
-  content.querySelectorAll('[data-review-old469]').forEach(button=>button.addEventListener('click',()=>{
-   const chapter=Number(button.dataset.reviewOld469);setReview469(true);
-   if(chapter===1)showChapterRoute461(1);else if(chapter===2)showForestMap457();else showChapterRoute461(3);
-  }));
-  content.querySelectorAll('[data-extra-chapter469]').forEach(b=>b.addEventListener('click',()=>{
-   const chapter=Number(b.dataset.extraChapter469),review=b.dataset.mode469==='review';
+  const chapterMap=(chapter,review)=>{
    setReview469(review);
-   showExtraMap469(chapter);
+   if(chapter===1)showChapterRoute461(1);
+   else if(chapter===2)showForestMap457();
+   else if(chapter===3)showChapterRoute461(3);
+   else showExtraMap469(chapter);
+  };
+  content.querySelectorAll('[data-campaign-open-473]').forEach(b=>b.addEventListener('click',()=>{
+   const ch=Number(b.dataset.campaignOpen473);
+   if(chapters473.some(c=>c.number===ch&&c.ready))chapterMap(ch,false);
   }));
-  content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
+  content.querySelectorAll('[data-campaign-test-473]').forEach(b=>b.addEventListener('click',()=>{
+   chapterMap(Number(b.dataset.campaignTest473),true);
+  }));
  }
  let prologueToMap=false,duelFinishedHere=false;
  function openPrologue2(toMap=false){
