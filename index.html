@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-schicksalsmuenze-sichtbarer-ki-auftakt-v489">
+<meta name="arcane-build" content="20261123-card-render-performance-v490">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5725,7 +5725,7 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.89</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.90</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7125,7 +7125,129 @@ function syncDuelOutcome(){
   return;
  }
 }
-function render(){const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0,lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;$("myDeckCount").textContent=drawPile.length;$("oppDeckCount").textContent=aiDeck.length;$("hand").innerHTML=hand.map(cardHTML).join('');const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);const handCardWidth=92;const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;$("hand").style.setProperty("--hand-overlap",handOverlap.toFixed(1)+"px");const referenceWidth=Math.max(66,Math.min(88,window.innerWidth*.205));const referenceAvailable=Math.max(240,window.innerWidth-35);const referenceOverlap=hand.length>1?Math.max(24,Math.min(referenceWidth*.68,(hand.length*referenceWidth-referenceAvailable+24)/(hand.length-1))):0;$("hand").style.setProperty("--reference-card-width",referenceWidth.toFixed(1)+"px");$("hand").style.setProperty("--reference-overlap",referenceOverlap.toFixed(1)+"px");$("oppHand").innerHTML=aiHand.map((c,i)=>{const mid=(aiHand.length-1)/2,spread=Math.max(1,mid),n=(i-mid)/spread,angle=-n*10,lift=10*(1-Math.abs(n));return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>'}).join('');renderGraveyards();updateExtraDeckGlow();enforceHandLimit();$("tributePanel").classList.toggle("visible",!!pendingTribute);if(pendingTribute){$("tributeText").textContent=pendingTribute.card.name+" benötigt "+pendingTribute.required+" Tribut(e). Tippe deine Monster auf dem Feld an.";$("tributeCount").textContent="Ausgewählt: "+pendingTribute.selected.length+" / "+pendingTribute.required;}$("handCount").textContent=hand.length+' Karten';$("phase").textContent=phase==="main1"?"Hauptphase 1":phase==="battle"?"Kampfphase":"Hauptphase 2";$("end").disabled=false;$("myMon").innerHTML=zoneHTML(myMon,'myMon');$("mySpell").innerHTML=zoneHTML(mySpell,'mySpell');$("oppMon").innerHTML=zoneHTML(oppMon,'oppMon');$("oppSpell").innerHTML=zoneHTML(oppSpell,'oppSpell');$("myLP").textContent=myLP+' LP';$("oppLP").textContent=oppLP+' LP';$("turn").textContent=turn;if(lostMy)showCombatNumber("myLP",lostMy);if(lostOpp)showCombatNumber("oppLP",lostOpp);syncDuelOutcome();}
+/* v4.90: Auf iOS bleiben Kartenbilder und ihre DOM-Knoten zwischen Aktionen erhalten.
+   Nur geänderte Karten/Felder ersetzen; andernfalls würden die Bilder erneut dekodiert. */
+const arcaneCardIdentity490=new WeakMap();
+let arcaneCardSequence490=0;
+const arcaneFieldSignatures490=Object.create(null);
+function arcaneCardId490(card){
+ if(!card||typeof card!=='object')return 0;
+ let id=arcaneCardIdentity490.get(card);
+ if(!id){id=++arcaneCardSequence490;arcaneCardIdentity490.set(card,id);}
+ return id;
+}
+function arcaneCardVisual490(card){
+ if(!card)return '';
+ return JSON.stringify([
+  arcaneCardId490(card),card.name,card.kind,card.rarity,card.resonance,card.skin,
+  card.artwork,card.emoji,card.element,card.race,card.level,card.atk,card.def,
+  card.effectText,card.desc,card.faceDown,card.position,card.effectUsedTurn,
+  card.shadowBlockedAiTurn,card.tempAtkBonus,card.tempDefBonus,
+  card.permanentAtkPenalty,card.eldricOriginal,card.valtorOriginal,
+  card.astraOriginal,card.rivenOriginal,card.summonedTurn
+ ]);
+}
+function arcaneFastHand490(){
+ const root=$('hand');
+ const prior=Array.from(root.children);
+ const used=new Set();
+ const middle=(hand.length-1)/2;
+ hand.forEach((card,i)=>{
+  const key=arcaneCardVisual490(card);
+  let element=prior.find(el=>!used.has(el)&&el.__arcaneCardRef490===card&&el.__arcaneCardKey490===key);
+  if(!element){
+   const template=document.createElement('template');
+   template.innerHTML=cardHTML(card,i);
+   element=template.content.firstElementChild;
+   element.__arcaneCardRef490=card;
+   element.__arcaneCardKey490=key;
+   element.querySelectorAll('img').forEach(img=>{img.loading='eager'});
+  }
+  used.add(element);
+  const relative=(i-middle)/Math.max(1,middle);
+  element.dataset.card=String(i);
+  element.style.setProperty('--fan-angle',(relative*10).toFixed(1)+'deg');
+  element.style.setProperty('--fan-lift',(-10*(1-Math.abs(relative))).toFixed(1)+'px');
+  element.style.zIndex=String(i+1);
+  element.classList.toggle('selected',selected===i);
+  // Bereits abgespielte Ziehanimation nicht bei jedem weiteren Render neu auslösen.
+  if(card===newlyDrawnCard&&!element.__arcaneDrawHandled490){
+   element.classList.add('new-card');
+   element.__arcaneDrawHandled490=true;
+  }
+  if(root.children[i]!==element)root.insertBefore(element,root.children[i]||null);
+ });
+ Array.from(root.children).forEach(el=>{if(!used.has(el))el.remove()});
+}
+function arcaneFastGrid490(type,cards){
+ const root=$(type);
+ for(let i=0;i<4;i++){
+  const card=cards[i];
+  const identity=arcaneCardVisual490(card);
+  const key=JSON.stringify([
+   identity,turn,aiTurn,chosenTarget,chosenSpell,pendingPlacement,
+   type==='myMon'&&pendingSwipeSummon?pendingSwipeSummon.zoneIndex:null,
+   type==='myMon'&&pendingTribute?pendingTribute.selected.includes(i):false
+  ]);
+  const slot=type+':'+i;
+  const existing=root.children[i];
+  if(existing&&arcaneFieldSignatures490[slot]===key)continue;
+  const isolated=[null,null,null,null];isolated[i]=card;
+  const template=document.createElement('template');
+  template.innerHTML=zoneHTML(isolated,type);
+  const updated=template.content.children[i];
+  if(!updated)continue;
+  updated.querySelectorAll('img').forEach(img=>{img.loading='eager'});
+  if(existing)existing.replaceWith(updated);else root.appendChild(updated);
+  arcaneFieldSignatures490[slot]=key;
+ }
+}
+let arcaneLastAiHandCount490=-1;
+function arcaneFastOpponentHand490(){
+ const root=$('oppHand'),count=aiHand.length;
+ if(arcaneLastAiHandCount490===count&&root.children.length===count)return;
+ const mid=(count-1)/2;
+ root.innerHTML=aiHand.map((c,i)=>{
+  const n=(i-mid)/Math.max(1,mid),angle=-n*10,lift=10*(1-Math.abs(n));
+  return '<div class="opponent-card-back" aria-hidden="true" style="--back-angle:'+angle.toFixed(1)+'deg;--back-lift:'+lift.toFixed(1)+'px;z-index:'+(i+1)+'">✦</div>';
+ }).join('');
+ arcaneLastAiHandCount490=count;
+}
+function render(){
+ const lostMy=lpFeedbackInitialized?Math.max(0,lastShownMyLP-myLP):0;
+ const lostOpp=lpFeedbackInitialized?Math.max(0,lastShownOppLP-oppLP):0;
+ lastShownMyLP=myLP;lastShownOppLP=oppLP;lpFeedbackInitialized=true;
+ $('myDeckCount').textContent=drawPile.length;
+ $('oppDeckCount').textContent=aiDeck.length;
+ arcaneFastHand490();
+ const handWidth=Math.max(145,Math.min(window.innerWidth,document.documentElement.clientWidth)-195);
+ const handCardWidth=92;
+ const handOverlap=hand.length>1?Math.max(40,Math.min(86,(hand.length*handCardWidth-handWidth)/(hand.length-1))):0;
+ $('hand').style.setProperty('--hand-overlap',handOverlap.toFixed(1)+'px');
+ const referenceWidth=Math.max(66,Math.min(88,window.innerWidth*.205));
+ const referenceAvailable=Math.max(240,window.innerWidth-35);
+ const referenceOverlap=hand.length>1?Math.max(24,Math.min(referenceWidth*.68,(hand.length*referenceWidth-referenceAvailable+24)/(hand.length-1))):0;
+ $('hand').style.setProperty('--reference-card-width',referenceWidth.toFixed(1)+'px');
+ $('hand').style.setProperty('--reference-overlap',referenceOverlap.toFixed(1)+'px');
+ arcaneFastOpponentHand490();
+ renderGraveyards();updateExtraDeckGlow();enforceHandLimit();
+ $('tributePanel').classList.toggle('visible',!!pendingTribute);
+ if(pendingTribute){
+  $('tributeText').textContent=pendingTribute.card.name+' benötigt '+pendingTribute.required+' Tribut(e). Tippe deine Monster auf dem Feld an.';
+  $('tributeCount').textContent='Ausgewählt: '+pendingTribute.selected.length+' / '+pendingTribute.required;
+ }
+ $('handCount').textContent=hand.length+' Karten';
+ $('phase').textContent=phase==='main1'?'Hauptphase 1':phase==='battle'?'Kampfphase':'Hauptphase 2';
+ $('end').disabled=false;
+ arcaneFastGrid490('myMon',myMon);
+ arcaneFastGrid490('mySpell',mySpell);
+ arcaneFastGrid490('oppMon',oppMon);
+ arcaneFastGrid490('oppSpell',oppSpell);
+ $('myLP').textContent=myLP+' LP';$('oppLP').textContent=oppLP+' LP';$('turn').textContent=turn;
+ if(lostMy)showCombatNumber('myLP',lostMy);
+ if(lostOpp)showCombatNumber('oppLP',lostOpp);
+ syncDuelOutcome();
+}
 /* v4.14 – Outcome safeguard for asynchronous attacks and other LP changes. */
 setInterval(()=>{if(myLP<=0||oppLP<=0)syncDuelOutcome();},750);
 
