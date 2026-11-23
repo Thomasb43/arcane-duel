@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-charakterauswahl-sechs-v452">
+<meta name="arcane-build" content="20261123-charakterkette-level10-v453">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -6883,6 +6883,7 @@ function syncDuelOutcome(){
  panel.querySelector('#duelOutcomeTitle306').textContent=draw?'UNENTSCHIEDEN':won?'DUELL GEWONNEN':'DUELL VERLOREN';
  panel.querySelector('#duelOutcomeMessage306').textContent=draw?'Beide Duellanten haben 0 Lebenspunkte.':won?'Du hast die gegnerischen Lebenspunkte auf 0 reduziert.':'Deine Lebenspunkte sind auf 0 gefallen.';
  const endButton=document.getElementById('end');if(endButton)endButton.disabled=true;
+ if(won)window.arcaneCharacterChain453?.awardVictory();
  // Story replaces the ordinary result panel; avoid a 99999-z-index blocking dialog.
  let storyHandled=false;
  try{
@@ -7949,6 +7950,71 @@ syncHeroResonanceExtra439();
  window.arcaneCharacterProgress382={completed,level,levelProgress,unlocked,leonUnlocked:()=>unlocked('Leon'),rewardMission};
 })();
 
+/* v4.53 – Separate character levels and sequential level-10 condition reveal.
+   These milestones reveal conditions only; they never unlock a character. */
+(function initCharacterChain453(){
+ const KEY='arcane-duel-character-levels-v453';
+ const ORDER=['Kael','Leon','Riven','Elara','Noctis','Astra'];
+ let victoryHandled=false;
+ function data(){
+  let saved;
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){}
+  if(!saved||typeof saved!=='object'||Array.isArray(saved))saved={};
+  return saved;
+ }
+ function levelForXP(value){
+  let remaining=Math.max(0,Math.floor(Number(value)||0)),level=1;
+  while(level<30&&remaining>=100+50*(level-1)){
+   remaining-=100+50*(level-1);level++;
+  }
+  return level;
+ }
+ function levelFor(name){
+  if(name==='Kael')return window.arcaneCharacterProgress382?.level?.()||1;
+  if(!ORDER.includes(name))return 1;
+  return levelForXP(data()[name]);
+ }
+ function available(name){
+  return name==='Kael'||(name==='Leon'&&!!window.arcaneCharacterProgress382?.leonUnlocked?.());
+ }
+ function predecessor(name){
+  const i=ORDER.indexOf(name);
+  return i>0?ORDER[i-1]:null;
+ }
+ function conditionsVisible(name){
+  const prev=predecessor(name);
+  return ORDER.indexOf(name)>=2&&levelFor(prev)>=10;
+ }
+ function status(name){
+  const prev=predecessor(name);
+  if(available(name))return 'Level '+levelFor(name);
+  if(name==='Leon')return '🔒 Kael Level 10 und erste Storymission';
+  if(!prev)return '🔒 Gesperrt';
+  if(conditionsVisible(name))return '🔓 Freischaltbedingungen folgen';
+  return '🔒 Erst '+prev+' Level 10 ('+Math.min(10,levelFor(prev))+'/10)';
+ }
+ function awardVictory(){
+  // A duel can render the outcome many times: credit only the first actual win.
+  if(victoryHandled)return null;
+  victoryHandled=true;
+  const name=(()=>{try{return localStorage.getItem('arcane-duel-selected-character-v1')}catch(_){return null}})();
+  if(!name||name==='Kael'||!available(name))return null;
+  // Tutorial victories must not grant progression for a different hero.
+  const training=document.getElementById('firstHint449');
+  if(training&&!training.hidden)return null;
+  const saved=data(),old=Math.max(0,Math.floor(Number(saved[name])||0));
+  const updated={...saved,[name]:old+100};
+  try{localStorage.setItem(KEY,JSON.stringify(updated))}catch(error){
+   console.warn('Charakterlevel konnte nicht gespeichert werden',error);
+   return null;
+  }
+  const result={name,xp:100,level:levelForXP(updated[name]),levelUp:levelForXP(updated[name])>levelForXP(old)};
+  try{window.dispatchEvent(new CustomEvent('arcane-character-level-v453',{detail:result}))}catch(_){}
+  return result;
+ }
+ window.arcaneCharacterChain453={order:ORDER.slice(),levelFor,available,predecessor,conditionsVisible,status,awardVictory};
+})();
+
 /* v3.20 – test currency persists across refresh and can be reset intentionally. */
 (function initArcaneShop320(){
  const STORE_KEY='arcane-duel-test-crystals-v1';
@@ -8568,10 +8634,15 @@ syncHeroResonanceExtra439();
  function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(x&&typeof x==='object'&&x.characters)return x}catch(_){}return {characters:{}}}
  function save(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch(_){return false}}
  function charState(store,ch){if(!store.characters[ch])store.characters[ch]={claimed:[],tickets:0,cosmetics:[]};return store.characters[ch]}
- const charLevel=ch=>ch==='Kael'?(window.arcaneCharacterProgress382?.level()||1):1;
- function rewards(lvl){
+ const charLevel=ch=>window.arcaneCharacterChain453?.levelFor(ch)||1;
+ function rewards(lvl,ch='Kael'){
   if(lvl===2)return [{type:'ticket',label:'Booster-Ticket',value:1}];
-  if(lvl===10)return [{type:'character',label:'Leon freischalten',value:'Leon'},{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
+  if(lvl===10){
+   if(ch==='Kael')return [{type:'character',label:'Leon freischalten',value:'Leon'},{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
+   const next=window.arcaneCharacterChain453?.order||[];
+   const successor=next[next.indexOf(ch)+1];
+   return [{type:'milestone',label:successor?successor+': Freischaltbedingungen sichtbar':'Level 10 erreicht',value:successor||''},{type:'cosmetic',label:'Exklusiver Kartenrücken',value:'Siegelglanz'}];
+  }
   if(lvl===15)return [{type:'card',label:'Seltene Karte',value:'rare'}];
   if(lvl===20)return [{type:'cosmetic',label:'Exklusive Kartenvariante',value:'Arkaner Glanz'}];
   if(lvl===25)return [{type:'card',label:'Legendäre Karte',value:'legendary'}];
@@ -8584,7 +8655,7 @@ syncHeroResonanceExtra439();
   if(lvl>=6)return lvl%2===0?[{type:'crystals',label:'150 Arkankristalle',value:150}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
   return lvl%2===1?[{type:'crystals',label:'100 Arkankristalle',value:100}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
  }
- const iconFor=t=>({character:'🔓',crystals:'💎',ticket:'🎟️',cosmetic:'✨',card:'🃏'})[t]||'✦';
+ const iconFor=t=>({character:'🔓',milestone:'🔓',crystals:'💎',ticket:'🎟️',cosmetic:'✨',card:'🃏'})[t]||'✦';
  function cardReward(grade){
   const catalog=window.arcaneCollectionCatalog322;
   if(!catalog)return null;
@@ -8606,7 +8677,7 @@ syncHeroResonanceExtra439();
    +'<div class="arcane-level-summary-384"><strong>'+esc(current)+' · Level '+level+' / 30</strong><span>🎟️ Tickets: '+(owned.tickets||0)+'</span></div>'
    +'<p class="arcane-level-hint-384">Levelbelohnungen können einmalig abgeholt werden. Tickets und kosmetische Freischaltungen werden gespeichert; ihre Verwendung folgt in einem späteren Update.</p>'
    +'<div class="arcane-level-list-384">'+Array.from({length:29},(_,i)=>i+2).map(lvl=>{
-     const items=rewards(lvl);
+     const items=rewards(lvl,current);
      const status=owned.claimed.includes(lvl)?'claimed':lvl<=level?'ready':'locked';
      return '<div class="arcane-level-item-384 '+status+'"><div class="arcane-level-number-384">LV '+lvl+'</div><div class="arcane-level-details-384">'+items.map(x=>'<span>'+iconFor(x.type)+' '+esc(x.label)+'</span>').join('')+'</div><button type="button" data-claim-level="'+lvl+'" '+(status==='ready'?'':'disabled')+'>'+(status==='claimed'?'✓ Erhalten':status==='ready'?'Abholen':'🔒 Gesperrt')+'</button></div>';
    }).join('')+'</div><div id="arcaneLevelStatus384" role="status" aria-live="polite"></div>';
@@ -8615,7 +8686,7 @@ syncHeroResonanceExtra439();
   if(lvl>charLevel(current)||lvl<2||lvl>30)return;
   const data=load(),owned=charState(data,current);
   if(owned.claimed.includes(lvl))return;
-  const items=rewards(lvl);
+  const items=rewards(lvl,current);
   const inventory=window.arcaneBoosterInventory322;
   const bank=window.arcaneTestCrystals320;
   if(items.some(x=>x.type==='crystals')&&!bank)return;
@@ -8704,14 +8775,14 @@ syncHeroResonanceExtra439();
   crystalCount391.textContent=Number.isFinite(n)?n.toLocaleString('de-DE'):'—';
  }
  function renderCharacter391(){
-  const selected=selected391(),level=window.arcaneCharacterProgress382?.level()||1,leonOpen=leonUnlocked391();
+  const selected=selected391(),progress=window.arcaneCharacterChain453,level=progress?.levelFor('Kael')||1,leonOpen=leonUnlocked391();
   // Keep portrait markup intact; replacing button.textContent removed the img and name elements.
   characterButton391.setAttribute('aria-label',selected+' – Charakter- und Deckauswahl öffnen');
   // Neue Charaktere sind bereits sichtbar, ihre Freischaltungen bleiben ausdrücklich offen.
   // Für Kael und Leon gelten die vorhandenen Regeln unverändert.
   const characters391=[
    {name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},
-   {name:'Leon',image:'artwork/story/leon.jpg',level:1,unlocked:leonOpen,requirement:'🔒 Freischaltung ab Kael Level 10'},
+   {name:'Leon',image:'artwork/story/leon.jpg',level:progress?.levelFor('Leon')||1,unlocked:leonOpen,requirement:'🔒 Freischaltung ab Kael Level 10 und Story 1-1'},
    {name:'Riven',image:'artwork/story/riven.jpg',unlocked:false,pending:true},
    {name:'Elara',image:'artwork/story/elara.jpg',unlocked:false,pending:true},
    {name:'Noctis',image:'artwork/story/noctis.jpg',unlocked:false,pending:true},
@@ -8720,7 +8791,7 @@ syncHeroResonanceExtra439();
   cards391.innerHTML=characters391.map(ch=>
    '<button type="button" class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+(ch.pending?'pending-452 ':'')+'" data-home-character-391="'+ch.name+'" '+(ch.unlocked?'':'disabled')+'>'
    +'<img src="'+ch.image+'" alt="'+ch.name+'" loading="eager" decoding="async"><strong>'+ch.name+'</strong>'
-   +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):(ch.pending?'🔒 Freischaltung noch offen':ch.requirement))+'</small></button>'
+   +'<small>'+(ch.unlocked?'Level '+ch.level+(selected===ch.name?' · Ausgewählt':''):(ch.pending?(progress?.status(ch.name)||'🔒 Gesperrt'):ch.requirement))+'</small></button>'
   ).join('');
  }
  function openCharacters391(){renderCharacter391();characterPicker.hidden=false;closeQuick392()}
@@ -8731,7 +8802,7 @@ syncHeroResonanceExtra439();
  function syncPortrait392(){
   const ch=selected391();
   name392.textContent=ch;
-  const lvl392=ch==='Kael'?(window.arcaneCharacterProgress382?.level?.()||1):1;
+  const lvl392=window.arcaneCharacterChain453?.levelFor(ch)||1;
   const level392=home.querySelector('#arcaneHubCharacterLevel392');
   if(level392)level392.textContent='LVL '+lvl392;
   portrait392.hidden=false;
