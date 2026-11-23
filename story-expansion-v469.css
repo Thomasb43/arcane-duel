@@ -1,0 +1,41 @@
+/* Arcane Duel v4.69 · Kapitel 4–7: eigene skalierbare Vorschau-Welten und Missionsrouten. */
+#arcaneStory357.is-expansion-map-469,
+#arcaneStory357.is-expansion-dialog-469{--world:#b9eaff;--accent:#65cde1;
+ background:linear-gradient(180deg,#0a12367d,#090a24af),var(--exp-art) center center/cover scroll!important;
+}
+#arcaneStory357[data-expansion-chapter="4"]{--world:#b6fff3;--accent:#4ddcc9;--exp-art:url('artwork/story/nymaris-ocean-v469.svg')}
+#arcaneStory357[data-expansion-chapter="5"]{--world:#fff0ba;--accent:#b4b0ff;--exp-art:url('artwork/story/aerion-sky-v469.svg')}
+#arcaneStory357[data-expansion-chapter="6"]{--world:#e6d3ff;--accent:#b1a0ff;--exp-art:url('artwork/story/time-palace-v469.svg')}
+#arcaneStory357[data-expansion-chapter="7"]{--world:#ffbddf;--accent:#d56bb8;--exp-art:url('artwork/story/dark-throne-v469.svg')}
+#arcaneStory357.is-expansion-map-469 .arcane-story-shell-357{max-width:800px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0 5px 20px!important}
+#arcaneStory357.is-expansion-map-469 .arcane-story-head-357{padding:12px!important;margin-bottom:12px!important;border:1.5px solid var(--world);border-radius:14px;background:linear-gradient(130deg,#0c1c38eb,#281737eb)!important;box-shadow:0 8px 28px #0007}
+#arcaneStory357.is-expansion-map-469 .arcane-story-kicker-357,
+#arcaneStory357.is-expansion-map-469 #arcaneStoryHeading357{color:var(--world)!important}
+#arcaneStory357.is-expansion-map-469 .arcane-forest-route-457{background-image:linear-gradient(180deg,#070e3022,#070b2411 55%,#0a0d252e),var(--exp-art)!important;background-size:cover!important;background-position:center!important;border-color:var(--world)!important;filter:none!important;backdrop-filter:none!important}
+#arcaneStory357.is-expansion-map-469 .arcane-forest-intro-457{border-color:var(--world);background:#111b38db}
+#arcaneStory357.is-expansion-map-469 .arcane-forest-detail-457{border-color:var(--world);background:linear-gradient(135deg,#191b3cee,#211a39ef)}
+#arcaneStory357.is-expansion-map-469 .arcane-forest-node-457.is-current-457{border-color:var(--world);box-shadow:0 0 0 5px #ffe1c044,0 0 22px var(--accent)}
+#arcaneStory357.is-expansion-dialog-469 .arcane-story-shell-357{background:linear-gradient(145deg,#17233aec,#19132de7)!important;border-color:var(--world)!important}
+#arcaneStory357.is-expansion-dialog-469 .arcane-story-stage-360.arcane-scene-expansion-469{background-image:linear-gradient(180deg,#0a0a2444,#07091a54),var(--exp-art)!important;background-size:cover!important;background-position:center 36%!important}
+#arcaneStory357.is-expansion-dialog-469 .arcane-story-dialog-box-360{background:linear-gradient(135deg,#192743ed,#241d3de9)!important;border-color:var(--world)!important}
+.arcane-expansion-chapters-469{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.arcane-expansion-card-469{padding:13px;border:1.5px solid #ac9bda;border-radius:15px;background:linear-gradient(135deg,#182545f0,#241d3cf0);box-shadow:0 6px 19px #0006;display:flex;flex-direction:column;gap:8px}
+.arcane-expansion-card-469 strong{font:700 17px Georgia,serif;color:#ffe3af}
+.arcane-expansion-card-469 small{color:#d4d0ef;font-size:11px;line-height:1.45}
+.arcane-expansion-card-469 button{border:1px solid #dfbe8b;border-radius:9px;padding:9px 8px;background:#4e3481;color:#fff2cf;font-weight:800;font-size:12px;min-height:37px;cursor:pointer}
+.arcane-expansion-card-469 button.preview{background:#24475d;border-color:#9bdfed;color:#ebfbff}
+.arcane-expansion-card-469 p{margin:0;font-size:11px;color:#e0d4ec}
+.arcane-expansion-test-469{margin:8px 0;padding:9px 11px;border:1px solid #83d4e7;border-radius:9px;background:#0c3455c9;color:#dcfbff;font-size:12px;text-align:center}
+.arcane-expansion-prologue-469{background:linear-gradient(140deg,#1d2646ef,#231735ef);border:1px solid #dfb47d;border-radius:15px;padding:17px;margin-top:14px}
+.arcane-expansion-prologue-469 strong{display:block;color:#ffe2ab;font:700 21px Georgia,serif}
+.arcane-expansion-prologue-469 p{color:#eee7ff;font-size:14px;line-height:1.6}
+.arcane-expansion-prologue-469 button{background:#6a409c;color:#fff3cd;border:1px solid #e5c28b;border-radius:9px;padding:10px;min-width:130px;font-weight:800}
+.arcane-briefing-overlay-465.is-chapter-4-465{background-image:linear-gradient(#081b2cb1,#0c1a32c5),url('artwork/story/nymaris-ocean-v469.svg')}
+.arcane-briefing-overlay-465.is-chapter-5-465{background-image:linear-gradient(#131a3baf,#161a3cc4),url('artwork/story/aerion-sky-v469.svg')}
+.arcane-briefing-overlay-465.is-chapter-6-465{background-image:linear-gradient(#16112eaf,#16122ec4),url('artwork/story/time-palace-v469.svg')}
+.arcane-briefing-overlay-465.is-chapter-7-465{background-image:linear-gradient(#180923b2,#150622cd),url('artwork/story/dark-throne-v469.svg')}
+.is-chapter-4-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#081b2900,#111a32c4),url('artwork/story/nymaris-ocean-v469.svg')}
+.is-chapter-5-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#121c3700,#14132cc4),url('artwork/story/aerion-sky-v469.svg')}
+.is-chapter-6-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#18103400,#111122c4),url('artwork/story/time-palace-v469.svg')}
+.is-chapter-7-465 .arcane-briefing-scene-465{background-image:linear-gradient(90deg,#150b1d00,#150a25d8),url('artwork/story/dark-throne-v469.svg')}
+@media(max-width:460px){.arcane-expansion-chapters-469{grid-template-columns:1fr}.arcane-expansion-card-469{padding:11px}}
