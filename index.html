@@ -5507,6 +5507,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <link rel="stylesheet" href="forest-story-map-v457.css?v=460">
 <link rel="stylesheet" href="chapter-route-maps-v461.css?v=468">
 <link rel="stylesheet" href="story-briefing-v465.css?v=468">
+<link rel="stylesheet" href="story-expansion-v469.css?v=469">
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -5536,6 +5537,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
 <script src="story-chapter2-v444.js?v=444"></script>
 <script src="story-chapter3-v445.js?v=445"></script>
+<script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
 const APP_VERSION='2.36';
@@ -5908,6 +5910,8 @@ window.arcaneChapter2Decks444={recipes:chapter2Recipes444,tiers:chapter2TierName
 const chapter3Data445=window.ARCANE_STORY_CHAPTER3_445;
 const chapter3Recipes445=chapter3Data445?.recipes||[];
 storyDeckRecipes362.push(...chapter3Recipes445);
+const storyExpansion469=window.ARCANE_STORY_EXPANSION_469;
+storyDeckRecipes362.push(...(storyExpansion469?.recipes||[]));
 const chapter3TierNames445=['Einsteiger','Fortgeschritten','Experte','Meister'];
 function createChapter3OpponentDeck445(index,tier=1){
  const recipe=chapter3Recipes445[index-20],sets=chapter3Data445?.tiers;
@@ -6148,6 +6152,7 @@ function createEldricDeck432(level=4){
 window.arcaneEldricDeck432={pool:eldricPool432.map(([name,count])=>({name,count})),tiers:eldricTiers432.map((t,i)=>({level:i+1,label:t.label})),create:createEldricDeck432};
 
 function createStoryOpponentDeck362(index){
+ if(index>=30&&index<70)return storyExpansion469.createDeck(index,window.arcaneStoryDifficultyExpanded469||1,deck,shuffleCards);
  if(index>=20&&index<30)return createChapter3OpponentDeck445(index,window.arcaneStoryDifficultyChapter3445||1);
  if(index>=10&&index<20)return createChapter2OpponentDeck444(index,window.arcaneStoryDifficultyChapter2444||1);
  if(index===0)return createLeonDeck363();
@@ -6195,6 +6200,10 @@ window.arcaneApplyStoryOpponent362=(index)=>{
  if(index>=20&&index<30){
   const tier=Math.max(1,Math.min(4,Number(window.arcaneStoryDifficultyChapter3445)||1));
   Object.assign(window.arcaneStoryOpponentInfo362,{chapter:3,mission:index-19,deckSize:30,difficulty:tier,difficultyName:chapter3TierNames445[tier-1],difficultyReady:4,possibleCharacter:index===24||index===29});
+ }
+ if(index>=30&&index<70){
+  const tier=Math.max(1,Math.min(4,Math.trunc(Number(window.arcaneStoryDifficultyExpanded469)||1)));
+  Object.assign(window.arcaneStoryOpponentInfo362,{chapter:Math.floor(index/10)+1,mission:index%10+1,deckSize:30,difficulty:tier,difficultyName:['Einsteiger','Fortgeschritten','Experte','Meister'][tier-1],difficultyReady:4,review:!!window.arcaneStoryReview469});
  }
  return true;
 };
@@ -9267,7 +9276,9 @@ syncHeroResonanceExtra439();
  const prologue2=window.ARCANE_STORY_CHAPTER2_444?.prologue||[];
  const missions3=window.ARCANE_STORY_CHAPTER3_445?.missions||[];
  const prologue3=window.ARCANE_STORY_CHAPTER3_445?.prologue||[];
- missions.push(...missions2,...missions3);
+ const expansionChapters469=window.ARCANE_STORY_EXPANSION_469?.chapters||[];
+ const missionsExpanded469=window.ARCANE_STORY_EXPANSION_469?.missions||[];
+ missions.push(...missions2,...missions3,...missionsExpanded469);
  const CH2KEY='arcane-duel-story-chapter2-v444',PROLOGUEKEY='arcane-duel-story2-prologue-v444';
  const read2=()=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(CH2KEY))||1)))}catch(_){return 1}};
  const save2=n=>{try{localStorage.setItem(CH2KEY,String(Math.max(read2(),Math.min(11,n))))}catch(_){}};
@@ -9278,9 +9289,17 @@ syncHeroResonanceExtra439();
  const save3=n=>{try{localStorage.setItem(CH3KEY,String(Math.max(read3(),Math.min(11,n))))}catch(_){}};
  const seen3=()=>{try{return localStorage.getItem(PROLOGUE3KEY)==='1'}catch(_){return false}};
  const markSeen3=()=>{try{localStorage.setItem(PROLOGUE3KEY,'1')}catch(_){}};
- const labelMission=i=>i<10?'1-'+(i+1):i<20?'2-'+(i-9):'3-'+(i-19);
- const unlockedMission=i=>i<10?(i+1<=read()):i<20?(read()>10&&i-9<=read2()):(read()>10&&read2()>10&&i-19<=read3());
- const clearedMission=i=>i<10?(i+1<read()):i<20?(read()>10&&i-9<read2()):(read()>10&&read2()>10&&i-19<read3());
+ const EXP_REVIEW_KEY469='arcane-story-review-v469';
+ try{window.arcaneStoryReview469=sessionStorage.getItem(EXP_REVIEW_KEY469)==='1'}catch(e){window.arcaneStoryReview469=false}
+ const labelMission=i=>(Math.floor(i/10)+1)+'-'+(i%10+1);
+ const keyExtra469=ch=>'arcane-duel-story-chapter'+ch+'-v469';
+ const readExtra469=ch=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(keyExtra469(ch)))||1)))}catch(e){return 1}};
+ const saveExtra469=(ch,n)=>{try{localStorage.setItem(keyExtra469(ch),String(Math.max(readExtra469(ch),Math.min(11,n))))}catch(e){}};
+ const previousChapterDone469=ch=>ch===4?(read()>10&&read2()>10&&read3()>10):(readExtra469(ch-1)>10);
+ const review469=()=>!!window.arcaneStoryReview469;
+ const setReview469=on=>{window.arcaneStoryReview469=!!on;try{if(on)sessionStorage.setItem(EXP_REVIEW_KEY469,'1');else sessionStorage.removeItem(EXP_REVIEW_KEY469)}catch(e){}};
+ const unlockedMission=i=>i<10?(i+1<=read()):i<20?(read()>10&&i-9<=read2()):i<30?(read()>10&&read2()>10&&i-19<=read3()):(review469()||(previousChapterDone469(Math.floor(i/10)+1)&&i%10+1<=readExtra469(Math.floor(i/10)+1)));
+ const clearedMission=i=>i<10?(i+1<read()):i<20?(read()>10&&i-9<read2()):i<30?(read()>10&&read2()>10&&i-19<read3()):(previousChapterDone469(Math.floor(i/10)+1)&&i%10+1<readExtra469(Math.floor(i/10)+1));
  const escapeText=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
  const forestIcons444={Lyra:'🌿',Fenrik:'🐺',Miren:'🌫️',Dornenfürst:'🌑',Arion:'🐲',Pyrathos:'🐉','Aschenwächter Korr':'🛡️','Magmaseherin Veyra':'🔥','General Tharos':'⚔️'};
@@ -9317,6 +9336,7 @@ syncHeroResonanceExtra439();
   else if(scene==='forest-map'||scene==='chapter-route-1'||scene==='chapter-route-3')showMap();
   else if(activeIndex!==null&&activeIndex<10)showChapterRoute461(1,activeIndex);
   else if(activeIndex!==null&&activeIndex>=10&&activeIndex<20)showForestMap457(activeIndex);
+  else if(activeIndex!==null&&activeIndex>=30)showExtraMap469(Math.floor(activeIndex/10)+1,activeIndex);
   else if(activeIndex!==null&&activeIndex>=20)showChapterRoute461(3,activeIndex);
   else showMap();
  });
@@ -9410,7 +9430,9 @@ const arcaneChapters461={
 };
 function chapterMapClear461(){
  stage.classList.remove('is-academy-map-461','is-volcano-map-461',
-  'is-academy-dialog-461','is-volcano-dialog-461');
+  'is-academy-dialog-461','is-volcano-dialog-461',
+  'is-expansion-map-469','is-expansion-dialog-469');
+ stage.removeAttribute('data-expansion-chapter');
 }
 function selectChapterMission461(chapter,index){
  const config=arcaneChapters461[chapter],m=missions[index],info=content.querySelector('#chapterMissionInfo461');
