@@ -9515,7 +9515,88 @@ function showChapterRoute461(chapter,selectIndex){
  selectChapterMission461(chapter,chosen);
 }
 
+
+/* Kapitel 4–7: Testvorschau und reguläre Missionskarten ohne Eingriff in den Spielstand. */
+function seenExtraPrologue469(ch){try{return sessionStorage.getItem('arcane-story-prologue-seen-'+ch+'-469')==='1'}catch(e){return false}}
+function markExtraPrologue469(ch){try{sessionStorage.setItem('arcane-story-prologue-seen-'+ch+'-469','1')}catch(e){}}
+function openExtraPrologue469(ch,missionIndex,continueAfter){
+ const config=expansionChapters469.find(x=>x.number===ch);
+ if(!config)return;
+ activeIndex=missionIndex;scene='extra-prologue';dialogStep=0;
+ const lines=config.prologue||[];
+ const draw=()=>{
+  chapterMapClear461();
+  stage.classList.remove('is-forest-dialog-457','is-forest-map-457');
+  stage.classList.add('is-expansion-dialog-469');
+  stage.dataset.expansionChapter=String(ch);
+  show();back.textContent='Zur Kapitelkarte';
+  stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel '+ch+' · '+config.title;
+  const line=lines[dialogStep]||['Erzähler','Der nächste Abschnitt deiner Reise beginnt.'];
+  content.innerHTML='<div class="arcane-expansion-prologue-469"><strong>✦ Prolog · '+escapeText(config.short)+'</strong>'
+   +'<p><b>'+escapeText(line[0])+':</b> '+escapeText(line[1])+'</p>'
+   +'<small>Dialog '+(dialogStep+1)+' / '+lines.length+'</small>'
+   +'<div class="arcane-forest-actions-457"><button type="button" id="extraPrologueSkip469">Überspringen</button>'
+   +'<button type="button" id="extraPrologueNext469">'+(dialogStep+1<lines.length?'Weiter':'Kapitel beginnen')+'</button></div></div>';
+  const complete=()=>{
+   markExtraPrologue469(ch);
+   if(continueAfter){activeIndex=null;openMission(missionIndex)}
+   else showExtraMap469(ch,missionIndex);
+  };
+  content.querySelector('#extraPrologueSkip469').addEventListener('click',complete);
+  content.querySelector('#extraPrologueNext469').addEventListener('click',()=>{
+   if(dialogStep+1<lines.length){dialogStep++;draw()}else complete();
+  });
+ };
+ draw();
+}
+function showExtraMap469(ch,selectedIndex){
+ const config=expansionChapters469.find(x=>x.number===ch);
+ if(!config)return showMap();
+ if(!review469()&&!previousChapterDone469(ch))return showMap();
+ chapterMapClear461();stage.classList.remove('is-forest-map-457','is-forest-dialog-457');
+ scene='expansion-map';activeIndex=null;completedResult=null;
+ stage.classList.add('is-expansion-map-469');stage.dataset.expansionChapter=String(ch);
+ show();back.textContent='← Kapitelübersicht';
+ stage.querySelector('#arcaneStoryHeading357').textContent='Kapitel '+ch+' · '+config.title;
+ const from=(ch-1)*10,progress=readExtra469(ch);
+ const chosen=Number.isInteger(selectedIndex)&&selectedIndex>=from&&selectedIndex<from+10?selectedIndex:from+Math.min(9,Math.max(0,progress-1));
+ const nodes=routePlaces461.map((p,j)=>{
+  const i=from+j,m=missions[i],done=clearedMission(i),open=unlockedMission(i),picked=i===chosen;
+  return '<button type="button" class="arcane-forest-node-457 '+(done?'is-complete-457':open?'is-current-457':'is-locked-457')+(picked?' is-selected-457':'')+'" data-expansion-mission469="'+i+'" aria-pressed="'+picked+'" style="left:'+p[0]+'%;top:'+p[1]+'%">'
+   +'<span class="forest-node-icon-457">'+(done?'✓':open?'⚔':'🔒')+'</span><span class="forest-node-label-457">'+labelMission(i)+'</span></button>';
+ }).join('');
+ const path='<svg class="arcane-forest-path-svg-457" viewBox="0 0 720 1000" preserveAspectRatio="none" aria-hidden="true">'
+   +'<path d="M 122 890 C 155 848 235 846 281 810 S 423 777 468 740 S 606 700 576 640 S 490 572 403 550 S 258 510 209 480 S 99 422 137 390 S 251 345 324 310 S 471 267 511 230 S 429 143 367 120" fill="none" stroke="#ffefb6" stroke-width="7" stroke-linecap="round" stroke-dasharray="10 14"/></svg>';
+ content.innerHTML='<section class="arcane-forest-map-457"><div class="arcane-forest-intro-457"><strong>'+escapeText(config.icon+' '+config.short)+'</strong><small>'+escapeText(config.title)+' · '+(progress-1)+'/10 abgeschlossen</small></div>'
+   +(review469()?'<p class="arcane-expansion-test-469">🔎 Testvorschau aktiv: Alle Missionen und Schwierigkeitsgrade sind zugänglich. Keine EP, Kristalle oder Siege werden gespeichert.</p>':'')
+   +'<div class="arcane-forest-route-457" aria-label="Kapitel '+ch+' Missionskarte">'+path+nodes+'</div>'
+   +'<div class="arcane-forest-detail-457" id="expansionMissionInfo469"></div>'
+   +'<div class="arcane-forest-actions-457"><button type="button" class="arcane-forest-btn-457 secondary" id="extraPrologueReplay469">📖 Kapitelprolog ansehen</button></div></section>';
+ const select=i=>{
+  const m=missions[i],info=content.querySelector('#expansionMissionInfo469'),open=unlockedMission(i),done=clearedMission(i);
+  content.querySelectorAll('[data-expansion-mission469]').forEach(b=>{
+   const picked=Number(b.dataset.expansionMission469)===i;
+   b.classList.toggle('is-selected-457',picked);b.setAttribute('aria-pressed',String(picked));
+  });
+  info.innerHTML='<div class="arcane-forest-detail-header-457"><h3>'+labelMission(i)+' · '+escapeText(m.title)+'</h3><span class="arcane-forest-state-457">'+(done?'✓ Geschafft':review469()?'🔎 Testbereit':open?'⚔ Bereit':'🔒 Gesperrt')+'</span></div>'
+    +'<div class="arcane-forest-info-457"><div class="arcane-forest-portrait-457 arcane-forest-portrait-placeholder-457">'+escapeText(config.icon)+'</div>'
+    +'<div class="arcane-forest-describe-457"><strong>⚔ Gegner: '+escapeText(m.opponent)+'</strong><p>📍 '+escapeText(m.location)+'</p><p>'+escapeText(m.pre[0][1])+'</p></div></div>'
+    +'<div class="arcane-forest-rewards-457"><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457">💎 50 Arkankristalle</span></div>'
+    +'<div class="arcane-forest-actions-457"><button type="button" class="arcane-forest-btn-457 secondary" id="expansionBack469">← Zur Übersicht</button>'
+    +'<button type="button" class="arcane-forest-btn-457" id="expansionStart469" '+(open?'':'disabled')+'>'+(review469()?'🔎 Mission testen':done?'Erneut spielen':open?'⚔ Mission starten':'🔒 Gesperrt')+'</button></div>';
+  info.querySelector('#expansionBack469').addEventListener('click',showMap);
+  info.querySelector('#expansionStart469').addEventListener('click',()=>{if(unlockedMission(i))openMission(i)});
+ };
+ content.querySelectorAll('[data-expansion-mission469]').forEach(b=>b.addEventListener('click',()=>{
+  select(Number(b.dataset.expansionMission469));
+  if(window.matchMedia?.('(max-width: 650px)').matches)content.querySelector('#expansionMissionInfo469')?.scrollIntoView({block:'nearest',behavior:'smooth'});
+ }));
+ content.querySelector('#extraPrologueReplay469').addEventListener('click',()=>openExtraPrologue469(ch,chosen,false));
+ select(chosen);
+}
+
  function showMap(){
+  setReview469(false);
   chapterMapClear461();
   stage.classList.remove('is-forest-map-457','is-forest-dialog-457');
   scene='map';activeIndex=null;completedResult=null;show();
@@ -9527,7 +9608,15 @@ function showChapterRoute461(chapter,selectIndex){
    return '<button type="button" class="arcane-story-choice-357 '+(cleared?'is-cleared-357 ':'')+(m.boss?'is-boss-357':'')+'" data-mission="'+i+'" '+(locked?'disabled':'')+'><span>'+(m.boss?'♛ ':'⚔ ')+labelMission(i)+'</span><div><strong>'+escapeText(m.title)+'</strong><small>'+escapeText(m.opponent)+' · '+(cleared?'✓ Geschafft':locked?'🔒 Gesperrt':'Bereit')+'</small>'+(m.candidate&&cleared?'<span class="arcane-story-candidate-444">✦ Möglicher Charakter entdeckt</span>':'')+'</div></button>';
   }).join('');
   const progress=window.arcaneCharacterProgress382?.levelProgress();
-  content.innerHTML='<div class="arcane-story-hero-357"><strong>Die Chronik der Sieben Siegel</strong></div><p class="arcane-story-copy-357">Von Arkanis durch den Verlorenen Wald bis zu den Aschengipfeln: Jede Mission enthält Dialoge, ein Duell und vier Schwierigkeitsstufen.</p>'
+  const expansionHtml469='<div class="arcane-expansion-chapters-469">'+expansionChapters469.map(c=>{
+   const ready=previousChapterDone469(c.number),value=readExtra469(c.number);
+   return '<div class="arcane-expansion-card-469"><strong>'+escapeText(c.icon+' Kapitel '+c.number+' · '+c.title)+'</strong>'
+    +'<small>'+escapeText(c.short)+' · '+(value-1)+'/10 Missionen abgeschlossen</small>'
+    +(ready?'<button type="button" data-extra-chapter469="'+c.number+'" data-mode469="normal">⚔ Kapitel betreten</button>':'<p>🔒 Regulär nach Kapitel '+(c.number-1)+' spielbar</p>')
+    +'<button type="button" class="preview" data-extra-chapter469="'+c.number+'" data-mode469="review">🔎 Kapitel testen</button>'
+    +'</div>';
+  }).join('')+'</div>';
+  content.innerHTML='<div class="arcane-story-hero-357"><strong>Die Chronik der Sieben Siegel</strong></div><p class="arcane-story-copy-357">Sieben Siegel, sieben Welten und 70 Missionen: Jede Mission enthält Dialoge, ein Duell und vier Schwierigkeitsstufen.</p>'
    +'<div class="arcane-character-progress-382"><button type="button" class="arcane-level-open-384" id="arcaneLevelOpen384">🎁 Levelbelohnungen ansehen</button><strong>Kael · Level '+(window.arcaneCharacterProgress382?.level()||1)+' / 30</strong><div class="arcane-character-level-track-382"><span style="width:'+(progress?.percent||0)+'%"></span></div><small>'+(progress?.current||0)+' / '+(progress?.next||'MAX')+' EP bis zum nächsten Level</small><p>'+(window.arcaneCharacterProgress382?.leonUnlocked()?'✓ Leon freigeschaltet · Starterpack und Deckplätze verfügbar':'🔒 Leon freischalten: Mission 1 gewinnen · Kael Level 10 erreichen')+'</p></div>'
    +'<div class="arcane-story-chapter-357"><strong>Kapitel 1 · Die Akademie von Arkanis</strong><p class="arcane-story-note-357">Die Reise beginnt mit zehn Prüfungen an der Akademie. Fortschritt: '+(ch1-1)+' / 10.</p><button type="button" class="arcane-story-action-357" id="arcaneChapter1Map461">✨ Akademie betreten · Missionskarte</button></div>'
    +'<div class="arcane-story-chapter2-banner-444"><strong>Kapitel 2 · Der verlorene Wald</strong><p>'+(open2?'Das Wurzelherz erwartet euch. Fortschritt: '+(ch2-1)+' / 10 Missionen.':'Schließe zuerst Kapitel 1 (Mission 1-10) ab.')+'</p>'
@@ -9536,11 +9625,18 @@ function showChapterRoute461(chapter,selectIndex){
    +'<div class="arcane-story-chapter3-banner-445"><strong>Kapitel 3 · Die Aschengipfel</strong><p>'+(open3?'Die Urflamme ruft. Fortschritt: '+(ch3-1)+' / 10 Missionen. Malachar jagt den dritten Siegelkern.':'Schließe Kapitel 2 (Mission 2-10) ab, um die Aschengipfel freizuschalten.')+'</p>'
    +(open3?'<button type="button" class="arcane-story-action-357" id="arcaneChapter3Map461">🌋 Aschengipfel betreten · Missionskarte</button>':'<small>🔒 Kapitel 3 nach Kapitel 2 verfügbar</small>')+'</div>'
    +(open3&&ch3>5?'<p class="arcane-story-note-357">✦ Arion kennengelernt'+(ch3>10?' · Pyrathos kennengelernt':'')+' – mögliche spätere Charaktere, noch nicht spielbar.</p>':'')
-   +'<p class="arcane-story-note-357">Deine Fortschritte und Siege werden auf diesem Gerät gespeichert.</p>';
+   +'<p class="arcane-story-note-357">Kapitel 4 bis 7 kannst du im Testmodus auch ohne vorherige Siege anschauen.</p>'
+   +expansionHtml469
+   +'<p class="arcane-story-note-357">Deine regulären Fortschritte und Siege werden auf diesem Gerät gespeichert.</p>';
   content.querySelector('#arcaneLevelOpen384')?.addEventListener('click',()=>window.openArcaneLevelRewards384?.());
   content.querySelector('#arcaneChapter1Map461')?.addEventListener('click',()=>showChapterRoute461(1));
   content.querySelector('#arcaneChapter2Map457')?.addEventListener('click',()=>showForestMap457());
   content.querySelector('#arcaneChapter3Map461')?.addEventListener('click',()=>showChapterRoute461(3));
+  content.querySelectorAll('[data-extra-chapter469]').forEach(b=>b.addEventListener('click',()=>{
+   const chapter=Number(b.dataset.extraChapter469),review=b.dataset.mode469==='review';
+   setReview469(review);
+   showExtraMap469(chapter);
+  }));
   content.querySelectorAll('[data-mission]').forEach(b=>b.addEventListener('click',()=>openMission(Number(b.dataset.mission))));
  }
  let prologueToMap=false,duelFinishedHere=false;
