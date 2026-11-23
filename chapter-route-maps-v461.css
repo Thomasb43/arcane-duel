@@ -1,0 +1,89 @@
+/* Arcane Duel v4.61 – Kapitelkarten Akademie & Aschengipfel.
+   Verwendet dieselben klickbaren Waldkarten-Knoten, Detailfelder und Fortschrittsdaten. */
+#arcaneStory357.is-academy-map-461,
+#arcaneStory357.is-volcano-map-461,
+#arcaneStory357.is-academy-dialog-461,
+#arcaneStory357.is-volcano-dialog-461{
+ background-position:center!important;
+ background-size:cover!important;
+ background-attachment:fixed!important;
+}
+#arcaneStory357.is-academy-map-461{
+ background-image:linear-gradient(180deg,#12203962,#091c292b,#0911228c),url('artwork/story/academy-magical-v461.avif'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+}
+#arcaneStory357.is-volcano-map-461{
+ background-image:linear-gradient(180deg,#1b0c2c8c,#2a0b1b3b,#0c0716b2),url('artwork/story/ashes-magical-v461.avif'),radial-gradient(ellipse at top left,#a54b2a,#2b133c 55%,#101321)!important;
+}
+#arcaneStory357.is-academy-map-461 .arcane-story-shell-357,
+#arcaneStory357.is-volcano-map-461 .arcane-story-shell-357{
+ max-width:800px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0 5px 20px!important;
+}
+#arcaneStory357.is-academy-map-461 .arcane-story-head-357,
+#arcaneStory357.is-volcano-map-461 .arcane-story-head-357{
+ padding:11px 12px!important;margin-bottom:10px!important;border:1.5px solid #dfbe79;
+ border-radius:13px;background:linear-gradient(135deg,#1a1e2ee8,#2c1745ec,#152c2ae8)!important;
+ box-shadow:0 8px 28px #0007,0 0 18px #9570ab86;backdrop-filter:blur(7px);
+}
+#arcaneStory357.is-academy-map-461 .arcane-story-kicker-357{color:#f2d0f7!important}
+#arcaneStory357.is-volcano-map-461 .arcane-story-kicker-357{color:#ffcba3!important}
+#arcaneStory357.is-academy-map-461 #arcaneStoryHeading357,
+#arcaneStory357.is-volcano-map-461 #arcaneStoryHeading357{font-size:clamp(21px,4.6vw,31px)!important;line-height:1.15}
+#arcaneStory357.is-academy-map-461 .arcane-forest-route-457,
+#arcaneStory357.is-volcano-map-461 .arcane-forest-route-457{
+ background-size:cover!important;background-position:center!important;
+}
+#arcaneStory357.is-academy-map-461 .arcane-forest-route-457{
+ background-image:linear-gradient(180deg,#0d203329,#08212f19 60%,#0d153742),url('artwork/story/academy-magical-v461.avif'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ border-color:#e7ca83!important;
+}
+#arcaneStory357.is-volcano-map-461 .arcane-forest-route-457{
+ background-image:linear-gradient(180deg,#2711252c,#200d212b 60%,#160b2549),url('artwork/story/ashes-magical-v461.avif'),radial-gradient(ellipse at 50% 17%,#df622f,#391a36 55%,#160d22)!important;
+ border-color:#e3af75!important;
+}
+#arcaneStory357.is-academy-map-461 .arcane-forest-intro-457{
+ border-color:#e0c79b;background:#0c1d3add;box-shadow:0 0 18px #7e6bb260;
+}
+#arcaneStory357.is-volcano-map-461 .arcane-forest-intro-457{
+ border-color:#edb776;background:#241327df;box-shadow:0 0 18px #de6d475b;
+}
+#arcaneStory357.is-academy-map-461 .arcane-forest-node-457.is-current-457{background:linear-gradient(155deg,#8b51c9ef,#2b205eea);border-color:#ffe6a4}
+#arcaneStory357.is-volcano-map-461 .arcane-forest-node-457.is-current-457{background:linear-gradient(155deg,#b6508cef,#45153be8);border-color:#ffc987;box-shadow:0 0 0 5px #e4a26750,0 0 28px #ff9b5dcc}
+#arcaneStory357.is-academy-map-461 .arcane-forest-detail-457{
+ background:linear-gradient(155deg,#302346f4,#192143f1 70%,#202f3ff0);border-color:#ead297;
+}
+#arcaneStory357.is-volcano-map-461 .arcane-forest-detail-457{
+ background:linear-gradient(155deg,#33203cf2,#201529f4 70%,#342033ee);border-color:#e6ab80;
+}
+#arcaneStory357.is-academy-map-461 .arcane-forest-btn-457{background:linear-gradient(130deg,#824dd4,#322078)}
+#arcaneStory357.is-volcano-map-461 .arcane-forest-btn-457{background:linear-gradient(130deg,#963c7e,#4a1a5c)}
+#arcaneStory357.is-academy-map-461 .arcane-forest-btn-457.secondary,
+#arcaneStory357.is-volcano-map-461 .arcane-forest-btn-457.secondary{background:#27253d}
+#arcaneStory357.is-academy-dialog-461{
+ background-image:linear-gradient(180deg,#11172cd8,#0d1f2ed6),url('artwork/story/academy-magical-v461.avif'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+}
+#arcaneStory357.is-volcano-dialog-461{
+ background-image:linear-gradient(180deg,#160b20d3,#1c101bd6),url('artwork/story/ashes-magical-v461.avif'),radial-gradient(ellipse at 50% 20%,#9d453b,#1c102e)!important;
+}
+#arcaneStory357.is-academy-dialog-461 .arcane-story-shell-357,
+#arcaneStory357.is-volcano-dialog-461 .arcane-story-shell-357{
+ background:linear-gradient(150deg,#25243cec,#171b33ed)!important;border-color:#bf9f8d!important;
+ box-shadow:0 0 25px #8276b46c!important;
+}
+#arcaneStory357.is-academy-dialog-461 .arcane-story-stage-360{
+ background-image:linear-gradient(180deg,#161d2841,#141a304e),url('artwork/story/academy-magical-v461.avif')!important;
+ background-size:cover!important;background-position:center 36%!important;
+}
+#arcaneStory357.is-volcano-dialog-461 .arcane-story-stage-360{
+ background-image:linear-gradient(180deg,#211a2941,#3017214b),url('artwork/story/ashes-magical-v461.avif')!important;
+ background-size:cover!important;background-position:center 35%!important;
+}
+#arcaneStory357.is-academy-dialog-461 .arcane-story-dialog-box-360,
+#arcaneStory357.is-volcano-dialog-461 .arcane-story-dialog-box-360{background:linear-gradient(140deg,#282242f1,#1e223af5)!important;border-color:#c9a58b!important}
+@media(max-width:460px){
+ #arcaneStory357.is-academy-map-461,
+ #arcaneStory357.is-volcano-map-461{padding:10px 6px max(12px,env(safe-area-inset-bottom))!important}
+ #arcaneStory357.is-academy-map-461 .arcane-story-head-357,
+ #arcaneStory357.is-volcano-map-461 .arcane-story-head-357{padding:9px 10px!important;gap:8px}
+ #arcaneStory357.is-academy-map-461 #arcaneStoryHeading357,
+ #arcaneStory357.is-volcano-map-461 #arcaneStoryHeading357{font-size:20px!important}
+}
