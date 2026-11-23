@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-forest-duel-world-v483">
+<meta name="arcane-build" content="20261123-story-duel-worlds-v484">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5546,6 +5546,54 @@ main.arcane-responsive.arcane-forest-duel-v483{
 }
 main.arcane-responsive.arcane-forest-duel-v483>.cathedral-ambience{opacity:.18!important}
 </style>
+
+<style>
+/* v4.84 – Kapitelwelten im Story-Duell, nur für Kapitel 3–7.
+   Kapitel 2 verwendet weiterhin die etablierte Waldansicht aus v4.83.
+   Das Duellfeld, LP und die Karten bleiben interaktiv und unverändert. */
+body[data-story-duel-chapter-v484="3"]{
+ --story-duel-world-v484:url('artwork/story/ashes-chapter3-hd-v478.avif?v=478');
+ --story-duel-base-v484:#211325;
+}
+body[data-story-duel-chapter-v484="4"]{
+ --story-duel-world-v484:url('artwork/story/nymaris-chapter4-hd-v479.avif?v=479');
+ --story-duel-base-v484:#0c2432;
+}
+body[data-story-duel-chapter-v484="5"]{
+ --story-duel-world-v484:url('artwork/story/aerion-chapter5-hd-v480.avif?v=480');
+ --story-duel-base-v484:#20233b;
+}
+body[data-story-duel-chapter-v484="6"]{
+ --story-duel-world-v484:url('artwork/story/time-palace-chapter6-hd-v481.avif?v=481');
+ --story-duel-base-v484:#231733;
+}
+body[data-story-duel-chapter-v484="7"]{
+ --story-duel-world-v484:url('artwork/story/dark-throne-chapter7-hd-v482.avif?v=482');
+ --story-duel-base-v484:#260f27;
+}
+body[data-story-duel-chapter-v484]::before{
+ background-image:linear-gradient(180deg,#070c1a76,#0b122e25 45%,#0a091a82),var(--story-duel-world-v484)!important;
+ background-size:cover!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+ background-attachment:fixed!important;
+ animation:none!important;
+}
+body[data-story-duel-chapter-v484]::after{
+ opacity:.14!important;
+ animation:none!important;
+}
+main.arcane-responsive[data-story-duel-chapter-v484]{
+ background-image:linear-gradient(180deg,#060c164d,#060e1922 52%,#060b1859),var(--story-duel-world-v484)!important;
+ background-color:var(--story-duel-base-v484,#16152b)!important;
+ background-size:cover!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
+main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
+ opacity:.16!important;
+}
+</style>
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -9373,18 +9421,29 @@ syncHeroResonanceExtra439();
  document.body.appendChild(stage);
  const content=stage.querySelector('#arcaneStoryContent357'),back=stage.querySelector('#arcaneStoryBack357');
  let activeIndex=null,dialogStep=0,scene='map',completedResult=null,lastMissionReward=null;
- // 2-1 bis 2-10: die Wald-Illustration erscheint nur beim aktiven Duell.
- function setStoryForestDuel483(active){
-  const showForest=!!active;
-  document.body.classList.toggle('arcane-forest-duel-v483',showForest);
-  document.querySelector('main')?.classList.toggle('arcane-forest-duel-v483',showForest);
+ // Storyduelle: Missionsindex 10–19 = Wald (Kapitel 2),
+ // 20–69 = die bereits hochgeladenen hochauflösenden Kapitelwelten 3–7.
+ function setStoryDuelWorld484(missionIndex){
+  const chapter=Number.isInteger(missionIndex)&&missionIndex>=10&&missionIndex<70
+   ?Math.floor(missionIndex/10)+1:0;
+  const arena=document.querySelector('main');
+  const forest=chapter===2;
+  document.body.classList.toggle('arcane-forest-duel-v483',forest);
+  arena?.classList.toggle('arcane-forest-duel-v483',forest);
+  if(chapter>=3&&chapter<=7){
+   document.body.setAttribute('data-story-duel-chapter-v484',String(chapter));
+   arena?.setAttribute('data-story-duel-chapter-v484',String(chapter));
+  }else{
+   document.body.removeAttribute('data-story-duel-chapter-v484');
+   arena?.removeAttribute('data-story-duel-chapter-v484');
+  }
  }
  document.addEventListener('click',event=>{
   if(event.target.closest('#arcaneStartDuel307, #arcaneReturnMenu307'))
-   setStoryForestDuel483(false);
+   setStoryDuelWorld484(null);
  },true);
  function show(){stage.hidden=false;stage.scrollTop=0}
- function close(){setStoryForestDuel483(false);chapterMapClear461();stage.classList.remove('is-forest-map-457','is-forest-dialog-457');stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
+ function close(){setStoryDuelWorld484(null);chapterMapClear461();stage.classList.remove('is-forest-map-457','is-forest-dialog-457');stage.hidden=true;scene='map';completedResult=null;home.hidden=false}
  back.addEventListener('click',()=>{
   if(scene==='map')close();
   else if(scene==='forest-map'||scene==='chapter-route-1'||scene==='chapter-route-3'||scene==='expansion-map')showMap();
@@ -9767,7 +9826,7 @@ function showExtraMap469(ch,selectedIndex){
   renderStoryHero475();
  }
  function showMap(){
-  setStoryForestDuel483(false);
+  setStoryDuelWorld484(null);
   setReview469(false);
   chapterMapClear461();
   stage.classList.remove('is-forest-map-457','is-forest-dialog-457');
@@ -9898,7 +9957,7 @@ function showExtraMap469(ch,selectedIndex){
  }
  function drawDialog(){
   if(activeIndex===null)return;
-  setStoryForestDuel483(false);
+  setStoryDuelWorld484(null);
   chapterMapClear461();
   if(activeIndex<10)stage.classList.add('is-academy-dialog-461');
   if(activeIndex>=20&&activeIndex<30)stage.classList.add('is-volcano-dialog-461');
@@ -9928,7 +9987,7 @@ function showExtraMap469(ch,selectedIndex){
   if(typeof window.arcaneApplyStoryOpponent362==='function'){
    try{if(!window.arcaneApplyStoryOpponent362(activeIndex))throw Error('Gegnerdeck nicht vorbereitet');}catch(e){console.error('Story-Gegnerdeck:',e);window.alert('Duell konnte nicht gestartet werden: '+e.message);return}
   }
-  setStoryForestDuel483(activeIndex>=10&&activeIndex<20);
+  setStoryDuelWorld484(activeIndex);
   scene='duel';stage.hidden=true;home.hidden=true;if(intro)intro.hidden=true;
   window.arcaneCurrentStoryOpponent397=missions[activeIndex].opponent;
   window.syncDuelCharacterPortraits396?.();
@@ -9939,7 +9998,7 @@ function showExtraMap469(ch,selectedIndex){
  }
  function finishMission(){
   if(activeIndex===null)return;
-  setStoryForestDuel483(false);
+  setStoryDuelWorld484(null);
   const chapter=Math.floor(activeIndex/10)+1,finalChapter=chapter===7;
   if(!review469()){
    if(chapter===1)save(activeIndex+2);
@@ -9980,7 +10039,7 @@ function showExtraMap469(ch,selectedIndex){
    try{pending=sessionStorage.getItem('arcane-story-active-duel-358')}catch(e){}
    const index=Number(pending);
    if(pending===null||!Number.isInteger(index)||index<0||index>=missions.length)return false;
-   activeIndex=index;scene='duel';
+   activeIndex=index;scene='duel';setStoryDuelWorld484(activeIndex);
   }
   completedResult=won?'win':draw?'draw':'loss';duelFinishedHere=true;
   const outcome=document.getElementById('duelOutcome306');
@@ -9999,7 +10058,7 @@ function showExtraMap469(ch,selectedIndex){
    scene='post';dialogStep=0;home.hidden=true;drawDialog();return true;
   }
   try{sessionStorage.removeItem('arcane-story-active-duel-358')}catch(e){}
-  setStoryForestDuel483(false);
+  setStoryDuelWorld484(null);
   scene='lost';show();
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(draw?'UNENTSCHIEDEN':'DUELL VERLOREN')+'</div><div class="arcane-story-line-357">Versuche Mission '+labelMission(activeIndex)+' erneut. Dein Story-Fortschritt bleibt erhalten.</div></div><div class="arcane-story-actions-357"><button class="arcane-story-action-357 primary-357" id="arcaneStoryRetry357">⚔ Erneut duellieren</button><button class="arcane-story-action-357" id="arcaneStoryLostMap357">Zur Übersicht</button></div>';
   content.querySelector('#arcaneStoryRetry357').addEventListener('click',()=>restartForStory(activeIndex));
