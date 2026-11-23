@@ -1,4 +1,4 @@
-/* Arcane Duel v4.67 – Vorhandene Story-Siege anerkennen und Schwierigkeitsstufen sequenziell freischalten */
+/* Arcane Duel v4.69 – 70 Story-Missionen, vier Schwierigkeitsgrade und sichere Testvorschau */
 (function(){
 'use strict';
 const LABELS=['Einsteiger','Fortgeschritten','Experte','Meister'];
@@ -29,7 +29,7 @@ createStoryOpponentDeck362=function(index){
  return index===0?createLeonTier(window.arcaneStoryDifficulty435||1):baseCreate(index);
 };
 function readWins(){
- let saved=Array(30).fill(0);
+ let saved=Array(70).fill(0);
  try{
   const data=JSON.parse(localStorage.getItem(WIN_KEY)||'[]');
   if(Array.isArray(data))saved=saved.map((_,i)=>Math.max(0,Math.min(15,Math.trunc(Number(data[i])||0))));
@@ -57,6 +57,7 @@ function readWins(){
  return saved;
 }
 function highestUnlocked(index,wins){
+ if(index>=30&&window.arcaneStoryReview469)return 4;
  const marks=(wins||readWins())[index]||0;
  let tier=1;
  // Jede Mission erfordert Siege in lückenloser Reihenfolge.
@@ -67,7 +68,7 @@ function isUnlocked(index,tier,wins){
  return clamp(tier)<=highestUnlocked(index,wins);
 }
 function recordWin(index,tier){
- if(!Number.isInteger(index)||index<0||index>=30)return false;
+ if(!Number.isInteger(index)||index<0||index>=70||window.arcaneStoryReview469)return false;
  tier=clamp(tier);
  const current=readWins();
  if(!isUnlocked(index,tier,current))return false;
@@ -78,10 +79,11 @@ function recordWin(index,tier){
 function choose(index,tier){
  // Auch direkte Aufrufe der Auswahl dürfen gesperrte Stufen nicht umgehen.
  tier=Math.min(clamp(tier),highestUnlocked(index));
- if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
+ if(index>=30)window.arcaneStoryDifficultyExpanded469=tier;
+ else if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
  else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
  else window[PROPS[index]]=tier;
- window.arcaneStorySelectedDifficulty435={mission:index+1,chapter:index<10?1:index<20?2:3,missionNumber:index%10+1,tier,label:LABELS[tier-1]};
+ window.arcaneStorySelectedDifficulty435={mission:index+1,chapter:Math.floor(index/10)+1,missionNumber:index%10+1,tier,label:LABELS[tier-1]};
  try{sessionStorage.setItem(TIER_KEY,String(tier));sessionStorage.setItem(MISSION_KEY,String(index))}catch(e){}
 }
 const oldApply=window.arcaneApplyStoryOpponent362;
@@ -89,7 +91,8 @@ window.arcaneApplyStoryOpponent362=function(index){
  let active=-1,tier=1;
  try{active=Number(sessionStorage.getItem(MISSION_KEY));tier=active===index?clamp(sessionStorage.getItem(TIER_KEY)):1}catch(e){}
  tier=active===index?Math.min(tier,highestUnlocked(index)):1;
- if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
+ if(index>=30)window.arcaneStoryDifficultyExpanded469=tier;
+ else if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
  else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
  else if(PROPS[index])window[PROPS[index]]=tier;
  const ok=oldApply(index);
@@ -106,7 +109,7 @@ if(typeof oldResult==='function'){
    try{
     const pending=sessionStorage.getItem('arcane-story-active-duel-358');
     const index=Number(pending),selected=Number(sessionStorage.getItem(MISSION_KEY));
-    if(pending!==null&&Number.isInteger(index)&&index>=0&&index<30){
+    if(pending!==null&&Number.isInteger(index)&&index>=0&&index<70){
      recordWin(index,selected===index?sessionStorage.getItem(TIER_KEY):1);
     }
    }catch(e){console.warn('Schwierigkeitssieg konnte nicht gespeichert werden:',e)}
@@ -139,15 +142,15 @@ document.head.appendChild(style);
 let ignoreButton=null,opened=false;
 function missionIndex(){
  const title=document.getElementById('arcaneStoryHeading357')?.textContent||'';
- const match=title.match(/^([123])-(\d+)\s/);
+ const match=title.match(/^([1-7])-(\d+)\s/);
  if(!match)return -1;
  const index=(Number(match[1])-1)*10+Number(match[2])-1;
- return Number.isInteger(index)&&index>=0&&index<30?index:-1;
+ return Number.isInteger(index)&&index>=0&&index<70?index:-1;
 }
 function showChoice(index,continueButton){
- if(opened||index<0||index>=30)return;
+ if(opened||index<0||index>=70)return;
  opened=true;
- const chapter=index<10?1:index<20?2:3;
+ const chapter=Math.floor(index/10)+1;
  const label=chapter+'-'+(index%10+1);
  const wins=readWins(),marks=wins[index];
  const maxTier=highestUnlocked(index,wins);
@@ -165,7 +168,7 @@ function showChoice(index,continueButton){
  const storyLine=story?.querySelector('.arcane-story-line-357')?.textContent?.trim()||'Bereite dich auf dein nächstes Duell vor.';
  const image=story?.querySelector('.arcane-story-portrait-360.is-speaking-360 img:not([hidden])');
  const art=image?.getAttribute('src')||null;
- const chapterNames=['','Die Akademie von Arkanis','Der verlorene Wald','Die Aschengipfel'];
+ const chapterNames=['','Die Akademie von Arkanis','Der verlorene Wald','Die Aschengipfel','Die versunkene Stadt Nymaris','Das Königreich über den Wolken','Der zerbrochene Zeitpalast','Der Thron der Finsternis'];
  const modal=document.createElement('div');
  modal.id='arcaneStoryDifficulty435';
  modal.className='arcane-difficulty-overlay-435 arcane-briefing-overlay-465 is-chapter-'+chapter+'-465';
@@ -204,7 +207,7 @@ function showChoice(index,continueButton){
  heading.textContent='✦ Schwierigkeitsgrad wählen ✦';
  const help=document.createElement('p');
  help.className='arcane-briefing-help-465';
- help.textContent='Gewinne jede Stufe, um die nächste freizuschalten: Einsteiger → Fortgeschritten → Experte → Meister.';
+ help.textContent=index>=30&&window.arcaneStoryReview469?'TESTMODUS: Alle vier Schwierigkeitsgrade können ausprobiert werden.':'Gewinne jede Stufe, um die nächste freizuschalten: Einsteiger → Fortgeschritten → Experte → Meister.';
  const grid=document.createElement('div');
  grid.className='arcane-difficulty-grid-435';
  const tierGlyphs=['⚔','⚔⚔','⚔⚔⚔','♛'];
@@ -221,7 +224,7 @@ function showChoice(index,continueButton){
   const name=document.createElement('strong');name.textContent=LABELS[tier-1];
   const description=document.createElement('small');description.textContent=DETAILS[tier-1];
   const state=document.createElement('span');state.className='tier-state';
-  state.textContent=!unlocked?'🔒 Erst '+LABELS[tier-2]+' besiegen':won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
+  state.textContent=index>=30&&window.arcaneStoryReview469?'🔎 Zum Testen verfügbar':!unlocked?'🔒 Erst '+LABELS[tier-2]+' besiegen':won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
   if(!unlocked)button.title='Besiege zuerst '+LABELS[tier-2]+' in dieser Mission.';
   button.append(number,name,description,state);
   button.addEventListener('click',()=>{
@@ -240,10 +243,10 @@ function showChoice(index,continueButton){
  }
  const rewards=document.createElement('div');
  rewards.className='arcane-briefing-rewards-465';
- rewards.innerHTML='<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
+ rewards.innerHTML=index>=30&&window.arcaneStoryReview469?'<strong>🔎 Testmodus</strong><span>Keine Belohnungen</span>':'<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
  const note=document.createElement('p');
  note.className='arcane-briefing-note-465';
- note.textContent='Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
+ note.textContent=index>=30&&window.arcaneStoryReview469?'Die Vorschau verändert weder deinen Story-Fortschritt noch deine Kristalle.':'Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
  const actions=document.createElement('div');
  actions.className='arcane-briefing-actions-465';
  actions.innerHTML='<button type="button" class="cancel">← Zurück</button><button type="button" class="start">⚔ Mission starten</button>';
@@ -300,5 +303,5 @@ if(container){
  new MutationObserver(decorate).observe(container,{childList:true});
  decorate();
 }
-window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,unlocked:highestUnlocked,select:choose,missions:30};
+window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,unlocked:highestUnlocked,select:choose,missions:70};
 })();
