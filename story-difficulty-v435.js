@@ -1,4 +1,4 @@
-/* Arcane Duel v4.66 – Story-Schwierigkeitsstufen mit aufeinanderfolgenden Freischaltungen */
+/* Arcane Duel v4.67 – Vorhandene Story-Siege anerkennen und Schwierigkeitsstufen sequenziell freischalten */
 (function(){
 'use strict';
 const LABELS=['Einsteiger','Fortgeschritten','Experte','Meister'];
@@ -29,11 +29,32 @@ createStoryOpponentDeck362=function(index){
  return index===0?createLeonTier(window.arcaneStoryDifficulty435||1):baseCreate(index);
 };
 function readWins(){
+ let saved=Array(30).fill(0);
  try{
   const data=JSON.parse(localStorage.getItem(WIN_KEY)||'[]');
-  if(Array.isArray(data))return Array.from({length:30},(_,i)=>Math.max(0,Math.min(15,Math.trunc(Number(data[i])||0))));
+  if(Array.isArray(data))saved=saved.map((_,i)=>Math.max(0,Math.min(15,Math.trunc(Number(data[i])||0))));
  }catch(e){}
- return Array(30).fill(0);
+ // Bestehende Story-Spielstände aus älteren Versionen zählen als Einsteiger-Siege.
+ // Der Speicherwert ist die nächste freigeschaltete Mission (1 bis 11).
+ // Nur tatsächlich abgeschlossene Missionen übernehmen; keine höheren Stufen fälschen.
+ const oldKeys=[
+  'arcane-duel-story-chapter1-357',
+  'arcane-duel-story-chapter2-v444',
+  'arcane-duel-story-chapter3-v445'
+ ];
+ let changed=false;
+ oldKeys.forEach((key,chapter)=>{
+  let progress=1;
+  try{progress=Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(key))||1)))}catch(_){}
+  for(let mission=0;mission<progress-1;mission++){
+   const index=chapter*10+mission;
+   if(!(saved[index]&1)){saved[index]|=1;changed=true}
+  }
+ });
+ if(changed){
+  try{localStorage.setItem(WIN_KEY,JSON.stringify(saved))}catch(e){console.warn('Frühere Story-Siege konnten nicht übernommen werden:',e)}
+ }
+ return saved;
 }
 function highestUnlocked(index,wins){
  const marks=(wins||readWins())[index]||0;
@@ -130,9 +151,14 @@ function showChoice(index,continueButton){
  const label=chapter+'-'+(index%10+1);
  const wins=readWins(),marks=wins[index];
  const maxTier=highestUnlocked(index,wins);
- let picked=1;
- try{if(Number(sessionStorage.getItem(MISSION_KEY))===index)picked=clamp(sessionStorage.getItem(TIER_KEY))}catch(_){}
- picked=Math.min(picked,maxTier);
+ // Nach einem Erfolg die nächste spielbare Stufe bevorzugen.
+ let picked=maxTier;
+ try{
+  if(Number(sessionStorage.getItem(MISSION_KEY))===index){
+   const previous=clamp(sessionStorage.getItem(TIER_KEY));
+   if(!(marks&(1<<(previous-1))))picked=Math.min(previous,maxTier);
+  }
+ }catch(_){}
  const story=document.getElementById('arcaneStoryContent357');
  const pageTitle=document.getElementById('arcaneStoryHeading357')?.textContent?.trim()||('Mission '+label);
  const speaker=story?.querySelector('.arcane-story-speaker-357')?.textContent?.trim()||'Erzähler';
