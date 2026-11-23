@@ -1,4 +1,4 @@
-/* Arcane Duel v4.45 – Vier Story-Schwierigkeitsstufen für Kapitel 1, 2 und 3 */
+/* Arcane Duel v4.66 – Story-Schwierigkeitsstufen mit aufeinanderfolgenden Freischaltungen */
 (function(){
 'use strict';
 const LABELS=['Einsteiger','Fortgeschritten','Experte','Meister'];
@@ -35,12 +35,28 @@ function readWins(){
  }catch(e){}
  return Array(30).fill(0);
 }
+function highestUnlocked(index,wins){
+ const marks=(wins||readWins())[index]||0;
+ let tier=1;
+ // Jede Mission erfordert Siege in lückenloser Reihenfolge.
+ while(tier<4&&(marks&(1<<(tier-1))))tier++;
+ return tier;
+}
+function isUnlocked(index,tier,wins){
+ return clamp(tier)<=highestUnlocked(index,wins);
+}
 function recordWin(index,tier){
- const current=readWins();current[index]|=(1<<(clamp(tier)-1));
+ if(!Number.isInteger(index)||index<0||index>=30)return false;
+ tier=clamp(tier);
+ const current=readWins();
+ if(!isUnlocked(index,tier,current))return false;
+ current[index]|=(1<<(tier-1));
  try{localStorage.setItem(WIN_KEY,JSON.stringify(current))}catch(e){console.warn('Story-Stufe nicht gespeichert:',e)}
+ return true;
 }
 function choose(index,tier){
- tier=clamp(tier);
+ // Auch direkte Aufrufe der Auswahl dürfen gesperrte Stufen nicht umgehen.
+ tier=Math.min(clamp(tier),highestUnlocked(index));
  if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
  else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
  else window[PROPS[index]]=tier;
@@ -51,8 +67,10 @@ const oldApply=window.arcaneApplyStoryOpponent362;
 window.arcaneApplyStoryOpponent362=function(index){
  let active=-1,tier=1;
  try{active=Number(sessionStorage.getItem(MISSION_KEY));tier=active===index?clamp(sessionStorage.getItem(TIER_KEY)):1}catch(e){}
+ tier=active===index?Math.min(tier,highestUnlocked(index)):1;
  if(index>=20)window.arcaneStoryDifficultyChapter3445=tier;
  else if(index>=10)window.arcaneStoryDifficultyChapter2444=tier;
+ else if(PROPS[index])window[PROPS[index]]=tier;
  const ok=oldApply(index);
  if(ok&&window.arcaneStoryOpponentInfo362){
   const info=window.arcaneStoryOpponentInfo362;
@@ -90,6 +108,8 @@ style.textContent=[
  '.arcane-difficulty-option-435 .tier-state{margin-top:auto;font-size:11px;color:#c7e7da;font-weight:900}',
  '.arcane-difficulty-option-435.is-cleared{border-color:#7fdfb9;background:linear-gradient(155deg,#245547,#28314b)}',
  '.arcane-difficulty-option-435.is-master{border-color:#dbb575;background:linear-gradient(155deg,#593b5b,#292244)}',
+ '.arcane-difficulty-option-435.is-locked{opacity:.57;filter:grayscale(.7);cursor:not-allowed;border-color:#66677d;background:linear-gradient(155deg,#29283c,#191b2e)}',
+ '.arcane-difficulty-option-435.is-locked strong{color:#bab8ca}',
  '.arcane-difficulty-option-435:focus-visible{outline:3px solid #ffe2a3;outline-offset:2px}',
  '.arcane-difficulty-cancel-435{width:100%;padding:11px;margin-top:11px;background:#282b4b;color:#fff1d1;border:1px solid #9fa2c1;border-radius:9px;font-weight:800}',
  '@media(max-width:340px){.arcane-difficulty-panel-435{padding:11px}.arcane-difficulty-grid-435{gap:6px}.arcane-difficulty-option-435{padding:8px;min-height:155px}.arcane-difficulty-option-435 strong{font-size:16px}}'
@@ -108,9 +128,11 @@ function showChoice(index,continueButton){
  opened=true;
  const chapter=index<10?1:index<20?2:3;
  const label=chapter+'-'+(index%10+1);
- const marks=readWins()[index];
+ const wins=readWins(),marks=wins[index];
+ const maxTier=highestUnlocked(index,wins);
  let picked=1;
  try{if(Number(sessionStorage.getItem(MISSION_KEY))===index)picked=clamp(sessionStorage.getItem(TIER_KEY))}catch(_){}
+ picked=Math.min(picked,maxTier);
  const story=document.getElementById('arcaneStoryContent357');
  const pageTitle=document.getElementById('arcaneStoryHeading357')?.textContent?.trim()||('Mission '+label);
  const speaker=story?.querySelector('.arcane-story-speaker-357')?.textContent?.trim()||'Erzähler';
@@ -156,24 +178,28 @@ function showChoice(index,continueButton){
  heading.textContent='✦ Schwierigkeitsgrad wählen ✦';
  const help=document.createElement('p');
  help.className='arcane-briefing-help-465';
- help.textContent='Vier Gegnerdeck-Stufen · Wähle deine Herausforderung und starte dann das Duell.';
+ help.textContent='Gewinne jede Stufe, um die nächste freizuschalten: Einsteiger → Fortgeschritten → Experte → Meister.';
  const grid=document.createElement('div');
  grid.className='arcane-difficulty-grid-435';
  const tierGlyphs=['⚔','⚔⚔','⚔⚔⚔','♛'];
  const buttons=[];
  for(let tier=1;tier<=4;tier++){
-  const won=!!(marks&(1<<(tier-1))),button=document.createElement('button');
+  const won=!!(marks&(1<<(tier-1))),unlocked=tier<=maxTier,button=document.createElement('button');
   button.type='button';
   button.dataset.tier=String(tier);
-  button.className='arcane-difficulty-option-435 arcane-briefing-option-465'+(won?' is-cleared':'')+(tier===4?' is-master':'');
+  button.className='arcane-difficulty-option-435 arcane-briefing-option-465'+(won?' is-cleared':'')+(tier===4?' is-master':'')+(!unlocked?' is-locked':'');
+  button.disabled=!unlocked;
+  button.setAttribute('aria-disabled',String(!unlocked));
   button.setAttribute('aria-pressed',String(tier===picked));
   const number=document.createElement('span');number.className='tier-number';number.textContent='STUFE '+tier+' · '+tierGlyphs[tier-1];
   const name=document.createElement('strong');name.textContent=LABELS[tier-1];
   const description=document.createElement('small');description.textContent=DETAILS[tier-1];
   const state=document.createElement('span');state.className='tier-state';
-  state.textContent=won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
+  state.textContent=!unlocked?'🔒 Erst '+LABELS[tier-2]+' besiegen':won?'✓ Auf dieser Stufe besiegt':'◇ Sieg noch offen';
+  if(!unlocked)button.title='Besiege zuerst '+LABELS[tier-2]+' in dieser Mission.';
   button.append(number,name,description,state);
   button.addEventListener('click',()=>{
+   if(!isUnlocked(index,tier))return;
    picked=tier;
    updatePicked();
   });
@@ -205,7 +231,7 @@ function showChoice(index,continueButton){
  }
  function onKey(event){if(event.key==='Escape'){event.preventDefault();close()}}
  function launch(){
-  if(!active)return;
+  if(!active||!isUnlocked(index,picked))return;
   // The existing 4-tier deck selection and the original duel controls stay authoritative.
   choose(index,picked);
   close();
@@ -248,5 +274,5 @@ if(container){
  new MutationObserver(decorate).observe(container,{childList:true});
  decorate();
 }
-window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,select:choose,missions:30};
+window.arcaneStoryDifficultyUI435={tiers:LABELS.slice(),wins:readWins,unlocked:highestUnlocked,select:choose,missions:30};
 })();
