@@ -1,0 +1,97 @@
+/* Arcane Duel v4.57 · Kapitel 2 Waldkarte, interaktive Missionsroute.
+   Die Kapitel 1 und 3 sowie der ursprüngliche Dialog-/Duellablauf bleiben erhalten. */
+#arcaneStory357.is-forest-map-457{
+ background:linear-gradient(180deg,#04111bab 0%,#09232643 36%,#051019d9 100%),url('artwork/story/forest-story-map-v457.svg') center center/cover fixed!important;
+}
+#arcaneStory357.is-forest-map-457 .arcane-story-shell-357{
+ max-width:800px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0 5px 20px!important;
+}
+#arcaneStory357.is-forest-map-457 .arcane-story-head-357{
+ padding:11px 12px!important;margin-bottom:10px!important;border:1.5px solid #d7b774;border-radius:13px;
+ background:linear-gradient(135deg,#1a1e2ee8,#2c1745e9,#152c2aea)!important;
+ box-shadow:0 8px 28px #0007,0 0 18px #6a9b7790;
+ backdrop-filter:blur(7px);
+}
+#arcaneStory357.is-forest-map-457 .arcane-story-kicker-357{font-size:10px;color:#b6dcba!important}
+#arcaneStory357.is-forest-map-457 #arcaneStoryHeading357{font-size:clamp(21px,4.6vw,31px)!important;line-height:1.15}
+.arcane-forest-map-457{width:100%;color:#fff3d4}
+.arcane-forest-intro-457{text-align:center;margin:4px 7px 13px;padding:8px 13px;border:1px solid #8ead86a6;border-radius:9px;background:#071b1ec7;box-shadow:0 0 18px #183f39a3;line-height:1.4}
+.arcane-forest-intro-457 strong{display:block;font:700 clamp(14px,2.5vw,18px) Georgia,serif;color:#ffdfa0}
+.arcane-forest-intro-457 small{font-size:11px;color:#c3dec7}
+.arcane-forest-route-457{
+ position:relative;width:100%;height:clamp(575px,77svh,760px);
+ overflow:hidden;isolation:isolate;border:2px solid #a6a16abb;border-radius:19px;
+ background:linear-gradient(180deg,#071b2855,#0e253514 43%,#0519285e 100%),url('artwork/story/forest-story-map-v457.svg') center/cover no-repeat;
+ box-shadow:inset 0 0 40px #0007,0 5px 30px #0009;
+}
+.arcane-forest-route-457:after{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:linear-gradient(90deg,#020c179a,transparent 19% 81%,#020c179a),
+ linear-gradient(180deg,#0a14274d,transparent 18% 80%,#05162769);
+}
+.arcane-forest-path-svg-457{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;filter:drop-shadow(0 0 9px #e2c36b88)}
+.arcane-forest-node-457{
+ position:absolute;z-index:3;transform:translate(-50%,-50%);width:65px;min-height:63px;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+ border:2px solid #cbb688;border-radius:50% 50% 36% 36%;cursor:pointer;
+ background:linear-gradient(145deg,#48315def,#181827ee 70%,#2b2447ee);
+ box-shadow:0 5px 15px #050d1abf,0 0 9px #ebd7a077;
+ color:#ffe5b0;font-family:Georgia,serif;text-shadow:0 2px 5px #000;
+ transition:transform .12s ease,box-shadow .12s ease;touch-action:manipulation;
+}
+.arcane-forest-node-457 .forest-node-icon-457{font-size:20px;line-height:1}
+.arcane-forest-node-457 .forest-node-label-457{font-weight:900;font-size:15px}
+.arcane-forest-node-457.is-complete-457{border-color:#f0c77f;background:linear-gradient(150deg,#604223e9,#242b2de6);box-shadow:0 0 12px #f2bd5b9d,0 4px 15px #000b}
+.arcane-forest-node-457.is-complete-457 .forest-node-icon-457{color:#95f9b9}
+.arcane-forest-node-457.is-current-457{border-color:#ffe3a0;background:linear-gradient(130deg,#8445b5ef,#2b1c58ef);box-shadow:0 0 0 5px #ddac7340,0 0 28px #bd72ffff;animation:forest-node-pulse-457 2.6s ease-in-out infinite}
+.arcane-forest-node-457.is-locked-457{border-color:#819596a6;opacity:.9;background:linear-gradient(145deg,#273340ec,#151d2ee8);box-shadow:0 5px 12px #0009;color:#c6d5d3}
+.arcane-forest-node-457.is-selected-457{outline:3px solid #fff3bc;outline-offset:3px;filter:brightness(1.17)}
+.arcane-forest-node-457:focus-visible{outline:4px solid #ffe6a9;outline-offset:3px}
+.arcane-forest-node-457:active{transform:translate(-50%,-50%) scale(.96)}
+.arcane-forest-route-star-457{position:absolute;pointer-events:none;z-index:2;width:7px;height:7px;border-radius:50%;background:#fff4c1;box-shadow:0 0 11px #e8d996}
+.arcane-forest-detail-457{
+ position:relative;margin:12px 3px 8px;padding:clamp(12px,2.3vw,21px);
+ border:2px solid #d6b775;border-radius:17px;background:linear-gradient(155deg,#302346ed,#191b32f3 70%,#1d2e35ee);
+ box-shadow:0 9px 26px #0008,0 0 22px #826bb244;backdrop-filter:blur(11px);
+}
+.arcane-forest-detail-header-457{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px}
+.arcane-forest-detail-header-457 h3{margin:0;font:700 clamp(17px,3.2vw,23px) Georgia,serif;color:#ffe3a0}
+.arcane-forest-state-457{white-space:nowrap;font-size:11px;font-weight:900;color:#fbe7ae;padding:5px 8px;border:1px solid #bc9d6d;border-radius:20px;background:#4d2b65}
+.arcane-forest-info-457{display:flex;gap:13px;align-items:flex-start}
+.arcane-forest-portrait-457{width:84px;height:104px;flex-shrink:0;border-radius:11px;border:2px solid #d5b78c;object-fit:cover;object-position:top;background:linear-gradient(#3c6c63,#1e2a42);box-shadow:0 0 13px #82b9976a}
+.arcane-forest-portrait-placeholder-457{display:flex;align-items:center;justify-content:center;font-size:37px;color:#e0dfc8}
+.arcane-forest-describe-457{min-width:0;flex:1}
+.arcane-forest-describe-457 strong{color:#d8b5ff;font-size:14px}
+.arcane-forest-describe-457 p{font-size:12px;line-height:1.55;margin:5px 0;color:#eee9df}
+.arcane-forest-rewards-457{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:12px;font-size:12px}
+.arcane-forest-rewards-457 em{font-style:normal;color:#d5dfc5;font-size:11px}
+.arcane-forest-reward-457{border:1px solid #9d839e;border-radius:7px;background:#392750;padding:6px 9px;color:#f6deb3}
+.arcane-forest-actions-457{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.arcane-forest-btn-457{
+ flex:1 1 140px;border:1.5px solid #e6be7e;border-radius:11px;
+ background:linear-gradient(130deg,#753cad,#351c73);color:#fff2c9;
+ font:900 14px Georgia,serif;padding:11px 12px;min-height:45px;cursor:pointer;
+ text-shadow:0 1px 3px #000;box-shadow:0 0 13px #ba65e355;
+}
+.arcane-forest-btn-457.secondary{background:#252338;color:#e9e3d0;border-color:#879c91;box-shadow:none}
+.arcane-forest-btn-457:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+.arcane-forest-credits-457{margin:9px 5px 0;text-align:center;font-size:10px;color:#c4d6c6}
+@keyframes forest-node-pulse-457{50%{box-shadow:0 0 0 6px #c9a87627,0 0 33px #c084eafa}}
+@media(prefers-reduced-motion:reduce){.arcane-forest-node-457.is-current-457{animation:none}}
+@media(max-width:460px){
+ #arcaneStory357.is-forest-map-457{padding:10px 6px max(12px,env(safe-area-inset-bottom))!important}
+ #arcaneStory357.is-forest-map-457 .arcane-story-head-357{padding:9px 10px!important;gap:8px}
+ #arcaneStory357.is-forest-map-457 #arcaneStoryHeading357{font-size:20px!important}
+ .arcane-forest-intro-457{padding:8px 6px}
+ .arcane-forest-route-457{height:590px}
+ .arcane-forest-node-457{width:53px;min-height:54px;border-width:2px}
+ .arcane-forest-node-457 .forest-node-icon-457{font-size:16px}
+ .arcane-forest-node-457 .forest-node-label-457{font-size:12px}
+ .arcane-forest-detail-457{padding:12px;margin:8px 0}
+ .arcane-forest-info-457{gap:9px}
+ .arcane-forest-portrait-457{width:68px;height:86px}
+ .arcane-forest-describe-457 p{font-size:11px}
+ .arcane-forest-rewards-457{gap:5px}
+ .arcane-forest-reward-457{font-size:11px}
+}
+@media(max-height:540px) and (orientation:landscape){.arcane-forest-route-457{height:540px}}
