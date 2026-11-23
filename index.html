@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-waldkarte-und-dialoge-v458">
+<meta name="arcane-build" content="20261123-waldkarte-knotenfix-v459">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5504,7 +5504,7 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 }
 </style>
 <link rel="stylesheet" href="artwork/vesperion-startkarte-illustration.css?v=4.48">
-<link rel="stylesheet" href="forest-story-map-v457.css?v=458">
+<link rel="stylesheet" href="forest-story-map-v457.css?v=459">
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -9328,7 +9328,7 @@ function forestMissionInfo457(index){
  const info=content.querySelector('#forestMissionInfo457');
  if(!m||!info)return;
  forestSelected457=index;
- content.querySelectorAll('[data-forest-mission-457]').forEach(node=>{
+ content.querySelectorAll('[data-forest-mission457]').forEach(node=>{
   const chosen=Number(node.dataset.forestMission457)===index;
   node.classList.toggle('is-selected-457',chosen);
   node.setAttribute('aria-pressed',String(chosen));
@@ -9365,7 +9365,7 @@ function showForestMap457(selectIndex){
  const controls=forestPlaces457.map((p,j)=>{
   const i=10+j,done=clearedMission(i),open=unlockedMission(i),klass=done?'is-complete-457':open?'is-current-457':'is-locked-457';
   const icon=done?'✓':open?'⚔':'🔒';
-  return '<button type="button" class="arcane-forest-node-457 '+klass+(chosen===i?' is-selected-457':'')+'" data-forest-mission-457="'+i+'" aria-label="Mission '+labelMission(i)+' '+escapeText(missions[i].title)+(done?' abgeschlossen':open?' bereit':' gesperrt')+'" aria-pressed="'+(chosen===i)+'" style="left:'+p[0]+'%;top:'+p[1]+'%"><span class="forest-node-icon-457">'+icon+'</span><span class="forest-node-label-457">'+labelMission(i)+'</span></button>';
+  return '<button type="button" class="arcane-forest-node-457 '+klass+(chosen===i?' is-selected-457':'')+'" data-forest-mission457="'+i+'" aria-label="Mission '+labelMission(i)+' '+escapeText(missions[i].title)+(done?' abgeschlossen':open?' bereit':' gesperrt')+'" aria-pressed="'+(chosen===i)+'" style="left:'+p[0]+'%;top:'+p[1]+'%"><span class="forest-node-icon-457">'+icon+'</span><span class="forest-node-label-457">'+labelMission(i)+'</span></button>';
  }).join('');
  content.innerHTML='<section class="arcane-forest-map-457" aria-label="Missionspfad durch den Verlorenen Wald">'
   +'<div class="arcane-forest-intro-457"><strong>✦ Der Pfad zum Wurzelherz ✦</strong><small>Folge den zehn Stationen durch den verwunschenen Wald · '+(read2()-1)+'/10 abgeschlossen</small></div>'
@@ -9376,7 +9376,7 @@ function showForestMap457(selectIndex){
   +controls+'</div><div class="arcane-forest-detail-457" id="forestMissionInfo457" role="region" aria-live="polite" aria-label="Ausgewählte Waldmission"></div>'
   +'<div class="arcane-forest-actions-457"><button class="arcane-forest-btn-457 secondary" id="forestReplayPrologue457">📖 Prolog zum Wald '+(seen2()?'erneut ansehen':'ansehen')+'</button></div>'
   +'<p class="arcane-forest-credits-457">Abgeschlossene Missionen bleiben gespeichert. Tippe einen Knoten an, um die Mission anzusehen.</p></section>';
- content.querySelectorAll('[data-forest-mission-457]').forEach(b=>b.addEventListener('click',()=>{
+ content.querySelectorAll('[data-forest-mission457]').forEach(b=>b.addEventListener('click',()=>{
   const i=Number(b.dataset.forestMission457);
   forestMissionInfo457(i);
   const info=content.querySelector('#forestMissionInfo457');
