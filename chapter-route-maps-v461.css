@@ -1,4 +1,4 @@
-/* Arcane Duel v4.61 – Kapitelkarten Akademie & Aschengipfel.
+/* Arcane Duel v4.68 – Hochauflösende Akademie-Karte & Aschengipfel.
    Verwendet dieselben klickbaren Waldkarten-Knoten, Detailfelder und Fortschrittsdaten. */
 #arcaneStory357.is-academy-map-461,
 #arcaneStory357.is-volcano-map-461,
@@ -9,7 +9,10 @@
  background-attachment:fixed!important;
 }
 #arcaneStory357.is-academy-map-461{
- background-image:linear-gradient(180deg,#12203962,#091c292b,#0911228c),url('artwork/story/academy-magical-v461.avif?v=464'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ /* Das alte 220×330-AVIF war eine Vorschau und wurde stark vergrößert. */
+ background-image:linear-gradient(180deg,#12203953,#091c2922,#09112280),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ background-position:center top!important;
+ background-attachment:scroll!important;
 }
 #arcaneStory357.is-volcano-map-461{
  background-image:linear-gradient(180deg,#1b0c2c8c,#2a0b1b3b,#0c0716b2),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
@@ -33,7 +36,13 @@
  background-size:cover!important;background-position:center!important;
 }
 #arcaneStory357.is-academy-map-461 .arcane-forest-route-457{
- background-image:linear-gradient(180deg,#0d203329,#08212f19 60%,#0d153742),url('artwork/story/academy-magical-v461.avif?v=464'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ /* Echte 650×1155-WEBP-Illustration statt hochskalierter Miniatur. */
+ background-image:linear-gradient(180deg,#0d203319,#08212f12 60%,#0d153729),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ background-position:center 45%!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+ filter:none!important;
+ backdrop-filter:none!important;
  border-color:#e7ca83!important;
 }
 #arcaneStory357.is-volcano-map-461 .arcane-forest-route-457{
@@ -59,7 +68,8 @@
 #arcaneStory357.is-academy-map-461 .arcane-forest-btn-457.secondary,
 #arcaneStory357.is-volcano-map-461 .arcane-forest-btn-457.secondary{background:#27253d}
 #arcaneStory357.is-academy-dialog-461{
- background-image:linear-gradient(180deg,#11172cd8,#0d1f2ed6),url('artwork/story/academy-magical-v461.avif?v=464'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ background-image:linear-gradient(180deg,#11172cc5,#0d1f2ec4),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ background-attachment:scroll!important;
 }
 #arcaneStory357.is-volcano-dialog-461{
  background-image:linear-gradient(180deg,#160b20d3,#1c101bd6),url('artwork/story/ashes-magical-v461.avif?v=464'),url('artwork/story/ashes-story-map-v461.svg')!important;
@@ -70,7 +80,7 @@
  box-shadow:0 0 25px #8276b46c!important;
 }
 #arcaneStory357.is-academy-dialog-461 .arcane-story-stage-360{
- background-image:linear-gradient(180deg,#161d2841,#141a304e),url('artwork/story/academy-magical-v461.avif?v=464'),url('artwork/arcane-world-hub-final-v315.webp')!important;
+ background-image:linear-gradient(180deg,#161d282a,#141a3034),url('artwork/arcane-world-hub-final-v315.webp')!important;
  background-size:cover!important;background-position:center 36%!important;
 }
 #arcaneStory357.is-volcano-dialog-461 .arcane-story-stage-360{
