@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-touch-chapter-nav-hero-selector-v475">
+<meta name="arcane-build" content="20261123-chapter-link-reload-v476">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5508,7 +5508,24 @@ main.arcane-responsive .opponent-fixed-ui .duel-lp-face img,main.arcane-responsi
 <link rel="stylesheet" href="chapter-route-maps-v461.css?v=468">
 <link rel="stylesheet" href="story-briefing-v465.css?v=468">
 <link rel="stylesheet" href="story-expansion-v469.css?v=469">
-<link rel="stylesheet" href="story-overview-v473.css?v=475">
+<link rel="stylesheet" href="story-overview-v473.css?v=476">
+<style>
+/* v4.76: Native links remain tappable independently of JavaScript. */
+#arcaneStory357.is-seven-overview-473 a.arcane-campaign-btn-473 {
+ display:flex!important;position:relative!important;z-index:20!important;
+ align-items:center;justify-content:center;text-decoration:none!important;
+ pointer-events:auto!important;touch-action:manipulation!important;
+ -webkit-tap-highlight-color:rgba(255,222,151,.38);
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-side-473{
+ position:relative!important;z-index:19!important;
+ pointer-events:auto!important;
+}
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-art-473:after,
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-chapter-473:after{
+ pointer-events:none!important;
+}
+</style>
 </head>
 <body>
 <header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 3.68</small></div></header>
@@ -9607,6 +9624,7 @@ function showExtraMap469(ch,selectedIndex){
  function openCampaignChapter474(ch,preview){
   // Kapitel 1–7 für die Vorschau direkt öffnen, ohne echte Freischaltung zu ändern.
   if(!Number.isInteger(ch)||ch<1||ch>7)return;
+  if(missions.length<ch*10)throw new Error('Missionsdaten von Kapitel '+ch+' fehlen (geladen: '+missions.length+'/70)');
   if(!preview){
    const complete=ch===1||ch===2&&read()>10||ch===3&&read()>10&&read2()>10||ch>=4&&previousChapterDone469(ch);
    if(!complete)return;
@@ -9629,6 +9647,9 @@ function showExtraMap469(ch,selectedIndex){
  },{capture:true,passive:true});
  function handleStoryControl475(event,button){
   if(!button||button.disabled||!content.contains(button)||scene!=='map')return false;
+  // Kapitel-Links nutzen die Browser-Navigation unabhängig vom Touch-Handler.
+  // So ist iOS Safari auch bei gestörten JavaScript-Klicks zuverlässig.
+  if(button.tagName==='A'&&button.matches(chapterControls475))return false;
   if(button.matches(chapterControls475)){
    const preview=button.hasAttribute('data-campaign-test-473');
    const number=Number(preview?button.dataset.campaignTest473:button.dataset.campaignOpen473);
@@ -9765,13 +9786,14 @@ function showExtraMap469(ch,selectedIndex){
    +'</div>'
    +'<div class="arcane-campaign-side-473">'
    +badge(c)
-   +'<button type="button" class="arcane-campaign-btn-473" data-campaign-open-473="'+c.number+'" '+(!c.ready?'disabled title="Zuerst Kapitel '+(c.number-1)+' abschließen"':'')+'>'
-   +(c.ready?c.icon+' Missionskarte':'🔒 Missionskarte')+'</button>'
-   +'<button type="button" class="arcane-campaign-btn-473 is-preview-473" data-campaign-test-473="'+c.number+'">🔎 Kapitel testen</button>'
+   +(c.ready
+      ?'<a class="arcane-campaign-btn-473" href="?arcane_chapter='+c.number+'&arcane_preview=0&_arcane_build=476" data-campaign-open-473="'+c.number+'">'+c.icon+' Missionskarte</a>'
+      :'<button type="button" class="arcane-campaign-btn-473" disabled title="Zuerst Kapitel '+(c.number-1)+' abschließen">🔒 Missionskarte</button>')
+   +'<a class="arcane-campaign-btn-473 is-preview-473" href="?arcane_chapter='+c.number+'&arcane_preview=1&_arcane_build=476" data-campaign-test-473="'+c.number+'">🔎 Kapitel testen</a>'
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade</p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 4.76</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
@@ -9956,6 +9978,30 @@ function showExtraMap469(ch,selectedIndex){
  // In the current UI, the outcome dialog already closes the gameplay via the Story panel.
  try{
   const pending=sessionStorage.getItem(CONTINUE);
+  const post=sessionStorage.getItem('arcane-story-post-win-358');
+  const directChapter=Number(new URLSearchParams(window.location.search).get('arcane_chapter'));
+  // Native chapter links: reload into the selected chapter while preserving local progress.
+  if(pending===null&&post===null&&Number.isInteger(directChapter)&&directChapter>=1&&directChapter<=7){
+   const preview=new URLSearchParams(window.location.search).get('arcane_preview')==='1';
+   if(intro){intro.hidden=true;intro.querySelector('video')?.pause()}
+   document.getElementById('arcaneTitleScreen447')?.setAttribute('hidden','');
+   home.hidden=true;
+   try{
+    openCampaignChapter474(directChapter,preview);
+    const clean=new URL(window.location.href);
+    clean.searchParams.delete('arcane_chapter');
+    clean.searchParams.delete('arcane_preview');
+    history.replaceState(history.state,'',clean.toString());
+   }catch(error){
+    console.error('Kapitel '+directChapter+' konnte nicht geladen werden',error);
+    showMap();
+    const warning=document.createElement('p');
+    warning.setAttribute('role','alert');
+    warning.className='arcane-expansion-test-469';
+    warning.textContent='Fehler bei Kapitel '+directChapter+': '+(error?.message||String(error));
+    content.prepend(warning);
+   }
+  }
   if(pending!==null){sessionStorage.removeItem(CONTINUE);sessionStorage.removeItem('arcane-story-post-win-358');sessionStorage.removeItem('arcane-story-active-duel-358');const index=Number(pending);if(Number.isInteger(index)&&index>=0&&index<missions.length){if(intro)intro.hidden=true;home.hidden=true;openMission(index)}}
   else {
    const post=sessionStorage.getItem('arcane-story-post-win-358');
