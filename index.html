@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-schicksalsmuenze-repeat-per-duel-v487">
+<meta name="arcane-build" content="20261123-schicksalsmuenze-second-player-four-cards-v488">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -7575,10 +7575,11 @@ function offerKaelAttackTrap389(card){
 }
 let kaelNegateAttack367=false,kaelReflectAttack367=false;
 let aiFxQueue=[];
-async function opponentTurn(){
+async function opponentTurn(drawOnStart=true){
  if(myLP<=0||oppLP<=0){syncDuelOutcome();return;}
  aiTurn++;
- const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn);while(aiHand.length>7){const discarded=aiHand.splice(Math.floor(Math.random()*aiHand.length),1)[0];sendToGraveyard(discarded,"opponent");}
+ // Beginnt die KI laut Münzwurf, ist das bereits ihr erster Zug: kein Extrazug vom Deck.
+ const drawn=drawOnStart?aiDeck.shift():null;if(drawn)aiHand.push(drawn);while(aiHand.length>7){const discarded=aiHand.splice(Math.floor(Math.random()*aiHand.length),1)[0];sendToGraveyard(discarded,"opponent");}
  log("Der Gegner ist am Zug.");
  // Leon nutzt charakteristische Zauber aktiv, statt sie nur verdeckt liegenzulassen.
  if(window.arcaneStoryOpponentInfo362?.name==="Leon"){
@@ -7896,6 +7897,14 @@ function startArcaneCoinToss485(){
  arcaneCoinTossStarted485=true;
  arcaneCoinTossActive485=true;
  const playerFirst=randomFirstPlayer485();
+ // Münzwurf-Regel: Erster Duellant 5 Starthandkarten, Zweiter 4.
+ // Die übrige Karte bleibt im jeweiligen Deck und wird im normalen ersten Zug gezogen.
+ if(playerFirst){
+  while(aiHand.length>4)aiDeck.unshift(aiHand.pop());
+ }else{
+  while(hand.length>4)drawPile.unshift(hand.pop());
+ }
+ render();
  const main=document.querySelector("main");
  if(main)main.inert=true;
  const overlay=document.createElement("div");
@@ -7932,7 +7941,7 @@ function startArcaneCoinToss485(){
     if(!playerFirst&&myLP>0&&oppLP>0){
      // Die KI darf tatsächlich den ersten Zug ausführen, nicht nur die Ergebnisanzeige.
      // Erst danach ist der Spieler wieder am Zug.
-     await opponentTurn();
+     await opponentTurn(false);
      if(myLP>0&&oppLP>0){
       turn++;
       phase="main1";
