@@ -9282,13 +9282,13 @@ syncHeroResonanceExtra439();
  const CH2KEY='arcane-duel-story-chapter2-v444',PROLOGUEKEY='arcane-duel-story2-prologue-v444';
  const read2=()=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(CH2KEY))||1)))}catch(_){return 1}};
  const save2=n=>{try{localStorage.setItem(CH2KEY,String(Math.max(read2(),Math.min(11,n))))}catch(_){}};
- const seen2=()=>{try{return localStorage.getItem(PROLOGUEKEY)==='1'}catch(_){return false}};
- const markSeen2=()=>{try{localStorage.setItem(PROLOGUEKEY,'1')}catch(_){}};
+ const seen2=()=>{try{return review469()?sessionStorage.getItem('arcane-preview-prologue2-469')==='1':localStorage.getItem(PROLOGUEKEY)==='1'}catch(_){return false}};
+ const markSeen2=()=>{try{if(review469())sessionStorage.setItem('arcane-preview-prologue2-469','1');else localStorage.setItem(PROLOGUEKEY,'1')}catch(_){}};
  const CH3KEY='arcane-duel-story-chapter3-v445',PROLOGUE3KEY='arcane-duel-story3-prologue-v445';
  const read3=()=>{try{return Math.max(1,Math.min(11,Math.trunc(Number(localStorage.getItem(CH3KEY))||1)))}catch(_){return 1}};
  const save3=n=>{try{localStorage.setItem(CH3KEY,String(Math.max(read3(),Math.min(11,n))))}catch(_){}};
- const seen3=()=>{try{return localStorage.getItem(PROLOGUE3KEY)==='1'}catch(_){return false}};
- const markSeen3=()=>{try{localStorage.setItem(PROLOGUE3KEY,'1')}catch(_){}};
+ const seen3=()=>{try{return review469()?sessionStorage.getItem('arcane-preview-prologue3-469')==='1':localStorage.getItem(PROLOGUE3KEY)==='1'}catch(_){return false}};
+ const markSeen3=()=>{try{if(review469())sessionStorage.setItem('arcane-preview-prologue3-469','1');else localStorage.setItem(PROLOGUE3KEY,'1')}catch(_){}};
  const EXP_REVIEW_KEY469='arcane-story-review-v469';
  try{window.arcaneStoryReview469=sessionStorage.getItem(EXP_REVIEW_KEY469)==='1'}catch(e){window.arcaneStoryReview469=false}
  const labelMission=i=>(Math.floor(i/10)+1)+'-'+(i%10+1);
@@ -9645,7 +9645,7 @@ function showExtraMap469(ch,selectedIndex){
  }
  let prologueToMap=false,duelFinishedHere=false;
  function openPrologue2(toMap=false){
-  if(read()<11)return;
+  if(read()<11&&!review469())return;
   activeIndex=10;scene='prologue2';dialogStep=0;prologueToMap=toMap;
   drawPrologue2();
  }
@@ -9672,7 +9672,7 @@ function showExtraMap469(ch,selectedIndex){
  }
  let prologue3ToMap=false;
  function openPrologue3(toMap=false){
-  if(read2()<11||read()<11)return;
+  if((read2()<11||read()<11)&&!review469())return;
   activeIndex=20;scene='prologue3';dialogStep=0;prologue3ToMap=toMap;drawPrologue3();
  }
  function finishPrologue3(){
