@@ -5778,7 +5778,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.39';
+const APP_VERSION='2.40';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -10485,7 +10485,7 @@ function showExtraMap469(ch,selectedIndex){
  // iOS Safari: Bedienelemente bereits beim Touch-Ende erfassen, nicht nur beim
  // synthetischen click. Scrollgesten werden dabei ausdrücklich ignoriert.
  const chapterControls475='[data-campaign-test-473],[data-campaign-open-473]';
- const heroControls475='[data-story-hero-next-475],[data-story-hero-prev-475],[data-story-hero-activate-475]';
+ const heroControls475='[data-story-hero-next-475],[data-story-hero-prev-475],[data-story-hero-activate-475],[data-story-hero-open-495]';
  let touchStart475=null;
  stage.addEventListener('touchstart',event=>{
   const button=event.target.closest(chapterControls475+','+heroControls475);
@@ -10508,6 +10508,8 @@ function showExtraMap469(ch,selectedIndex){
    rotateStoryHero475(1);
   }else if(button.hasAttribute('data-story-hero-prev-475')){
    rotateStoryHero475(-1);
+  }else if(button.hasAttribute('data-story-hero-open-495')){
+   window.arcaneCharacterStories454?.openStory(storyHero475);
   }else if(button.hasAttribute('data-story-hero-activate-475')){
    activateStoryHero475();
   }else return false;
@@ -10567,6 +10569,7 @@ function showExtraMap469(ch,selectedIndex){
    +(available&&selected!==ch?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-activate-475>✓ '+ch+' auswählen</button>':
      !available?'<small class="arcane-campaign-preview-475">🔎 Charaktervorschau – noch nicht spielbar</small>':
      '<small class="arcane-campaign-preview-475">Aktiver Charakter · mit ‹ › wechseln</small>')
+   +(ch!=='Kael'?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-open-495>📖 '+(available?'Eigene Geschichte öffnen':'Geschichte ansehen')+'</button>':'')
    +'</div>';
  }
  function rotateStoryHero475(step){
@@ -10929,7 +10932,7 @@ function showExtraMap469(ch,selectedIndex){
 <script src="story-difficulty-v435.js?v=470"></script>
 <script>window.ARCANE_CHRONORESONANZ_436?.install();</script>
 <script src="first-play-tutorial-v449.js?v=450"></script>
-<script src="character-stories-v454.js?v=456"></script>
+<script src="character-stories-v454.js?v=495"></script>
 
 <style id="arcanePlayChoiceStyle493">
 .arcane-play-choice-493{position:fixed;inset:0;margin:auto!important;box-sizing:border-box;width:min(86vw,310px);max-height:94dvh;padding:14px 16px 12px!important;border:1px solid #cba56d;border-radius:17px;color:#f8ebd6;background:linear-gradient(150deg,#251f3d,#101728);box-shadow:0 0 32px #9871dd66;overflow:auto;text-align:center;z-index:2147483647;overscroll-behavior:contain}
