@@ -5772,13 +5772,14 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="chronoresonanz-art-b-v437.js?v=437"></script>
 <script src="chronoresonanz-pack-v438.js?v=438"></script>
  <script src="resonance-starter-v436.js?v=438"></script>
+<script src="tribute-starter-v496.js?v=496"></script>
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
 <script src="story-chapter2-v444.js?v=444"></script>
 <script src="story-chapter3-v445.js?v=445"></script>
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.40';
+const APP_VERSION='2.41';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -5997,6 +5998,7 @@ function createDuelDeck(){
 }
 // Single source of truth: resonance-starter-v436.js, loaded before this script.
 deck.push(...window.ARCANE_CHRONORESONANZ_436.cards.map(c=>({...c})));
+ deck.push(...window.ARCANE_WURZELHERZ_496.cards.map(c=>({...c})));
 
 /* v4.39: Kaels Siegel- und Leons Arena-Resonanz – Booster-exklusive Karten.
    Vorlaeufig die bestehenden Charakter-Artworks, bis eigene Motive angefertigt sind. */
@@ -6703,6 +6705,7 @@ function renderEldricArtwork433(card){
 }
 function renderCardArt(c){
  if(!c)return '';
+ if(c.forestTribute)return '<div style="position:relative;width:100%;height:100%;overflow:hidden;background:#183c29"><img src="artwork/story/forest-magical-v460.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:2em;text-shadow:0 2px 8px #001c0c">'+c.emoji+'</span></div>';
  // v4.41: 8 bestätigte, eigenständige WebP-Artworks für die Kael-/Leon-Resonanzkarten.
  // Die Galerie, Booster-Reveal, Hand und Extra-Deck verwenden denselben Renderer.
  const resonanceArt441=window.ARCANE_RESONANCE_ART_V441?.[c.name];
@@ -6809,7 +6812,9 @@ function monsterDestructionFx(card,owner){
  document.body.appendChild(shell);
  setTimeout(()=>shell.remove(),1000);
 }
+function forestContext496(){return {own:myMon,atk:effectiveAtk,draw(){const c=drawPile.shift();if(!c)return false;hand.push(c);newlyDrawnCard=c;return true},heal(n){myLP+=n},damage(n){oppLP=Math.max(0,oppLP-n)},search(test){const i=drawPile.findIndex(test);if(i<0)return false;hand.push(drawPile.splice(i,1)[0]);shuffleCards(drawPile);return true},revive(test){const zone=myMon.findIndex(m=>!m),i=myGraveyard.findLastIndex(test);if(zone<0||i<0)return false;const old=myGraveyard[i],c=deck.find(x=>x.name===old.name);if(!c)return false;myGraveyard.splice(i,1);myMon[zone]={...c,position:'defense',faceDown:false,summonedTurn:turn,attacksThisTurn:1};return true},destroyStrongest(){const t=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&!x.m.faceDown).sort((a,b)=>effectiveAtk(b.m)-effectiveAtk(a.m))[0];if(t){sendToGraveyard(t.m,'opponent');oppMon[t.i]=null}},destroySet(){const i=oppSpell.findIndex(c=>c&&c.faceDown!==false);if(i>=0){sendToGraveyard(oppSpell[i],'opponent');oppSpell[i]=null}},stop(){kaelNegateAttack367=true}}}
 function triggerMonsterEvent(card,event,owner="player",index=-1){
+ if(owner==='player'&&event==='summon'&&card?.forestTribute)window.ARCANE_WURZELHERZ_496.summonEffect(card,forestContext496());
  if(!card||card.kind!=="monster")return;
 
  if(card.eldricOriginal&&event==='summon'&&!card.faceDown){
@@ -7712,7 +7717,7 @@ function playSpellChoice493(card,handIndex,index){
  if(card.kind==='trap'){commit('set');return}
  openPlayChoice493(card,index,commit,()=>{selected=-1;pendingPlacement=null;render();log('Zauberaktion abgebrochen.')});
 }
-function completeTributeSummon(){if(!pendingTribute)return;const p=pendingTribute;if(p.selected.length!==p.required)return;const card=hand[p.handIndex];if(!card){pendingTribute=null;render();log("Beschwörung nicht mehr möglich.");return;}p.selected.forEach(i=>{sendToGraveyard(myMon[i]);myMon[i]=null;});const destination=p.zoneIndex>=0&&!myMon[p.zoneIndex]?p.zoneIndex:myMon.findIndex(x=>!x);pendingTribute=null;if(destination<0){render();log("Es ist keine freie Monsterzone verfügbar.");return;}pendingSwipeSummon={zoneIndex:destination};myMon[destination]=hand.splice(p.handIndex,1)[0];selected=-1;finishSwipeSummon(p.position||"attack");}
+function completeTributeSummon(){if(!pendingTribute)return;const p=pendingTribute;if(p.selected.length!==p.required)return;const card=hand[p.handIndex];if(!card){pendingTribute=null;render();log("Beschwörung nicht mehr möglich.");return;}const materials=p.selected.map(i=>myMon[i]);if(card.forestTribute){card.tributeSummonedForest=true;window.ARCANE_WURZELHERZ_496.tributeBonus(materials,card,forestContext496());}p.selected.forEach(i=>{sendToGraveyard(myMon[i]);myMon[i]=null;});const destination=p.zoneIndex>=0&&!myMon[p.zoneIndex]?p.zoneIndex:myMon.findIndex(x=>!x);pendingTribute=null;if(destination<0){render();log("Es ist keine freie Monsterzone verfügbar.");return;}pendingSwipeSummon={zoneIndex:destination};myMon[destination]=hand.splice(p.handIndex,1)[0];selected=-1;finishSwipeSummon(p.position||"attack");}
 $("confirmTribute").onclick=()=>{if(!pendingTribute)return;if(pendingTribute.selected.length!==pendingTribute.required){log("Bitte wähle genau "+pendingTribute.required+" Tribut(e) aus.");return;}completeTributeSummon();};
 $("cancelTribute").onclick=()=>{pendingTribute=null;render();log("Tributbeschwörung abgebrochen.");};
 function finishSwipeSummon(position){
@@ -9338,7 +9343,8 @@ syncHeroResonanceExtra439();
  const currentPrice=()=>purchaseCount()===0?FIRST_PRICE:REPEAT_PRICE;
  const products=[
   {id:'kael',name:'Kael',title:'Wächter des ersten Siegels',image:'artwork/starterdeck-kael.png',accent:'blue',feature:'Arkaner Lichtdrache',cards:starterDeckList,freeBase:true},
-  {id:'leon',name:'Leon',title:'König der Löwenarena',image:'artwork/starterdeck-leon.png',accent:'fire',feature:'König der Löwenarena',cards:leonDeckList363,freeBase:false}
+  {id:'leon',name:'Leon',title:'König der Löwenarena',image:'artwork/starterdeck-leon.png',accent:'fire',feature:'König der Löwenarena',cards:leonDeckList363,freeBase:false},
+  {id:window.ARCANE_WURZELHERZ_496.id,name:'Wurzelherz',title:window.ARCANE_WURZELHERZ_496.title,image:'artwork/story/forest-magical-v460.jpg',accent:'ice',feature:'Wurzelherzdrache Sylvaron',cards:window.ARCANE_WURZELHERZ_496.recipe,freeBase:false}
  ];
  const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
  const qty=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
@@ -9394,6 +9400,7 @@ syncHeroResonanceExtra439();
   for(const [name,count] of adds)next.counts[name]=(next.counts[name]||0)+count;
   if(!inventory().save(next)){result.textContent='Speichern fehlgeschlagen – Kauf nicht durchgeführt.';return}
   bank().set(balance-price);bank().refresh();recordPurchase();
+  if(p.id===window.ARCANE_WURZELHERZ_496.id){try{const key='arcane-duel-managed-decks-v1';const saved=JSON.parse(localStorage.getItem(key)||'null');const state=saved&&Array.isArray(saved.decks)?saved:{active:'kael',decks:[{id:'kael',title:'Kael – Wächter des ersten Siegels',cards:starterDeckList.map(x=>[...x])},{id:'leon',title:'Leon – König der Löwenarena',cards:leonDeckList363.map(x=>[...x])}]};if(!state.decks.some(d=>d.id===p.id)&&p.cards.every(([name,n])=>qty(name)>=n)){state.decks.push({id:p.id,title:p.title,character:'kael',cards:p.cards.map(x=>[...x]),extra:[]});localStorage.setItem(key,JSON.stringify(state))}}catch(e){console.warn('Wurzelherz-Deckvorlage konnte nicht gespeichert werden',e)}}
   view(p.id);
   detail.querySelector('#arcaneStarterFeedback375').textContent='Starterpack gekauft! '+adds.reduce((n,[,v])=>n+v,0)+' Karten in deiner Sammlung gespeichert.';
  }
@@ -10930,7 +10937,8 @@ function showExtraMap469(ch,selectedIndex){
 })();
 </script>
 <script src="story-difficulty-v435.js?v=470"></script>
-<script>window.ARCANE_CHRONORESONANZ_436?.install();</script>
+<script>window.ARCANE_CHRONORESONANZ_436?.install();
+(function(){const b=document.getElementById("activate"),previous=b.onclick;b.onclick=function(...args){const i=chosenSpell,c=mySpell[i];if(!c?.forestTribute)return previous.apply(this,args);if(!isMainPhase()){log("Nur in der Hauptphase aktivierbar.");return}if(c.kind==="trap"&&turn<=c.setTurn){log("Falle erst ab deinem nächsten Zug aktivierbar.");return}if(!window.ARCANE_WURZELHERZ_496.spellEffect(c,forestContext496())){log(c.name+": Voraussetzungen nicht erfüllt.");return}sendToGraveyard(c);mySpell[i]=null;chosenSpell=-1;render();log(c.name+" wurde aktiviert.");};})();</script>
 <script src="first-play-tutorial-v449.js?v=450"></script>
 <script src="character-stories-v454.js?v=495"></script>
 
