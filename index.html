@@ -7469,87 +7469,98 @@ function activateEldricTrap432(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Eldric')return false;
  const i=oppSpell.findIndex(c=>c&&c.eldricOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.eldricFx==='stopburn300')myLP=Math.max(0,myLP-300);
  else if(c.eldricFx==='stopweak600'){const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-600;}
  else if(c.eldricFx==='stopheal300')oppLP+=300;
  log('🔮 Eldric aktiviert '+c.name+' und verhindert den Angriff.');
  return true;
+ });
 }
 
 function activateAstraTrap417(){
  if(!['Astra','Valtor'].includes(window.arcaneStoryOpponentInfo362?.name))return false;
  const i=oppSpell.findIndex(c=>c&&c.astraOriginal&&c.kind==='trap'&&aiTurn>c.setTurn&&(window.arcaneStoryOpponentInfo362?.name==='Valtor'?c.valtorOriginal:!c.valtorOriginal));
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.astraFx==='stopburn200')myLP=Math.max(0,myLP-200);
  if(c.astraFx==='stopweak400'){const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;}
  log('✧ '+window.arcaneStoryOpponentInfo362.name+' aktiviert '+c.name+' und stoppt den Angriff.');
  return true;
+ });
 }
 function activateRivenTrap415(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Riven')return false;
  const i=oppSpell.findIndex(c=>c&&c.rivenOriginal&&c.kind==='trap'&&aiTurn>c.setTurn&&c.rivenFx!=='trapcounter');
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.rivenFx==='trapweak500'){const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-500;}
  log('🌪️ Riven aktiviert '+c.name+' und beendet den Angriff.');
  return true;
+ });
 }
 function activateSeraphineTrap411(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Seraphine')return false;
  const i=oppSpell.findIndex(c=>c&&c.seraphineOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.seraphineFx==='stopburn200')myLP=Math.max(0,myLP-200);
  if(c.seraphineFx==='stopweak400'){const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;}
  log('✦ Seraphine aktiviert '+c.name+' und stoppt den Angriff.');
  return true;
+ });
 }
 function activateNoctisTrap408(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Noctis')return false;
  const i=oppSpell.findIndex(c=>c&&c.noctisOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.noctisFx==='stopburn200')myLP=Math.max(0,myLP-200);
  if(c.noctisFx==='stopweak400'){
   const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;
  }
  log('🌘 Noctis aktiviert '+c.name+' und stoppt den Angriff.');
  return true;
+ });
 }
 function activateVarekTrap405(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Varek')return false;
  const i=oppSpell.findIndex(c=>c&&c.varekOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.varekFx==='stopburn'){myLP=Math.max(0,myLP-300);log('⛓️ Kettenbruch stoppt den Angriff und verursacht 300 LP Schaden.');}
  else{const attacker=myMon[chosenMonster];if(attacker)attacker.tempAtkBonus=(attacker.tempAtkBonus||0)-400;log('🌑 Schattenumkehr stoppt den Angriff und schwächt den Angreifer.');}
  return true;
+ });
 }
 function activateElaraDefenseTrap401(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Elara')return false;
  const i=oppSpell.findIndex(c=>c&&c.elaraOriginal&&c.kind==='trap'&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,'opponent');
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.name==='Spiegelbann'){myLP=Math.max(0,myLP-200);log('🪞 Elara aktiviert Spiegelbann: Angriff gestoppt und 200 LP Schaden!');}
  else log('💠 Elara aktiviert Prismenschild und stoppt den Angriff!');
  return true;
+ });
 }
 function activateLeonDefenseTrap363(){
  if(window.arcaneStoryOpponentInfo362?.name!=="Leon")return false;
  const i=oppSpell.findIndex(c=>c&&["Löwenmut-Schild","Glutwall","Kampf der Arena","Heldenbrüllen"].includes(c.name)&&aiTurn>c.setTurn);
  if(i<0)return false;
- const c=oppSpell[i];oppSpell[i]=null;sendToGraveyard(c,"opponent");
+ return arcaneResolveOpponentTrap492(i,c=>{
  if(c.name==="Löwenmut-Schild"){log("🛡️ Leon aktiviert Löwenmut-Schild und stoppt den Angriff!");return true;}
  if(c.name==="Glutwall"){myLP=Math.max(0,myLP-300);log("🔥 Leons Glutwall verursacht 300 LP Schaden!");return false;}
  if(c.name==="Heldenbrüllen"){oppLP+=500;log("🦁 Leons Heldenbrüllen: +500 LP!");return false;}
  const warrior=oppMon.filter(Boolean).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0];
  if(warrior){warrior.tempAtkBonus=(warrior.tempAtkBonus||0)+500;log("⚔️ Kampf der Arena: "+warrior.name+" erhält +500 ATK!");}
  return false;
+ });
 }
 
-function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
+async function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
+ if(arcaneOpponentAttackBusy492)return;
+ arcaneOpponentAttackBusy492=true;
+ try{
  const attacker=myMon[monsterIndex];
  if(!attacker){log("Dein angreifendes Monster wurde nicht gefunden.");return;}
  // Eine freie einzelne Zone zählt nicht als freies Gegnerfeld. Ohne ausdrücklichen Effekt müssen ALLE Gegner-Monsterzonen leer sein.
@@ -7558,7 +7569,7 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  if(attacker.varekLockedUntil>=turn){log("⛓️ Schattenketten: Dieses Monster kann in diesem Zug nicht angreifen.");return;}
  if(attacker.position==="defense"||attacker.faceDown){log("Nur ein offenes Monster in Angriffsposition kann direkt angreifen.");return;}
  if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log("Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.");return;}
- if(activateEldricTrap432()||activateAstraTrap417()||activateRivenTrap415()||activateSeraphineTrap411()||activateNoctisTrap408()||activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
+ if((await activateEldricTrap432())||(await activateAstraTrap417())||(await activateRivenTrap415())||(await activateSeraphineTrap411())||(await activateNoctisTrap408())||(await activateVarekTrap405())||(await activateElaraDefenseTrap401())||(await activateLeonDefenseTrap363())){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;render();return;}
  const damage=effectiveAtk(attacker);
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
@@ -7566,6 +7577,7 @@ function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  render();playBattleFx('myMon',monsterIndex,'oppMon',-1,'💥',attacker);
  log(attacker.name+" greift durch die leere gegnerische Monsterzone direkt an: "+damage+" Schaden! Der Gegner hat noch "+oppLP+" LP.");
  if(oppLP<=0)log("Du hast das Testduell gewonnen!");
+ }finally{arcaneOpponentAttackBusy492=false;}
 }
 
 // Einheitliche Wischsteuerung mit sichtbarer Karte am Finger.
@@ -7713,7 +7725,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelReflectAttack367=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
  }else if(c.name==='Löwenmut-Schild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=()=>{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if(activateEldricTrap432()||activateAstraTrap417()||activateRivenTrap415()||activateSeraphineTrap411()||activateNoctisTrap408()||activateVarekTrap405()||activateElaraDefenseTrap401()||activateLeonDefenseTrap363()){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+$("attack").onclick=async()=>{if(arcaneOpponentAttackBusy492)return;arcaneOpponentAttackBusy492=true;try{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if((await activateEldricTrap432())||(await activateAstraTrap417())||(await activateRivenTrap415())||(await activateSeraphineTrap411())||(await activateNoctisTrap408())||(await activateVarekTrap405())||(await activateElaraDefenseTrap401())||(await activateLeonDefenseTrap363())){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();playBattleFx('myMon',attackFrom,'oppMon',target<0?-1:attackTo,'💥',attacker,target>=0&&!!defenderWasDefense);if(oppLP<=0)log('Du hast das Testduell gewonnen!')}finally{arcaneOpponentAttackBusy492=false;}};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let trapDecisionPending205=false;
