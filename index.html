@@ -5771,7 +5771,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="chronoresonanz-art-a-v437.js?v=437"></script>
 <script src="chronoresonanz-art-b-v437.js?v=437"></script>
 <script src="chronoresonanz-pack-v438.js?v=438"></script>
- <script src="resonance-starter-v436.js?v=438"></script>
+ <script src="resonance-starter-v436.js?v=501"></script>
 <script src="tribute-starter-v496.js?v=496"></script>
 <script src="wurzelherz-art-v497.js?v=500"></script>
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
@@ -5780,7 +5780,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.45';
+const APP_VERSION='2.46';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -9332,6 +9332,32 @@ syncHeroResonanceExtra439();
 })();
 
 
+/* v5.01 – shared starterdeck card gallery and readable card detail. */
+(function initStarterCardGallery501(){
+ const esc=arcaneEscape335;
+ function lookup(name){return window.arcaneCollectionCatalog322?.cards?.find(c=>c.name===name)||deck.find(c=>c.name===name)}
+ function gallery(recipe,owned){
+  return recipe.map(([name,count])=>{
+   const c=lookup(name);const stock=owned(name);
+   if(!c)return '<div class="arcane-starter-tile-501"><strong>'+esc(name)+'</strong><small>×'+count+' · Bestand '+stock+'/3</small></div>';
+   return '<button type="button" class="arcane-starter-tile-501" data-starter-card-501="'+esc(name)+'" aria-label="'+esc(name)+' – Karte ansehen"><div class="arcane-starter-face-501">'+renderArcaneCard335(c,{size:'collection'})+'</div><span class="arcane-starter-quantity-501">×'+count+'</span><strong>'+esc(name)+'</strong><small>Bestand '+stock+'/3</small></button>';
+  }).join('');
+ }
+ function open(name){
+  const c=lookup(name);if(!c)return;
+  const previous=document.activeElement;
+  const d=document.createElement('dialog');d.className='arcane-starter-preview-501';d.setAttribute('aria-label','Karte: '+name);
+  d.innerHTML='<div class="arcane-starter-preview-head-501"><strong>'+esc(name)+'</strong><button type="button" data-close-501 aria-label="Karte schließen">✕</button></div><div class="arcane-starter-large-501">'+renderArcaneCard335(c,{size:'large'})+'</div><div class="arcane-starter-effect-501"><strong>Beschreibung &amp; Effekt</strong><p>'+esc(c.effectText||c.desc||'Kein besonderer Effekt.')+'</p>'+(c.kind==='monster'?'<small>Stufe '+esc(c.level)+' · ATK '+esc(c.atk)+' · DEF '+esc(c.def)+'</small>':'')+'</div>';
+  document.body.append(d);
+  d.addEventListener('close',()=>{d.remove();previous?.focus?.({preventScroll:true})},{once:true});
+  d.querySelector('[data-close-501]').addEventListener('click',()=>d.close());
+  d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()}});
+  d.showModal();
+ }
+ document.addEventListener('click',e=>{const b=e.target.closest?.('#arcaneStarterDetail375 [data-starter-card-501]');if(!b)return;e.preventDefault();open(b.dataset.starterCard501)});
+ window.arcaneStarterGallery501=gallery;
+})();
+
 /* v3.75 – Two illustrated starter pack products, using original prepared pack art files.
    Kael is 30 cards and Leon 50 cards. Inventory cap is three per named card. */
 (function initStarterPackShop375(){
@@ -9363,7 +9389,7 @@ syncHeroResonanceExtra439();
    +'<img src="'+p.image+'" alt="Starterpack '+esc(p.name)+'" loading="lazy" onload="this.previousElementSibling.style.display=\'none\'" onerror="this.remove()"></div>';
  }
  function previewCards(p){
-  return p.cards.map(([name,count])=>'<div class="arcane-starter-card-row-375"><span>'+esc(name)+'</span><small>×'+count+' · Bestand '+qty(name)+'/3</small></div>').join('');
+  return window.arcaneStarterGallery501(p.cards,qty);
  }
  function canGain(p){return p.cards.some(([name])=>qty(name)<3)}
  function drawProducts(){
@@ -9381,7 +9407,7 @@ syncHeroResonanceExtra439();
   detail.dataset.activeDeck=id;
   detail.innerHTML='<button type="button" class="arcane-starter-detail-back-375" id="arcaneStarterBack375">← Alle Starterpacks</button>'
    +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p>💎 '+price+' Arkankristalle</p></div></div>'
-   +'<h4>Enthaltene Karten</h4><div class="arcane-starter-card-list-375">'+previewCards(p)+'</div>'
+   +'<h4>Enthaltene Karten</h4><p class="arcane-starter-hint-501">Tippe auf eine Karte, um sie groß anzusehen und ihren Effekt zu lesen.</p><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'+previewCards(p)+'</div>'
    +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare pro Karte. Karten, die du bereits 3-mal besitzt, werden bei weiteren Käufen nicht erneut gutgeschrieben.</p>'
    +'<button type="button" id="arcaneStarterBuy375" class="arcane-starter-buy-375" '+(buyable?'':'disabled')+'>'
    +(canGain(p)?balance>=price?'Starterpack kaufen · 💎 '+price:'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
@@ -10964,4 +10990,27 @@ function showExtraMap469(ch,selectedIndex){
 <script src="pvp/arena-board.js?v=2"></script>
 <script src="pvp/arena-friends.js?v=1"></script>
 <script src="pvp/arena-modes.js?v=4"></script>
+<style id="arcane-starter-gallery-style-501">
+.arcane-starter-card-list-375.arcane-starter-gallery-501{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-height:none;overflow:visible;border:0;border-radius:0;padding:0 0 8px}
+.arcane-starter-tile-501{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:3px 2px 7px;background:#1a2039;border:1px solid #66567d;border-radius:8px;color:#f6e3b9;cursor:pointer;text-align:center;touch-action:manipulation}
+.arcane-starter-face-501{width:100%;aspect-ratio:.68;position:relative;min-height:0}
+.arcane-starter-face-501>.arcane-card-335{width:100%!important;height:100%!important;transform:none!important;margin:0!important;border-width:2px!important}
+.arcane-starter-face-501 .arcane-card-head-335>strong{font-size:clamp(7px,1.8vw,12px)!important;line-height:1.1!important}
+.arcane-starter-face-501 .arcane-card-head-335>small,.arcane-starter-face-501 .arcane-card-meta-335,.arcane-starter-face-501 .arcane-card-stats-335{font-size:clamp(6px,1.5vw,9px)!important}
+.arcane-starter-face-501 .arcane-card-effect-335{display:none!important}
+.arcane-starter-tile-501>strong{font-size:11px;overflow-wrap:anywhere;line-height:1.2}
+.arcane-starter-tile-501>small,.arcane-starter-hint-501{font-size:11px;color:#c6cbe0}
+.arcane-starter-quantity-501{position:absolute;right:4px;top:4px;border:1px solid #e7c482;border-radius:5px;background:#171227e8;color:#ffe4a8;padding:2px 5px;font-size:12px;font-weight:800;z-index:2}
+.arcane-starter-preview-501{position:fixed;inset:0;margin:auto!important;width:min(90vw,370px);max-height:94dvh;box-sizing:border-box;overflow:auto;padding:12px 16px 16px;background:#151a30;color:#f9e5bb;border:1px solid #cca870;border-radius:15px;overscroll-behavior:contain}
+.arcane-starter-preview-501::backdrop{background:#060812d9;backdrop-filter:blur(5px)}
+.arcane-starter-preview-head-501{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;text-align:left}
+.arcane-starter-preview-head-501 button{border:1px solid #bf9a62;border-radius:8px;background:#312747;color:#ffe5b0;min-width:42px;min-height:42px;font-size:20px}
+.arcane-starter-large-501{width:min(100%,260px,calc(61dvh * .68));aspect-ratio:.68;margin:0 auto}
+.arcane-starter-large-501>.arcane-card-335{width:100%!important;height:100%!important;transform:none!important;margin:0!important}
+.arcane-starter-effect-501{padding:10px 12px;border:1px solid #6a5b87;border-radius:8px;margin-top:12px;background:#21233b;text-align:left}
+.arcane-starter-effect-501 p{font-size:14px;line-height:1.45;margin:6px 0;color:#f2e7fa}
+.arcane-starter-effect-501 small{color:#e7cb91;font-size:12px}
+@media(min-width:700px){.arcane-starter-card-list-375.arcane-starter-gallery-501{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:340px){.arcane-starter-card-list-375.arcane-starter-gallery-501{gap:5px}.arcane-starter-tile-501>strong{font-size:10px}}
+</style>
 </body></html>
