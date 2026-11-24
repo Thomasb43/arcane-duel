@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261124-all-opponent-turns-visible-v491">
+<meta name="arcane-build" content="20261124-enemy-trap-flip-v492">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5711,6 +5711,18 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
 </style>
 <style>
 
+
+/* v4.92 – Gegnerische Fallenkarten drehen sich auf dem Feld vor ihrem Effekt um. */
+main.arcane-enemy-trap-busy-492{pointer-events:none!important}
+.arcane-enemy-trap-flip-492{position:fixed;z-index:2147483015;pointer-events:none;perspective:1100px;transform-style:preserve-3d;filter:drop-shadow(0 0 12px #c98aff)}
+.arcane-enemy-trap-rotor-492{position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;will-change:transform}
+.arcane-enemy-trap-side-492{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:8px;border:2px solid #d7aeff}
+.arcane-enemy-trap-back-492{background:radial-gradient(ellipse at 50% 38%,#723fa7,#251642 55%,#111a35);display:grid;place-items:center;color:#f3ce8b;font:900 clamp(21px,6vw,42px) Georgia,serif}
+.arcane-enemy-trap-front-492{transform:rotateY(180deg);background:#111831}
+.arcane-enemy-trap-front-492>.arcane-card-335{width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;transform:none!important;margin:0!important;overflow:hidden!important}
+@keyframes arcaneEnemyFlip492{from{transform:rotateY(0deg)}to{transform:rotateY(180deg)}}
+@media(prefers-reduced-motion:reduce){.arcane-enemy-trap-rotor-492{animation:none!important}}
+
 /* v4.91 – Sichtbare KI-Spielzüge in jeder Runde, nur tatsächlich offene Karten zeigen. */
 .arcane-ai-busy-491 #hand,.arcane-ai-busy-491 #myMon,.arcane-ai-busy-491 #mySpell,
 .arcane-ai-busy-491 #end,.arcane-ai-busy-491 #phase{pointer-events:none!important}
@@ -5736,7 +5748,7 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.91</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.92</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7385,6 +7397,73 @@ $("oppSpell").addEventListener('click',e=>{
 });
 // Direkter Angriff: Das Wischen auf eine leere gegnerische Monsterzone verursacht sofort LP-Schaden.
 
+
+
+/* v4.92 – erst umdrehen, dann sichtbaren Effekt ausführen, danach auf den Friedhof. */
+let arcaneOpponentTrapBusy492=false,arcaneOpponentAttackBusy492=false;
+async function arcaneOpponentTrapFlip492(index,card){
+ const slot=document.querySelector('#oppSpell [data-index="'+index+'"]');
+ const oldCard=slot?.querySelector('.field-card');
+ const rect=(oldCard||slot)?.getBoundingClientRect();
+ const reduced=arcaneOpeningReduced489();
+ let ghost=null;
+ if(rect&&rect.width&&rect.height){
+  ghost=document.createElement('div');
+  ghost.className='arcane-enemy-trap-flip-492';
+  Object.assign(ghost.style,{left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px'});
+  const rotor=document.createElement('div');rotor.className='arcane-enemy-trap-rotor-492';
+  const back=document.createElement('div');back.className='arcane-enemy-trap-side-492 arcane-enemy-trap-back-492';back.textContent='✦';
+  const front=document.createElement('div');front.className='arcane-enemy-trap-side-492 arcane-enemy-trap-front-492';
+  front.innerHTML=renderArcaneCard335(card,{size:'field'});
+  front.querySelectorAll('img').forEach(img=>{img.loading='eager';img.decoding='async'});
+  rotor.append(back,front);ghost.append(rotor);document.body.appendChild(ghost);
+ }
+ card.faceDown=false;
+ render();
+ const exposed=document.querySelector('#oppSpell [data-index="'+index+'"] .field-card');
+ if(exposed&&ghost)exposed.style.visibility='hidden';
+ arcaneOpeningCaption489('⚠ GEGNER AKTIVIERT FALLE: '+card.name);
+ try{
+  if(ghost&&!reduced){
+   const rotor=ghost.firstElementChild;
+   if(rotor.animate){
+    const animation=rotor.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(90deg)',offset:.48},{transform:'rotateY(180deg)'}],
+     {duration:760,easing:'cubic-bezier(.28,.73,.18,1)',fill:'forwards'});
+    await animation.finished.catch(()=>{});
+   }else{
+    rotor.style.animation='arcaneEnemyFlip492 760ms ease-out forwards';
+    await arcaneOpeningWait489(780);
+   }
+  }else await arcaneOpeningWait489(reduced?120:350);
+ }finally{
+  ghost?.remove();
+  if(exposed)exposed.style.visibility='';
+ }
+ await arcaneAiPlay491(card,'Gegner aktiviert Falle:');
+}
+async function arcaneResolveOpponentTrap492(index,applyEffect){
+ if(arcaneOpponentTrapBusy492)return false;
+ const card=oppSpell[index];if(!card||card.kind!=='trap')return false;
+ arcaneOpponentTrapBusy492=true;
+ document.querySelector('main')?.classList.add('arcane-enemy-trap-busy-492');
+ let applied=false;
+ try{
+  await arcaneOpponentTrapFlip492(index,card);
+  const blocked=!!applyEffect(card);
+  applied=true;
+  arcaneOpeningCaption489('✦ FALLENEFFEKT: '+card.name);
+  render();
+  await arcaneOpeningWait489(arcaneOpeningReduced489()?120:420);
+  return blocked;
+ }finally{
+  if(applied&&oppSpell[index]===card){
+   oppSpell[index]=null;sendToGraveyard(card,'opponent');render();
+  }
+  document.querySelector('main')?.classList.remove('arcane-enemy-trap-busy-492');
+  document.getElementById('arcaneOpeningCaption489')?.remove();
+  arcaneOpponentTrapBusy492=false;
+ }
+}
 
 function activateEldricTrap432(){
  if(window.arcaneStoryOpponentInfo362?.name!=='Eldric')return false;
