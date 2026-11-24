@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261124-adaptive-card-art-v505">
+<meta name="arcane-build" content="20261124-fullbleed-update-v506">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.94</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.06</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -5805,8 +5805,10 @@ const arcaneValtorArt428={
 };
 window.arcaneValtorArt428=arcaneValtorArt428;
 
-let availableBuild=null;
+let availableBuild=null,arcaneUpdateCheckRunning506=false;
 async function checkForUpdates(){
+ if(arcaneUpdateCheckRunning506)return;
+ arcaneUpdateCheckRunning506=true;
  try{
   const url=new URL('./index.html',location.href);
   url.searchParams.set('_arcane_check',String(Date.now()));
@@ -5816,8 +5818,10 @@ async function checkForUpdates(){
   const match=html.match(/<meta\s+name=["']arcane-build["']\s+content=["']([^"']+)/i);
   if(!match)return;
   availableBuild=match[1]!==CURRENT_BUILD?match[1]:null;
-  document.getElementById('updateNotice').style.display=availableBuild?'block':'none';
- }catch(e){}
+  const notice=document.getElementById('updateNotice');
+  notice.dataset.updateReady=availableBuild?'true':'false';
+  notice.style.display=availableBuild?'flex':'none';
+ }catch(e){}finally{arcaneUpdateCheckRunning506=false}
 }
 document.getElementById('reloadUpdate').addEventListener('click',()=>{
  if(!availableBuild)return;
@@ -5825,9 +5829,12 @@ document.getElementById('reloadUpdate').addEventListener('click',()=>{
  target.searchParams.set('_arcane_build',availableBuild);
  location.replace(target.toString());
 });
-setInterval(()=>{if(!document.hidden)checkForUpdates();},45000);
+setInterval(()=>{if(!document.hidden)checkForUpdates();},15000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkForUpdates();});
 window.addEventListener('pageshow',()=>checkForUpdates());
+window.addEventListener('focus',()=>checkForUpdates());
+window.addEventListener('online',()=>checkForUpdates());
+checkForUpdates();
 window.addEventListener('error',e=>{const box=document.getElementById('log');if(box)box.textContent='Technischer Fehler beim Laden: '+e.message;});
 
 /* Element emblems, visual only; existing card effects remain unchanged. */
@@ -5850,37 +5857,16 @@ function arcaneElementIcon329(c){
 /* v3.35: ONE card face reused in every context, only scaled. */
 function arcaneEscape335(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function arcaneRarity335(c){const d=window.arcaneCollectionCatalog322,k=d?.rarity?.(c)||'normal';return {key:k,label:d?.rarityData?.[k]?.label||'Normal',color:d?.rarityData?.[k]?.color||'#c3c5d1'}}
-/* v5.04 – adaptive artwork framing: preserve focal points and eliminate empty sidebars. */
+/* v5.06 – full-bleed artwork in every card view, without letterboxing. */
 function arcaneFitArt503(markup){
  return String(markup||'').replace(/<img\b[^>]*>/gi,tag=>{
   if(/arcane-art-background-341/.test(tag))return tag;
-  return tag.replace(/\s*\/?>$/,' data-art-fit-503="auto">');
+  const fit='display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;transform:none!important;';
+  if(/\bstyle="[^"]*"/i.test(tag))return tag.replace(/\bstyle="([^"]*)"/i,(_,style)=>'style="'+style+';'+fit+'" data-art-fit-503="cover"');
+  if(/\bstyle='[^']*'/i.test(tag))return tag.replace(/\bstyle='([^']*)'/i,(_,style)=>"style='"+style+";"+fit+"' data-art-fit-503=\"cover\"");
+  return tag.replace(/\s*\/?>$/,' style="'+fit+'" data-art-fit-503="cover">');
  });
 }
-function arcaneFillArtEdges503(img){
- if(!img.matches?.('img[data-art-fit-503]')||!img.naturalWidth||!img.naturalHeight)return;
- if(img.hasAttribute('data-legacy-art-337')&&!img.dataset.cropReady337)return;
- const frame=img.closest('.arcane-card-art-335,.arcane-play-art-493,.resonance-extra-art,.hand-limit-art,.grave-card');
- const holder=img.parentElement;
- if(!frame||!holder)return;
- // Preserve native renderer positioning and only use the softer framing on strongly mismatched aspect ratios.
- const w=frame.clientWidth,h=frame.clientHeight;
- const frameRatio=w&&h?w/h:(frame.closest('.arcane-type-spell,.arcane-type-trap')?1:1.3);
- const ratio=img.naturalWidth/img.naturalHeight;
- const fit=Math.min(ratio/frameRatio,frameRatio/ratio);
- const soft=fit<.76&&!img.classList.contains('arcane-legacy-crop-fallback-337');
- // Restore the original inline focus on re-load, then apply only the selected framing.
- if(!img._arcaneOriginalFit504)img._arcaneOriginalFit504=Object.fromEntries(['object-fit','object-position','transform','transform-origin'].map(k=>[k,[img.style.getPropertyValue(k),img.style.getPropertyPriority(k)]]));
- for(const [k,[v,p]] of Object.entries(img._arcaneOriginalFit504)){if(v)img.style.setProperty(k,v,p);else img.style.removeProperty(k)}
- img.dataset.artFit503=soft?'soft':'cover';
- if(!soft){holder.removeAttribute('data-art-edge-504');holder.style.removeProperty('--arcane-art-edge-504');return}
- for(const [k,v] of Object.entries({'object-fit':'contain','object-position':'center','transform':'scale(1.13)','transform-origin':'center'}))img.style.setProperty(k,v,'important');
- const src=img.currentSrc||img.src;
- if(!src)return;
- holder.dataset.artEdge504='true';
- holder.style.setProperty('--arcane-art-edge-504','url('+JSON.stringify(src)+')');
-}
-document.addEventListener('load',e=>{if(e.target?.tagName==='IMG')arcaneFillArtEdges503(e.target)},true);
 
 function renderArcaneCard335(c,o={}){
  if(!c)return '';
@@ -6567,6 +6553,7 @@ const ARCANE_ART_FOCUS_339={
 
 /* v3.43: full-bleed image with per-card subject focus, no portrait letterboxing. */
 const ARCANE_ART_FRAMING_343={
+ 'kael-siegelritter':{x:50,y:26},'kael-lichtfalke':{x:50,y:40},'kael-runenwaechter':{x:50,y:26},'kael-sternenklingen-ritter':{x:50,y:28},'kael-hueter-des-ersten-siegels':{x:50,y:25},'kael-arkaner-lichtdrache':{x:50,y:32},
  'flame-dragon':{x:50,y:22},
  'earth-warden':{x:50,y:20},'erdwaechter':{x:50,y:20},
  'ember-colossus':{x:50,y:20},
@@ -11056,14 +11043,15 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 .arcane-shop-balance-320 img.arcane-currency-shop-502{width:1.25em!important;height:1.25em!important;vertical-align:-.3em!important}
 </style>
 <style id="arcane-art-fit-style-503">
-/* v5.04: restore full-width artwork, with colour-matched extensions for tall original motifs. */
+/* Full-width, edge-to-edge illustrations. Keep the individual subject focus. */
 .arcane-card-art-335,.arcane-play-art-493{position:relative!important;isolation:isolate!important;overflow:hidden!important}
-.arcane-card-art-335 img[data-art-fit-503],.arcane-play-art-493 img[data-art-fit-503]{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important}
-.arcane-card-art-335 img[data-art-fit-503="soft"],.arcane-play-art-493 img[data-art-fit-503="soft"],img[data-art-fit-503="soft"]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;transform:scale(1.13)!important;transform-origin:center!important;z-index:2!important}
-[data-art-edge-504]{position:relative!important;isolation:isolate!important;overflow:hidden!important}
-[data-art-edge-504]::before{content:"";position:absolute;inset:-12%;z-index:0;background-image:var(--arcane-art-edge-504);background-position:center;background-size:cover;filter:blur(clamp(3px,.8vw,12px)) brightness(.78) saturate(1.05);pointer-events:none}
-.arcane-card-art-335 img.arcane-legacy-crop-fallback-337{height:142%!important;top:-25%!important;bottom:auto!important;object-fit:fill!important}
+.arcane-card-art-335 img[data-art-fit-503],.arcane-play-art-493 img[data-art-fit-503],img[data-art-fit-503="cover"]{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;transform:none!important}
+.arcane-card-art-335 .card-art-loader{position:relative!important;width:100%!important;height:100%!important;overflow:hidden!important}
 .riven-art-416{container-type:size;display:grid!important;place-items:center!important}
 .riven-tile-503{display:block!important;position:relative!important;width:100%;width:max(100cqw,calc(100cqh * var(--riven-atlas-ratio-503,.75)));height:auto;aspect-ratio:var(--riven-atlas-ratio-503,.75);max-width:none;max-height:none;flex:none}
+#updateNotice{display:none!important}
+#updateNotice[data-update-ready="true"]{display:flex!important;position:fixed!important;top:max(8px,calc(env(safe-area-inset-top) + 6px))!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translateX(-50%)!important;z-index:2147483647!important;width:max-content!important;max-width:calc(100vw - 20px)!important;align-items:center!important;justify-content:center!important;gap:8px!important;padding:5px 7px 5px 10px!important;border:1px solid #e9c879!important;border-radius:12px!important;background:#20152fee!important;box-shadow:0 3px 18px #000b!important;color:#ffedc5!important;font:700 11px system-ui,sans-serif!important;pointer-events:auto!important}
+#updateNotice #reloadUpdate{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;margin:0!important;padding:6px 9px!important;background:#76562c!important;color:#fff3cc!important;border:1px solid #f2d193!important;border-radius:7px!important;white-space:nowrap!important;font:800 12px system-ui,sans-serif!important;cursor:pointer!important;touch-action:manipulation!important}
+@media(max-height:480px) and (orientation:landscape){#updateNotice[data-update-ready="true"]{left:auto!important;right:max(8px,env(safe-area-inset-right))!important;transform:none!important}}
 </style>
 </body></html>
