@@ -5773,13 +5773,14 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="chronoresonanz-pack-v438.js?v=438"></script>
  <script src="resonance-starter-v436.js?v=438"></script>
 <script src="tribute-starter-v496.js?v=496"></script>
+<script src="wurzelherz-art-v497.js?v=497"></script>
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
 <script src="story-chapter2-v444.js?v=444"></script>
 <script src="story-chapter3-v445.js?v=445"></script>
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.41';
+const APP_VERSION='2.42';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -6705,6 +6706,7 @@ function renderEldricArtwork433(card){
 }
 function renderCardArt(c){
  if(!c)return '';
+ if(c.forestTribute&&window.ARCANE_WURZELHERZ_ART_497?.[c.name])return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#183c29"><img class="arcane-art-direct-339 arcane-fullbleed-img-343" src="'+window.ARCANE_WURZELHERZ_ART_497[c.name]+'" alt="" loading="lazy" decoding="async" style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center"></span>';
  if(c.forestTribute)return '<div style="position:relative;width:100%;height:100%;overflow:hidden;background:#183c29"><img src="artwork/story/forest-magical-v460.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:2em;text-shadow:0 2px 8px #001c0c">'+c.emoji+'</span></div>';
  // v4.41: 8 bestätigte, eigenständige WebP-Artworks für die Kael-/Leon-Resonanzkarten.
  // Die Galerie, Booster-Reveal, Hand und Extra-Deck verwenden denselben Renderer.
@@ -9344,7 +9346,7 @@ syncHeroResonanceExtra439();
  const products=[
   {id:'kael',name:'Kael',title:'Wächter des ersten Siegels',image:'artwork/starterdeck-kael.png',accent:'blue',feature:'Arkaner Lichtdrache',cards:starterDeckList,freeBase:true},
   {id:'leon',name:'Leon',title:'König der Löwenarena',image:'artwork/starterdeck-leon.png',accent:'fire',feature:'König der Löwenarena',cards:leonDeckList363,freeBase:false},
-  {id:window.ARCANE_WURZELHERZ_496.id,name:'Wurzelherz',title:window.ARCANE_WURZELHERZ_496.title,image:'artwork/story/forest-magical-v460.jpg',accent:'ice',feature:'Wurzelherzdrache Sylvaron',cards:window.ARCANE_WURZELHERZ_496.recipe,freeBase:false}
+  {id:window.ARCANE_WURZELHERZ_496.id,name:'Wurzelherz',title:window.ARCANE_WURZELHERZ_496.title,image:window.ARCANE_WURZELHERZ_PACK_497||'artwork/story/forest-magical-v460.jpg',accent:'ice',feature:'Wurzelherzdrache Sylvaron',cards:window.ARCANE_WURZELHERZ_496.recipe,freeBase:false}
  ];
  const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
  const qty=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
