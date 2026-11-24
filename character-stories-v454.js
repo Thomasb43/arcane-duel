@@ -183,14 +183,10 @@
   resetFinishedGame();
   HOME.hidden=false;
  }
+ // The existing story overview is the single character navigation entry.
  function renderHub(){
-  state={view:'hub',hero:null,index:null,page:0};heading.textContent='Die Geschichten der Chronik';open();
-  const names=['Kael',...cast];
-  body.innerHTML='<p class="ac-story-copy454">Jeder Duellant folgt seinem eigenen Weg. Deine Kapitel und Siege bleiben für jeden Charakter getrennt gespeichert.</p>'
-   +'<div class="ac-story-roster454">'+names.map(name=>{
-      const item=stories[name],subtitle=name==='Kael'?'Die Chronik der Sieben Siegel':item.title;
-      return '<button type="button" class="ac-story-choice454" data-cs454="hero" data-hero454="'+name+'"><img src="'+photo(name)+'" alt=""><span><strong>'+name+'</strong><small>'+esc(subtitle)+'</small><small>'+esc(name==='Kael'?'Eigene 30-Missionen-Chronik':unlockStatus(name))+'</small></span></button>';
-   }).join('')+'</div>';
+  modal.hidden=true;PICKER.hidden=true;state={view:'hub',hero:null,index:null,page:0};
+  resetFinishedGame();window.arcaneStory357.open();
  }
  function openKael(){
   resetFinishedGame();
@@ -216,7 +212,7 @@
       const complete=progress.cleared.includes(i),unlocked=playable&&(i===0||progress.cleared.includes(i-1));
       return '<button class="ac-story-mission454" data-cs454="mission" data-hero454="'+hero+'" data-index454="'+i+'" '+(unlocked?'':'disabled')+'><span>'+(complete?'✓':unlocked?'⚔':'🔒')+'</span><div><strong>'+(i+1)+'. '+esc(m[0])+'</strong><small>'+esc(enemy[m[1]])+' · '+(complete?'Geschafft':unlocked?'Bereit':'Gesperrt')+'</small></div></button>';
    }).join('')+'</div>'
-   +'<div class="ac-story-actions454"><button type="button" class="ac-story-btn454 alt" data-cs454="hub">← Alle Geschichten</button></div>';
+   +'<div class="ac-story-actions454"><button type="button" class="ac-story-btn454 alt" data-cs454="hub">← Zur Storyübersicht</button></div>';
  }
  function renderPrologue(hero){
   state={view:'prologue',hero,index:null,page:0};heading.textContent=hero+' · Prolog';open();
@@ -347,13 +343,7 @@
   const hero=button.dataset.characterStory454;
   hero==='Kael'?openKael():renderHero(hero);
  },true);
- // The main story landmark opens a story selection; never overwrite Kael's engine.
- const storyButton=HOME.querySelector('[data-arcane-mode="story"]');
- document.addEventListener('click',e=>{
-  if(storyButton&&storyButton.contains(e.target)){
-   e.stopImmediatePropagation();e.preventDefault();renderHub();
-  }
- },true);
+ // The main Story landmark is handled by the existing campaign overview.
  const arenaButton=byId('arcaneStartDuel307');
  arenaButton?.addEventListener('click',resetFinishedGame,true);
  const returnButton=byId('arcaneReturnMenu307');
