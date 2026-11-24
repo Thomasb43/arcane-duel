@@ -2,6 +2,7 @@
 import http from 'node:http';
 import {randomBytes} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
+import {newDuel,apply,duelView} from './duel-engine.mjs';
 const MAX=1000, TTL=15*60*1000;
 const token=()=>randomBytes(24).toString('hex');
 const code=()=>randomBytes(6).toString('hex').toUpperCase();
@@ -9,18 +10,20 @@ export function createLobby({now=Date.now}={}){
  const rooms=new Map();
  function prune(){for(const [id,r] of rooms)if(now()-r.touched>TTL)rooms.delete(id)}
  function participant(r,t){return r?.players.find(p=>p.token===t)}
- function view(r,p){return {room:r.id,mode:r.mode,players:r.players.length,youReady:p.ready,opponentReady:r.players.some(q=>q!==p&&q.ready),status:r.players.length===2?'paired':'waiting'}}
+ function view(r,p){return {room:r.id,mode:r.mode,players:r.players.length,youReady:p.ready,opponentReady:r.players.some(q=>q!==p&&q.ready),status:r.duel?'duel':r.players.length===2?'paired':'waiting',...(r.duel?{duel:duelView(r.duel,r.players.indexOf(p))}:{})}}
  function add(r){const p={token:token(),ready:false};r.players.push(p);r.touched=now();return {...view(r,p),token:p.token}}
  function create(mode){if(rooms.size>=MAX)throw Error('Lobby ausgelastet');let id;do{id=code()}while(rooms.has(id));const r={id,mode,players:[],touched:now()};rooms.set(id,r);return add(r)}
  return function action(b){
   prune();
   if(b.action==='create')return create('private');
-  if(b.action==='match'){const r=[...rooms.values()].find(r=>r.mode==='match'&&r.players.length===1);return r?add(r):create('match')}
+  if(b.action==='match'){const r=[...rooms.values()].find(r=>r.mode==='match'&&!r.duel&&r.players.length===1);return r?add(r):create('match')}
   const r=rooms.get(String(b.room||'').toUpperCase());
-  if(b.action==='join'){if(!r||r.mode!=='private'||r.players.length!==1)throw Error('Raum nicht verfügbar');return add(r)}
+  if(b.action==='join'){if(!r||r.mode!=='private'||r.duel||r.players.length!==1)throw Error('Raum nicht verfügbar');return add(r)}
   const p=participant(r,b.token);if(!p)throw Error('Raum oder Zugang abgelaufen');
-  if(b.action==='leave'){r.players=r.players.filter(q=>q!==p);if(!r.players.length)rooms.delete(r.id);else{r.players[0].ready=false;r.touched=now()}return {left:true}}
-  if(b.action==='ready')p.ready=b.ready===true;
+  if(b.action==='leave'){if(r.duel){if(r.duel.winner===null)apply(r.duel,r.players.indexOf(p),{move:'surrender',rev:r.duel.rev});p.left=true;if(r.players.every(q=>q.left))rooms.delete(r.id);return {left:true}}r.players=r.players.filter(q=>q!==p);if(!r.players.length)rooms.delete(r.id);else{r.players[0].ready=false;r.touched=now()}return {left:true}}
+  if(p.left)throw Error('Raum verlassen');
+  if(b.action==='ready'){if(r.duel)throw Error('Duell läuft bereits');p.ready=b.ready===true;if(r.players.length===2&&r.players.every(q=>q.ready))r.duel=newDuel()}
+  else if(b.action==='move'){if(!r.duel)throw Error('Kein Duell');apply(r.duel,r.players.indexOf(p),b)}
   else if(b.action!=='status')throw Error('Unbekannte Aktion');
   r.touched=now();return view(r,p)
  };
@@ -40,4 +43,4 @@ export function createServer({origin=process.env.PVP_ORIGIN||'', lobby=createLob
   }catch(e){return send(400,{error:e instanceof SyntaxError?'Ungültiges JSON':String(e.message||'Fehler')})}
  });
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){createServer().listen(Number(process.env.PORT||8787),'127.0.0.1',()=>console.log('Arcane PvP lobby listening on 127.0.0.1'))}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){createServer().listen(Number(process.env.PORT||8787),process.env.HOST||'127.0.0.1',()=>console.log('Arcane PvP server ready'))}
