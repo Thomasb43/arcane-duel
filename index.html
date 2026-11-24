@@ -5778,7 +5778,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.38';
+const APP_VERSION='2.39';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -9531,7 +9531,7 @@ syncHeroResonanceExtra439();
  <div class="arcane-home-choices-307 arcane-hub-buildings-314">
   <button type="button" class="arcane-hub-building-314 arcane-hub-collection-314" data-arcane-mode="collection" aria-label="Bibliothek – Kartensammlung"><span>▣ Sammlung</span></button>
   <button type="button" class="arcane-hub-building-314 arcane-hub-story-314" data-arcane-mode="story" aria-label="Schloss – Story"><span>✦ Story</span></button>
-  <button type="button" class="arcane-hub-building-314 arcane-hub-arena-314 arcane-home-duel-307" id="arcaneStartDuel307" aria-label="Arena – Duell gegen KI starten"><span>⚔ Arena</span></button>
+  <button type="button" class="arcane-hub-building-314 arcane-hub-arena-314 arcane-home-duel-307" id="arcaneStartDuel307" aria-label="Arena – Duellmodus auswählen"><span>⚔ Arena</span></button>
   <button type="button" class="arcane-hub-building-314 arcane-hub-shop-314" data-arcane-mode="shop" aria-label="Magischer Laden – Shop"><span>◇ Shop</span></button>
  </div>
  <button type="button" class="arcane-hub-deck-314" data-arcane-mode="deck" aria-label="Deckverwaltung">▤ Decks</button>
@@ -9635,7 +9635,7 @@ syncHeroResonanceExtra439();
   menuButton.hidden=open;
   if(open){detail.hidden=true;characterPicker.hidden=true;closeQuick392();updateWallet391();renderCharacter391();syncPortrait392();home.querySelector('#arcaneStartDuel307').focus({preventScroll:true})}
  }
- home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>{setMenu(false);window.arcaneCoinToss485?.start()});
+ home.querySelector('#arcaneStartDuel307').addEventListener('click',()=>{const startKi=()=>{setMenu(false);window.arcaneCoinToss485?.start()};if(window.arcaneArenaModes)window.arcaneArenaModes.open(startKi);else alert('Arena-Menü konnte nicht geladen werden. Bitte aktualisiere das Spiel.')});
  menuButton.addEventListener('click',()=>setMenu(true));
  home.querySelector('#arcaneHomeDetailBack307').addEventListener('click',()=>{detail.hidden=true});
  const names={story:'Story',deck:'Deckverwaltung',collection:'Kartensammlung',shop:'Shop'};
@@ -10947,4 +10947,8 @@ function showExtraMap469(ch,selectedIndex){
 .arcane-play-options-493 .is-cancel{background:transparent;border-color:transparent;color:#c8bbd5;min-height:32px}
 @media(max-height:460px) and (orientation:landscape){.arcane-play-choice-493{width:min(80vw,530px);display:grid;grid-template-columns:1fr 1.2fr;gap:6px 15px;align-items:center}.arcane-play-choice-493:not([open]){display:none}.arcane-play-choice-493 h2{grid-column:1/-1}.arcane-play-art-493{grid-row:2/5;height:clamp(80px,42dvh,180px)}.arcane-play-choice-493 p{margin:0}.arcane-play-options-493{gap:4px}.arcane-play-options-493 button{min-height:38px}.arcane-play-options-493 .is-cancel{min-height:28px}}
 </style>
+<link rel="stylesheet" href="pvp/arena-modes.css?v=4">
+<script src="pvp/arena-board.js?v=2"></script>
+<script src="pvp/arena-friends.js?v=1"></script>
+<script src="pvp/arena-modes.js?v=4"></script>
 </body></html>
