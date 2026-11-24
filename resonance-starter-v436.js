@@ -200,7 +200,7 @@ function install(){
    if(productGrid.querySelector('#arcaneResonanceShopProduct436'))return;
    const button=document.createElement('button');button.id='arcaneResonanceShopProduct436';
    button.type='button';button.className='arcane-starter-product-375 ice';
-   button.innerHTML=packVisual437()+'<div class="arcane-starter-product-label-375"><strong>Chronoresonanz</strong><span>30 Karten + 3 Extra · 💎 '+price()+'</span></div>';
+   button.innerHTML=packVisual437()+'<div class="arcane-starter-product-label-375"><strong>Chronoresonanz</strong><span>30 Karten + 3 Extra · <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price()+'</span></div>';
    button.addEventListener('click',showDetail);
    productGrid.appendChild(button);
   }
@@ -211,13 +211,13 @@ function install(){
    const newCards=recipe.some(([name,n])=>owned(name)<n)||extra.some(c=>owned(c.name)===0);
    details.hidden=false;details.dataset.activeDeck='chronoresonanz';
    details.innerHTML='<button type="button" id="arcaneChronoBack436" class="arcane-starter-detail-back-375">← Alle Starterpacks</button>'
-    +'<div class="arcane-starter-detail-top-375">'+packVisual437()+'<div><h4>Chronoresonanz</h4><p>Klang der Sphären</p><strong>30 Hauptdeck-Karten</strong><p>18 Monster · 7 Zauber · 5 Fallen</p><strong>3 Resonanzmonster im Extra-Deck</strong><p>💎 '+price()+' Arkankristalle</p></div></div>'
+    +'<div class="arcane-starter-detail-top-375">'+packVisual437()+'<div><h4>Chronoresonanz</h4><p>Klang der Sphären</p><strong>30 Hauptdeck-Karten</strong><p>18 Monster · 7 Zauber · 5 Fallen</p><strong>3 Resonanzmonster im Extra-Deck</strong><p><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price()+' Arkankristalle</p></div></div>'
     +'<h4>Alle Karten im Hauptdeck</h4><p class="arcane-starter-hint-501">Tippe auf eine Karte, um sie groß anzusehen und ihren Effekt zu lesen.</p><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'
     +(window.arcaneStarterGallery501?.(recipe,owned)||recipe.map(([name,n])=>'<div class="arcane-starter-card-row-375"><span>'+esc(name)+'</span><small>×'+n+' · Bestand '+owned(name)+'/3</small></div>').join(''))+'</div>'
     +'<h4>Extra-Deck · beim Kauf inklusive</h4><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'
     +(window.arcaneStarterGallery501?.(extra.map(c=>[c.name,1]),owned)||extra.map(c=>'<div class="arcane-starter-card-row-375"><span>'+esc(c.name)+'</span><small>Stufe '+c.level+' · '+c.atk+' ATK</small></div>').join(''))+'</div>'
     +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare je Karte. Alle Karten sind auf Resonanzbeschwörungen abgestimmt; die Extra-Deck-Monster gehören nicht zu den 30 Hauptdeck-Karten.</p>'
-    +'<button type="button" id="arcaneChronoBuy436" class="arcane-starter-buy-375" '+(newCards&&enough?'':'disabled')+'>'+(newCards?(enough?'Starterdeck kaufen · 💎 '+price():'Nicht genügend Arkankristalle'):'Karten bereits vorhanden')+'</button>'
+    +'<button type="button" id="arcaneChronoBuy436" class="arcane-starter-buy-375" '+(newCards&&enough?'':'disabled')+'>'+(newCards?(enough?'Starterdeck kaufen · <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price():'Nicht genügend Arkankristalle'):'Karten bereits vorhanden')+'</button>'
     +'<p id="arcaneChronoFeedback436" role="status" aria-live="polite"></p>'
     +(owned('Sternklang-Novizin')>0?'<button type="button" id="arcaneChronoActivate436" class="arcane-starter-buy-375">Als aktives Deck wählen</button>':'');
    details.querySelector('#arcaneChronoBack436').addEventListener('click',()=>{details.hidden=true;});

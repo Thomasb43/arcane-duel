@@ -5771,7 +5771,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="chronoresonanz-art-a-v437.js?v=437"></script>
 <script src="chronoresonanz-art-b-v437.js?v=437"></script>
 <script src="chronoresonanz-pack-v438.js?v=438"></script>
- <script src="resonance-starter-v436.js?v=501"></script>
+ <script src="resonance-starter-v436.js?v=502"></script>
 <script src="tribute-starter-v496.js?v=496"></script>
 <script src="wurzelherz-art-v497.js?v=500"></script>
 <script src="arcane-resonanz-bilder-v441.js?v=441"></script>
@@ -5780,7 +5780,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.46';
+const APP_VERSION='2.47';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -8836,7 +8836,7 @@ syncHeroResonanceExtra439();
  panel.setAttribute('aria-label','Magischer Kartenladen');
  panel.innerHTML=`<div class="arcane-shop-top-320"><button id="arcaneShopBack320" type="button" class="arcane-shop-back-320">← Stadt</button><strong>ARCANE DUEL</strong></div>
  <h2>Magischer Laden</h2>
- <div class="arcane-shop-balance-320" aria-live="polite"><strong>💎 <span id="arcaneShopCount320" style="display:inline;color:inherit;font-size:inherit">1.000</span></strong><span>Arkankristalle · Testguthaben</span></div>
+ <div class="arcane-shop-balance-320" aria-live="polite"><strong><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> <span id="arcaneShopCount320" style="display:inline;color:inherit;font-size:inherit">1.000</span></strong><span>Arkankristalle · Testguthaben</span></div>
  <div class="arcane-shop-info-320">
   <h3>✦ Booster &amp; Starterdecks</h3>
   <p>Booster: <strong>100 Arkankristalle</strong> · 5 Karten pro Pack, mindestens eine Seltene.</p>
@@ -8874,7 +8874,7 @@ syncHeroResonanceExtra439();
    <div class="arcane-booster-overline-322">ERSTES BOOSTER-SET</div>
    <div class="arcane-booster-title-322">Schatten &amp; Flammen</div>
    <div class="arcane-booster-product-322"><div class="arcane-booster-product-shine-322">✦</div><div class="arcane-booster-product-name-322">ARCANE DUEL</div></div>
-   <div class="arcane-booster-price-322">💎 100 Arkankristalle</div>
+   <div class="arcane-booster-price-322"><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> 100 Arkankristalle</div>
    <div class="arcane-booster-sub-322">5 Karten pro Pack · mindestens 1 Seltene oder höher.<br>Nur 6 Resonanzmonster + die 2 benötigten Resonatoren von Kael und Leon. Alle anderen Karten sind unabhängig von den beiden.</div>
    <button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button">▣ Karten anzeigen &amp; Packs wählen</button>
    <div class="arcane-booster-feedback-322" id="arcaneBoosterFeedback322" role="status" aria-live="polite"></div>
@@ -8897,9 +8897,9 @@ syncHeroResonanceExtra439();
    <div class="arcane-booster-catalogue-purchase-324">
     <div class="arcane-booster-purchase-label-324">Booster kaufen <span id="arcaneBoosterBalance324"></span></div>
     <div id="arcaneBoosterQuantities324" class="arcane-booster-quantities-324">
-     <button type="button" data-packs="1"><strong>1 Pack</strong><span>💎 100</span></button>
-     <button type="button" data-packs="5"><strong>5 Packs</strong><span>💎 500</span></button>
-     <button type="button" data-packs="10"><strong>10 Packs</strong><span>💎 1.000</span></button>
+     <button type="button" data-packs="1"><strong>1 Pack</strong><span><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> 100</span></button>
+     <button type="button" data-packs="5"><strong>5 Packs</strong><span><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> 500</span></button>
+     <button type="button" data-packs="10"><strong>10 Packs</strong><span><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> 1.000</span></button>
     </div>
     <p id="arcaneBoosterCatalogueMessage324" role="status" aria-live="polite">5 Karten pro Pack · mindestens eine Seltene oder höher.</p>
    </div>
@@ -9102,7 +9102,7 @@ syncHeroResonanceExtra439();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!detail.hidden)closePoolCard()});
  function sync(){
   const money=bank()?.get()??0,pending=inventory()?.read().pendingPack;
-  $b('arcaneBoosterBalance324').textContent='💎 '+money.toLocaleString('de-DE')+' verfügbar';
+  $b('arcaneBoosterBalance324').innerHTML='<img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+arcaneEscape335(money.toLocaleString('de-DE'))+' verfügbar';
   quantities.querySelectorAll('[data-packs]').forEach(b=>{
    const price=Number(b.dataset.packs)*PRICE;
    b.disabled=money<price||!!pending;
@@ -9378,7 +9378,7 @@ syncHeroResonanceExtra439();
  const qty=name=>Math.min(3,(base[name]||0)+(inventory()?.owned(name)||0));
  const wrapper=document.createElement('div');
  wrapper.className='arcane-starter-shop-375';wrapper.hidden=true;
- wrapper.innerHTML='<div class="arcane-starter-shop-head-375"><div><small>ARCANE DUEL · STARTERDECKS</small><h3>Wähle dein Starterpack</h3><p>Erster Starterpack-Kauf: 300 💎 · ab dem zweiten: 600 💎</p></div><button type="button" id="arcaneStarterClose375" aria-label="Starterdecks schließen">×</button></div>'
+ wrapper.innerHTML='<div class="arcane-starter-shop-head-375"><div><small>ARCANE DUEL · STARTERDECKS</small><h3>Wähle dein Starterpack</h3><p>Erster Starterpack-Kauf: 300 <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> · ab dem zweiten: 600 <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"></p></div><button type="button" id="arcaneStarterClose375" aria-label="Starterdecks schließen">×</button></div>'
  +'<div class="arcane-starter-products-375" id="arcaneStarterProducts375"></div>'
  +'<div class="arcane-starter-info-375" id="arcaneStarterDetail375" hidden></div>';
  shop.appendChild(wrapper);
@@ -9396,7 +9396,7 @@ syncHeroResonanceExtra439();
   productsEl.innerHTML=products.filter(p=>p.id!=='leon'||window.arcaneCharacterProgress382?.leonUnlocked()).map(p=>{
    const cardCount=p.cards.reduce((n,[,v])=>n+v,0);
    return '<button type="button" class="arcane-starter-product-375 '+p.accent+'" data-starter-open="'+p.id+'">'
-     +packImage(p)+'<div class="arcane-starter-product-label-375"><strong>'+esc(p.name)+'</strong><span>'+cardCount+' Karten · 💎 '+currentPrice()+'</span></div></button>';
+     +packImage(p)+'<div class="arcane-starter-product-label-375"><strong>'+esc(p.name)+'</strong><span>'+cardCount+' Karten · <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+currentPrice()+'</span></div></button>';
   }).join('');
  }
  function view(id){
@@ -9406,11 +9406,11 @@ syncHeroResonanceExtra439();
   detail.hidden=false;
   detail.dataset.activeDeck=id;
   detail.innerHTML='<button type="button" class="arcane-starter-detail-back-375" id="arcaneStarterBack375">← Alle Starterpacks</button>'
-   +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p>💎 '+price+' Arkankristalle</p></div></div>'
+   +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price+' Arkankristalle</p></div></div>'
    +'<h4>Enthaltene Karten</h4><p class="arcane-starter-hint-501">Tippe auf eine Karte, um sie groß anzusehen und ihren Effekt zu lesen.</p><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'+previewCards(p)+'</div>'
    +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare pro Karte. Karten, die du bereits 3-mal besitzt, werden bei weiteren Käufen nicht erneut gutgeschrieben.</p>'
    +'<button type="button" id="arcaneStarterBuy375" class="arcane-starter-buy-375" '+(buyable?'':'disabled')+'>'
-   +(canGain(p)?balance>=price?'Starterpack kaufen · 💎 '+price:'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
+   +(canGain(p)?balance>=price?'Starterpack kaufen · <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price:'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
    +'<p id="arcaneStarterFeedback375" role="status" aria-live="polite"></p>';
   detail.querySelector('#arcaneStarterBack375').addEventListener('click',()=>{detail.hidden=true;drawProducts()});
   detail.querySelector('#arcaneStarterBuy375').addEventListener('click',()=>buy(p));
@@ -9475,7 +9475,7 @@ syncHeroResonanceExtra439();
   if(lvl>=6)return lvl%2===0?[{type:'crystals',label:'150 Arkankristalle',value:150}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
   return lvl%2===1?[{type:'crystals',label:'100 Arkankristalle',value:100}]:[{type:'ticket',label:'Booster-Ticket',value:1}];
  }
- const iconFor=t=>({character:'🔓',milestone:'🔓',crystals:'💎',ticket:'🎟️',cosmetic:'✨',card:'🃏'})[t]||'✦';
+ const iconFor=t=>({character:'🔓',milestone:'🔓',crystals:'<img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async">',ticket:'🎟️',cosmetic:'✨',card:'🃏'})[t]||'✦';
  function cardReward(grade){
   const catalog=window.arcaneCollectionCatalog322;
   if(!catalog)return null;
@@ -9548,7 +9548,7 @@ syncHeroResonanceExtra439();
  home.setAttribute('aria-label','Arcane Duel Hauptmenü');
  home.innerHTML=`<div class="arcane-home-shell-307 arcane-world-hub-314">
  <div class="arcane-hub-shimmer-314" aria-hidden="true"></div>
- <div class="arcane-hub-wallet-391" aria-label="Arkankristalle">💎 <strong id="arcaneHubCrystals391">1.000</strong></div>
+ <div class="arcane-hub-wallet-391" aria-label="Arkankristalle"><img class="arcane-currency-icon-502 arcane-currency-hud-502" src="artwork/currency/arkankristall-hud.avif" alt="Arkankristalle" decoding="async"> <strong id="arcaneHubCrystals391">1.000</strong></div>
  <div class="arcane-hub-character-dock-392" id="arcaneCharacterDock392">
   <button type="button" class="arcane-hub-character-391" id="arcaneHubCharacter391" aria-label="Kaels Charakter- und Deckmenü öffnen" aria-expanded="false" aria-controls="arcaneCharacterQuick392">
     <img id="arcaneHubCharacterPortrait392" src="artwork/story/kael.jpg" alt="Kael" loading="eager" decoding="async">
@@ -10276,7 +10276,7 @@ function forestMissionInfo457(index){
  info.innerHTML='<div class="arcane-forest-detail-header-457"><h3>'+labelMission(index)+' · '+escapeText(m.title)+'</h3><span class="arcane-forest-state-457">'+result457+'</span></div>'
   +'<div class="arcane-forest-info-457">'+portrait457
   +'<div class="arcane-forest-describe-457"><strong>⚔ Gegner: '+escapeText(m.opponent)+'</strong><p>📍 '+escapeText(m.location||'Der verlorene Wald')+'</p><p>'+escapeText(introduction457)+'</p></div></div>'
-  +'<div class="arcane-forest-rewards-457"><em>Belohnungen:</em><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457">💎 50 Arkankristalle</span></div>'
+  +'<div class="arcane-forest-rewards-457"><em>Belohnungen:</em><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457"><img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async"> 50 Arkankristalle</span></div>'
   +'<p class="arcane-forest-credits-457">'+rewards457+'</p>'
   +'<div class="arcane-forest-actions-457"><button type="button" class="arcane-forest-btn-457 secondary" id="forestBack457">← Zurück</button>'
   +'<button type="button" class="arcane-forest-btn-457" id="forestStart457" '+(open?'':'disabled')+'>'+(review469()?'🔎 Mission testen':open?'⚔ '+(done?'Mission erneut spielen':'Mission starten'):'🔒 Noch gesperrt')+'</button></div>';
@@ -10369,7 +10369,7 @@ function selectChapterMission461(chapter,index){
   +'<div class="arcane-forest-info-457">'+portrait
   +'<div class="arcane-forest-describe-457"><strong>⚔ Gegner: '+escapeText(m.opponent)+'</strong>'
   +'<p>📍 '+escapeText(location)+'</p><p>'+escapeText(description)+'</p></div></div>'
-  +'<div class="arcane-forest-rewards-457"><em>Belohnungen:</em><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457">💎 50 Arkankristalle</span></div>'
+  +'<div class="arcane-forest-rewards-457"><em>Belohnungen:</em><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457"><img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async"> 50 Arkankristalle</span></div>'
   +'<p class="arcane-forest-credits-457">'+rewardInfo+'</p>'
   +'<div class="arcane-forest-actions-457"><button type="button" class="arcane-forest-btn-457 secondary" id="chapterMapBack461">← Zurück</button>'
   +'<button type="button" class="arcane-forest-btn-457" id="chapterMapStart461" '+(open?'':'disabled')+'>'
@@ -10489,7 +10489,7 @@ function showExtraMap469(ch,selectedIndex){
   info.innerHTML='<div class="arcane-forest-detail-header-457"><h3>'+labelMission(i)+' · '+escapeText(m.title)+'</h3><span class="arcane-forest-state-457">'+(done?'✓ Geschafft':review469()?'🔎 Testbereit':open?'⚔ Bereit':'🔒 Gesperrt')+'</span></div>'
     +'<div class="arcane-forest-info-457"><div class="arcane-forest-portrait-457 arcane-forest-portrait-placeholder-457">'+escapeText(config.icon)+'</div>'
     +'<div class="arcane-forest-describe-457"><strong>⚔ Gegner: '+escapeText(m.opponent)+'</strong><p>📍 '+escapeText(m.location)+'</p><p>'+escapeText(m.pre[0][1])+'</p></div></div>'
-    +'<div class="arcane-forest-rewards-457"><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457">💎 50 Arkankristalle</span></div>'
+    +'<div class="arcane-forest-rewards-457"><span class="arcane-forest-reward-457">✨ 100 EP</span><span class="arcane-forest-reward-457"><img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async"> 50 Arkankristalle</span></div>'
     +'<div class="arcane-forest-actions-457"><button type="button" class="arcane-forest-btn-457 secondary" id="expansionBack469">← Zur Übersicht</button>'
     +'<button type="button" class="arcane-forest-btn-457" id="expansionStart469" '+(open?'':'disabled')+'>'+(review469()?'🔎 Mission testen':done?'Erneut spielen':open?'⚔ Mission starten':'🔒 Gesperrt')+'</button></div>';
   info.querySelector('#expansionBack469').addEventListener('click',showMap);
@@ -10820,7 +10820,7 @@ function showExtraMap469(ch,selectedIndex){
   stage.classList.toggle('is-forest-dialog-457',chapter===2);
   content.innerHTML='<div class="arcane-story-dialog-357"><div class="arcane-story-speaker-357">'+(chapterLast?'KAPITEL '+chapter+' '+(review469()?'GETESTET':'ABGESCHLOSSEN'):'MISSION '+labelMission(activeIndex)+(review469()?' GETESTET':' GESCHAFFT'))+'</div><div class="arcane-story-line-357">'+text+'</div>'
    +(missions[activeIndex]?.candidate?'<p class="arcane-story-note-357">✦ '+escapeText(missions[activeIndex].opponent)+' kann später ein eigener Charakter werden.</p>':'')
-   +(lastMissionReward?.first&&!review469()?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · 💎 +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')
+   +(lastMissionReward?.first&&!review469()?'<div class="arcane-story-reward-383">✦ +'+lastMissionReward.xp+' EP · <img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async"> +'+lastMissionReward.crystals+' Arkankristalle'+(lastMissionReward.levelUp?' · Level '+lastMissionReward.newLevel+' erreicht!':'')+'</div>':'')
    +'</div><div class="arcane-story-actions-357"><button type="button" class="arcane-story-action-357 primary-357" id="arcaneStoryContinue357">'+(finalChapter&&chapterLast?'Zur Kapitelübersicht':lastThree?'Kapitel 4 beginnen':lastTwo?'Kapitel 3 beginnen':lastOne?'Kapitel 2 beginnen':'Nächste Mission')+'</button><button type="button" class="arcane-story-action-357" id="arcaneStoryMap357">Missionsübersicht</button></div>';
   content.querySelector('#arcaneStoryMap357').addEventListener('click',()=>chapter===1?showChapterRoute461(1):chapter===2?showForestMap457():chapter===3?showChapterRoute461(3):showExtraMap469(chapter,activeIndex));
   content.querySelector('#arcaneStoryContinue357').addEventListener('click',()=>{
@@ -10964,7 +10964,7 @@ function showExtraMap469(ch,selectedIndex){
  window.syncDuelCharacterPortraits396=update;
 })();
 </script>
-<script src="story-difficulty-v435.js?v=470"></script>
+<script src="story-difficulty-v435.js?v=502"></script>
 <script>window.ARCANE_CHRONORESONANZ_436?.install();
 (function(){const b=document.getElementById("activate"),previous=b.onclick;b.onclick=function(...args){const i=chosenSpell,c=mySpell[i];if(!c?.forestTribute)return previous.apply(this,args);if(!isMainPhase()){log("Nur in der Hauptphase aktivierbar.");return}if(c.kind==="trap"&&turn<=c.setTurn){log("Falle erst ab deinem nächsten Zug aktivierbar.");return}if(!window.ARCANE_WURZELHERZ_496.spellEffect(c,forestContext496())){log(c.name+": Voraussetzungen nicht erfüllt.");return}sendToGraveyard(c);mySpell[i]=null;chosenSpell=-1;render();log(c.name+" wurde aktiviert.");};})();</script>
 <script src="first-play-tutorial-v449.js?v=450"></script>
@@ -11012,5 +11012,12 @@ function showExtraMap469(ch,selectedIndex){
 .arcane-starter-effect-501 small{color:#e7cb91;font-size:12px}
 @media(min-width:700px){.arcane-starter-card-list-375.arcane-starter-gallery-501{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:340px){.arcane-starter-card-list-375.arcane-starter-gallery-501{gap:5px}.arcane-starter-tile-501>strong{font-size:10px}}
+</style>
+<style id="arcane-currency-style-502">
+img.arcane-currency-icon-502{display:inline-block!important;position:static!important;inset:auto!important;float:none!important;width:1.55em!important;height:1.55em!important;max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important;object-fit:contain!important;vertical-align:-.43em!important;flex:0 0 auto!important;margin:0 .05em!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 3px #745aff88);pointer-events:none}
+img.arcane-currency-hud-502{width:24px!important;height:27px!important;vertical-align:middle!important}
+.arcane-hub-wallet-391{padding:5px 10px;gap:4px}
+img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;vertical-align:-.55em!important}
+.arcane-shop-balance-320 img.arcane-currency-shop-502{width:1.25em!important;height:1.25em!important;vertical-align:-.3em!important}
 </style>
 </body></html>

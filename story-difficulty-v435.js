@@ -243,7 +243,7 @@ function showChoice(index,continueButton){
  }
  const rewards=document.createElement('div');
  rewards.className='arcane-briefing-rewards-465';
- rewards.innerHTML=window.arcaneStoryReview469?'<strong>🔎 Testmodus</strong><span>Keine Belohnungen</span>':'<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span>💎 50 Arkankristalle</span>';
+ rewards.innerHTML=window.arcaneStoryReview469?'<strong>🔎 Testmodus</strong><span>Keine Belohnungen</span>':'<strong>🎁 Belohnungen</strong><span>✨ 100 EP</span><span><img class="arcane-currency-icon-502 arcane-currency-reward-502" src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async"> 50 Arkankristalle</span>';
  const note=document.createElement('p');
  note.className='arcane-briefing-note-465';
  note.textContent=window.arcaneStoryReview469?'Die Vorschau verändert weder deinen Story-Fortschritt noch deine Kristalle.':'Diese Belohnungen gibt es einmalig für den ersten Missionssieg. Jede der 4 Stufen hat einen eigenen Siegstatus.';
