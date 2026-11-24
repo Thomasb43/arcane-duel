@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261124-intro-siegel-video-assembled-v494">
+<meta name="arcane-build" content="20261124-adaptive-card-art-v504">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5850,24 +5850,31 @@ function arcaneElementIcon329(c){
 /* v3.35: ONE card face reused in every context, only scaled. */
 function arcaneEscape335(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function arcaneRarity335(c){const d=window.arcaneCollectionCatalog322,k=d?.rarity?.(c)||'normal';return {key:k,label:d?.rarityData?.[k]?.label||'Normal',color:d?.rarityData?.[k]?.color||'#c3c5d1'}}
-/* v5.03 – preserve the whole illustration, including older custom art renderers. */
+/* v5.04 – adaptive artwork framing: preserve focal points and eliminate empty sidebars. */
 function arcaneFitArt503(markup){
  return String(markup||'').replace(/<img\b[^>]*>/gi,tag=>{
   if(/arcane-art-background-341/.test(tag))return tag;
-  const fit='position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;transform:none!important;';
-  if(/\bstyle="[^"]*"/i.test(tag))return tag.replace(/\bstyle="([^"]*)"/i,(_,style)=>'style="'+style+';'+fit+'" data-art-fit-503="whole"');
-  if(/\bstyle='[^']*'/i.test(tag))return tag.replace(/\bstyle='([^']*)'/i,(_,style)=>"style='"+style+";"+fit+"' data-art-fit-503=\"whole\"");
-  return tag.replace(/\s*\/?>$/,' style="'+fit+'" data-art-fit-503="whole">');
+  return tag.replace(/\s*\/?>$/,' data-art-fit-503="auto">');
  });
 }
 function arcaneFillArtEdges503(img){
  if(!img.matches?.('img[data-art-fit-503]')||!img.naturalWidth||!img.naturalHeight)return;
- const frame=img.closest('.arcane-card-art-335,.arcane-play-art-493');if(!frame)return;
- // A subtle colour-matched backdrop in detailed views only; never enlarge foreground.
- if(!frame.closest('.arcane-size-large,.arcane-play-art-493'))return;
+ if(img.hasAttribute('data-legacy-art-337')&&!img.dataset.cropReady337)return;
+ const frame=img.closest('.arcane-card-art-335,.arcane-play-art-493,.resonance-extra-art,.hand-limit-art,.grave-card');
+ const holder=img.parentElement;
+ if(!frame||!holder)return;
+ // Preserve native renderer positioning and only use the softer framing on strongly mismatched aspect ratios.
+ const w=frame.clientWidth,h=frame.clientHeight;
+ const frameRatio=w&&h?w/h:(frame.closest('.arcane-type-spell,.arcane-type-trap')?1:1.3);
+ const ratio=img.naturalWidth/img.naturalHeight;
+ const fit=Math.min(ratio/frameRatio,frameRatio/ratio);
+ const soft=fit<.76&&!img.classList.contains('arcane-legacy-crop-fallback-337');
+ img.dataset.artFit503=soft?'soft':'cover';
+ if(!soft){holder.removeAttribute('data-art-edge-504');holder.style.removeProperty('--arcane-art-edge-504');return}
  const src=img.currentSrc||img.src;
- if(!src||src.startsWith('data:')||src.startsWith('blob:'))return;
- frame.style.setProperty('--arcane-art-edge-503','url('+JSON.stringify(src)+')');
+ if(!src)return;
+ holder.dataset.artEdge504='true';
+ holder.style.setProperty('--arcane-art-edge-504','url('+JSON.stringify(src)+')');
 }
 document.addEventListener('load',e=>{if(e.target?.tagName==='IMG')arcaneFillArtEdges503(e.target)},true);
 
@@ -11045,14 +11052,14 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 .arcane-shop-balance-320 img.arcane-currency-shop-502{width:1.25em!important;height:1.25em!important;vertical-align:-.3em!important}
 </style>
 <style id="arcane-art-fit-style-503">
-/* Global card artwork: fit the entire image, never stretch or crop the subject. */
-.arcane-card-art-335,.arcane-play-art-493{isolation:isolate!important;background:radial-gradient(ellipse at center,#30345b,#111a2e 70%,#151126)!important}
-.arcane-card-art-335 img[data-art-fit-503],.arcane-play-art-493 img[data-art-fit-503]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;transform:none!important}
-.arcane-card-art-335>.card-art-loader,.arcane-card-art-335>span,.arcane-card-art-335>div{position:relative;z-index:1}
-.arcane-card-art-335 .card-art-loader,.arcane-card-art-335 .astra-art-frame-425,.arcane-card-art-335 .eldric-card-art-434{background:transparent!important}
-.arcane-size-large .arcane-card-art-335::before,.arcane-play-art-493::before{content:"";position:absolute;inset:-8%;z-index:0;background-image:var(--arcane-art-edge-503,none);background-position:center;background-size:cover;filter:blur(12px) brightness(.42) saturate(.85);pointer-events:none}
-.arcane-size-large .arcane-card-art-335>img,.arcane-play-art-493>img{z-index:1}
+/* v5.04: restore full-width artwork, with colour-matched extensions for tall original motifs. */
+.arcane-card-art-335,.arcane-play-art-493{position:relative!important;isolation:isolate!important;overflow:hidden!important}
+.arcane-card-art-335 img[data-art-fit-503],.arcane-play-art-493 img[data-art-fit-503]{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important}
+.arcane-card-art-335 img[data-art-fit-503="soft"],.arcane-play-art-493 img[data-art-fit-503="soft"],img[data-art-fit-503="soft"]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;transform:scale(1.13)!important;transform-origin:center!important;z-index:2!important}
+[data-art-edge-504]{position:relative!important;isolation:isolate!important;overflow:hidden!important}
+[data-art-edge-504]::before{content:"";position:absolute;inset:-12%;z-index:0;background-image:var(--arcane-art-edge-504);background-position:center;background-size:cover;filter:blur(clamp(3px,.8vw,12px)) brightness(.78) saturate(1.05);pointer-events:none}
+.arcane-card-art-335 img.arcane-legacy-crop-fallback-337{height:142%!important;top:-25%!important;bottom:auto!important;object-fit:fill!important}
 .riven-art-416{container-type:size;display:grid!important;place-items:center!important}
-.riven-tile-503{display:block!important;position:relative!important;width:100%;height:100%;width:min(100cqw,calc(100cqh * var(--riven-atlas-ratio-503,.75)));height:auto;aspect-ratio:var(--riven-atlas-ratio-503,.75);max-width:100%;max-height:100%;flex:none}
+.riven-tile-503{display:block!important;position:relative!important;width:100%;width:max(100cqw,calc(100cqh * var(--riven-atlas-ratio-503,.75)));height:auto;aspect-ratio:var(--riven-atlas-ratio-503,.75);max-width:none;max-height:none;flex:none}
 </style>
 </body></html>
