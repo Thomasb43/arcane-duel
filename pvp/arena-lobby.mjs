@@ -1,7 +1,10 @@
 // Arcane Duel: isolated, unranked PvP lobby prototype. No duel simulation yet.
 import http from 'node:http';
 import {randomBytes} from 'node:crypto';
-import {pathToFileURL} from 'node:url';
+import {pathToFileURL,fileURLToPath} from 'node:url';
+import {resolve,sep,extname} from 'node:path';
+import {stat,realpath} from 'node:fs/promises';
+import {createReadStream} from 'node:fs';
 import {newDuel,apply,duelView} from './duel-engine.mjs';
 const MAX=1000, TTL=15*60*1000;
 const token=()=>randomBytes(24).toString('hex');
@@ -28,12 +31,21 @@ export function createLobby({now=Date.now}={}){
   r.touched=now();return view(r,p)
  };
 }
+const root=fileURLToPath(new URL('../',import.meta.url));
+const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.webm':'video/webm','.woff2':'font/woff2','.ico':'image/x-icon','.mp3':'audio/mpeg','.wav':'audio/wav'};
 export function createServer({origin=process.env.PVP_ORIGIN||'', lobby=createLobby()}={}){
  return http.createServer(async(req,res)=>{
   res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');
   const send=(status,data)=>{res.statusCode=status;res.end(JSON.stringify(data))};
-  if(req.headers.origin){if(req.headers.origin!==origin)return send(403,{error:'Origin nicht erlaubt'});res.setHeader('Access-Control-Allow-Origin',origin);res.setHeader('Vary','Origin')}
-  if(req.url!=='/arena/lobby')return send(404,{error:'Nicht gefunden'});
+  if(req.url!=='/arena/lobby'){
+   if(!['GET','HEAD'].includes(req.method))return send(405,{error:'Nur GET'});
+   try{let pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(pathname==='/')pathname='/index.html';
+    if(pathname.split('/').some(p=>p.startsWith('.'))||pathname.startsWith('/pvp/')&&!['/pvp/arena-modes.js','/pvp/arena-board.js','/pvp/arena-modes.css'].includes(pathname))return send(404,{error:'Nicht gefunden'});
+    const file=await realpath(resolve(root,'.'+pathname));if(!file.startsWith(resolve(root)+sep)||!mime[extname(file)])return send(404,{error:'Nicht gefunden'});
+    const info=await stat(file);if(!info.isFile())return send(404,{error:'Nicht gefunden'});res.setHeader('Content-Type',mime[extname(file)]);res.setHeader('Content-Length',info.size);if(req.method==='HEAD')return res.end();const stream=createReadStream(file);stream.on('error',()=>res.destroy());return stream.pipe(res)
+   }catch{return send(404,{error:'Nicht gefunden'})}
+  }
+  if(req.headers.origin){const allowed=origin||'http://'+req.headers.host;if(req.headers.origin!==allowed)return send(403,{error:'Origin nicht erlaubt'});res.setHeader('Access-Control-Allow-Origin',allowed);res.setHeader('Vary','Origin')}
   if(req.method==='OPTIONS'){res.setHeader('Access-Control-Allow-Methods','POST, OPTIONS');res.setHeader('Access-Control-Allow-Headers','Content-Type');res.statusCode=204;return res.end()}
   if(req.method!=='POST')return send(405,{error:'Nur POST'});
   try{
