@@ -14,11 +14,12 @@ window.arcaneArenaModes=(()=>{
  function credentials(){return {room:active.room,token:active.token}}
  function note(t){status.textContent=t}
  function clear(){content.replaceChildren();note('')}
- function close(){window.arcanePvpBoard?.reset();dialog?.classList.remove('pvp-duel-open');generation++;stop();busy=false;const old=active;active=null;if(old)request('leave',{room:old.room,token:old.token}).catch(()=>{});if(dialog.open)dialog.close()}
+ function close(){window.arcaneArenaFriends?.stop();window.arcanePvpBoard?.reset();dialog?.classList.remove('pvp-duel-open');generation++;stop();busy=false;const old=active;active=null;if(old)request('leave',{room:old.room,token:old.token}).catch(()=>{});if(dialog.open)dialog.close()}
  function menu(startKi){
   clear();
   content.append(btn('⚔ KI-Duell',()=>{close();startKi()}));
   const title=h('p','Spieler gegen Spieler · Online');content.append(title);
+  content.append(btn('♟ Freunde & Anfragen',()=>{clear();window.arcaneArenaFriends.open({root:content,request,back:()=>menu(startKi),join:data=>{active=data;showRoom();timer=setInterval(poll,1200)}})}));
   content.append(btn('Zufälligen Gegner suchen',()=>enter('match')),btn('Privaten Raum erstellen',()=>enter('create')));
   const code=h('input');code.placeholder='Raumcode';code.maxLength=12;code.autocomplete='off';code.setAttribute('aria-label','Raumcode');
   content.append(code,btn('Raum beitreten',()=>{const v=code.value.trim().toUpperCase();if(!/^[A-F0-9]{12}$/.test(v)){note('Bitte einen gültigen Raumcode eingeben.');return}enter('join',{room:v})}));
@@ -33,7 +34,7 @@ window.arcaneArenaModes=(()=>{
  }
  function showRoom(){
   clear();const label=h('strong','Raum: '+active.room);content.append(label);
-  content.append(h('p',active.mode==='private'?'Teile diesen Raumcode mit deinem Freund.':'Suche nach einem echten Mitspieler.'));
+  content.append(h('p',active.mode==='friend'?'Freundesduell – beide Spieler müssen bereit sein.':active.mode==='private'?'Teile diesen Raumcode mit deinem Freund.':'Suche nach einem echten Mitspieler.'));
   const count=h('p');count.id='arcanePvpCount';content.append(count);
   const ready=btn('Bereit',async()=>{if(!active||busy)return;busy=true;const g=generation;try{const data=await request('ready',{...credentials(),ready:!active.youReady});if(g===generation){Object.assign(active,data);paint()}}catch(e){if(g===generation)note(e.message)}finally{if(g===generation)busy=false}});ready.id='arcanePvpReady';content.append(ready,btn('Raum verlassen',()=>close()));paint()
  }
