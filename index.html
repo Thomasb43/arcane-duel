@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261124-enemy-trap-flip-v492">
+<meta name="arcane-build" content="20261124-intro-kampf-der-siegel-v493">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.92</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.93</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -9869,7 +9869,7 @@ syncHeroResonanceExtra439();
  intro.setAttribute('role','dialog');
  intro.setAttribute('aria-modal','true');
  intro.setAttribute('aria-label','Arcane Duel Spielintro');
- intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" autoplay muted playsinline webkit-playsinline preload="auto" src="artwork/arcane-duel-opening.mp4?v=3.87" aria-label="Arcane Duel Anime-Intro"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
+ intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" autoplay muted playsinline webkit-playsinline preload="auto" src="artwork/arcane-duel-opening-siegel.mp4?v=4.93" aria-label="Arcane Duel – Der Kampf der Siegel"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
   +'<div class="arcane-cinema-stars-385"></div>'
   +'<div class="arcane-cinema-character-385 kael"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display=\'none\'"><strong>KAEL</strong></div>'
   +'<div class="arcane-cinema-character-385 leon"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display=\'none\'"><strong>LEON</strong></div>'
@@ -9881,9 +9881,23 @@ syncHeroResonanceExtra439();
   +'<div class="arcane-cinema-title-385"><small>✦ DIE CHRONIK ERWACHT ✦</small><strong>ARCANE <em>DUEL</em></strong><span>ZWEI HELDEN · EIN SCHICKSAL</span></div>'
   +'</div><div class="arcane-cinema-controls-385">'
   +'<button id="arcaneIntroReplay385" type="button">↺ Intro wiederholen</button>'
+  +'<button id="arcaneIntroSound493" type="button" aria-pressed="false">🔇 Ton an</button>'
   +'<button id="arcaneIntroSkipVideo447" type="button">Intro überspringen</button></div>';
  document.body.appendChild(intro);
  const video=intro.querySelector('#arcaneIntroVideo386');
+ // v4.93: Nach dem Upload unter artwork/ wird das bestätigte Intro automatisch verwendet.
+ // Bis dahin bleibt das bisherige Video als Rückfall erhalten (kein schwarzer Bildschirm).
+ const introPreviousVideo493='artwork/arcane-duel-opening.mp4?v=3.87';
+ let introFallbackUsed493=false;
+ const soundButton493=intro.querySelector('#arcaneIntroSound493');
+ soundButton493.addEventListener('click',()=>{
+  const turnOn=video.muted;
+  video.muted=!turnOn;
+  video.defaultMuted=!turnOn;
+  soundButton493.textContent=turnOn?'🔊 Ton aus':'🔇 Ton an';
+  soundButton493.setAttribute('aria-pressed',String(turnOn));
+  if(turnOn&&video.paused)video.play().catch(()=>{});
+ });
  const replayButton=intro.querySelector('#arcaneIntroReplay385');
  const startButton=intro.querySelector('#arcaneIntroSkipVideo447');
  // v4.47: Restore the original v3.13 3D-card start screen after the video.
@@ -9940,7 +9954,6 @@ syncHeroResonanceExtra439();
  }
  function playVideo(reset){
   if(reset){try{video.currentTime=0}catch(_e){}}
-  video.muted=true;
   video.playsInline=true;
   // iOS Safari may ignore preload/loadeddata without an explicit play request.
   const attempt=video.play();
@@ -9967,7 +9980,16 @@ syncHeroResonanceExtra439();
  }
  video.addEventListener('playing',showVideo);
  video.addEventListener('canplay',()=>{if(!intro.hidden&&video.paused)playVideo(false)});
- video.addEventListener('error',showFallback);
+ video.addEventListener('error',()=>{
+  if(!introFallbackUsed493){
+   introFallbackUsed493=true;
+   video.src=introPreviousVideo493;
+   video.load();
+   if(!intro.hidden)playVideo(false);
+   return;
+  }
+  showFallback();
+ });
  video.addEventListener('ended',showRotatingTitle447);
  function replay(){
   intro.hidden=false;
