@@ -6,18 +6,21 @@ import {resolve,sep,extname} from 'node:path';
 import {stat,realpath} from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
 import {newDuel,apply,duelView} from './duel-engine.mjs';
+import {createSocial} from './arena-social.mjs';
 const MAX=1000, TTL=15*60*1000;
 const token=()=>randomBytes(24).toString('hex');
 const code=()=>randomBytes(6).toString('hex').toUpperCase();
-export function createLobby({now=Date.now}={}){
+export function createLobby({now=Date.now,socialStorage=null}={}){
  const rooms=new Map();
  function prune(){for(const [id,r] of rooms)if(now()-r.touched>TTL)rooms.delete(id)}
  function participant(r,t){return r?.players.find(p=>p.token===t)}
  function view(r,p){return {room:r.id,mode:r.mode,players:r.players.length,youReady:p.ready,opponentReady:r.players.some(q=>q!==p&&q.ready),status:r.duel?'duel':r.players.length===2?'paired':'waiting',...(r.duel?{duel:duelView(r.duel,r.players.indexOf(p))}:{})}}
  function add(r){const p={token:token(),ready:false};r.players.push(p);r.touched=now();return {...view(r,p),token:p.token}}
  function create(mode){if(rooms.size>=MAX)throw Error('Lobby ausgelastet');let id;do{id=code()}while(rooms.has(id));const r={id,mode,players:[],touched:now()};rooms.set(id,r);return add(r)}
+ const social=createSocial({now,storage:socialStorage,pair:()=>{const first=create('friend');const second=add(rooms.get(first.room));return [first,second]}});
  return function action(b){
   prune();
+  if(typeof b.action==='string'&&b.action.startsWith('social_'))return social(b);
   if(b.action==='create')return create('private');
   if(b.action==='match'){const r=[...rooms.values()].find(r=>r.mode==='match'&&!r.duel&&r.players.length===1);return r?add(r):create('match')}
   const r=rooms.get(String(b.room||'').toUpperCase());
@@ -33,14 +36,14 @@ export function createLobby({now=Date.now}={}){
 }
 const root=fileURLToPath(new URL('../',import.meta.url));
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.webm':'video/webm','.woff2':'font/woff2','.ico':'image/x-icon','.mp3':'audio/mpeg','.wav':'audio/wav'};
-export function createServer({origin=process.env.PVP_ORIGIN||'', lobby=createLobby()}={}){
+export function createServer({origin=process.env.PVP_ORIGIN||'', lobby=createLobby({socialStorage:process.env.PVP_SOCIAL_FILE||resolve(root,'.arcane-social.json')})}={}){
  return http.createServer(async(req,res)=>{
   res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');
   const send=(status,data)=>{res.statusCode=status;res.end(JSON.stringify(data))};
   if(req.url!=='/arena/lobby'){
    if(!['GET','HEAD'].includes(req.method))return send(405,{error:'Nur GET'});
    try{let pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(pathname==='/')pathname='/index.html';
-    if(pathname.split('/').some(p=>p.startsWith('.'))||pathname.startsWith('/pvp/')&&!['/pvp/arena-modes.js','/pvp/arena-board.js','/pvp/arena-modes.css'].includes(pathname))return send(404,{error:'Nicht gefunden'});
+    if(pathname.split('/').some(p=>p.startsWith('.'))||pathname.startsWith('/pvp/')&&!['/pvp/arena-modes.js','/pvp/arena-board.js','/pvp/arena-friends.js','/pvp/arena-modes.css'].includes(pathname))return send(404,{error:'Nicht gefunden'});
     const file=await realpath(resolve(root,'.'+pathname));if(!file.startsWith(resolve(root)+sep)||!mime[extname(file)])return send(404,{error:'Nicht gefunden'});
     const info=await stat(file);if(!info.isFile())return send(404,{error:'Nicht gefunden'});res.setHeader('Content-Type',mime[extname(file)]);res.setHeader('Content-Length',info.size);if(req.method==='HEAD')return res.end();const stream=createReadStream(file);stream.on('error',()=>res.destroy());return stream.pipe(res)
    }catch{return send(404,{error:'Nicht gefunden'})}
