@@ -5778,7 +5778,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.37';
+const APP_VERSION='2.38';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -8211,20 +8211,30 @@ $("end").onclick=async()=>{
  try{
   myMon.forEach(m=>{if(m){m.tempAtkBonus=-(m.permanentAtkPenalty||0);m.tempDefBonus=0;m.maxAttacksPerTurn=1;m.attacksThisTurn=0}});
   turn++;phase="main1";normalSummonUsed=false;
-  let drawn=drawPile.shift();if(drawn){hand.push(drawn);newlyDrawnCard=drawn;}
-  if(drawn)log("Du ziehst "+drawn.name+". Die gegnerische KI bereitet ihren Zug vor.");
-  else log("Dein Deck ist leer. Die gegnerische KI ist am Zug.");
+  // v4.94: Der normale Kartenzug beginnt erst nach dem vollständigen KI-Zug.
+  log("Die gegnerische KI ist am Zug.");
   render();
   if(myLP>0&&oppLP>0){
+   document.querySelector('main')?.classList.add('arcane-ai-busy-491');
    await arcaneTurnSplash489('GEGNER AM ZUG','Beobachte seine Kartenaktionen');
    await opponentTurn(true,true);
-   if(myLP>0&&oppLP>0)await arcaneTurnSplash489('DU BIST AM ZUG','Jetzt bist du wieder dran');
+   if(myLP>0&&oppLP>0){
+    document.querySelector('main')?.classList.add('arcane-ai-busy-491');
+    await arcaneTurnSplash489('DU BIST AM ZUG','Jetzt ziehst du deine neue Karte');
+    if(myLP>0&&oppLP>0){
+     const drawn=drawPile.shift();
+     if(drawn){hand.push(drawn);newlyDrawnCard=drawn;log("Du ziehst "+drawn.name+". Du bist am Zug.");}
+     else log("Dein Deck ist leer. Du bist am Zug.");
+     render();
+    }
+   }
   }
  }catch(error){
   console.error('KI-Zug fehlgeschlagen:',error);
   log('Fehler beim Gegnerzug: '+String(error?.message||error));
  }finally{
   arcaneEndActionBusy491=false;
+  document.querySelector('main')?.classList.remove('arcane-ai-busy-491');
   document.getElementById('arcaneOpeningCaption489')?.remove();
  }
 };
