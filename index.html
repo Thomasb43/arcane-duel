@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261123-card-render-performance-v490">
+<meta name="arcane-build" content="20261124-all-opponent-turns-visible-v491">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5710,6 +5710,17 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
 }
 </style>
 <style>
+
+/* v4.91 – Sichtbare KI-Spielzüge in jeder Runde, nur tatsächlich offene Karten zeigen. */
+.arcane-ai-busy-491 #hand,.arcane-ai-busy-491 #myMon,.arcane-ai-busy-491 #mySpell,
+.arcane-ai-busy-491 #end,.arcane-ai-busy-491 #phase{pointer-events:none!important}
+.arcane-flying-face-491{padding:0!important;overflow:hidden!important;color:inherit!important;background:#101d3b!important}
+.arcane-flying-face-491>.arcane-card-335{width:100%!important;height:100%!important;min-height:0!important;max-width:none!important;margin:0!important;transform:none!important;box-sizing:border-box!important;overflow:hidden!important}
+.arcane-ai-reveal-491{position:fixed;z-index:2147483021;left:50%;top:48%;transform:translate(-50%,-50%);pointer-events:none;max-width:85vw;text-align:center;filter:drop-shadow(0 8px 22px #030418)}
+.arcane-ai-reveal-491 .arcane-card-335{width:clamp(112px,28vw,165px)!important;height:clamp(155px,43vw,230px)!important;margin:auto!important;transform:none!important;overflow:hidden!important}
+.arcane-ai-reveal-491 .arcane-ai-reveal-label-491{display:block;max-width:85vw;margin:0 auto 8px;padding:5px 13px;border-radius:18px;background:#10162df0;border:1px solid #e6be75;color:#ffe4aa;font-weight:800;font-size:clamp(12px,2.8vw,16px);text-shadow:0 0 10px #9659e6}
+@media(prefers-reduced-motion:no-preference){.arcane-ai-reveal-491{animation:arcaneAiReveal491 .22s ease-out both}@keyframes arcaneAiReveal491{from{opacity:0;transform:translate(-50%,-43%) scale(.88)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}}
+
 /* v4.89 – flüssiger Übergang: Münze → sichtbarer KI-Eröffnungszug → Spielerzug. */
 .arcane-toss-overlay-485.arcane-toss-exit-489{opacity:0;transition:opacity .38s ease-out;pointer-events:none}
 .arcane-turn-splash-489{position:fixed;inset:0;z-index:2147483010;pointer-events:none;display:grid;place-items:center;background:linear-gradient(180deg,transparent 25%,rgba(6,8,26,.63) 45%,rgba(17,11,39,.66) 56%,transparent 75%);animation:arcaneTurnSplash489 .3s ease-out both}
@@ -5725,7 +5736,7 @@ main.arcane-responsive[data-story-duel-chapter-v484]>.cathedral-ambience{
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.90</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.91</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7722,8 +7733,10 @@ function offerKaelAttackTrap389(card){
 }
 let kaelNegateAttack367=false,kaelReflectAttack367=false;
 let aiFxQueue=[];
-async function opponentTurn(drawOnStart=true,showOpening=false){
+async function opponentTurn(drawOnStart=true,showOpening=true){
  if(myLP<=0||oppLP<=0){syncDuelOutcome();return;}
+ if(showOpening)document.querySelector('main')?.classList.add('arcane-ai-busy-491');
+ try{
  aiTurn++;
  // Beginnt die KI laut Münzwurf, ist das bereits ihr erster Zug: kein Extrazug vom Deck.
  const drawn=drawOnStart?aiDeck.shift():null;if(drawn)aiHand.push(drawn);while(aiHand.length>7){const discarded=aiHand.splice(Math.floor(Math.random()*aiHand.length),1)[0];sendToGraveyard(discarded,"opponent");}
@@ -7741,10 +7754,12 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
   if(boost>=0&&strongest){
    const c=aiHand.splice(boost,1)[0];strongest.tempAtkBonus=(strongest.tempAtkBonus||0)+(c.name==="Mut der Löwen"?600:300);
    sendToGraveyard(c,"opponent");log("🦁 Leon aktiviert "+c.name+"!");
+   if(showOpening)await arcaneAiPlay491(c,'Leon aktiviert');
   }
   const call=aiHand.findIndex(c=>c.name==="Löwenruf"),space=oppMon.findIndex(m=>!m),grave=oppGraveyard.findLastIndex(m=>m.kind==="monster"&&(m.level||4)<=4);
   if(call>=0&&space>=0&&grave>=0){
    const c=aiHand.splice(call,1)[0],revived=oppGraveyard.splice(grave,1)[0];revived.position="defense";revived.faceDown=false;revived.summonedTurn=aiTurn;revived.attacksThisTurn=1;oppMon[space]=revived;sendToGraveyard(c,"opponent");log("📯 Leon aktiviert Löwenruf und holt "+revived.name+" zurück!");
+   if(showOpening)await arcaneAiPlay491(c,'Leon aktiviert');
   }
  }
  // Elara setzt ihre eigenen Kristallzauber aktiv ein, statt sie wirkungslos zu verdecken.
@@ -7775,6 +7790,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    }
    sendToGraveyard(c,'opponent');
    log('💎 Elara aktiviert '+c.name+'!');
+   if(showOpening)await arcaneAiPlay491(c,'Elara aktiviert');
   }
  }
  // Varek setzt eigene Zauber aktiv ein; keine bloße Deko.
@@ -7794,6 +7810,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(fx==='sacrifice2'){const z=oppMon.findIndex(Boolean);if(z>=0){sendToGraveyard(oppMon[z],'opponent');oppMon[z]=null;}}
    if(fx==='draw2'||fx==='sacrifice2')for(let k=0;k<2;k++){const drawn=aiDeck.shift();if(drawn)aiHand.push(drawn)}
    sendToGraveyard(c,'opponent');log('🌑 Varek aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Varek aktiviert');
   }
  }
 
@@ -7816,6 +7833,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(fx==='burn300')myLP=Math.max(0,myLP-300);
    sendToGraveyard(c,'opponent');
    log('🌑 Noctis aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Noctis aktiviert');
   }
  }
 
@@ -7837,6 +7855,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(fx==='draw2')for(let n=0;n<2;n++){const d=aiDeck.shift();if(d)aiHand.push(d);}
    if(fx==='heal600')oppLP+=600;
    sendToGraveyard(c,'opponent');log('✦ Seraphine aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Seraphine aktiviert');
   }
  }
 
@@ -7859,6 +7878,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(fx==='shrine'&&ally)ally.tempAtkBonus=(ally.tempAtkBonus||0)+200;
    sendToGraveyard(c,'opponent');
    log('⚡ Riven aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Riven aktiviert');
   }
  }
 
@@ -7882,6 +7902,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    else if(fx==='draw2'){for(let n=0;n<2;n++){const d=aiDeck.shift();if(d)aiHand.push(d);}}
    else if(fx==='burn400')myLP=Math.max(0,myLP-400);
    sendToGraveyard(c,'opponent');log('📜 Eldric aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Eldric aktiviert');
   }
  }
 
@@ -7902,12 +7923,10 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(fx==='draw2')for(let n=0;n<2;n++){const d=aiDeck.shift();if(d)aiHand.push(d);}
    if(fx==='heal600')oppLP+=600;
    sendToGraveyard(c,'opponent');log('✧ '+window.arcaneStoryOpponentInfo362.name+' aktiviert '+c.name+'.');
+   if(showOpening)await arcaneAiPlay491(c,'Gegner aktiviert');
   }
  }
- if(showOpening&&oppGraveyard.length>openingGraveBefore489){
-  render();arcaneOpeningCaption489('Der Gegner aktiviert einen Zaubereffekt');
-  await arcaneOpeningWait489(arcaneOpeningReduced489()?230:850);
- }
+ // Einzelne aktivierte Zauber wurden bereits mit ihrem originalen Kartenbild gezeigt.
  // KI legt Zauber und Fallen verdeckt in ihre vier Zauber-/Fallenzonen.
  // Für den Test von Arkaner Sturm bekommt sie bei Bedarf eine Karte aus dem Deck.
  const freeAiSpellZone=oppSpell.findIndex(x=>!x);
@@ -7929,9 +7948,10 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
 
  const spellIndex=aiHand.findIndex(x=>x.name==="Flammenstoß");
  if(spellIndex>=0&&myLP>0){
-  sendToGraveyard(aiHand[spellIndex],"opponent");aiHand.splice(spellIndex,1);
+  const flame491=aiHand[spellIndex];
+  sendToGraveyard(flame491,"opponent");aiHand.splice(spellIndex,1);
   myLP=Math.max(0,myLP-500);log("Die gegnerische KI aktiviert Flammenstoß: Du verlierst 500 LP!");
-  if(showOpening){render();arcaneOpeningCaption489('Flammenstoß! Du verlierst 500 LP');await arcaneOpeningWait489(arcaneOpeningReduced489()?220:850);}
+  if(showOpening)await arcaneAiPlay491(flame491,'Gegner aktiviert');
  }
  const monsterIndex=aiHand.reduce((best,x,i)=>{
   if(x.kind!=="monster")return best;
@@ -7961,7 +7981,7 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    if(showOpening)await arcaneOpeningCard489(useDefense?'Gegner setzt ein Monster verdeckt':'Gegner beschwört '+card.name,'oppMon',free,from489);
   }
  }
- if(showOpening){render();arcaneOpeningCaption489('Die KI beendet ihren ersten Zug');await arcaneOpeningWait489(arcaneOpeningReduced489()?220:750);}
+ if(showOpening){render();arcaneOpeningCaption489('Gegnerische Kampfphase');await arcaneOpeningWait489(arcaneOpeningReduced489()?150:450);}
  const attackers=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&x.m.position!=="defense"&&x.m.summonedTurn!==aiTurn);
  for(const entry of attackers){
   const a=entry.m;if(!oppMon[entry.i]||a.attacksThisTurn)continue;if(a.varekLockedUntil>=aiTurn){log("⛓️ "+a.name+" kann nicht angreifen.");continue;}if(a.shadowBlockedAiTurn===aiTurn){log("⛓️ "+a.name+" kann wegen Schattenfessel in diesem Zug nicht angreifen.");a.shadowBlockedAiTurn=-1;render();continue;}
@@ -7980,6 +8000,10 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
   // Nur unbekannte, verdeckte Karten sind eine bewusste Risikoentscheidung.
   const target=safeTargets[0]||hiddenTargets[0]||null;
   if(targets.length&&!target){log("🧠 Die KI verzichtet auf den Angriff: Dein offenes Monster ist stärker oder nicht sicher zu besiegen.");continue;}
+  if(showOpening){
+   arcaneOpeningCaption489('⚔ '+a.name+(target?' greift '+(target.m.faceDown?'dein verdecktes Monster':target.m.name):' greift direkt an'));
+   await arcaneOpeningWait489(arcaneOpeningReduced489()?160:470);
+  }
   // v3.89: Player traps NEVER trigger automatically. Ask before consuming each eligible trap.
   const eligibleKaelTrapZones=mySpell.map((card,i)=>({card,i})).filter(({card})=>
    card&&card.kind==='trap'&&
@@ -8009,7 +8033,13 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    await offerCrystalShield205();
    if(crystalShield){crystalShield=false;log("Dein Kristallschild blockiert den direkten KI-Angriff!");}
    else{myLP=Math.max(0,myLP-effectiveAtk(a));log("Die KI greift direkt an! Du verlierst "+effectiveAtk(a)+" LP.");}
-   a.attacksThisTurn=1;continue;
+   a.attacksThisTurn=1;
+   if(showOpening){
+    render();
+    playBattleFx('oppMon',entry.i,'myMon',-1,'💥',{...a},false);
+    await arcaneOpeningWait489(arcaneOpeningReduced489()?180:560);
+   }
+   continue;
   }
   const d=target.m,di=target.i;
   const expectedDamage=d.position==="defense"?Math.max(0,effectiveDef(d)-effectiveAtk(a)):Math.max(0,effectiveAtk(a)-effectiveAtk(d));
@@ -8027,16 +8057,48 @@ async function opponentTurn(drawOnStart=true,showOpening=false){
    else{myLP=Math.max(0,myLP-damage);log("Die KI besiegt "+d.name+"! Du verlierst "+damage+" LP.");}
   }else if(effectiveAtk(a)<effectiveAtk(d)){const damage=effectiveAtk(d)-effectiveAtk(a);sendToGraveyard(a,"opponent");oppMon[entry.i]=null;oppLP=Math.max(0,oppLP-damage);log("Dein "+d.name+" ist stärker und besiegt das angreifende KI-Monster! Der Gegner verliert "+damage+" LP.");}
   else{sendToGraveyard(a,"opponent");sendToGraveyard(d);oppMon[entry.i]=null;myMon[di]=null;log("Beide Monster werden im Kampf zerstört!");}
-  a.attacksThisTurn=1;if(myLP<=0||oppLP<=0)break;
+  a.attacksThisTurn=1;
+  if(showOpening&&aiFxQueue.length){
+   const fx=aiFxQueue.pop();render();
+   playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending);
+   await arcaneOpeningWait489(arcaneOpeningReduced489()?180:680);
+  }
+  if(myLP<=0||oppLP<=0)break;
  }
- render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending),n*520));aiFxQueue=[];if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
+ render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending),n*520));aiFxQueue=[];
+ if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
+ }finally{
+  if(showOpening){
+   document.querySelector('main')?.classList.remove('arcane-ai-busy-491');
+   document.getElementById('arcaneOpeningCaption489')?.remove();
+  }
+ }
 }
-$("end").onclick=async()=>{if(myLP<=0||oppLP<=0){syncDuelOutcome();return;}if(trapDecisionPending205)return;
- myMon.forEach(m=>{if(m){m.tempAtkBonus=-(m.permanentAtkPenalty||0);m.tempDefBonus=0;m.maxAttacksPerTurn=1;m.attacksThisTurn=0}});
- turn++;phase="main1";normalSummonUsed=false;
- let drawn=drawPile.shift();if(drawn){hand.push(drawn);newlyDrawnCard=drawn;}
- if(drawn)log("Du ziehst "+drawn.name+". Die gegnerische KI bereitet ihren Zug vor.");else log("Dein Deck ist leer. Die gegnerische KI ist am Zug.");
- render();if(myLP>0&&oppLP>0)await opponentTurn();
+let arcaneEndActionBusy491=false;
+$("end").onclick=async()=>{
+ if(arcaneEndActionBusy491)return;
+ if(myLP<=0||oppLP<=0){syncDuelOutcome();return;}
+ if(trapDecisionPending205)return;
+ arcaneEndActionBusy491=true;
+ try{
+  myMon.forEach(m=>{if(m){m.tempAtkBonus=-(m.permanentAtkPenalty||0);m.tempDefBonus=0;m.maxAttacksPerTurn=1;m.attacksThisTurn=0}});
+  turn++;phase="main1";normalSummonUsed=false;
+  let drawn=drawPile.shift();if(drawn){hand.push(drawn);newlyDrawnCard=drawn;}
+  if(drawn)log("Du ziehst "+drawn.name+". Die gegnerische KI bereitet ihren Zug vor.");
+  else log("Dein Deck ist leer. Die gegnerische KI ist am Zug.");
+  render();
+  if(myLP>0&&oppLP>0){
+   await arcaneTurnSplash489('GEGNER AM ZUG','Beobachte seine Kartenaktionen');
+   await opponentTurn(true,true);
+   if(myLP>0&&oppLP>0)await arcaneTurnSplash489('DU BIST AM ZUG','Jetzt bist du wieder dran');
+  }
+ }catch(error){
+  console.error('KI-Zug fehlgeschlagen:',error);
+  log('Fehler beim Gegnerzug: '+String(error?.message||error));
+ }finally{
+  arcaneEndActionBusy491=false;
+  document.getElementById('arcaneOpeningCaption489')?.remove();
+ }
 };
 
 /* v4.85 – echte 50/50-Schicksalsmünze vor dem ersten Zug. */
@@ -8070,6 +8132,24 @@ async function arcaneTurnSplash489(title,subtitle){
  try{await arcaneOpeningWait489(arcaneOpeningReduced489()?350:1250)}
  finally{node.remove()}
 }
+/* v4.91 – Aktive KI-Karten zeigen; verdeckt gesetzte Karten bleiben geheim. */
+async function arcaneAiPlay491(card,label='Gegner aktiviert'){
+ if(!card)return;
+ render();
+ arcaneOpeningCaption489(label+' '+card.name);
+ const node=document.createElement('div');
+ node.className='arcane-ai-reveal-491';
+ const heading=document.createElement('strong');heading.className='arcane-ai-reveal-label-491';
+ heading.textContent=label+' '+card.name;
+ const template=document.createElement('template');
+ template.innerHTML=renderArcaneCard335(card,{size:'list'});
+ const face=template.content.firstElementChild;
+ if(face)node.append(heading,face);else node.append(heading);
+ node.querySelectorAll('img').forEach(img=>{img.loading='eager';img.decoding='async'});
+ document.body.appendChild(node);
+ try{await arcaneOpeningWait489(arcaneOpeningReduced489()?250:950)}
+ finally{node.remove()}
+}
 async function arcaneOpeningCard489(message,zoneType,index,fromRect){
  render();
  arcaneOpeningCaption489(message);
@@ -8081,7 +8161,13 @@ async function arcaneOpeningCard489(message,zoneType,index,fromRect){
   const end=zone?.getBoundingClientRect();
   const start=fromRect||document.querySelector('#oppHand .opponent-card-back:last-child')?.getBoundingClientRect();
   if(start&&end&&!arcaneOpeningReduced489()&&document.body.animate!==undefined){
-   ghost=document.createElement('div');ghost.className='arcane-flying-card-489';ghost.textContent='✦';
+   ghost=document.createElement('div');ghost.className='arcane-flying-card-489';
+   const playedCard=zoneType==='oppMon'?oppMon[index]:oppSpell[index];
+   if(playedCard&&!playedCard.faceDown){
+    ghost.classList.add('arcane-flying-face-491');
+    ghost.innerHTML=renderArcaneCard335(playedCard,{size:'field'});
+    ghost.querySelectorAll('img').forEach(img=>{img.loading='eager'});
+   }else ghost.textContent='✦';
    const w=Math.max(44,start.width||64),h=Math.max(65,start.height||88);
    ghost.style.left=start.left+'px';ghost.style.top=start.top+'px';
    ghost.style.width=w+'px';ghost.style.height=h+'px';document.body.appendChild(ghost);
