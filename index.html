@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261124-intro-kampf-der-siegel-v493">
+<meta name="arcane-build" content="20261124-intro-siegel-video-assembled-v494">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.93</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 4.94</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -9869,7 +9869,7 @@ syncHeroResonanceExtra439();
  intro.setAttribute('role','dialog');
  intro.setAttribute('aria-modal','true');
  intro.setAttribute('aria-label','Arcane Duel Spielintro');
- intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" autoplay muted playsinline webkit-playsinline preload="auto" src="artwork/arcane-duel-opening-siegel.mp4?v=4.93" aria-label="Arcane Duel – Der Kampf der Siegel"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
+ intro.innerHTML='<video id="arcaneIntroVideo386" class="arcane-cinema-video-386" autoplay muted playsinline webkit-playsinline preload="auto" data-arcane-siegel-video="v4.94" aria-label="Arcane Duel – Der Kampf der Siegel"></video><div class="arcane-cinema-scene-385" aria-hidden="true">'
   +'<div class="arcane-cinema-stars-385"></div>'
   +'<div class="arcane-cinema-character-385 kael"><img src="artwork/story/kael.jpg" alt="" onerror="this.style.display=\'none\'"><strong>KAEL</strong></div>'
   +'<div class="arcane-cinema-character-385 leon"><img src="artwork/story/leon.jpg" alt="" onerror="this.style.display=\'none\'"><strong>LEON</strong></div>'
@@ -9885,9 +9885,17 @@ syncHeroResonanceExtra439();
   +'<button id="arcaneIntroSkipVideo447" type="button">Intro überspringen</button></div>';
  document.body.appendChild(intro);
  const video=intro.querySelector('#arcaneIntroVideo386');
- // v4.93: Nach dem Upload unter artwork/ wird das bestätigte Intro automatisch verwendet.
- // Bis dahin bleibt das bisherige Video als Rückfall erhalten (kein schwarzer Bildschirm).
+ // v4.94: Die bestätigte MP4 liegt unverändert in 21 Teilen im Repository.
+ // Der Browser setzt sie bytegenau zusammen und spielt sie als eine Videodatei ab.
  const introPreviousVideo493='artwork/arcane-duel-opening.mp4?v=3.87';
+ const introChunkCount494=21, introChunkSize494=196608, introVideoSize494=4051895;
+ let introBlobUrl494=null, introLoadPromise494=null;
+ const loadingLabel494=document.createElement('div');
+ loadingLabel494.id='arcaneIntroLoading494';
+ loadingLabel494.setAttribute('role','status');
+ loadingLabel494.textContent='✦ Der Kampf der Siegel wird geladen …';
+ loadingLabel494.style.cssText='position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);z-index:5;text-align:center;pointer-events:none;max-width:88vw;padding:12px 19px;border:1px solid #d9ae74;border-radius:12px;background:#0c102bdd;color:#ffe5b3;font:800 clamp(14px,3.5vw,21px) Georgia,serif;box-shadow:0 0 30px #6839a98c';
+ intro.appendChild(loadingLabel494);
  let introFallbackUsed493=false;
  const soundButton493=intro.querySelector('#arcaneIntroSound493');
  soundButton493.addEventListener('click',()=>{
@@ -9954,6 +9962,7 @@ syncHeroResonanceExtra439();
  }
  function playVideo(reset){
   if(reset){try{video.currentTime=0}catch(_e){}}
+  if(!video.getAttribute('src'))return;
   video.playsInline=true;
   // iOS Safari may ignore preload/loadeddata without an explicit play request.
   const attempt=video.play();
@@ -9977,6 +9986,47 @@ syncHeroResonanceExtra439();
   title.querySelector('#arcaneIntroStart308')?.focus({preventScroll:true});
   const menuButton=document.getElementById('arcaneReturnMenu307');
   if(menuButton)menuButton.hidden=true;
+ }
+
+ async function loadSiegelIntro494(){
+  if(introLoadPromise494)return introLoadPromise494;
+  introLoadPromise494=(async()=>{
+   try{
+    // Parallele 5er-Gruppen vermeiden lange Netzwerkwartezeiten auf iPhones.
+    const pieces=new Array(introChunkCount494);
+    for(let start=0;start<introChunkCount494;start+=5){
+     const stop=Math.min(start+5,introChunkCount494);
+     await Promise.all(Array.from({length:stop-start},async(_,offset)=>{
+      const index=start+offset;
+      const file='artwork/intro-siegel/part-'+String(index).padStart(2,'0')+'.bin?v=4.94';
+      const response=await fetch(file,{cache:'force-cache'});
+      if(!response.ok)throw new Error('Videoteil '+index+' fehlt ('+response.status+')');
+      const bytes=await response.arrayBuffer();
+      const expected=index===introChunkCount494-1
+       ?introVideoSize494-introChunkSize494*(introChunkCount494-1)
+       :introChunkSize494;
+      if(bytes.byteLength!==expected)throw new Error('Videoteil '+index+' unvollständig');
+      pieces[index]=bytes;
+     }));
+    }
+    const assembled=new Blob(pieces,{type:'video/mp4'});
+    if(assembled.size!==introVideoSize494)throw new Error('Videolänge stimmt nicht');
+    introBlobUrl494=URL.createObjectURL(assembled);
+    video.src=introBlobUrl494;
+    video.load();
+    if(!intro.hidden)playVideo(false);
+   }catch(error){
+    console.error('Neues Arcane-Duel-Intro nicht ladbar:',error);
+    // Auch bei fehlenden Teilen bleibt das bestehende Intro bedienbar.
+    introFallbackUsed493=true;
+    video.src=introPreviousVideo493;
+    video.load();
+    if(!intro.hidden)playVideo(false);
+   }finally{
+    loadingLabel494.remove();
+   }
+  })();
+  return introLoadPromise494;
  }
  video.addEventListener('playing',showVideo);
  video.addEventListener('canplay',()=>{if(!intro.hidden&&video.paused)playVideo(false)});
@@ -10002,8 +10052,7 @@ syncHeroResonanceExtra439();
  });
  startButton.addEventListener('click',showRotatingTitle447);
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)intro.classList.add('motion-reduced-385');
- video.load();
- playVideo(false);
+ loadSiegelIntro494();
  window.arcaneReplayIntro385=()=>{title.hidden=true;intro.hidden=false;replay()};
 })();
 
