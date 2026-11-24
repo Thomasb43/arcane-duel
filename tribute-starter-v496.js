@@ -16,7 +16,7 @@ const specs=[
  ['Kraft des Wurzelherzens','spell',0,0,0,1,'boost','💚','Dein stärkstes offenes Wurzelherz-Monster, das als Tribut beschworen wurde, erhält bis zum Ende des Zuges 700 ATK.'],
  ['Wiederkehr der Wurzeln','trap',0,0,0,2,'revive','🌾','Ab dem nächsten eigenen Zug manuell aktivierbar: Beschwöre das zuletzt auf deinen Friedhof gelegte kleine Wurzelherz-Monster in offener Verteidigung. Es kann in diesem Zug nicht angreifen und darf als Tribut dienen.'],
  ['Dornenwall','trap',0,0,0,2,'stop','🛡️','Ab dem nächsten eigenen Zug manuell aktivierbar, wenn du ein tributbeschworenes Wurzelherz-Monster kontrollierst: Annulliere den nächsten gegnerischen Angriff.'],
- ['Segen des zweiten Siegels','trap',0,0,0,1,'ward','✨','Ab dem nächsten eigenen Zug manuell aktivierbar: Alle eigenen offenen tributbeschworenen Wurzelherz-Monster erhalten bis zum Ende des Zuges 500 DEF.']
+ ['Segen des zweiten Siegels','trap',0,0,0,1,'ward','✨','Ab dem nächsten eigenen Zug manuell aktivierbar: Alle eigenen offenen tributbeschworenen Wurzelherz-Monster erhalten dauerhaft 500 DEF.']
 ];
 const cards=specs.map(([name,kind,level,atk,def,q,forestFx,emoji,effectText])=>({name,kind,forestTribute:true,forestFx,emoji,effectText,skin:kind==='monster'?'ice':'spell',...(kind==='monster'?{level,atk,def,element:'Natur',race:'Waldwesen'}:{})}));
 const recipe=specs.map(s=>[s[0],s[5]]);
@@ -49,7 +49,7 @@ function spellEffect(c,ctx){
   case 'revive':return ctx.revive(low);
   case 'boost':if(!targets.length)return false;targets.sort((a,b)=>ctx.atk(b)-ctx.atk(a))[0].tempAtkBonus=(targets[0].tempAtkBonus||0)+700;return true;
   case 'stop':if(!targets.length)return false;ctx.stop();return true;
-  case 'ward':if(!targets.length)return false;for(const m of targets)m.tempDefBonus=(m.tempDefBonus||0)+500;return true;
+  case 'ward':if(!targets.length)return false;for(const m of targets)m.def+=500;return true;
   default:return false
  }
 }
