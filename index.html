@@ -5780,7 +5780,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 // VERSION 1.42
-const APP_VERSION='2.47';
+const APP_VERSION='2.48';
 const CURRENT_BUILD=document.querySelector('meta[name="arcane-build"]')?.content||'';
 
 /* v4.28 – Unique Valtor portrait for Kael mission 1-9.
@@ -5850,6 +5850,27 @@ function arcaneElementIcon329(c){
 /* v3.35: ONE card face reused in every context, only scaled. */
 function arcaneEscape335(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function arcaneRarity335(c){const d=window.arcaneCollectionCatalog322,k=d?.rarity?.(c)||'normal';return {key:k,label:d?.rarityData?.[k]?.label||'Normal',color:d?.rarityData?.[k]?.color||'#c3c5d1'}}
+/* v5.03 – preserve the whole illustration, including older custom art renderers. */
+function arcaneFitArt503(markup){
+ return String(markup||'').replace(/<img\b[^>]*>/gi,tag=>{
+  if(/arcane-art-background-341/.test(tag))return tag;
+  const fit='position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;transform:none!important;';
+  if(/\bstyle="[^"]*"/i.test(tag))return tag.replace(/\bstyle="([^"]*)"/i,(_,style)=>'style="'+style+';'+fit+'" data-art-fit-503="whole"');
+  if(/\bstyle='[^']*'/i.test(tag))return tag.replace(/\bstyle='([^']*)'/i,(_,style)=>"style='"+style+";"+fit+"' data-art-fit-503=\"whole\"");
+  return tag.replace(/\s*\/?>$/,' style="'+fit+'" data-art-fit-503="whole">');
+ });
+}
+function arcaneFillArtEdges503(img){
+ if(!img.matches?.('img[data-art-fit-503]')||!img.naturalWidth||!img.naturalHeight)return;
+ const frame=img.closest('.arcane-card-art-335,.arcane-play-art-493');if(!frame)return;
+ // A subtle colour-matched backdrop in detailed views only; never enlarge foreground.
+ if(!frame.closest('.arcane-size-large,.arcane-play-art-493'))return;
+ const src=img.currentSrc||img.src;
+ if(!src||src.startsWith('data:')||src.startsWith('blob:'))return;
+ frame.style.setProperty('--arcane-art-edge-503','url('+JSON.stringify(src)+')');
+}
+document.addEventListener('load',e=>{if(e.target?.tagName==='IMG')arcaneFillArtEdges503(e.target)},true);
+
 function renderArcaneCard335(c,o={}){
  if(!c)return '';
  if(o.faceDown)return '<div class="arcane-card-335 arcane-card-back-335"><span>✧</span><strong>ARCANE DUEL</strong></div>';
@@ -5861,7 +5882,7 @@ function renderArcaneCard335(c,o={}){
  const stats=monster?stat335('ATK',atk,atkDiff)+stat335('DEF',def,defDiff):'<span>'+arcaneEscape335(label)+'</span>';
  return '<div class="arcane-card-335 arcane-type-'+type+' arcane-size-'+(o.size||'small')+' rarity-'+rarity.key+'" style="--card-rarity-335:'+rarity.color+'">'
  +'<div class="arcane-card-head-335"><strong>'+arcaneEscape335(c.name)+'</strong><small>'+arcaneEscape335(label)+' · '+arcaneEscape335(rarity.label)+'</small>'+arcaneElementIcon329(c)+'</div>'
- +'<div class="arcane-card-art-335">'+renderCardArt(c)+'</div>'
+ +'<div class="arcane-card-art-335">'+arcaneFitArt503(renderCardArt(c))+'</div>'
  +(monster?'<div class="arcane-card-meta-335"><span>'+arcaneEscape335(c.race||label)+'</span><span>Level '+arcaneEscape335(c.level??'–')+'</span></div>':'')
  +'<div class="arcane-card-effect-335"><strong>Beschreibung & Effekt</strong><p>'+arcaneEscape335(c.effectText||c.desc||'Kein besonderer Effekt.')+'</p></div>'
  +(monster?'<div class="arcane-card-stats-335">'+stats+'</div>':'')+'</div>';
@@ -6607,6 +6628,8 @@ for(const card of deck){
 /* v4.16: Rivens previously uploaded 5-by-5 overview is an immediately usable
    individual artwork atlas; each of the 25 unique cards gets its own grid tile. */
 const RIVEN_GRID_ART_416=Object.fromEntries(rivenPool415.map(([name],index)=>[name,{col:index%5,row:Math.floor(index/5)}]));
+// Keep the atlas tile in its own native aspect ratio rather than stretching it.
+const rivenAtlasRatio503=new Image();rivenAtlasRatio503.onload=()=>{if(rivenAtlasRatio503.naturalHeight)document.documentElement.style.setProperty('--riven-atlas-ratio-503',String(rivenAtlasRatio503.naturalWidth/rivenAtlasRatio503.naturalHeight))};rivenAtlasRatio503.src='artwork/riven_kartenuebersicht.png';
 /* v4.18: direct GitHub image upload test — Astra's Siegelbotin Elya. */
 for(const card of deck){
  if(card.astraOriginal&&card.name==='Siegelbotin Elya'){
@@ -6727,7 +6750,7 @@ function renderCardArt(c){
   const {col,row}=RIVEN_GRID_ART_416[c.name];
   const x=col*25,y=row*25;
   return '<span class="card-art-loader arcane-fullbleed-343 riven-art-416" role="img" aria-label="'+c.name.replace(/"/g,'&quot;')+'" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#132d60">'
-    +'<span style="position:absolute;inset:0;background-image:url(&quot;artwork/riven_kartenuebersicht.png&quot;);background-repeat:no-repeat;background-size:500% 500%;background-position:'+x+'% '+y+'%"></span></span>';
+    +'<span class="riven-tile-503" style="background-image:url(&quot;artwork/riven_kartenuebersicht.png&quot;);background-repeat:no-repeat;background-size:500% 500%;background-position:'+x+'% '+y+'%"></span></span>';
  }
 
  const focus=ARCANE_ART_FRAMING_343[c.artwork]||ARCANE_ART_FOCUS_339[c.artwork]||{x:50,y:50};
@@ -6737,7 +6760,8 @@ function renderCardArt(c){
  };
  const file=c.artwork==='flame-dragon'?'flammendrache-neu.webp':(replacements344[c.artwork]||CARD_ART_FILES[c.artwork]);
  if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;
- const legacy=file.endsWith('.png'),src='artwork/'+file;
+ // Only the oldest card scans require border removal. Character illustration PNGs are already artwork.
+ const legacy=file.endsWith('.png')&&!/^(elara|varek|darian|noctis|seraphine)-art-/.test(c.artwork||''),src='artwork/'+file;
  const backup344=replacements344[c.artwork]?CARD_ART_FILES[c.artwork]:null;
  const positioning='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:'+focus.x+'% '+focus.y+'%;--art-focus-x-340:'+focus.x+'%;--art-focus-y-340:'+focus.y+'%;';
  const fallback='<span class="card-art-fallback" style="display:block;position:absolute;inset:0">'+arcaneArt(c.artwork)+'</span>';
@@ -7683,7 +7707,7 @@ function openPlayChoice493(card,zone,onChoose,onCancel){
  closeHandPreview336();closeCardInfo();
  const d=document.createElement('dialog');d.className='arcane-play-choice-493';d.setAttribute('aria-label',card.kind==='monster'?'Beschwörung auswählen':'Zauberaktion auswählen');
  const heading=document.createElement('h2');heading.textContent=card.kind==='monster'?'Monster spielen':'Zauberkarte spielen';d.append(heading);
- const art=document.createElement('div');art.className='arcane-play-art-493';art.innerHTML=renderCardArt(card);d.append(art);
+ const art=document.createElement('div');art.className='arcane-play-art-493';art.innerHTML=arcaneFitArt503(renderCardArt(card));d.append(art);
  const name=document.createElement('strong');name.textContent=card.name;d.append(name);
  const info=document.createElement('p');info.textContent=card.kind==='monster'?'ATK '+effectiveAtk(card)+' / DEF '+effectiveDef(card)+(card.level>=5?' · '+(card.level>=7?2:1)+' Tribut(e)':''):(card.effectText||card.desc||'');d.append(info);
  const options=document.createElement('div');options.className='arcane-play-options-493';d.append(options);
@@ -8637,7 +8661,7 @@ syncHeroResonanceExtra439();
  const rarity=c=>rarities[c.name]||'normal';
  const count=c=>(testNames.get(c.name)||0)+(window.arcaneBoosterInventory322?.owned(c.name)||0);
  const special=c=>extraNames.has(c.name);
- const picture=c=>renderCardArt(c);
+ const picture=c=>arcaneFitArt503(renderCardArt(c));
  const rarityVars=c=>'--rarity-color:'+rarityData[rarity(c)].color;
  function buildArt(c){return '<div class="arcane-collection-art-316 arcane-collection-card-frame-318 arcane-type-'+arcaneCardType332(c)+'">'+renderArcaneCard335(c,{size:'collection'})+'</div>'}
  function drawGrid(){
@@ -11019,5 +11043,16 @@ img.arcane-currency-hud-502{width:24px!important;height:27px!important;vertical-
 .arcane-hub-wallet-391{padding:5px 10px;gap:4px}
 img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;vertical-align:-.55em!important}
 .arcane-shop-balance-320 img.arcane-currency-shop-502{width:1.25em!important;height:1.25em!important;vertical-align:-.3em!important}
+</style>
+<style id="arcane-art-fit-style-503">
+/* Global card artwork: fit the entire image, never stretch or crop the subject. */
+.arcane-card-art-335,.arcane-play-art-493{isolation:isolate!important;background:radial-gradient(ellipse at center,#30345b,#111a2e 70%,#151126)!important}
+.arcane-card-art-335 img[data-art-fit-503],.arcane-play-art-493 img[data-art-fit-503]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;transform:none!important}
+.arcane-card-art-335>.card-art-loader,.arcane-card-art-335>span,.arcane-card-art-335>div{position:relative;z-index:1}
+.arcane-card-art-335 .card-art-loader,.arcane-card-art-335 .astra-art-frame-425,.arcane-card-art-335 .eldric-card-art-434{background:transparent!important}
+.arcane-size-large .arcane-card-art-335::before,.arcane-play-art-493::before{content:"";position:absolute;inset:-8%;z-index:0;background-image:var(--arcane-art-edge-503,none);background-position:center;background-size:cover;filter:blur(12px) brightness(.42) saturate(.85);pointer-events:none}
+.arcane-size-large .arcane-card-art-335>img,.arcane-play-art-493>img{z-index:1}
+.riven-art-416{container-type:size;display:grid!important;place-items:center!important}
+.riven-tile-503{display:block!important;position:relative!important;width:100%;height:100%;width:min(100cqw,calc(100cqh * var(--riven-atlas-ratio-503,.75)));height:auto;aspect-ratio:var(--riven-atlas-ratio-503,.75);max-width:100%;max-height:100%;flex:none}
 </style>
 </body></html>
