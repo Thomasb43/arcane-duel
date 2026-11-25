@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-native-starter-details-v508">
+<meta name="arcane-build" content="20261125-story-character-swipe-v509">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.08</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.09</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -10538,7 +10538,7 @@ function showExtraMap469(ch,selectedIndex){
  // iOS Safari: Bedienelemente bereits beim Touch-Ende erfassen, nicht nur beim
  // synthetischen click. Scrollgesten werden dabei ausdrücklich ignoriert.
  const chapterControls475='[data-campaign-test-473],[data-campaign-open-473]';
- const heroControls475='[data-story-hero-next-475],[data-story-hero-prev-475],[data-story-hero-activate-475],[data-story-hero-open-495]';
+ const heroControls475='[data-story-hero-pick-509],[data-story-hero-activate-475],[data-story-hero-open-495]';
  let touchStart475=null;
  stage.addEventListener('touchstart',event=>{
   const button=event.target.closest(chapterControls475+','+heroControls475);
@@ -10557,10 +10557,11 @@ function showExtraMap469(ch,selectedIndex){
    const preview=button.hasAttribute('data-campaign-test-473');
    const number=Number(preview?button.dataset.campaignTest473:button.dataset.campaignOpen473);
    openCampaignChapter474(number,preview);
-  }else if(button.hasAttribute('data-story-hero-next-475')){
-   rotateStoryHero475(1);
-  }else if(button.hasAttribute('data-story-hero-prev-475')){
-   rotateStoryHero475(-1);
+  }else if(button.hasAttribute('data-story-hero-pick-509')){
+   const hero=button.dataset.storyHeroPick509;
+   if(!storyHeroes475.includes(hero))return false;
+   storyHero475=hero;
+   renderStoryHero475();
   }else if(button.hasAttribute('data-story-hero-open-495')){
    window.arcaneCharacterStories454?.openStory(storyHero475);
   }else if(button.hasAttribute('data-story-hero-activate-475')){
@@ -10602,33 +10603,43 @@ function showExtraMap469(ch,selectedIndex){
  function renderStoryHero475(){
   const panel=content.querySelector('.arcane-campaign-status-473');
   if(!panel)return;
+  const previousScroll=panel.querySelector('.arcane-hero-strip-509')?.scrollLeft;
   const ch=storyHero475,chain=window.arcaneCharacterChain453;
   const progress=progressStoryHero475(ch);
   const available=ch==='Kael'||!!chain?.available?.(ch);
   const selected=(()=>{try{return localStorage.getItem('arcane-duel-selected-character-v1')||'Kael'}catch(_){return 'Kael'}})();
+  const active=available&&selected===ch;
   const notice=available
    ?(ch==='Kael'?(window.arcaneCharacterProgress382?.leonUnlocked?.()?'✓ Leon freigeschaltet':'🔒 Leon freischalten: Mission 1 gewinnen und Kael Level 10'):'✓ Charakter ist spielbar')
    :(chain?.status?.(ch)||'🔒 Freischaltung ausstehend');
+  const thumbs=storyHeroes475.map(hero=>{
+   const ready=hero==='Kael'||!!chain?.available?.(hero);
+   const picked=hero===ch;
+   return '<button type="button" class="arcane-hero-thumb-509'+(picked?' is-picked-509':'')+(ready?'':' is-locked-509')+'" data-story-hero-pick-509="'+hero+'" aria-pressed="'+picked+'" aria-label="'+hero+(ready?' ansehen':' – gesperrt, Vorschau ansehen')+'">'
+    +'<img src="artwork/story/'+hero.toLowerCase()+'.jpg" alt="" decoding="async" draggable="false">'
+    +(!ready?'<span class="arcane-hero-lock-509" aria-hidden="true">🔒</span>':'')
+    +'<span class="arcane-hero-name-509">'+hero+'</span></button>';
+  }).join('');
   panel.innerHTML=
-    '<div class="arcane-campaign-hero-swap-475">'
-   +'<button type="button" data-story-hero-prev-475 aria-label="Vorheriger Charakter">‹</button>'
-   +'<img class="arcane-campaign-portrait-473" src="artwork/story/'+ch.toLowerCase()+'.jpg" alt="'+ch+'">'
-   +'<button type="button" data-story-hero-next-475 aria-label="Nächster Charakter">›</button></div>'
-   +'<div class="arcane-campaign-progress-473">'
+    '<div class="arcane-hero-main-509'+(available?'':' is-locked-509')+'">'
+   +'<img src="artwork/story/'+ch.toLowerCase()+'.jpg" alt="'+ch+'" decoding="async">'
+   +'<div class="arcane-hero-main-label-509">'+(active?'✦ Aktiver Charakter ✦':available?'Charaktervorschau':'🔒 Gesperrt')+'</div></div>'
+   +'<div class="arcane-campaign-progress-473 arcane-hero-info-509">'
    +'<strong>'+ch+' · Level '+progress.level+' / 30</strong>'
-   +'<div class="arcane-campaign-track-473"><span style="width:'+Math.max(0,Math.min(100,Number(progress.percent)||0))+'%"></span></div>'
-   +'<small class="arcane-campaign-exp-473">'+progress.current+' / '+(progress.next||'MAX')+' EP bis zum nächsten Level</small>'
+   +'<div class="arcane-campaign-track-473" role="progressbar" aria-label="Erfahrung" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.max(0,Math.min(100,Number(progress.percent)||0))+'"><span style="width:'+Math.max(0,Math.min(100,Number(progress.percent)||0))+'%"></span></div>'
+   +'<small class="arcane-campaign-exp-473">'+(progress.next?progress.current+' / '+progress.next+' EP bis zum nächsten Level':'Maximales Level erreicht')+'</small>'
    +'<span class="arcane-campaign-unlock-473">'+escapeText(notice)+'</span>'
-   +(available&&selected!==ch?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-activate-475>✓ '+ch+' auswählen</button>':
-     !available?'<small class="arcane-campaign-preview-475">🔎 Charaktervorschau – noch nicht spielbar</small>':
-     '<small class="arcane-campaign-preview-475">Aktiver Charakter · mit ‹ › wechseln</small>')
+   +'<div class="arcane-hero-strip-509" aria-label="Charaktere – horizontal wischen">'+thumbs+'</div>'
+   +'<small class="arcane-hero-swipe-509">Nach links / rechts wischen</small>'
+   +(available&&selected!==ch?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-activate-475>✓ '+ch+' auswählen</button>':'')
    +(ch!=='Kael'?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-open-495>📖 '+(available?'Eigene Geschichte öffnen':'Geschichte ansehen')+'</button>':'')
    +'</div>';
- }
- function rotateStoryHero475(step){
-  const at=storyHeroes475.indexOf(storyHero475);
-  storyHero475=storyHeroes475[(at+step+storyHeroes475.length)%storyHeroes475.length];
-  renderStoryHero475();
+  const strip=panel.querySelector('.arcane-hero-strip-509');
+  if(previousScroll!==undefined)strip.scrollLeft=previousScroll;
+  else {
+   const picked=strip.querySelector('.is-picked-509');
+   if(picked&&picked.offsetLeft+picked.offsetWidth>strip.clientWidth)strip.scrollLeft=picked.offsetLeft;
+  }
  }
  function activateStoryHero475(){
   const chain=window.arcaneCharacterChain453;
@@ -10700,11 +10711,12 @@ function showExtraMap469(ch,selectedIndex){
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 4.78</small></p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.09</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
-  // Die Klicks werden einmal zentral gebunden: auch nach erneutem Rendern bleiben sie aktiv.
+  // Start at the active character whenever the campaign overview is opened.
+  try{const selected=localStorage.getItem('arcane-duel-selected-character-v1')||'Kael';storyHero475=storyHeroes475.includes(selected)&&(selected==='Kael'||window.arcaneCharacterChain453?.available?.(selected))?selected:'Kael'}catch(_){storyHero475='Kael'}
   renderStoryHero475();
   content.querySelectorAll('[data-campaign-open-473]').forEach(b=>b.setAttribute('aria-label','Missionskarte von Kapitel '+b.dataset.campaignOpen473+' öffnen'));
   content.querySelectorAll('[data-campaign-test-473]').forEach(b=>b.setAttribute('aria-label','Kapitel '+b.dataset.campaignTest473+' ohne Speichern testen'));
@@ -11067,5 +11079,27 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 #updateNotice[data-update-ready="true"]{display:flex!important;position:fixed!important;top:max(8px,calc(env(safe-area-inset-top) + 6px))!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translateX(-50%)!important;z-index:2147483647!important;width:max-content!important;max-width:calc(100vw - 20px)!important;align-items:center!important;justify-content:center!important;gap:8px!important;padding:5px 7px 5px 10px!important;border:1px solid #e9c879!important;border-radius:12px!important;background:#20152fee!important;box-shadow:0 3px 18px #000b!important;color:#ffedc5!important;font:700 11px system-ui,sans-serif!important;pointer-events:auto!important}
 #updateNotice #reloadUpdate{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;margin:0!important;padding:6px 9px!important;background:#76562c!important;color:#fff3cc!important;border:1px solid #f2d193!important;border-radius:7px!important;white-space:nowrap!important;font:800 12px system-ui,sans-serif!important;cursor:pointer!important;touch-action:manipulation!important}
 @media(max-height:480px) and (orientation:landscape){#updateNotice[data-update-ready="true"]{left:auto!important;right:max(8px,env(safe-area-inset-right))!important;transform:none!important}}
+</style>
+<style id="arcane-story-character-style-509">
+#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{grid-template-columns:minmax(94px,30%) minmax(0,1fr)!important;gap:12px!important;align-items:stretch!important;padding:10px!important;min-height:0!important;overflow:hidden!important}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-main-509{position:relative;isolation:isolate;align-self:stretch;min-width:0;min-height:156px;overflow:hidden;border:1.5px solid #ffe1a1;border-radius:13px;background:#151735;box-shadow:0 0 13px #d8b66b55}
+.arcane-hero-main-509>img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.arcane-hero-main-509.is-locked-509>img{filter:brightness(.65) saturate(.65)}
+.arcane-hero-main-509:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0b0b22e8,transparent 42%);pointer-events:none}
+.arcane-hero-main-label-509{position:absolute;z-index:1;left:4px;right:4px;bottom:7px;text-align:center;font:700 clamp(10px,2.9vw,15px)/1.2 Georgia,serif;color:#ffe7b0;text-shadow:0 1px 5px #000;pointer-events:none}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-info-509{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-info-509>strong{font-size:clamp(15px,4vw,24px);line-height:1.12}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-info-509 .arcane-campaign-track-473{height:10px;flex:none}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-strip-509{position:relative;display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;width:100%;min-width:0;max-width:100%;padding:7px 3px 6px;margin-top:8px;border-top:1px solid #9884ad66;touch-action:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#9b79d0 transparent;scroll-snap-type:x proximity}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-thumb-509{position:relative;flex:0 0 clamp(52px,15vw,80px);width:clamp(52px,15vw,80px);aspect-ratio:.82;min-width:0;min-height:0;padding:0!important;border:1px solid #a592bd;border-radius:10px;overflow:hidden;isolation:isolate;background:#17182d;cursor:pointer;touch-action:auto!important;scroll-snap-align:start;pointer-events:auto!important}
+.arcane-hero-thumb-509 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;pointer-events:none}
+.arcane-hero-thumb-509:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#090a1be8 0%,transparent 45%);pointer-events:none}
+.arcane-hero-thumb-509.is-locked-509 img{filter:brightness(.62) saturate(.65)}
+#arcaneStory357.is-seven-overview-473 .arcane-hero-thumb-509.is-picked-509{border:2px solid #ffe2a0;box-shadow:0 0 9px #ffc66b88}
+.arcane-hero-name-509{position:absolute;bottom:3px;left:0;right:0;z-index:1;text-align:center;color:#fff1d4;font:700 10px Georgia,serif;pointer-events:none}
+.arcane-hero-lock-509{position:absolute;z-index:2;bottom:17px;right:3px;font-size:12px;pointer-events:none}
+.arcane-hero-swipe-509{display:block;text-align:center;color:#bdb2db;font-size:10px;margin-top:3px}
+@media(min-width:701px){#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{grid-template-columns:minmax(120px,22%) minmax(0,1fr)!important}.arcane-hero-main-509{max-height:240px}}
+@media(max-width:360px){#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{gap:8px!important;padding:8px!important;grid-template-columns:minmax(82px,29%) minmax(0,1fr)!important}}
 </style>
 </body></html>
