@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-daily-login-v512">
+<meta name="arcane-build" content="20261125-character-visibility-v513">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.12</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.13</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -8802,10 +8802,13 @@ syncHeroResonanceExtra439();
   const i=ORDER.indexOf(name);
   return i>0?ORDER[i-1]:null;
  }
- function conditionsVisible(name){
-  const prev=predecessor(name);
-  return ORDER.indexOf(name)>=2&&levelFor(prev)>=10;
+ function visible(name){
+  const index=ORDER.indexOf(name);
+  if(index<0)return false;
+  // Reveal only the reached prefix of the character chain.
+  return ORDER.slice(0,index).every(hero=>levelFor(hero)>=10);
  }
+ function conditionsVisible(name){return name!=='Kael'&&visible(name)}
  function status(name){
   const prev=predecessor(name);
   if(available(name))return 'Level '+levelFor(name);
@@ -8833,7 +8836,7 @@ syncHeroResonanceExtra439();
   try{window.dispatchEvent(new CustomEvent('arcane-character-level-v453',{detail:result}))}catch(_){}
   return result;
  }
- window.arcaneCharacterChain453={order:ORDER.slice(),levelFor,available,predecessor,conditionsVisible,status,awardVictory,resetVictory:()=>{victoryHandled=false}};
+ window.arcaneCharacterChain453={order:ORDER.slice(),levelFor,available,predecessor,visible,conditionsVisible,status,awardVictory,resetVictory:()=>{victoryHandled=false}};
 })();
 
 /* v3.20 – test currency persists across refresh and can be reset intentionally. */
@@ -9635,8 +9638,7 @@ syncHeroResonanceExtra439();
   const selected=selected391(),progress=window.arcaneCharacterChain453,level=progress?.levelFor('Kael')||1,leonOpen=leonUnlocked391();
   // Keep portrait markup intact; replacing button.textContent removed the img and name elements.
   characterButton391.setAttribute('aria-label',selected+' – Charakter- und Deckauswahl öffnen');
-  // Neue Charaktere sind bereits sichtbar, ihre Freischaltungen bleiben ausdrücklich offen.
-  // Für Kael und Leon gelten die vorhandenen Regeln unverändert.
+  // Future characters are omitted entirely until their predecessor reaches level 10.
   const characters391=[
    {name:'Kael',image:'artwork/story/kael.jpg',level:level,unlocked:true},
    {name:'Leon',image:'artwork/story/leon.jpg',level:progress?.levelFor('Leon')||1,unlocked:leonOpen,requirement:'🔒 Freischaltung ab Kael Level 10 und Story 1-1'},
@@ -9645,7 +9647,7 @@ syncHeroResonanceExtra439();
    {name:'Noctis',image:'artwork/story/noctis.jpg',unlocked:false,pending:true},
    {name:'Astra',image:'artwork/story/astra.jpg',unlocked:false,pending:true}
   ];
-  cards391.innerHTML=characters391.map(ch=>
+  cards391.innerHTML=characters391.filter(ch=>ch.name==='Kael'||progress?.visible(ch.name)).map(ch=>
    '<article class="arcane-character-card-391 '+(selected===ch.name?'selected-391 ':'')+(ch.pending?'pending-452 ':'')+'">'
    +'<img src="'+ch.image+'" alt="'+ch.name+'" loading="eager" decoding="async"><strong>'+ch.name+'</strong>'
    +'<small>'+(ch.unlocked?'Level '+ch.level:(ch.pending?(progress?.status(ch.name)||'🔒 Gesperrt'):ch.requirement))+'</small>'
@@ -10577,10 +10579,11 @@ function showExtraMap469(ch,selectedIndex){
    openCampaignChapter474(number,preview);
   }else if(button.hasAttribute('data-story-hero-pick-509')){
    const hero=button.dataset.storyHeroPick509;
-   if(!storyHeroes475.includes(hero))return false;
+   if(!storyHeroes475.includes(hero)||(hero!=='Kael'&&!window.arcaneCharacterChain453?.visible(hero)))return false;
    storyHero475=hero;
    renderStoryHero475();
   }else if(button.hasAttribute('data-story-hero-open-495')){
+   if(storyHero475!=='Kael'&&!window.arcaneCharacterChain453?.visible(storyHero475))return false;
    window.arcaneCharacterStories454?.openStory(storyHero475);
   }else if(button.hasAttribute('data-story-hero-activate-475')){
    activateStoryHero475();
@@ -10622,15 +10625,19 @@ function showExtraMap469(ch,selectedIndex){
   const panel=content.querySelector('.arcane-campaign-status-473');
   if(!panel)return;
   const previousScroll=panel.querySelector('.arcane-hero-strip-509')?.scrollLeft;
-  const ch=storyHero475,chain=window.arcaneCharacterChain453;
+  const chain=window.arcaneCharacterChain453;
+  const visibleHeroes=storyHeroes475.filter(hero=>hero==='Kael'||chain?.visible(hero));
+  if(!visibleHeroes.includes(storyHero475))storyHero475='Kael';
+  const ch=storyHero475;
   const progress=progressStoryHero475(ch);
   const available=ch==='Kael'||!!chain?.available?.(ch);
   const selected=(()=>{try{return localStorage.getItem('arcane-duel-selected-character-v1')||'Kael'}catch(_){return 'Kael'}})();
   const active=available&&selected===ch;
+  const nextHero=storyHeroes475[storyHeroes475.indexOf(ch)+1];
   const notice=available
-   ?(ch==='Kael'?(window.arcaneCharacterProgress382?.leonUnlocked?.()?'✓ Leon freigeschaltet':'🔒 Leon freischalten: Mission 1 gewinnen und Kael Level 10'):'✓ Charakter ist spielbar')
+   ?(nextHero&&!chain?.visible(nextHero)?'✦ Nächster Charakter erscheint auf Level 10':ch==='Kael'?(window.arcaneCharacterProgress382?.leonUnlocked?.()?'✓ Leon freigeschaltet':'🔒 Leon freischalten: Mission 1 gewinnen und Kael Level 10'):'✓ Charakter ist spielbar')
    :(chain?.status?.(ch)||'🔒 Freischaltung ausstehend');
-  const thumbs=storyHeroes475.map(hero=>{
+  const thumbs=visibleHeroes.map(hero=>{
    const ready=hero==='Kael'||!!chain?.available?.(hero);
    const picked=hero===ch;
    return '<button type="button" class="arcane-hero-thumb-509'+(picked?' is-picked-509':'')+(ready?'':' is-locked-509')+'" data-story-hero-pick-509="'+hero+'" aria-pressed="'+picked+'" aria-label="'+hero+(ready?' ansehen':' – gesperrt, Vorschau ansehen')+'">'
@@ -10647,12 +10654,13 @@ function showExtraMap469(ch,selectedIndex){
    +'<div class="arcane-campaign-track-473" role="progressbar" aria-label="Erfahrung" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.max(0,Math.min(100,Number(progress.percent)||0))+'"><span style="width:'+Math.max(0,Math.min(100,Number(progress.percent)||0))+'%"></span></div>'
    +'<small class="arcane-campaign-exp-473">'+(progress.next?progress.current+' / '+progress.next+' EP bis zum nächsten Level':'Maximales Level erreicht')+'</small>'
    +'<span class="arcane-campaign-unlock-473">'+escapeText(notice)+'</span>'
-   +'<div class="arcane-hero-strip-509" aria-label="Charaktere – horizontal wischen">'+thumbs+'</div>'
-   +'<small class="arcane-hero-swipe-509">Nach links / rechts wischen</small>'
+   +(visibleHeroes.length>1?'<div class="arcane-hero-strip-509" aria-label="Charaktere – horizontal wischen">'+thumbs+'</div>':'')
+   +(visibleHeroes.length>1?'<small class="arcane-hero-swipe-509">Nach links / rechts wischen</small>':'')
    +(available&&selected!==ch?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-activate-475>✓ '+ch+' auswählen</button>':'')
    +(ch!=='Kael'?'<button type="button" class="arcane-campaign-activate-475" data-story-hero-open-495>📖 '+(available?'Eigene Geschichte öffnen':'Geschichte ansehen')+'</button>':'')
    +'</div>';
   const strip=panel.querySelector('.arcane-hero-strip-509');
+  if(!strip)return;
   if(previousScroll!==undefined)strip.scrollLeft=previousScroll;
   else {
    const picked=strip.querySelector('.is-picked-509');
@@ -10729,7 +10737,7 @@ function showExtraMap469(ch,selectedIndex){
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.12</small></p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.13</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
