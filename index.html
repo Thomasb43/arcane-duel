@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-booster-art-crops-v510">
+<meta name="arcane-build" content="20261125-two-booster-pools-v511">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.10</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.11</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -8601,7 +8601,7 @@ window.setArenaCharacterTheme('magierin');
      if(typeof name==='string'&&name.length<100&&Number.isSafeInteger(number)&&number>=0&&number<=100000)counts[name]=number;
     }
    }
-   return {counts,opened:Number.isSafeInteger(v.opened)&&v.opened>=0?v.opened:0,pendingPack:Array.isArray(v.pendingPack)?v.pendingPack.filter(x=>typeof x==='string'&&x.length<100).slice(0,50):null};
+   return {counts,opened:Number.isSafeInteger(v.opened)&&v.opened>=0?v.opened:0,pendingBooster:['kael','leon'].includes(v.pendingBooster)?v.pendingBooster:null,pendingPack:Array.isArray(v.pendingPack)?v.pendingPack.filter(x=>typeof x==='string'&&x.length<100).slice(0,50):null};
   }catch(e){return empty()}
  }
  function save(value){
@@ -8899,19 +8899,16 @@ syncHeroResonanceExtra439();
  if(!panel)return;
  const el=document.createElement('div');
  el.className='arcane-booster-322';el.id='arcaneBooster322';
- el.innerHTML=`<div class="arcane-booster-pack-322">
-   <div class="arcane-booster-overline-322">ERSTES BOOSTER-SET</div>
-   <div class="arcane-booster-title-322">Schatten &amp; Flammen</div>
-   <div class="arcane-booster-product-322"><div class="arcane-booster-product-shine-322">✦</div><div class="arcane-booster-product-name-322">ARCANE DUEL</div></div>
-   <div class="arcane-booster-price-322"><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> 100 Arkankristalle</div>
-   <div class="arcane-booster-sub-322">5 Karten pro Pack · mindestens 1 Seltene oder höher.<br>Nur 6 Resonanzmonster + die 2 benötigten Resonatoren von Kael und Leon. Alle anderen Karten sind unabhängig von den beiden.</div>
-   <button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button">▣ Karten anzeigen &amp; Packs wählen</button>
-   <div class="arcane-booster-feedback-322" id="arcaneBoosterFeedback322" role="status" aria-live="polite"></div>
- </div>
+ el.innerHTML=`<div class="arcane-booster-selection-511">
+ <h3>Booster-Sets</h3>
+ <div class="arcane-booster-grid-511">
+  <button type="button" data-booster-511="kael" class="arcane-booster-choice-511"><div class="arcane-booster-cover-511" style="--booster-art-511:url('artwork/story/kael.jpg')"><span>ARCANE DUEL</span><strong>Siegel des Lichts</strong></div><strong>Siegel des Lichts</strong><small>Kaels Resonanzmonster · <span data-count-511="kael"></span> Karten</small><span class="arcane-booster-cost-511">100 Arkankristalle</span><span class="arcane-booster-view-511">Karten anzeigen</span></button>
+  <button type="button" data-booster-511="leon" class="arcane-booster-choice-511"><div class="arcane-booster-cover-511" style="--booster-art-511:url('artwork/story/leon.jpg')"><span>ARCANE DUEL</span><strong>Flammen der Arena</strong></div><strong>Flammen der Arena</strong><small>Leons Resonanzmonster · <span data-count-511="leon"></span> Karten</small><span class="arcane-booster-cost-511">100 Arkankristalle</span><span class="arcane-booster-view-511">Karten anzeigen</span></button>
+ </div><button id="arcaneBoosterBuy322" class="arcane-booster-action-322" type="button" hidden>Gekaufte Packs öffnen</button><div class="arcane-booster-feedback-322" id="arcaneBoosterFeedback322" role="status" aria-live="polite"></div></div>
  <div id="arcaneBoosterCatalogue324" class="arcane-booster-catalogue-324" hidden role="dialog" aria-modal="true" aria-label="Mögliche Inhalte von Schatten und Flammen">
   <div class="arcane-booster-catalogue-panel-324">
    <div class="arcane-booster-catalogue-heading-324"><div class="arcane-booster-catalogue-kicker-324">ARCANE DUEL · BOOSTER-SET</div>
-    <h3>Schatten &amp; Flammen</h3><button type="button" id="arcaneBoosterCatalogueClose324" aria-label="Schließen">×</button>
+    <h3 id="arcaneBoosterTitle511">Booster</h3><button type="button" id="arcaneBoosterCatalogueClose324" aria-label="Schließen">×</button>
     <p id="arcaneBoosterTotal510">Mögliche Inhalte · 6 Resonanzmonster + 2 Resonatoren</p>
    </div>
    <div class="arcane-booster-filters-324" id="arcaneBoosterFilters324">
@@ -9041,16 +9038,21 @@ syncHeroResonanceExtra439();
  const catalog=()=>window.arcaneCollectionCatalog322;
  // v4.40: Sechs Resonanzbosse + zwei Resonatoren der Helden; ansonsten nur Karten
  // außerhalb der Kael-/Leon-Starterdecks und ihrer persönlichen Signaturkarten.
- const kaelLeonStarterNames440=new Set([...starterDeckList,...leonDeckList363].map(([name])=>name));
- const resonanceNames440=new Set([...arcaneHeroResonators439,...arcaneHeroResonanceBosses439].map(c=>c.name));
- const pool=()=>catalog()?.cards.filter(c=>{
-  if(!c?.kind||!c.name)return false;
-  if(resonanceNames440.has(c.name))return true;
-  if(c.resonance||c.resonator||c.heroResonance439)return false;
-  if(kaelLeonStarterNames440.has(c.name))return false;
-  if(typeof c.artwork==="string"&&/^(kael|leon)-/.test(c.artwork))return false;
-  return true;
- })||[];
+ // v5.11 – two fixed, mutually exclusive pools. New cards are not added automatically.
+ const BOOSTERS511={kael:{title:'Siegel des Lichts',hero:'Kael',art:'artwork/story/kael.jpg',names:["Siegelstern-Resonator","Runenklingen-Wächter Caelus","Siegellichtdrache Auralion","Erstsiegel-Hüter Solarian","Frostwächter","Nachtklinge","Sphärenritter","Wellenluchs","Wurzelkeim","Nebelpfad-Späher","Dornenhirsch","Dornenfürst des Wildsiegels","Kristallfüchsin","Lichtsplitter-Magierin","Mondquarz-Wächter","Sternenprisma-Drache","Aurorakönigin","Nachtklingen-Ritter","Kettenrufer der Finsternis","Seelenwächter Morvyn","Abysskonstrukt","Schattennovize Neris","Fluchhüter Vesper","Schattenhexe Nyss","Seelenfänger Moros","Noctis, Fürst des Schleiers","Runenfuchs Auriel","Sternenschreiberin Mira","Archivgolem Ordon","Richter des Sternenarchivs","Sturmspäher","Windklingen-Ritter","Donner-Magierin","Blitzstein-Golem","Zyklonwächter","Tempestritter","Königin des Gewitters","Siegelbotin Elya","Mondrunen-Hüter","Sternenpriesterin Lyra","Engel des goldenen Siegels","Astra, Wächterin des ersten Siegels","Schattenritter von Valtor","Mystischer Schattenmagier","Düstere Seelenwache","Schattenschreiber Neral","Runenbrecher Kaor","Obsidian-Golem","Kettenarchon Malvyr","Schildwächter Novar","Steinwächter Bastion","Turmwächter Aegor","Kristallwächter Seron","Arkaner Sturm","Heilende Quelle","Gedankenraub","Arkane Ernte","Seelenbergung","Doppelter Segen","Sternenregen","Frostpanzer","Sphärenruf","Oberton-Segen","Kreislauf der Natur","Kraft des Wurzelherzens","Prismenwissen","Lichtbrechung","Kristallnebel","Fluch der Nacht","Düstere Opferung","Abgrundssiegel","Dunkler Wissensraub","Flüsternde Finsternis","Verbotene Chronik","Prismenbann","Donnerschlag","Zyklonstoß","Geladener Himmel","Goldener Schutzkreis","Strahl der sieben Runen","Segen des Siegels","Schattenportal","Macht der Schatten","Dimensionaler Riss","Bruchsiegel des Direktors","Krone der Schattenrunen","Schattenfessel","Gegenhall","Wiederkehr der Wurzeln","Segen des zweiten Siegels","Spiegelbann","Schattenumkehr","Schattenvergeltung","Siegelkreis der Abwehr","Runenfessel","Sturmbarriere","Windfalle","Himmlischer Rückstoß","Schattenfalle","Letzter Widerstand","Dämmerungsruf","Vergeltung des Erstsiegels","Ungebrochenes Verbot"]},leon:{title:'Flammen der Arena',hero:'Leon',art:'artwork/story/leon.jpg',names:["Arena-Taktgeber","Flammenmähnen-Ritter Pyron","Sonnenmähnen-Löwe Raigon","Löwenkönig Ignarion","Schattenwolf","Erdwächter","Kristall-Echowächter","Obertongeist","Moosgeist","Spiegelrinden-Wächter","Uralter Eichenkoloss","Wurzelherzdrache Sylvaron","Prismengolem","Spiegelritterin","Smaragdgeist","Quarzseherin","Schattenketten-Häscher","Fluchwolf Umbra","Dämmergreif","Schattenpriesterin Nyra","Vareks Abyssdrache","Nachtkralle Umbren","Nebelschleicher","Dunkelklingen-Ritter","Grabhüter der Dämmerung","Siegelnovizin Liora","Chronikwächter Thalen","Glyphenritter Caelis","Hüterin der Sieben Siegel","Seraphines Chronikdrache","Funkenfuchs","Wolkenschlange","Orkanwolf","Himmelsreiterin","Sturmlöwe","Blitzgreif","Himmelsdrache des ewigen Sturms","Goldfeder-Greif","Sonnenklingen-Paladin","Prismenwächter Solen","Himmelsrichter Aurelion","Valtor, Fürst der Schatten","Dunkler Wächter","Schattenlanze","Siegelakolyth des Abgrunds","Bannkreis-Wächter","Seelenleser der Tiefe","Phantom der Sieben Risse","Gefallener Eldric – Meister des Siegels","Frostschild-Wächter","Arkaner Torwächter","Runenwächter Valen","Hochwächter Darions Bollwerk","Arkaner Zerstörungsstrahl","Arkaner Wissensstrom","Eisiger Rückstoß","Schicksalsrad","Seelenfunke","Kristallraub","Lebensfunke","Echomelodie","Resonanz-Reprise","Ruf der Waldkeime","Ruf des Wildsiegels","Kristallheilung","Spiegelglanz","Quarzsegen","Ketten des Abgrunds","Schattenruf","Schwarzer Nebelschleier","Fluchnebel","Schattenschild","Arkanes Siegel","Runenheilung","Archivschutz","Rückenwind","Schrein des Sturms","Auge des Orkans","Chronik des Morgensterns","Bannlicht","Valtors Macht","Dunkle Allianz","Seelenbindung","Verbotene Chronik Eldrics","Opferflamme des Siegels","Malachars Flüstern","Taktwende","Echostille","Dornenwall","Prismenschild","Kettenbruch der Verdammnis","Fessel der Nacht","Siegel der Schwäche","Sternenrückschlag","Blitznetz","Donnerkonter","Siegelbarriere","Runengericht","Valtors Bannkreis","Schattenversiegelung","Ewige Dunkelheit","Riss im Bannkreis"]}};
+ let activeBooster511='kael';
+ const pool=(id=activeBooster511)=>{const names=new Set(BOOSTERS511[id]?.names||[]);return (catalog()?.cards||[]).filter(c=>names.has(c.name))};
+ function setBooster511(id){if(BOOSTERS511[id])activeBooster511=id}
+ function updateBoosterCover511(id){
+  const config=BOOSTERS511[id];
+  const surface=$b('arcaneSanctuaryPack325');
+  if(!config){surface.removeAttribute('data-booster-511');return}
+  surface.dataset.booster511=id;
+  surface.style.setProperty('--booster-art-511','url("'+config.art+'")');
+  surface.querySelector('b').innerHTML='ARCANE<br>DUEL';
+  surface.querySelector('em').textContent=config.title;
+  surface.setAttribute('aria-label',config.title+' öffnen');
+ }
  function selectCard(guaranteed){
   const cards=pool();
   const options=WEIGHTS.filter(([key])=>cards.some(c=>catalog().rarity(c)===key)&&(!guaranteed||key!=='normal'));
@@ -9069,7 +9071,7 @@ syncHeroResonanceExtra439();
  function renderPool(){
   const data=catalog();
   const countLabel=document.getElementById('arcaneBoosterTotal510');
-  if(countLabel)countLabel.textContent=pool().length+' verschiedene Karten · 6 Resonanzmonster + 2 Resonatoren';
+  if(countLabel)countLabel.textContent=pool().length+' verschiedene Karten · 3 Resonanzmonster + 1 Resonator von '+BOOSTERS511[activeBooster511].hero;
   const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
   $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
    const rarity=data.rarity(c),tone=data.rarityData[rarity];
@@ -9141,11 +9143,16 @@ syncHeroResonanceExtra439();
   });
   const buy=$b('arcaneBoosterBuy322');
   buy.disabled=false;
-  buy.textContent=pending?'▣ Gekaufte Packs öffnen':'▣ Karten anzeigen & Packs wählen';
+  buy.hidden=!pending;buy.textContent='▣ Gekaufte Packs öffnen';
+  for(const id of Object.keys(BOOSTERS511)){const count=el.querySelector('[data-count-511="'+id+'"]');if(count)count.textContent=pool(id).length;}
   if(pending)label.textContent='Du hast noch gekaufte Karten zum Aufdecken.';
  }
- function openCatalogue(){
+ function openCatalogue(id=activeBooster511){
+  setBooster511(id);
+  $b('arcaneBoosterTitle511').textContent=BOOSTERS511[activeBooster511].title;
+  catalogue.setAttribute('aria-label','Mögliche Inhalte von '+BOOSTERS511[activeBooster511].title);
   catalogue.hidden=false;
+  catalogue.querySelector('.arcane-booster-catalogue-scroll-324').scrollTop=0;
   currentFilter='all';
   filterBar.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.rarity==='all'));
   label.textContent='5 Karten pro Pack · mindestens eine Seltene oder höher.';
@@ -9153,7 +9160,8 @@ syncHeroResonanceExtra439();
   $b('arcaneBoosterCatalogueClose324').focus({preventScroll:true});
  }
 
- function openReveal(names){
+ function openReveal(names,id=inventory().read().pendingBooster){
+  updateBoosterCover511(id);
   pack=names.slice();step=0;flipped=0;revealStage='intro';clearTear348();spotlight354.hidden=true;
   $b('arcaneBoosterCards322').innerHTML='';
   reveal.hidden=false;opening346=false;reveal.classList.remove('sanctuary-cards-325','sanctuary-burst-325','sanctuary-opening-346','sanctuary-rare-glory-346','sanctuary-card-awaken-346');
@@ -9164,7 +9172,7 @@ syncHeroResonanceExtra439();
   const total=pack?.length||0;
   const progress=$b('arcaneBoosterProgress322'),next=$b('arcaneBoosterNext322');
   if(revealStage==='intro'){
-   progress.textContent='Das Heiligtum · '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
+   progress.textContent=(BOOSTERS511[inventory().read().pendingBooster]?.title||'Das Heiligtum')+' · '+Math.min(step+1,total)+'–'+Math.min(step+5,total)+' von '+total;
    next.textContent=opening346?'✦ Magie entfesselt …':'✦ Booster öffnen';next.disabled=opening346;
   }else{
    progress.textContent=step>=total?'Das Ritual ist vollendet':'Karten '+(step-4)+'–'+step+' von '+total;
@@ -9178,7 +9186,7 @@ syncHeroResonanceExtra439();
   if(revealStage==='cards'){
    if(flipped<5)return;
    if(step>=pack.length){
-    const state=inventory().read();state.pendingPack=null;inventory().save(state);
+    const state=inventory().read();state.pendingPack=null;state.pendingBooster=null;inventory().save(state);
     reveal.hidden=true;catalogue.hidden=true;pack=null;
     feedback.textContent='Alle gekauften Karten wurden deiner Sammlung hinzugefügt.';
     sync();return;
@@ -9267,7 +9275,7 @@ syncHeroResonanceExtra439();
    for(let i=0;i<amount;i++)names.push(...rollPack());
    const updated=inventory().read();
    for(const name of names)updated.counts[name]=(updated.counts[name]||0)+1;
-   updated.opened+=amount;updated.pendingPack=names;
+   updated.opened+=amount;updated.pendingPack=names;updated.pendingBooster=activeBooster511;
    if(!inventory().save(updated)){label.textContent='Speichern fehlgeschlagen. Kein Kauf durchgeführt.';return}
    bank().set(balance-price);bank().refresh();
    syncHeroResonanceExtra439();
@@ -9275,6 +9283,7 @@ syncHeroResonanceExtra439();
    openReveal(names);sync();
   }catch(error){label.textContent='Kauf fehlgeschlagen: '+error.message}
  }
+ el.querySelectorAll('.arcane-booster-choice-511').forEach(btn=>btn.addEventListener('click',()=>{if(inventory().read().pendingPack){openReveal(inventory().read().pendingPack);return}openCatalogue(btn.dataset.booster511)}));
  $b('arcaneBoosterBuy322').addEventListener('click',()=>{
   const pending=inventory().read().pendingPack;
   if(pending){openReveal(pending);return}
@@ -9295,7 +9304,7 @@ syncHeroResonanceExtra439();
  $b('arcaneBoosterNext322').addEventListener('click',revealNext);
  $b('arcaneBoosterClose322').addEventListener('click',()=>{reveal.hidden=true;pack=null;sync()});
  document.getElementById('arcaneShopReset320')?.addEventListener('click',sync);
- window.arcaneBoosterShop322={sync,openCatalogue};
+ window.arcaneBoosterShop322={sync,openCatalogue,poolInfo:()=>Object.fromEntries(Object.keys(BOOSTERS511).map(id=>[id,{title:BOOSTERS511[id].title,names:pool(id).map(c=>c.name)}]))};
  sync();
 })();
 
@@ -10720,7 +10729,7 @@ function showExtraMap469(ch,selectedIndex){
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.10</small></p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.11</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
@@ -11116,4 +11125,22 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 .arcane-art-window-510>.arcane-art-crop-510{display:block!important;position:absolute!important;left:50%!important;top:50%!important;width:100%;width:max(100cqw,calc(100cqh * var(--crop-ratio-510)))!important;height:auto!important;aspect-ratio:var(--crop-ratio-510)!important;max-width:none!important;max-height:none!important;transform:translate(-50%,-50%)!important;background-repeat:no-repeat!important}
 .arcane-art-placeholder-510{color:#e9d2ff;background:radial-gradient(ellipse at center,#3a3e74,#10162e 75%);font-size:clamp(18px,5vw,46px);text-shadow:0 0 10px #d4b8ff}
 </style>
-</body></html>
+<style id="arcane-booster-split-style-511">
+.arcane-booster-selection-511{padding:12px;border:1px solid #dfbc7d;border-radius:18px;background:linear-gradient(145deg,#281b49,#10132b);box-shadow:0 0 18px #9c65d344}
+.arcane-booster-selection-511>h3{text-align:center;color:#ffe1a1;font:700 25px Georgia,serif;margin:0 0 12px}
+.arcane-booster-grid-511{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.arcane-booster-choice-511{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;padding:7px;color:#ffe7b2;border:1px solid #a28cd1;border-radius:12px;background:#151b39;cursor:pointer;touch-action:manipulation}
+.arcane-booster-choice-511[data-booster-511="leon"]{border-color:#df9d61;background:#311b28}
+.arcane-booster-cover-511{position:relative;display:flex;flex-direction:column;justify-content:space-between;width:100%;aspect-ratio:.72;padding:12px 5px;overflow:hidden;isolation:isolate;border:2px solid #e5c27d;border-radius:8px;background:linear-gradient(0deg,#0a1028eb,transparent 35%,transparent 70%,#10152bd9),var(--booster-art-511) center 25%/cover no-repeat;box-shadow:inset 0 0 12px #dcbf7955}
+.arcane-booster-cover-511>span{font-size:9px;font-weight:900;letter-spacing:1.5px;text-shadow:0 2px 5px #000}
+.arcane-booster-cover-511>strong{font:700 clamp(15px,4vw,23px)/1.1 Georgia,serif;text-shadow:0 2px 6px #000}
+.arcane-booster-choice-511>strong{font:700 clamp(13px,3.4vw,21px) Georgia,serif}
+.arcane-booster-choice-511>small{color:#cfc2e9;font-size:11px;line-height:1.35}
+.arcane-booster-cost-511{font-size:12px;font-weight:800;color:#ffdd9c}
+.arcane-booster-view-511{display:block;width:100%;padding:9px 3px;border:1px solid #c4a26e;border-radius:7px;background:linear-gradient(#694389,#302349);font-size:12px;font-weight:800}
+#arcaneBoosterBuy322[hidden]{display:none!important}
+.sanctuary-pack-325[data-booster-511].arcane-pack-image-ready-351{overflow:hidden!important;border:2px solid #e5c27d!important;border-radius:9px!important;background:linear-gradient(0deg,#0a1028eb,transparent 35%,transparent 70%,#10152bd9),var(--booster-art-511) center 25%/cover no-repeat!important}
+.sanctuary-pack-325[data-booster-511]>.arcane-pack-art-351{display:none!important}
+.sanctuary-pack-325[data-booster-511].arcane-pack-image-ready-351>b,.sanctuary-pack-325[data-booster-511].arcane-pack-image-ready-351>em{display:block!important;position:relative;z-index:3;color:#ffe7b2;text-shadow:0 2px 6px #000}
+.sanctuary-pack-325[data-booster-511]>em{font-size:clamp(14px,4vw,22px)!important;font-family:Georgia,serif!important}
+</style></body></html>
