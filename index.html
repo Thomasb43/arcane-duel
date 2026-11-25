@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-starter-card-preview-v507">
+<meta name="arcane-build" content="20261125-native-starter-details-v508">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.07</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.08</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -9354,50 +9354,26 @@ syncHeroResonanceExtra439();
 })();
 
 
-/* v5.07 – reliable starterdeck card inspection, shared by all starter products. */
+/* v5.08 – native disclosure for starter cards. No delegated click or modal required. */
 (function initStarterCardGallery501(){
  const esc=arcaneEscape335;
- const known=new Map();
- let preview=null,previous=null;
  function lookup(name){
   return window.arcaneCollectionCatalog322?.cards?.find(c=>c.name===name)||deck.find(c=>c.name===name)
    ||window.ARCANE_CHRONORESONANZ_436?.cards?.find(c=>c.name===name)||window.ARCANE_CHRONORESONANZ_436?.extra?.find(c=>c.name===name)
-   ||window.ARCANE_WURZELHERZ_496?.cards?.find?.(c=>c.name===name)||known.get(name);
+   ||window.ARCANE_WURZELHERZ_496?.cards?.find?.(c=>c.name===name);
  }
  function gallery(recipe,owned){
   return recipe.map(([name,count])=>{
-   const c=lookup(name);const stock=owned(name);
+   const c=lookup(name),stock=owned(name);
    if(!c)return '<div class="arcane-starter-tile-501"><strong>'+esc(name)+'</strong><small>×'+count+' · Bestand '+stock+'/3</small></div>';
-   known.set(name,c);
-   return '<button type="button" class="arcane-starter-tile-501" data-starter-card-501="'+esc(name)+'" aria-label="'+esc(name)+' – Karte ansehen"><div class="arcane-starter-face-501">'+renderArcaneCard335(c,{size:'collection'})+'</div><span class="arcane-starter-quantity-501">×'+count+'</span><strong>'+esc(name)+'</strong><small>Bestand '+stock+'/3</small></button>';
+   const type=c.kind==='monster'?(c.resonance?'Resonanzmonster':'Monster'):c.kind==='spell'?'Zauberkarte':'Fallenkarte';
+   const effect=esc(c.effectText||c.desc||'Kein besonderer Effekt.');
+   return '<details class="arcane-starter-tile-501 arcane-starter-disclosure-508" name="arcane-starter-cards-508">'
+    +'<summary class="arcane-starter-summary-508" aria-label="'+esc(name)+' – Effekt ansehen"><div class="arcane-starter-face-501">'+renderArcaneCard335(c,{size:'collection'})+'</div><span class="arcane-starter-quantity-501">×'+count+'</span><strong>'+esc(name)+'</strong><small>Bestand '+stock+'/3</small><span class="arcane-starter-read-508"><span class="read-open-508">Effekt ansehen ▾</span><span class="read-close-508">Schließen ▴</span></span></summary>'
+    +'<div class="arcane-starter-effect-501 arcane-starter-expanded-508"><strong>Beschreibung &amp; Effekt</strong><small>'+esc(type)+(c.kind==='monster'?' · Stufe '+esc(c.level)+' · ATK '+esc(c.atk)+' · DEF '+esc(c.def):'')+'</small><p>'+effect+'</p></div></details>';
   }).join('');
  }
- function close(){
-  if(!preview)return;
-  preview.remove();preview=null;
-  previous?.focus?.({preventScroll:true});previous=null;
- }
- function open(name,source){
-  const c=lookup(name);if(!c)return false;
-  close();previous=source||document.activeElement;
-  const d=document.createElement('div');d.className='arcane-starter-preview-overlay-507';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Karte: '+name);
-  d.innerHTML='<div class="arcane-starter-preview-501"><div class="arcane-starter-preview-head-501"><strong>'+esc(name)+'</strong><button type="button" data-close-501 aria-label="Karte schließen">✕</button></div><div class="arcane-starter-large-501">'+renderArcaneCard335(c,{size:'large'})+'</div><div class="arcane-starter-effect-501"><strong>Beschreibung &amp; Effekt</strong><p>'+esc(c.effectText||c.desc||'Kein besonderer Effekt.')+'</p>'+(c.kind==='monster'?'<small>Stufe '+esc(c.level)+' · ATK '+esc(c.atk)+' · DEF '+esc(c.def)+'</small>':'')+'</div></div>';
-  preview=d;document.body.appendChild(d);
-  const dismiss=d.querySelector('[data-close-501]');
-  dismiss.addEventListener('click',close);
-  d.addEventListener('click',e=>{if(e.target===d)close()});
-  dismiss.focus({preventScroll:true});
-  return true;
- }
- // Capture the actual tile before unrelated shop or game handlers can consume the tap.
- window.addEventListener('click',e=>{
-  const tile=e.target?.closest?.('button[data-starter-card-501]');
-  if(!tile||!tile.closest('.arcane-starter-gallery-501'))return;
-  e.preventDefault();e.stopImmediatePropagation();open(tile.dataset.starterCard501,tile);
- },true);
- window.addEventListener('keydown',e=>{if(preview&&e.key==='Escape'){e.preventDefault();close()}});
  window.arcaneStarterGallery501=gallery;
- window.arcaneStarterPreview507={open,close};
 })();
 
 /* v3.75 – Two illustrated starter pack products, using original prepared pack art files.
@@ -9449,7 +9425,7 @@ syncHeroResonanceExtra439();
   detail.dataset.activeDeck=id;
   detail.innerHTML='<button type="button" class="arcane-starter-detail-back-375" id="arcaneStarterBack375">← Alle Starterpacks</button>'
    +'<div class="arcane-starter-detail-top-375">'+packImage(p)+'<div><h4>'+esc(p.name)+'</h4><p>'+esc(p.title)+'</p><strong>'+cardCount+' Karten</strong><p>Enthält '+esc(p.feature)+'</p><p>Dein Bestand: '+qty(p.feature)+'/3</p><p><img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price+' Arkankristalle</p></div></div>'
-   +'<h4>Enthaltene Karten</h4><p class="arcane-starter-hint-501">Tippe auf eine Karte, um sie groß anzusehen und ihren Effekt zu lesen.</p><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'+previewCards(p)+'</div>'
+   +'<h4>Enthaltene Karten</h4><p class="arcane-starter-hint-501">Tippe auf eine Karte oder auf „Effekt ansehen“, um den vollständigen Effekt zu öffnen.</p><div class="arcane-starter-card-list-375 arcane-starter-gallery-501">'+previewCards(p)+'</div>'
    +'<p class="arcane-starter-warning-375">Maximal 3 Exemplare pro Karte. Karten, die du bereits 3-mal besitzt, werden bei weiteren Käufen nicht erneut gutgeschrieben.</p>'
    +'<button type="button" id="arcaneStarterBuy375" class="arcane-starter-buy-375" '+(buyable?'':'disabled')+'>'
    +(canGain(p)?balance>=price?'Starterpack kaufen · <img class="arcane-currency-icon-502 arcane-currency-shop-502" src="artwork/currency/arkankristall-shop.avif" alt="Arkankristalle" decoding="async"> '+price:'Nicht genügend Arkankristalle':'Alle Karten bereits dreimal vorhanden')+'</button>'
@@ -11043,12 +11019,25 @@ function showExtraMap469(ch,selectedIndex){
 .arcane-starter-tile-501>strong{font-size:11px;overflow-wrap:anywhere;line-height:1.2}
 .arcane-starter-tile-501>small,.arcane-starter-hint-501{font-size:11px;color:#c6cbe0}
 .arcane-starter-quantity-501{position:absolute;right:4px;top:4px;border:1px solid #e7c482;border-radius:5px;background:#171227e8;color:#ffe4a8;padding:2px 5px;font-size:12px;font-weight:800;z-index:2}
-.arcane-starter-tile-501{pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:#d1b77755}
-.arcane-starter-tile-501>*{pointer-events:none!important}
-.arcane-starter-preview-overlay-507{position:fixed!important;inset:0!important;z-index:2147483630!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:max(8px,env(safe-area-inset-top)) 10px max(8px,env(safe-area-inset-bottom));box-sizing:border-box;background:#060812e8;pointer-events:auto!important;overscroll-behavior:contain}
-.arcane-starter-preview-501{position:relative!important;inset:auto!important;margin:0!important;width:min(100%,370px);max-height:100%;box-sizing:border-box;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px 16px;background:#151a30;color:#f9e5bb;border:1px solid #cca870;border-radius:15px;overscroll-behavior:contain;pointer-events:auto!important}
-.arcane-starter-preview-501 .arcane-starter-effect-501 p{white-space:pre-wrap;overflow-wrap:anywhere}
-@media(max-height:480px) and (orientation:landscape){.arcane-starter-preview-501{width:min(95vw,620px);display:grid;grid-template-columns:1fr 1.3fr;gap:8px 14px;align-items:start}.arcane-starter-preview-head-501{grid-column:1/-1}.arcane-starter-large-501{width:min(100%,calc(72dvh * .68))!important}.arcane-starter-effect-501{margin-top:0!important}}
+.arcane-starter-disclosure-508{display:block!important;min-width:0!important;align-self:start;overflow:visible!important;padding:3px 2px 7px!important}
+.arcane-starter-summary-508{position:relative!important;display:flex!important;flex-direction:column;align-items:center;gap:4px;width:100%;min-width:0;list-style:none!important;cursor:pointer;touch-action:manipulation!important;pointer-events:auto!important;-webkit-tap-highlight-color:#d1b77755}
+.arcane-starter-summary-508::-webkit-details-marker{display:none!important}
+.arcane-starter-summary-508::marker{content:""}
+.arcane-starter-summary-508 *{pointer-events:none!important}
+.arcane-starter-summary-508>strong{font-size:11px;overflow-wrap:anywhere;line-height:1.2}
+.arcane-starter-summary-508>small{font-size:11px;color:#c6cbe0}
+.arcane-starter-read-508{display:block;width:100%;padding:5px 1px;background:#36294b;border:1px solid #8e75a7;border-radius:5px;font-size:10px;font-weight:800;color:#ffe4ad}
+.arcane-starter-summary-508 .read-close-508{display:none}
+.arcane-starter-disclosure-508[open]{grid-column:1/-1!important;padding:12px!important;border-color:#d9b96f;background:#1a2039;display:grid!important;grid-template-columns:minmax(85px,37%) minmax(0,1fr);align-items:start;gap:12px}
+.arcane-starter-disclosure-508[open] .arcane-starter-summary-508{max-width:210px;justify-self:center}
+.arcane-starter-disclosure-508[open] .read-open-508{display:none}
+.arcane-starter-disclosure-508[open] .read-close-508{display:inline}
+.arcane-starter-disclosure-508:not([open]) .arcane-starter-expanded-508{display:none!important}
+.arcane-starter-disclosure-508[open] .arcane-starter-expanded-508{display:block!important;margin:0!important;text-align:left;min-width:0;overflow-wrap:anywhere}
+.arcane-starter-expanded-508>small{display:block;margin-top:7px}
+.arcane-starter-expanded-508 p{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:360px){.arcane-starter-disclosure-508[open]{grid-template-columns:1fr}.arcane-starter-disclosure-508[open] .arcane-starter-summary-508{max-width:140px}}
+.arcane-starter-preview-head-501{grid-column:1/-1}.arcane-starter-large-501{width:min(100%,calc(72dvh * .68))!important}.arcane-starter-effect-501{margin-top:0!important}}
 .arcane-starter-preview-501::backdrop{background:#060812d9;backdrop-filter:blur(5px)}
 .arcane-starter-preview-head-501{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;text-align:left}
 .arcane-starter-preview-head-501 button{border:1px solid #bf9a62;border-radius:8px;background:#312747;color:#ffe5b0;min-width:42px;min-height:42px;font-size:20px}
