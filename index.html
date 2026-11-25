@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-two-booster-pools-v511">
+<meta name="arcane-build" content="20261125-daily-login-v512">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.11</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.12</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -10729,7 +10729,7 @@ function showExtraMap469(ch,selectedIndex){
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.11</small></p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.12</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
@@ -11143,4 +11143,119 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 .sanctuary-pack-325[data-booster-511]>.arcane-pack-art-351{display:none!important}
 .sanctuary-pack-325[data-booster-511].arcane-pack-image-ready-351>b,.sanctuary-pack-325[data-booster-511].arcane-pack-image-ready-351>em{display:block!important;position:relative;z-index:3;color:#ffe7b2;text-shadow:0 2px 6px #000}
 .sanctuary-pack-325[data-booster-511]>em{font-size:clamp(14px,4vw,22px)!important;font-family:Georgia,serif!important}
-</style></body></html>
+</style>
+<script>
+/* v5.12 – Daily login rewards, saved separately from character and booster progression. */
+(function initDailyLogin512(){
+ const KEY='arcane-duel-daily-login-v1',WALLET='arcane-duel-test-crystals-v1';
+ const REWARDS=[50,75,100,125,150,200,300];
+ function dayNumber(date=new Date()){return Math.floor(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/86400000)}
+ function read(storage=localStorage){
+  const raw=storage.getItem(KEY);
+  if(raw===null)return {last:null,count:0};
+  const x=JSON.parse(raw);
+  if(!x||!Number.isSafeInteger(x.count)||x.count<0||!Number.isSafeInteger(x.last))throw Error('Login-Fortschritt nicht lesbar.');
+  return {last:x.last,count:x.count};
+ }
+ function status(state,today){
+  const ready=state.last===null||today>state.last;
+  const completed=state.count>0&&state.count%7===0;
+  const done=completed?(ready?0:7):state.count%7;
+  return {ready,done,next:done<7?done:6,clockBlocked:state.last!==null&&today<state.last};
+ }
+ function claim(storage,today){
+  const state=read(storage),info=status(state,today);
+  if(!info.ready)return {ok:false};
+  const amount=REWARDS[state.count%7],oldBalance=storage.getItem(WALLET),oldState=storage.getItem(KEY);
+  const balance=oldBalance===null?1000:Number(oldBalance);
+  if(!Number.isSafeInteger(balance)||balance<0||!Number.isSafeInteger(balance+amount))throw Error('Kristallbestand nicht lesbar.');
+  // Both local writes are synchronous. Roll back the claim marker if the wallet write fails.
+  storage.setItem(KEY,JSON.stringify({last:today,count:state.count+1}));
+  try{storage.setItem(WALLET,String(balance+amount))}
+  catch(error){if(oldState===null)storage.removeItem(KEY);else storage.setItem(KEY,oldState);throw error}
+  return {ok:true,amount};
+ }
+ const home=document.getElementById('arcaneHome307'),shell=home?.querySelector('.arcane-home-shell-307');
+ if(!shell)return;
+ const entry=document.createElement('button');entry.type='button';entry.className='arcane-daily-entry-512';
+ entry.innerHTML='<span aria-hidden="true">🎁</span><span>Login-Bonus</span><i aria-hidden="true"></i>';
+ shell.appendChild(entry);
+ const overlay=document.createElement('section');overlay.className='arcane-daily-overlay-512';overlay.hidden=true;
+ overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','dailyTitle512');
+ overlay.innerHTML='<div class="arcane-daily-panel-512"><button type="button" class="arcane-daily-close-512" aria-label="Schließen">×</button><div class="arcane-daily-kicker-512">✦ ARCANE DUEL ✦</div><h2 id="dailyTitle512">Täglicher Login-Bonus</h2><p class="arcane-daily-intro-512">Sieben Login-Tage · Sieben Belohnungen</p><div class="arcane-daily-grid-512"></div><p class="arcane-daily-message-512" role="status" aria-live="polite"></p><button type="button" class="arcane-daily-claim-512">Belohnung abholen</button><small class="arcane-daily-note-512">Ein Bonus pro Kalendertag. Verpasste Tage setzen deinen Fortschritt nicht zurück.</small></div>';
+ document.body.appendChild(overlay);
+ const grid=overlay.querySelector('.arcane-daily-grid-512'),message=overlay.querySelector('.arcane-daily-message-512'),button=overlay.querySelector('.arcane-daily-claim-512');
+ const icon='<img src="artwork/currency/arkankristall-reward.avif" alt="Arkankristalle" decoding="async">';
+ let busy=false,autoShown=null;
+ function refresh(custom){
+  let info;
+  try{info=status(read(),dayNumber())}
+  catch(e){entry.classList.remove('is-ready-512');button.disabled=true;message.textContent='Fortschritt kann nicht gespeichert werden. Bitte Browser-Speicherung prüfen.';return null}
+  entry.classList.toggle('is-ready-512',info.ready);
+  entry.setAttribute('aria-label',info.ready?'Täglicher Login-Bonus verfügbar':'Täglicher Login-Bonus');
+  grid.innerHTML=REWARDS.map((amount,i)=>{
+   const done=i<info.done,ready=info.ready&&i===info.next;
+   return '<div class="arcane-daily-day-512'+(done?' is-done-512':ready?' is-today-512':'')+(i===6?' is-final-512':'')+'"><span>Tag '+(i+1)+'</span>'+icon+'<strong>'+amount+'</strong><small>'+(done?'✓ Abgeholt':ready?'Heute':'🔒 Ausstehend')+'</small></div>';
+  }).join('');
+  button.disabled=busy||!info.ready;
+  button.textContent=info.ready?'✦ '+REWARDS[info.next]+' Arkankristalle abholen':'Heute bereits abgeholt';
+  message.textContent=custom||(info.clockBlocked?'Das Gerätedatum liegt vor deinem letzten Login.':info.ready?'Deine heutige Belohnung wartet auf dich.':'Morgen wartet die nächste Belohnung.');
+  return info;
+ }
+ function open(){refresh();overlay.hidden=false;overlay.querySelector('.arcane-daily-close-512').focus({preventScroll:true})}
+ function close(){overlay.hidden=true;entry.focus({preventScroll:true})}
+ function maybeOpen(){const info=refresh(),today=dayNumber();if(info?.ready&&autoShown!==today){autoShown=today;open()}}
+ entry.addEventListener('click',open);
+ overlay.querySelector('.arcane-daily-close-512').addEventListener('click',close);
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
+ button.addEventListener('click',async()=>{
+  if(busy)return;busy=true;button.disabled=true;
+  let msg;
+  try{
+   const work=()=>claim(localStorage,dayNumber());
+   const result=navigator.locks?.request?await navigator.locks.request('arcane-daily-login-512',work):work();
+   if(result.ok){window.arcaneTestCrystals320?.refresh();window.arcaneBoosterShop322?.sync();msg='✦ '+result.amount+' Arkankristalle gutgeschrieben!'}
+   else msg='Deine heutige Belohnung wurde bereits abgeholt.';
+  }catch(e){msg='Speichern fehlgeschlagen. Bitte erneut versuchen.'}
+  finally{busy=false;refresh(msg)}
+ });
+ document.getElementById('arcaneIntroStart308')?.addEventListener('click',maybeOpen);
+ // Also support direct returns to the city, but never interrupt an active duel or intro.
+ new MutationObserver(()=>{if(!home.hidden&&document.getElementById('arcaneIntro308')?.hidden&&document.getElementById('arcaneTitleScreen447')?.hidden)maybeOpen()}).observe(home,{attributes:true,attributeFilter:['hidden']});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
+ window.addEventListener('storage',e=>{if(e.key===KEY||e.key===WALLET)refresh()});
+ setInterval(()=>{if(!document.hidden)refresh()},60000);
+ window.arcaneDailyLogin512={open,refresh};
+ refresh();
+})();
+</script>
+<style id="arcane-daily-style-512">
+.arcane-daily-entry-512{position:absolute!important;z-index:10;top:max(10px,env(safe-area-inset-top));right:12px;display:flex!important;align-items:center;gap:5px;min-height:37px;padding:7px 9px;border:1px solid #e5c18b;border-radius:11px;background:linear-gradient(#513178,#211637);color:#ffe7b1;font-size:12px;font-weight:800;cursor:pointer;touch-action:manipulation;box-shadow:0 0 12px #a86cff77}
+.arcane-daily-entry-512 i{display:none;width:8px;height:8px;border-radius:50%;background:#ffe2a0;box-shadow:0 0 10px #ffe2a0}
+.arcane-daily-entry-512.is-ready-512 i{display:block}
+.arcane-daily-overlay-512{position:fixed;inset:0;z-index:2000000000;display:flex;align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom));box-sizing:border-box;background:#090614e8;overscroll-behavior:contain}
+.arcane-daily-overlay-512[hidden]{display:none!important}
+.arcane-daily-panel-512{position:relative;width:min(100%,480px);max-height:100%;overflow:auto;padding:22px 15px 16px;border:2px solid #e7c582;border-radius:21px;background:radial-gradient(ellipse at 50% 0%,#63408a,#211338 45%,#101226 90%);box-shadow:0 0 30px #b575fa55;color:#f3e6ff;text-align:center}
+.arcane-daily-close-512{position:absolute;right:10px;top:10px;width:36px;height:36px;border-radius:50%;border:1px solid #e7c582;color:#ffe8b1;background:#2b1e46;font-size:25px;cursor:pointer}
+.arcane-daily-kicker-512{color:#d7bafa;font-size:10px;letter-spacing:3px;font-weight:900;margin:4px 32px 9px}
+.arcane-daily-panel-512 h2{font:700 clamp(24px,6.3vw,34px)/1.05 Georgia,serif;color:#ffe0a1;margin:12px 0}
+.arcane-daily-intro-512{font-size:12px;color:#dccdea;margin:0 0 17px}
+.arcane-daily-grid-512{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.arcane-daily-day-512{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:10px 4px;border:1px solid #77658c;border-radius:11px;background:linear-gradient(#2b244a,#15152e);color:#f2d99b}
+.arcane-daily-day-512>span{font-size:12px;font-weight:800}
+.arcane-daily-day-512>img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 6px #ad77ff)}
+.arcane-daily-day-512>strong{font:700 23px Georgia,serif}
+.arcane-daily-day-512>small{font-size:9px;color:#d8cde6}
+.arcane-daily-day-512.is-done-512{border-color:#6bab8b;background:#193b36}
+.arcane-daily-day-512.is-today-512{border-color:#ffdd91;box-shadow:0 0 12px #ffca6a77;background:linear-gradient(#64428c,#36244e)}
+.arcane-daily-day-512.is-final-512{grid-column:1/-1;flex-direction:row;gap:10px;min-height:74px;border-color:#d6a960;background:linear-gradient(110deg,#463069,#36243e)}
+.arcane-daily-day-512.is-final-512>img{width:52px;height:52px}
+.arcane-daily-day-512.is-final-512.is-done-512{background:#193b36}
+.arcane-daily-message-512{font-size:13px;min-height:20px;margin:15px 0 10px}
+.arcane-daily-claim-512{width:100%;min-height:48px;border:1px solid #ffe2a0;border-radius:10px;background:linear-gradient(#a27038,#533159);color:#fff1c9;font-size:15px;font-weight:900;cursor:pointer;touch-action:manipulation}
+.arcane-daily-claim-512:disabled{opacity:.58;cursor:default}
+.arcane-daily-note-512{display:block;color:#c7bcd9;font-size:11px;line-height:1.4;margin-top:12px}
+@media(max-height:500px) and (orientation:landscape){.arcane-daily-panel-512{width:min(96%,720px)}.arcane-daily-grid-512{grid-template-columns:repeat(7,minmax(0,1fr))}.arcane-daily-day-512.is-final-512{grid-column:auto;flex-direction:column;gap:5px}.arcane-daily-day-512>img,.arcane-daily-day-512.is-final-512>img{width:30px;height:30px}}
+</style>
+</body></html>
