@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261125-story-character-swipe-v509">
+<meta name="arcane-build" content="20261125-booster-art-crops-v510">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5748,7 +5748,7 @@ main.arcane-enemy-trap-busy-492{pointer-events:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.09</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.10</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6623,11 +6623,16 @@ for(const card of deck){
  card.artwork=key;
  CARD_ART_FILES[key]=filename;
 }
-/* v4.16: Rivens previously uploaded 5-by-5 overview is an immediately usable
-   individual artwork atlas; each of the 25 unique cards gets its own grid tile. */
-const RIVEN_GRID_ART_416=Object.fromEntries(rivenPool415.map(([name],index)=>[name,{col:index%5,row:Math.floor(index/5)}]));
-// Keep the atlas tile in its own native aspect ratio rather than stretching it.
-const rivenAtlasRatio503=new Image();rivenAtlasRatio503.onload=()=>{if(rivenAtlasRatio503.naturalHeight)document.documentElement.style.setProperty('--riven-atlas-ratio-503',String(rivenAtlasRatio503.naturalWidth/rivenAtlasRatio503.naturalHeight))};rivenAtlasRatio503.src='artwork/riven_kartenuebersicht.png';
+/* v5.10: verified atlas is 8+7 monsters, 6 spells and 4 traps, not a 5x5 grid.
+   Coordinates reference a proportional 1500x1000 view of the source image.
+   Only the actual picture window of each source card is used. */
+const RIVEN_ART_RECTS_510={"Sturmspäher":[30,469,199,593],"Funkenfuchs":[30,210,188,335],"Windklingen-Ritter":[409,210,560,335],"Wolkenschlange":[775,210,920,335],"Donner-Magierin":[592,210,743,335],"Orkanwolf":[660,469,832,593],"Blitzstein-Golem":[452,469,620,593],"Himmelsreiterin":[1319,210,1470,335],"Donnerfalke":[952,210,1104,335],"Zyklonwächter":[223,210,378,335],"Sturmlöwe":[240,469,411,593],"Tempestritter":[1136,210,1287,335],"Blitzgreif":[1096,469,1264,593],"Königin des Gewitters":[1306,469,1469,593],"Himmelsdrache des ewigen Sturms":[875,469,1054,593],"Donnerschlag":[36,755,157,859],"Rückenwind":[491,755,609,859],"Zyklonstoß":[780,755,866,859],"Schrein des Sturms":[642,755,754,859],"Geladener Himmel":[340,755,462,859],"Auge des Orkans":[188,755,310,859],"Blitznetz":[914,755,1035,859],"Sturmbarriere":[1214,755,1334,859],"Donnerkonter":[1066,755,1187,859],"Windfalle":[1361,755,1469,859]};
+function arcaneCropArt510(c,src,rect,sourceWidth,sourceHeight){
+ const [x,y,x2,y2]=rect,w=x2-x,h=y2-y,ratio=w/h;
+ const posX=100*x/(sourceWidth-w),posY=100*y/(sourceHeight-h);
+ return '<span class="card-art-loader arcane-art-window-510" role="img" aria-label="'+arcaneEscape335(c.name)+'" style="--crop-ratio-510:'+ratio+'">'
+  +'<span class="arcane-art-crop-510" style="background-image:url(&quot;'+src+'&quot;);background-size:'+100*sourceWidth/w+'% '+100*sourceHeight/h+'%;background-position:'+posX+'% '+posY+'%"></span></span>';
+}
 /* v4.18: direct GitHub image upload test — Astra's Siegelbotin Elya. */
 for(const card of deck){
  if(card.astraOriginal&&card.name==='Siegelbotin Elya'){
@@ -6727,6 +6732,9 @@ function renderEldricArtwork433(card){
 }
 function renderCardArt(c){
  if(!c)return '';
+ const chronoArt510=window.ARCANE_CHRONORESONANZ_ART_437?.[c.name];
+ if(chronoArt510)return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><img src="'+chronoArt510+'" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></span>';
+
  if(c.forestTribute&&window.ARCANE_WURZELHERZ_ART_497?.[c.name])return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#183c29"><img class="arcane-art-direct-339 arcane-fullbleed-img-343" src="'+window.ARCANE_WURZELHERZ_ART_497[c.name]+'" alt="" loading="lazy" decoding="async" style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center"></span>';
  if(c.forestTribute)return '<div style="position:relative;width:100%;height:100%;overflow:hidden;background:#183c29"><img src="artwork/story/forest-magical-v460.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:2em;text-shadow:0 2px 8px #001c0c">'+c.emoji+'</span></div>';
  // v4.41: 8 bestätigte, eigenständige WebP-Artworks für die Kael-/Leon-Resonanzkarten.
@@ -6744,12 +6752,11 @@ function renderCardArt(c){
 
  if(c.valtorOriginal)return renderValtorArt429(c);
  if(c.astraOriginal)return renderAstraArtwork420(c);
- if(c.rivenOriginal&&RIVEN_GRID_ART_416[c.name]){
-  const {col,row}=RIVEN_GRID_ART_416[c.name];
-  const x=col*25,y=row*25;
-  return '<span class="card-art-loader arcane-fullbleed-343 riven-art-416" role="img" aria-label="'+c.name.replace(/"/g,'&quot;')+'" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#132d60">'
-    +'<span class="riven-tile-503" style="background-image:url(&quot;artwork/riven_kartenuebersicht.png&quot;);background-repeat:no-repeat;background-size:500% 500%;background-position:'+x+'% '+y+'%"></span></span>';
- }
+ if(c.rivenOriginal&&RIVEN_ART_RECTS_510[c.name])return arcaneCropArt510(c,'artwork/riven_kartenuebersicht.png?v=510',RIVEN_ART_RECTS_510[c.name],1500,1000);
+ // These two legacy scans are verified source images with title/frame strips;
+ // bypass the canvas conversion and isolate the illustration directly.
+ if(c.artwork==='kristallraub')return arcaneCropArt510(c,'artwork/kristallraub.png?v=510',[12,53,294,229],307,256);
+ if(c.artwork==='sternenregen')return arcaneCropArt510(c,'artwork/sternenregen.png?v=510',[12,42,294,208],307,256);
 
  const focus=ARCANE_ART_FRAMING_343[c.artwork]||ARCANE_ART_FOCUS_339[c.artwork]||{x:50,y:50};
  const replacements344={
@@ -6757,12 +6764,12 @@ function renderCardArt(c){
   'schattenresonator':'schattenresonator-neu.webp'
  };
  const file=c.artwork==='flame-dragon'?'flammendrache-neu.webp':(replacements344[c.artwork]||CARD_ART_FILES[c.artwork]);
- if(!file)return c.artwork?arcaneArt(c.artwork):c.emoji;
+ if(!file)return (c.artwork&&arcaneArt(c.artwork))||'<span class="arcane-art-placeholder-510" style="display:grid;width:100%;height:100%;place-items:center">'+arcaneEscape335(c.emoji||'✦')+'</span>';
  // Only the oldest card scans require border removal. Character illustration PNGs are already artwork.
  const legacy=file.endsWith('.png')&&!/^(elara|varek|darian|noctis|seraphine)-art-/.test(c.artwork||''),src='artwork/'+file;
  const backup344=replacements344[c.artwork]?CARD_ART_FILES[c.artwork]:null;
  const positioning='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:'+focus.x+'% '+focus.y+'%;--art-focus-x-340:'+focus.x+'%;--art-focus-y-340:'+focus.y+'%;';
- const fallback='<span class="card-art-fallback" style="display:block;position:absolute;inset:0">'+arcaneArt(c.artwork)+'</span>';
+ const fallback='<span class="card-art-fallback arcane-art-placeholder-510" style="display:grid;position:absolute;inset:0;place-items:center">'+(arcaneArt(c.artwork)||'<span aria-hidden="true">'+arcaneEscape335(c.emoji||'✦')+'</span>')+'</span>';
  const onload='this.parentElement.querySelector(".card-art-fallback").style.display="none";'+(legacy?'arcaneCropLegacy337(this);':'');
  return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden;background:#170d2d">'
  +fallback+'<img class="arcane-art-direct-339 arcane-fullbleed-img-343" src="'+src+'" alt="" loading="lazy" decoding="async"'
@@ -8905,7 +8912,7 @@ syncHeroResonanceExtra439();
   <div class="arcane-booster-catalogue-panel-324">
    <div class="arcane-booster-catalogue-heading-324"><div class="arcane-booster-catalogue-kicker-324">ARCANE DUEL · BOOSTER-SET</div>
     <h3>Schatten &amp; Flammen</h3><button type="button" id="arcaneBoosterCatalogueClose324" aria-label="Schließen">×</button>
-    <p>Mögliche Inhalte · 6 Resonanzmonster + Siegelstern-Resonator + Arena-Taktgeber, sonst unabhängige Karten</p>
+    <p id="arcaneBoosterTotal510">Mögliche Inhalte · 6 Resonanzmonster + 2 Resonatoren</p>
    </div>
    <div class="arcane-booster-filters-324" id="arcaneBoosterFilters324">
     <button type="button" data-rarity="all" class="active">Alle</button>
@@ -9061,6 +9068,8 @@ syncHeroResonanceExtra439();
  }
  function renderPool(){
   const data=catalog();
+  const countLabel=document.getElementById('arcaneBoosterTotal510');
+  if(countLabel)countLabel.textContent=pool().length+' verschiedene Karten · 6 Resonanzmonster + 2 Resonatoren';
   const cards=pool().filter(c=>currentFilter==='all'||data.rarity(c)===currentFilter);
   $b('arcaneBoosterPool324').innerHTML=cards.length?cards.map(c=>{
    const rarity=data.rarity(c),tone=data.rarityData[rarity];
@@ -10711,7 +10720,7 @@ function showExtraMap469(ch,selectedIndex){
    +'</div></article>'
   ).join('');
   content.innerHTML=
-   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.09</small></p>'
+   '<p class="arcane-campaign-tagline-473">Sieben Welten · Sieben Siegel · 70 Missionen · Vier Schwierigkeitsgrade <small style="display:block;color:#b4a4d6;margin:4px auto">Testversion 5.10</small></p>'
    +'<section class="arcane-campaign-status-473" aria-label="Charakterfortschritt und Charakter wechseln"></section>'
    +'<section class="arcane-campaign-chapters-473" aria-label="Die sieben Kapitel">'+cards+'</section>'
    +'<p class="arcane-campaign-bottom-note-473">🔎 Im Testmodus kannst du jedes Kapitel prüfen, ohne reguläre Story-Siege oder Belohnungen zu verändern.</p>';
@@ -11101,5 +11110,10 @@ img.arcane-currency-reward-502{width:1.85em!important;height:1.85em!important;ve
 .arcane-hero-swipe-509{display:block;text-align:center;color:#bdb2db;font-size:10px;margin-top:3px}
 @media(min-width:701px){#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{grid-template-columns:minmax(120px,22%) minmax(0,1fr)!important}.arcane-hero-main-509{max-height:240px}}
 @media(max-width:360px){#arcaneStory357.is-seven-overview-473 .arcane-campaign-status-473{gap:8px!important;padding:8px!important;grid-template-columns:minmax(82px,29%) minmax(0,1fr)!important}}
+</style>
+<style id="arcane-art-crop-style-510">
+.arcane-card-art-335 .arcane-art-window-510,.arcane-art-window-510{display:block!important;position:relative!important;width:100%!important;height:100%!important;overflow:hidden!important;container-type:size!important;background:#101e36}
+.arcane-art-window-510>.arcane-art-crop-510{display:block!important;position:absolute!important;left:50%!important;top:50%!important;width:100%;width:max(100cqw,calc(100cqh * var(--crop-ratio-510)))!important;height:auto!important;aspect-ratio:var(--crop-ratio-510)!important;max-width:none!important;max-height:none!important;transform:translate(-50%,-50%)!important;background-repeat:no-repeat!important}
+.arcane-art-placeholder-510{color:#e9d2ff;background:radial-gradient(ellipse at center,#3a3e74,#10162e 75%);font-size:clamp(18px,5vw,46px);text-shadow:0 0 10px #d4b8ff}
 </style>
 </body></html>
