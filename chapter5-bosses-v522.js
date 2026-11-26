@@ -698,13 +698,13 @@ ch3MonsterEvent=function(card,event,owner){
  case 'draw':ch3Draw();break;
  case 'weak200':ch3TurnBoost(enemy,-200);break;
  case 'weak300':ch3TurnBoost(enemy,-300);break;
- case 'lock':ch4Lock(enemy);break;
+ case 'lock':if(enemy)enemy.varekLockedUntil=Math.max(enemy.varekLockedUntil||0,turn+1);break;
  case 'tributeBoost':if(card.ch3Tribute)ch3Boost(card,400);break;
  case 'tributeHeal':if(card.ch3Tribute)oppLP+=500;break;
  case 'tributeWeak':if(card.ch3Tribute)ch3TurnBoost(enemy,-500);break;
  case 'destroySet':if(card.ch3Tribute)ch3EnemyDestroy(mySpell,true);break;
  case 'solarBoss':if(card.ch3Tribute)allies.forEach(m=>ch3TurnBoost(m,500));break;
- case 'stormBoss':if(card.ch3Tribute){myMon.filter(m=>m&&!m.faceDown).forEach(m=>ch3TurnBoost(m,-500));ch4Lock(enemy)}break;
+ case 'stormBoss':if(card.ch3Tribute){myMon.filter(m=>m&&!m.faceDown).forEach(m=>ch3TurnBoost(m,-500));if(enemy)enemy.varekLockedUntil=Math.max(enemy.varekLockedUntil||0,turn+1)}break;
  }
 };
 function ch5Spell(c){
