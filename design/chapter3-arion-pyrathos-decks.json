@@ -1,0 +1,697 @@
+{
+  "status": "Designentwurf – nicht in Duellengine eingebunden; Effekte, AI-Resonanz, Bilddateien und Balancing noch umzusetzen.",
+  "chapter": 3,
+  "arion": {
+    "mission": "3-5",
+    "portrait": "Variante 2",
+    "element": "Feuer",
+    "pool": [
+      {
+        "name": "Glutklingen-Rekrut",
+        "kind": "Monster",
+        "level": 3,
+        "atk": 1400,
+        "def": 1000,
+        "effect": "Bei offener Beschwörung: erhält 200 ATK.",
+        "copies": 3
+      },
+      {
+        "name": "Funkenresonator",
+        "kind": "Monster / Resonator",
+        "level": 2,
+        "atk": 700,
+        "def": 1100,
+        "effect": "Bei offener Beschwörung: ziehe 1 Karte, wenn du ein anderes offenes Feuerkrieger-Monster kontrollierst.",
+        "copies": 3
+      },
+      {
+        "name": "Drachenpakt-Knappe",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1500,
+        "def": 1400,
+        "effect": "Wenn als Resonanzmaterial verwendet: erhalte 300 LP.",
+        "copies": 3
+      },
+      {
+        "name": "Aschenbastions-Wächter",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1000,
+        "def": 1900,
+        "effect": "Beim Aufdecken durch einen Angriff: erhält 300 DEF.",
+        "copies": 3
+      },
+      {
+        "name": "Phönixküken Ignis",
+        "kind": "Monster",
+        "level": 3,
+        "atk": 1200,
+        "def": 900,
+        "effect": "Wenn vom Feld auf den Friedhof gelegt: erhalte 200 LP.",
+        "copies": 3
+      },
+      {
+        "name": "Glutbanner-Ritterin",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1600,
+        "def": 1300,
+        "effect": "Bei offener Beschwörung: ein anderes eigenes offenes Feuermonster erhält 300 ATK.",
+        "copies": 3
+      },
+      {
+        "name": "Flammenchor-Resonator",
+        "kind": "Monster / Resonator",
+        "level": 3,
+        "atk": 1000,
+        "def": 1300,
+        "effect": "Bei offener Beschwörung: reduziere die ATK eines offenen gegnerischen Monsters um 200 bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Drachenritter Solvar",
+        "kind": "Monster",
+        "level": 5,
+        "atk": 2100,
+        "def": 1600,
+        "effect": "Bei Tributbeschwörung: ziehe 1 Karte.",
+        "copies": 3
+      },
+      {
+        "name": "Phönix der Aschengipfel",
+        "kind": "Monster",
+        "level": 6,
+        "atk": 2300,
+        "def": 1900,
+        "effect": "Bei Tributbeschwörung: erhalte 500 LP.",
+        "copies": 2
+      },
+      {
+        "name": "Eid der Drachenritter",
+        "kind": "Zauber",
+        "effect": "Ein eigenes offenes Feuermonster erhält 400 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Ruf der Glut",
+        "kind": "Zauber",
+        "effect": "Nimm einen Funkenresonator oder Flammenchor-Resonator aus deinem Deck auf die Hand.",
+        "copies": 3
+      },
+      {
+        "name": "Phönixschwinge",
+        "kind": "Zauber",
+        "effect": "Beschwöre ein Feuer-Monster der Stufe 4 oder niedriger aus deinem Friedhof offen in Verteidigung.",
+        "copies": 3
+      },
+      {
+        "name": "Schmiedefeuer",
+        "kind": "Zauber",
+        "effect": "Ziehe 1 Karte und erhalte 300 LP.",
+        "copies": 3
+      },
+      {
+        "name": "Resonanz der Flammen",
+        "kind": "Zauber",
+        "effect": "Falls du ein offenes Resonanzmonster kontrollierst: ziehe 2 Karten.",
+        "copies": 3
+      },
+      {
+        "name": "Glutwirbel",
+        "kind": "Zauber",
+        "effect": "Ein offenes gegnerisches Monster verliert 400 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Phönixschild",
+        "kind": "Falle",
+        "effect": "Stoppe einen gegnerischen Angriff und erhalte 200 LP.",
+        "copies": 3
+      },
+      {
+        "name": "Gegenschlag der Bastion",
+        "kind": "Falle",
+        "effect": "Stoppe einen gegnerischen Angriff und füge dem Gegner 300 LP Schaden zu.",
+        "copies": 3
+      }
+    ],
+    "decks": [
+      {
+        "tier": "Einsteiger",
+        "cards": [
+          {
+            "name": "Glutklingen-Rekrut",
+            "count": 3
+          },
+          {
+            "name": "Funkenresonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenpakt-Knappe",
+            "count": 3
+          },
+          {
+            "name": "Aschenbastions-Wächter",
+            "count": 3
+          },
+          {
+            "name": "Phönixküken Ignis",
+            "count": 3
+          },
+          {
+            "name": "Glutbanner-Ritterin",
+            "count": 3
+          },
+          {
+            "name": "Eid der Drachenritter",
+            "count": 3
+          },
+          {
+            "name": "Schmiedefeuer",
+            "count": 3
+          },
+          {
+            "name": "Glutwirbel",
+            "count": 3
+          },
+          {
+            "name": "Phönixschild",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Fortgeschritten",
+        "cards": [
+          {
+            "name": "Aschenbastions-Wächter",
+            "count": 3
+          },
+          {
+            "name": "Funkenresonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenpakt-Knappe",
+            "count": 3
+          },
+          {
+            "name": "Glutbanner-Ritterin",
+            "count": 3
+          },
+          {
+            "name": "Flammenchor-Resonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenritter Solvar",
+            "count": 3
+          },
+          {
+            "name": "Eid der Drachenritter",
+            "count": 3
+          },
+          {
+            "name": "Ruf der Glut",
+            "count": 3
+          },
+          {
+            "name": "Schmiedefeuer",
+            "count": 3
+          },
+          {
+            "name": "Gegenschlag der Bastion",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Experte",
+        "cards": [
+          {
+            "name": "Funkenresonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenpakt-Knappe",
+            "count": 3
+          },
+          {
+            "name": "Aschenbastions-Wächter",
+            "count": 3
+          },
+          {
+            "name": "Glutbanner-Ritterin",
+            "count": 3
+          },
+          {
+            "name": "Flammenchor-Resonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenritter Solvar",
+            "count": 3
+          },
+          {
+            "name": "Ruf der Glut",
+            "count": 3
+          },
+          {
+            "name": "Phönixschwinge",
+            "count": 3
+          },
+          {
+            "name": "Resonanz der Flammen",
+            "count": 3
+          },
+          {
+            "name": "Gegenschlag der Bastion",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Meister",
+        "cards": [
+          {
+            "name": "Funkenresonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenpakt-Knappe",
+            "count": 3
+          },
+          {
+            "name": "Aschenbastions-Wächter",
+            "count": 3
+          },
+          {
+            "name": "Flammenchor-Resonator",
+            "count": 3
+          },
+          {
+            "name": "Drachenritter Solvar",
+            "count": 3
+          },
+          {
+            "name": "Ruf der Glut",
+            "count": 3
+          },
+          {
+            "name": "Phönixschwinge",
+            "count": 3
+          },
+          {
+            "name": "Resonanz der Flammen",
+            "count": 3
+          },
+          {
+            "name": "Gegenschlag der Bastion",
+            "count": 3
+          },
+          {
+            "name": "Phönix der Aschengipfel",
+            "count": 2
+          },
+          {
+            "name": "Phönixküken Ignis",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "name": "Glutdrache Aurelion",
+        "level": 6,
+        "atk": 2400,
+        "def": 1700,
+        "materials": "Funkenresonator + Drachenpakt-Knappe",
+        "effect": "Bei Resonanzbeschwörung: ziehe 1 Karte.",
+        "copies": 1
+      },
+      {
+        "name": "Phönixwächter der Bastion",
+        "level": 7,
+        "atk": 2600,
+        "def": 2100,
+        "materials": "Flammenchor-Resonator + Aschenbastions-Wächter",
+        "effect": "Bei Resonanzbeschwörung: erhalte 500 LP.",
+        "copies": 1
+      },
+      {
+        "name": "Arion, Phönixritter der Asche",
+        "level": 8,
+        "atk": 2800,
+        "def": 2300,
+        "materials": "Flammenchor-Resonator + Drachenritter Solvar",
+        "effect": "Bei Resonanzbeschwörung: ein gegnerisches offenes Monster verliert 600 ATK bis Zugende.",
+        "copies": 1
+      }
+    ],
+    "extraByTier": [
+      [
+        "Glutdrache Aurelion"
+      ],
+      [
+        "Glutdrache Aurelion",
+        "Phönixwächter der Bastion"
+      ],
+      [
+        "Glutdrache Aurelion",
+        "Phönixwächter der Bastion",
+        "Arion, Phönixritter der Asche"
+      ],
+      [
+        "Glutdrache Aurelion",
+        "Phönixwächter der Bastion",
+        "Arion, Phönixritter der Asche"
+      ]
+    ]
+  },
+  "pyrathos": {
+    "mission": "3-10",
+    "portrait": "Variante 3",
+    "element": "Feuer",
+    "pool": [
+      {
+        "name": "Lavakern-Wyrmling",
+        "kind": "Monster",
+        "level": 2,
+        "atk": 800,
+        "def": 1100,
+        "effect": "Wenn als Tribut verwendet: erhalte 200 LP.",
+        "copies": 3
+      },
+      {
+        "name": "Obsidianpanzer-Drache",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1100,
+        "def": 1900,
+        "effect": "Beim Aufdecken durch einen Angriff: erhält 300 DEF.",
+        "copies": 3
+      },
+      {
+        "name": "Magmaschuppen-Jäger",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1700,
+        "def": 1000,
+        "effect": "Wenn er ein Monster im Kampf zerstört: erhält 200 ATK.",
+        "copies": 3
+      },
+      {
+        "name": "Kraterkriecher",
+        "kind": "Monster",
+        "level": 3,
+        "atk": 1300,
+        "def": 1500,
+        "effect": "Wenn als Tribut verwendet: der beschworene Drache erhält 200 ATK.",
+        "copies": 3
+      },
+      {
+        "name": "Schlackenflügel",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 1600,
+        "def": 1200,
+        "effect": "Bei offener Beschwörung: ein gegnerisches offenes Monster verliert 200 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Basaltkoloss",
+        "kind": "Monster",
+        "level": 4,
+        "atk": 900,
+        "def": 2000,
+        "effect": "Wenn als Tribut verwendet: der beschworene Drache erhält 300 DEF.",
+        "copies": 3
+      },
+      {
+        "name": "Inferno-Wyvern",
+        "kind": "Monster",
+        "level": 5,
+        "atk": 2200,
+        "def": 1400,
+        "effect": "Bei Tributbeschwörung: ein gegnerisches offenes Monster verliert 400 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Vulkanherz-Drache",
+        "kind": "Monster",
+        "level": 6,
+        "atk": 2400,
+        "def": 1900,
+        "effect": "Bei Tributbeschwörung: zerstöre eine gesetzte gegnerische Zauber- oder Fallenkarte.",
+        "copies": 3
+      },
+      {
+        "name": "Pyrathos, Urdrache des Infernos",
+        "kind": "Monster",
+        "level": 8,
+        "atk": 2900,
+        "def": 2500,
+        "effect": "Benötigt 2 Tribute. Bei offener Tributbeschwörung: zerstöre 1 gegnerisches Monster.",
+        "copies": 2
+      },
+      {
+        "name": "Lavastrom",
+        "kind": "Zauber",
+        "effect": "Ein gegnerisches offenes Monster verliert 500 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Opfer der Urflamme",
+        "kind": "Zauber",
+        "effect": "Opfere ein eigenes Monster und ziehe 2 Karten.",
+        "copies": 3
+      },
+      {
+        "name": "Ruf aus dem Krater",
+        "kind": "Zauber",
+        "effect": "Beschwöre ein Feuermonster der Stufe 3 oder niedriger aus deinem Friedhof offen in Verteidigung.",
+        "copies": 3
+      },
+      {
+        "name": "Drachenhort",
+        "kind": "Zauber",
+        "effect": "Nimm ein Drachenmonster der Stufe 5 oder 6 aus dem Deck auf die Hand.",
+        "copies": 3
+      },
+      {
+        "name": "Vulkanausbruch",
+        "kind": "Zauber",
+        "effect": "Falls du ein offenes tributbeschworenes Drachenmonster kontrollierst: zerstöre eine gegnerische Zauber- oder Fallenkarte.",
+        "copies": 3
+      },
+      {
+        "name": "Atem des Feuerkönigs",
+        "kind": "Zauber",
+        "effect": "Ein eigenes offenes Drachenmonster erhält 400 ATK bis Zugende.",
+        "copies": 3
+      },
+      {
+        "name": "Obsidianmauer",
+        "kind": "Falle",
+        "effect": "Stoppe einen gegnerischen Angriff.",
+        "copies": 3
+      },
+      {
+        "name": "Zorn der Urflamme",
+        "kind": "Falle",
+        "effect": "Stoppe einen gegnerischen Angriff und füge dem Gegner 300 LP Schaden zu.",
+        "copies": 3
+      }
+    ],
+    "decks": [
+      {
+        "tier": "Einsteiger",
+        "cards": [
+          {
+            "name": "Lavakern-Wyrmling",
+            "count": 3
+          },
+          {
+            "name": "Obsidianpanzer-Drache",
+            "count": 3
+          },
+          {
+            "name": "Magmaschuppen-Jäger",
+            "count": 3
+          },
+          {
+            "name": "Kraterkriecher",
+            "count": 3
+          },
+          {
+            "name": "Schlackenflügel",
+            "count": 3
+          },
+          {
+            "name": "Basaltkoloss",
+            "count": 3
+          },
+          {
+            "name": "Lavastrom",
+            "count": 3
+          },
+          {
+            "name": "Drachenhort",
+            "count": 3
+          },
+          {
+            "name": "Atem des Feuerkönigs",
+            "count": 3
+          },
+          {
+            "name": "Obsidianmauer",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Fortgeschritten",
+        "cards": [
+          {
+            "name": "Lavakern-Wyrmling",
+            "count": 3
+          },
+          {
+            "name": "Obsidianpanzer-Drache",
+            "count": 3
+          },
+          {
+            "name": "Magmaschuppen-Jäger",
+            "count": 3
+          },
+          {
+            "name": "Kraterkriecher",
+            "count": 3
+          },
+          {
+            "name": "Basaltkoloss",
+            "count": 3
+          },
+          {
+            "name": "Inferno-Wyvern",
+            "count": 3
+          },
+          {
+            "name": "Lavastrom",
+            "count": 3
+          },
+          {
+            "name": "Opfer der Urflamme",
+            "count": 3
+          },
+          {
+            "name": "Drachenhort",
+            "count": 3
+          },
+          {
+            "name": "Obsidianmauer",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Experte",
+        "cards": [
+          {
+            "name": "Lavakern-Wyrmling",
+            "count": 3
+          },
+          {
+            "name": "Magmaschuppen-Jäger",
+            "count": 3
+          },
+          {
+            "name": "Kraterkriecher",
+            "count": 3
+          },
+          {
+            "name": "Schlackenflügel",
+            "count": 3
+          },
+          {
+            "name": "Inferno-Wyvern",
+            "count": 3
+          },
+          {
+            "name": "Vulkanherz-Drache",
+            "count": 3
+          },
+          {
+            "name": "Opfer der Urflamme",
+            "count": 3
+          },
+          {
+            "name": "Ruf aus dem Krater",
+            "count": 3
+          },
+          {
+            "name": "Vulkanausbruch",
+            "count": 3
+          },
+          {
+            "name": "Zorn der Urflamme",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "tier": "Meister",
+        "cards": [
+          {
+            "name": "Lavakern-Wyrmling",
+            "count": 3
+          },
+          {
+            "name": "Obsidianpanzer-Drache",
+            "count": 3
+          },
+          {
+            "name": "Magmaschuppen-Jäger",
+            "count": 3
+          },
+          {
+            "name": "Kraterkriecher",
+            "count": 3
+          },
+          {
+            "name": "Basaltkoloss",
+            "count": 3
+          },
+          {
+            "name": "Vulkanherz-Drache",
+            "count": 3
+          },
+          {
+            "name": "Opfer der Urflamme",
+            "count": 3
+          },
+          {
+            "name": "Vulkanausbruch",
+            "count": 3
+          },
+          {
+            "name": "Zorn der Urflamme",
+            "count": 3
+          },
+          {
+            "name": "Pyrathos, Urdrache des Infernos",
+            "count": 2
+          },
+          {
+            "name": "Inferno-Wyvern",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "rules": "30 Karten je Hauptdeck, maximal 3 Kopien pro Karte. 50 physische Karten im Hauptdeckpool je Charakter, Extra-Deck separat. Fallen erst ab dem nächsten eigenen Zug aktivierbar; Angriffsfallen reagieren danach auf einen gegnerischen Angriff. Beschwörung Stufe 5-6: 1 Tribut, Stufe 7+: 2 Tribute. Karteneffekte mit Auswahl werden durch die KI zielgerichtet verwendet."
+}
