@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261126-chapter3-boss-decks-v516">
+<meta name="arcane-build" content="20261126-chapter3-boss-decks-v517">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5785,7 +5785,7 @@ Object.assign(window.ARCANE_STORY_CHAPTER2_444,{"missions":[{"title":"Der Pfad h
 </script>
 <script src="story-chapter3-v445.js?v=445"></script>
 <script src="chapter3-boss-decks-v516.js?v=516"></script>
-<script src="chapter3-boss-engine-v516.js?v=516"></script>
+<script src="chapter3-boss-engine-v516.js?v=517"></script>
 <script src="chapter3-arion-pyrathos-art.js?v=516"></script>
 <script>Object.assign(window.arcaneForestBossPortraits514||{},window.ARCANE_CH3_PORTRAITS||{});</script>
 <script src="story-chapters4-7-v469.js?v=469"></script>
@@ -7116,7 +7116,7 @@ function renderExtraDeckCounts(){
  opponent.setAttribute("title",opponentCards+" Karten im Extra-Deck");
  const mine=player.querySelector(".sidezone-count"),theirs=opponent.querySelector(".sidezone-count");
  if(mine)mine.textContent="";
- if(theirs)theirs.textContent="";
+ if(theirs)theirs.textContent=opponentCards?String(opponentCards):"";
 }
 function renderGraveyards(){
  renderExtraDeckCounts();
@@ -7982,6 +7982,7 @@ async function opponentTurn(drawOnStart=true,showOpening=true){
  if(showOpening)document.querySelector('main')?.classList.add('arcane-ai-busy-491');
  try{
  aiTurn++;
+ if(ch3IsBoss())oppMon.forEach(m=>{if(m)m.attacksThisTurn=0});
  // Beginnt die KI laut Münzwurf, ist das bereits ihr erster Zug: kein Extrazug vom Deck.
  const drawn=drawOnStart?aiDeck.shift():null;if(drawn)aiHand.push(drawn);while(aiHand.length>7){const discarded=aiHand.splice(Math.floor(Math.random()*aiHand.length),1)[0];sendToGraveyard(discarded,"opponent");}
  log("Der Gegner ist am Zug.");
@@ -8304,7 +8305,7 @@ async function opponentTurn(drawOnStart=true,showOpening=true){
    else if(effectiveAtk(a)<effectiveDef(d)){const damage=effectiveDef(d)-effectiveAtk(a);oppLP=Math.max(0,oppLP-damage);log("Deine Verteidigung hält stand! Der angreifende Gegner verliert "+damage+" LP.");}
    else{log("Dein Monster hält dem KI-Angriff stand.");}
   }else if(effectiveAtk(a)>effectiveAtk(d)){
-   sendToGraveyard(d);myMon[di]=null;if(a.varekFx==="wolf"||a.name==="Magmaschuppen-Jäger")a.tempAtkBonus=(a.tempAtkBonus||0)+200;const damage=effectiveAtk(a)-effectiveAtk(d);
+   sendToGraveyard(d);myMon[di]=null;if(a.varekFx==="wolf")a.tempAtkBonus=(a.tempAtkBonus||0)+200;const damage=effectiveAtk(a)-effectiveAtk(d);if(a.name==="Magmaschuppen-Jäger")ch3Boost(a,200);
    if(crystalShield){crystalShield=false;log("Dein Monster wird zerstört, Kristallschild verhindert aber "+damage+" LP-Schaden!");}
    else{myLP=Math.max(0,myLP-damage);log("Die KI besiegt "+d.name+"! Du verlierst "+damage+" LP.");}
   }else if(effectiveAtk(a)<effectiveAtk(d)){const damage=effectiveAtk(d)-effectiveAtk(a);sendToGraveyard(a,"opponent");oppMon[entry.i]=null;oppLP=Math.max(0,oppLP-damage);log("Dein "+d.name+" ist stärker und besiegt das angreifende KI-Monster! Der Gegner verliert "+damage+" LP.");}
@@ -8320,6 +8321,7 @@ async function opponentTurn(drawOnStart=true,showOpening=true){
  render();aiFxQueue.forEach((fx,n)=>setTimeout(()=>playBattleFx('oppMon',fx.from,'myMon',fx.to,'💥',fx.card,fx.defending),n*520));aiFxQueue=[];
  if(myLP<=0)log("Du hast das Testduell verloren!");if(oppLP<=0)log("Du hast das Testduell gewonnen!");
  }finally{
+  if(ch3IsBoss()){ch3EndTurn();render();}
   if(showOpening){
    document.querySelector('main')?.classList.remove('arcane-ai-busy-491');
    document.getElementById('arcaneOpeningCaption489')?.remove();
