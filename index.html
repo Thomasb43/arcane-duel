@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261126-chapter4-water-boss-decks-v519">
+<meta name="arcane-build" content="20261126-chapter4-water-boss-art-v520">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5792,7 +5792,13 @@ Object.assign(window.ARCANE_STORY_CHAPTER2_444,{"missions":[{"title":"Der Pfad h
 <script src="chapter3-art-part2-v518.js?v=518"></script>
 <script src="chapter3-art-part3-v518.js?v=518"></script>
 <script src="chapter3-art-part4-v518.js?v=518"></script>
-<script>Object.assign(window.arcaneForestBossPortraits514||{},window.ARCANE_CH3_PORTRAITS||{});</script>
+<script src="chapter4-art-part1-v520.js?v=520"></script>
+<script src="chapter4-art-part2-v520.js?v=520"></script>
+<script src="chapter4-art-part3-v520.js?v=520"></script>
+<script src="chapter4-art-part4-v520.js?v=520"></script>
+<script src="chapter4-art-part5-v520.js?v=520"></script>
+<script src="chapter4-art-part6-v520.js?v=520"></script>
+<script>Object.assign(window.arcaneForestBossPortraits514||{},window.ARCANE_CH3_PORTRAITS||{},window.ARCANE_CH4_PORTRAITS||{});</script>
 <script src="story-chapters4-7-v469.js?v=469"></script>
 <script>
 (function(){const e=window.ARCANE_STORY_EXPANSION_469;if(!e)return;Object.assign(e.missions[4],{deck:"Gesang der Gezeiten",candidate:true,boss:true});Object.assign(e.missions[9],{deck:"Abgrundflut und Sturmdrachen"});e.recipes[4].theme="Gesang der Gezeiten";e.recipes[9].theme="Abgrundflut und Sturmdrachen";e.missions[9].pre[0][1]="Der silberhaarige Sturmherrscher Leviathor erhebt seinen Dreizack. Hinter ihm erscheint ein uralter Meeresdrache aus einem Strudel schwarzen Lichts.";})();
@@ -6773,7 +6779,7 @@ function renderEldricArtwork433(card){
 }
 function renderCardArt(c){
  if(!c)return '';
- const ch3Art=window.ARCANE_CH3_ART?.[c.name];if(ch3Art)return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><img src="'+ch3Art+'" alt="" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></span>';
+ const ch3Art=window.ARCANE_CH4_ART?.[c.name]||window.ARCANE_CH3_ART?.[c.name];if(ch3Art)return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><img src="'+ch3Art+'" alt="" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></span>';
  const chronoArt510=window.ARCANE_CHRONORESONANZ_ART_437?.[c.name];
  if(chronoArt510)return '<span class="card-art-loader arcane-fullbleed-343" style="display:block;position:relative;width:100%;height:100%;overflow:hidden"><img src="'+chronoArt510+'" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></span>';
 
