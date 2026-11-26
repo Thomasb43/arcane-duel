@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261126-chapter4-water-boss-webp-v521">
+<meta name="arcane-build" content="20261126-chapter5-solar-storm-v522">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5788,6 +5788,7 @@ Object.assign(window.ARCANE_STORY_CHAPTER2_444,{"missions":[{"title":"Der Pfad h
 <script src="chapter3-boss-engine-v516.js?v=517"></script>
 <script src="chapter4-boss-decks-v519.js?v=519"></script>
 <script src="chapter4-boss-engine-v519.js?v=519"></script>
+<script src="chapter5-bosses-v522.js?v=522"></script>
 <script src="chapter3-art-part1-v518.js?v=518"></script>
 <script src="chapter3-art-part2-v518.js?v=518"></script>
 <script src="chapter3-art-part3-v518.js?v=518"></script>
@@ -5798,6 +5799,7 @@ window.ARCANE_CH4_PORTRAITS={"Sirene Melis":"artwork/chapter4-v521/portrait-1.we
 </script>
 <script>Object.assign(window.arcaneForestBossPortraits514||{},window.ARCANE_CH3_PORTRAITS||{},window.ARCANE_CH4_PORTRAITS||{});</script>
 <script src="story-chapters4-7-v469.js?v=469"></script>
+<script>(function(){const e=window.ARCANE_STORY_EXPANSION_469;if(!e)return;Object.assign(e.missions[14],{deck:"Sonnenorden der Morgenglut",candidate:true,boss:true});Object.assign(e.missions[19],{deck:"Klingen des ewigen Sturms"});e.recipes[14].theme="Sonnenorden der Morgenglut";e.recipes[19].theme="Klingen des ewigen Sturms";})();</script>
 <script>
 (function(){const e=window.ARCANE_STORY_EXPANSION_469;if(!e)return;Object.assign(e.missions[4],{deck:"Gesang der Gezeiten",candidate:true,boss:true});Object.assign(e.missions[9],{deck:"Abgrundflut und Sturmdrachen"});e.recipes[4].theme="Gesang der Gezeiten";e.recipes[9].theme="Abgrundflut und Sturmdrachen";e.missions[9].pre[0][1]="Der silberhaarige Sturmherrscher Leviathor erhebt seinen Dreizack. Hinter ihm erscheint ein uralter Meeresdrache aus einem Strudel schwarzen Lichts.";})();
 </script>
@@ -6454,6 +6456,7 @@ function createEldricDeck432(level=4){
 window.arcaneEldricDeck432={pool:eldricPool432.map(([name,count])=>({name,count})),tiers:eldricTiers432.map((t,i)=>({level:i+1,label:t.label})),create:createEldricDeck432};
 
 function createStoryOpponentDeck362(index){
+ if(index===44||index===49)return window.ARCANE_CH5_BOSSES.create(index,window.arcaneStoryDifficultyExpanded469||1,shuffleCards).cards;
  if(index===34||index===39)return window.ARCANE_CH4_BOSSES.create(index,window.arcaneStoryDifficultyExpanded469||1,shuffleCards).cards;
  if(index>=30&&index<70)return storyExpansion469.createDeck(index,window.arcaneStoryDifficultyExpanded469||1,deck,shuffleCards);
  if(index>=20&&index<30)return createChapter3OpponentDeck445(index,window.arcaneStoryDifficultyChapter3445||1);
