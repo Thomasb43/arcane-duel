@@ -2,8 +2,10 @@
 let ch3AiExtra=[];
 function ch3IsBoss(){return ['Arion','Pyrathos'].includes(window.arcaneStoryOpponentInfo362?.name)}
 function ch3Top(list){return list.filter(m=>m&&!m.faceDown).sort((a,b)=>effectiveAtk(b)-effectiveAtk(a))[0]}
-function ch3Draw(n=1){while(n--&&aiDeck.length&&aiHand.length<7)aiHand.push(aiDeck.shift())}
+function ch3Draw(n=1){while(n--&&aiDeck.length)aiHand.push(aiDeck.shift());while(aiHand.length>7){const i=aiHand.findIndex(c=>c.kind==='spell');sendToGraveyard(aiHand.splice(i<0?0:i,1)[0],'opponent')}}
 function ch3Boost(c,n){if(c)c.tempAtkBonus=(c.tempAtkBonus||0)+n}
+function ch3TurnBoost(c,n){if(c){ch3Boost(c,n);c.ch3TurnAtk=(c.ch3TurnAtk||0)+n}}
+function ch3EndTurn(){if(!ch3IsBoss())return;for(const m of [...myMon,...oppMon])if(m?.ch3TurnAtk){m.tempAtkBonus=(m.tempAtkBonus||0)-m.ch3TurnAtk;delete m.ch3TurnAtk}}
 function ch3Def(c,n){if(c)c.tempDefBonus=(c.tempDefBonus||0)+n}
 function ch3EnemyDestroy(list,setOnly=false){
  let i=list.findIndex(m=>m&&(!setOnly||m.faceDown));
@@ -20,11 +22,11 @@ function ch3MonsterEvent(card,event,owner){
  if(n==='Glutklingen-Rekrut')ch3Boost(card,200);
  if(n==='Funkenresonator'&&oppMon.some(m=>m&&m!==card&&!m.faceDown&&m.ch3Hero==='arion'&&!m.resonator))ch3Draw();
  if(n==='Glutbanner-Ritterin')ch3Boost(ch3Top(oppMon.filter(m=>m!==card&&m?.element==='Feuer')),300);
- if(['Flammenchor-Resonator','Schlackenflügel'].includes(n))ch3Boost(enemy,-200);
+ if(['Flammenchor-Resonator','Schlackenflügel'].includes(n))ch3TurnBoost(enemy,-200);
  if(card.ch3Tribute){
   if(n==='Drachenritter Solvar')ch3Draw();
   if(n==='Phönix der Aschengipfel')oppLP+=500;
-  if(n==='Inferno-Wyvern')ch3Boost(enemy,-400);
+  if(n==='Inferno-Wyvern')ch3TurnBoost(enemy,-400);
   if(n==='Vulkanherz-Drache')ch3EnemyDestroy(mySpell,true);
   if(n==='Pyrathos, Urdrache des Infernos')ch3EnemyDestroy(myMon);
  }
@@ -42,7 +44,7 @@ function ch3Revive(maxLevel){
  const z=oppMon.findIndex(m=>!m),i=oppGraveyard.findLastIndex(c=>c.kind==='monster'&&c.element==='Feuer'&&c.level<=maxLevel&&!c.resonance);
  if(z<0||i<0)return false;
  const c=oppGraveyard.splice(i,1)[0];
- oppMon[z]={...c,faceDown:false,position:'defense',tempAtkBonus:0,tempDefBonus:0,ch3Tribute:false,summonedTurn:aiTurn,attacksThisTurn:1};
+ oppMon[z]={...c,faceDown:false,position:'defense',tempAtkBonus:0,tempDefBonus:0,ch3TurnAtk:0,ch3Tribute:false,summonedTurn:aiTurn,attacksThisTurn:1};
  return true;
 }
 function ch3Search(test){
@@ -53,12 +55,12 @@ function ch3Search(test){
 function ch3Spell(c){
  const own=ch3Top(oppMon),enemy=ch3Top(myMon);
  switch(c.name){
-  case 'Eid der Drachenritter':case 'Atem des Feuerkönigs':if(!own)return false;ch3Boost(own,400);return true;
+  case 'Eid der Drachenritter':case 'Atem des Feuerkönigs':if(!own)return false;ch3TurnBoost(own,400);return true;
   case 'Ruf der Glut':return ch3Search(m=>m.resonator&&m.ch3Hero==='arion');
   case 'Phönixschwinge':return ch3Revive(4);
   case 'Schmiedefeuer':if(!aiDeck.length)return false;ch3Draw();oppLP+=300;return true;
   case 'Resonanz der Flammen':if(!oppMon.some(m=>m?.resonance&&!m.faceDown)||aiDeck.length<2)return false;ch3Draw(2);return true;
-  case 'Glutwirbel':case 'Lavastrom':if(!enemy)return false;ch3Boost(enemy,c.name==='Glutwirbel'?-400:-500);return true;
+  case 'Glutwirbel':case 'Lavastrom':if(!enemy)return false;ch3TurnBoost(enemy,c.name==='Glutwirbel'?-400:-500);return true;
   case 'Opfer der Urflamme':{
    const a=oppMon.map((m,i)=>({m,i})).filter(x=>x.m&&!x.m.resonance).sort((a,b)=>effectiveAtk(a.m)-effectiveAtk(b.m))[0];
    if(!a||aiDeck.length<2||oppMon.filter(Boolean).length<2)return false;
@@ -107,7 +109,7 @@ async function ch3AiResonance(show){
  oppMon[a]=boss;
  if(boss.name==='Glutdrache Aurelion')ch3Draw();
  if(boss.name==='Phönixwächter der Bastion')oppLP+=500;
- if(boss.name==='Arion, Phönixritter der Asche')ch3Boost(ch3Top(myMon),-600);
+ if(boss.name==='Arion, Phönixritter der Asche')ch3TurnBoost(ch3Top(myMon),-600);
  log('🔥 Resonanzbeschwörung: '+boss.name+'!');
  if(show)await arcaneOpeningCard489('Gegner beschwört '+boss.name,'oppMon',a,null);
  render();
