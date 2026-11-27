@@ -1,4 +1,4 @@
-/* Arcane Duel 5.30 — original, procedural, articulated WebGL combat models.
+/* Arcane Duel 5.30 — sculpted procedural dragon revision, articulated WebGL combat models.
    Self-contained; no CDN, external models, or copied game assets. */
 (function(){
 'use strict';
@@ -21,46 +21,120 @@ function box(g,p,s,m,r){return mesh(g,'box',p,s,m,r)}
 function rod(g,a,b,width,m,taper=false){const d=sub(b,a),len=Math.hypot(...d)||.01,dir=norm(d),n=mesh(g,taper?'cone':'tube',a.map((x,i)=>(x+b[i])/2),V(width,len,width),m);const y=dir,ref=Math.abs(y[2])>.94?[1,0,0]:[0,0,1],x=norm(cross(y,ref)),z=cross(x,y);n.basis=[x[0]*width,x[1]*width,x[2]*width,0,y[0]*len,y[1]*len,y[2]*len,0,z[0]*width,z[1]*width,z[2]*width,0,n.p[0],n.p[1],n.p[2],1];return n}
 function tri(g,a,b,c,m){const n=group(g);n.mesh={tri:[a,b,c]};n.m=m;return n}
 function armor(g,p,s,r=V()){sphere(g,p,s,M.gold,r);sphere(g,[p[0],p[1]+s[1]*.08,p[2]+s[2]*.12],s.map((v,i)=>v*(i===0?.73:.83)),M.steel,r)}
+// Continuous swept meshes, curved horns and sculpted wing membranes.
+function surface(g,rows,cols,fn,m,wrap=false){
+ const data=[],grid=[];
+ for(let i=0;i<=rows;i++){const row=[];for(let j=0;j<=cols;j++)row.push(fn(i/rows,j/cols));grid.push(row)}
+ const normals=grid.map((row,i)=>row.map((p,j)=>{
+  const du=sub(grid[Math.min(rows,i+1)][j],grid[Math.max(0,i-1)][j]);
+  const a=wrap?(j===0||j===cols?cols-1:j-1):Math.max(0,j-1),b=wrap?(j===0||j===cols?1:j+1):Math.min(cols,j+1);
+  return norm(cross(du,sub(row[b],row[a])));
+ }));
+ function vert(i,j){data.push(...grid[i][j],...normals[i][j])}
+ for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){vert(i,j);vert(i+1,j);vert(i+1,j+1);vert(i,j);vert(i+1,j+1);vert(i,j+1)}
+ const n=group(g);n.mesh={data:new Float32Array(data)};n.m=m;return n;
+}
+function spline(points,t){
+ const x=clamp(t,0,1)*(points.length-1),i=Math.min(points.length-2,Math.floor(x)),f=x-i;
+ const a=points[Math.max(0,i-1)],b=points[i],c=points[i+1],d=points[Math.min(points.length-1,i+2)];
+ return b.map((v,k)=>.5*((2*v)+(-a[k]+c[k])*f+(2*a[k]-5*v+4*c[k]-d[k])*f*f+(-a[k]+3*v-3*c[k]+d[k])*f*f*f));
+}
+function sculpt(g,profile,m,segments=22,sides=20){
+ return surface(g,segments,sides,(t,v)=>{
+  const p=spline(profile,t),a=spline(profile,Math.max(0,t-.003)),b=spline(profile,Math.min(1,t+.003)),dir=norm(sub(b.slice(0,3),a.slice(0,3)));
+  const ref=Math.abs(dir[0])>.92?[0,1,0]:[1,0,0],x=norm(sub(ref,dir.map(k=>k*dot(ref,dir)))),y=norm(cross(dir,x)),ang=v*PI*2;
+  const rx=Math.max(.002,p[3]),ry=Math.max(.002,p[4]??p[3]);
+  return p.slice(0,3).map((q,i)=>q+x[i]*Math.cos(ang)*rx+y[i]*Math.sin(ang)*ry);
+ },m,true);
+}
+function curve(g,pts,m,segments=14,sides=12){return sculpt(g,pts.map(p=>[p[0],p[1],p[2],p[3],p[3]]),m,segments,sides)}
 function makeDragon(){
  const root=group(),body=group(root,[0,1.08,0]);
- sphere(body,[0,0,0],[.64,.52,1.05],M.ivory);sphere(body,[0,-.17,.43],[.47,.38,.76],M.gold);
- for(let i=0;i<6;i++)sphere(body,[0,-.12+i*.015,.34-i*.22],[.48-i*.025,.37-i*.014,.17],i%2?M.ivory:M.bright,[.1,0,0]);
- const chest=group(body,[0,.1,.65]);sphere(chest,[0,.08,0],[.53,.61,.52],M.ivory);
- sphere(chest,[0,.15,.43],[.26,.34,.12],M.gold);sphere(chest,[0,.17,.53],[.14,.20,.10],M.cyan);
- const neck=group(chest,[0,.38,.04]);sphere(neck,[0,.30,-.03],[.33,.49,.35],M.ivory,[-.3,0,0]);sphere(neck,[0,.67,.13],[.28,.45,.3],M.ivory,[-.48,0,0]);
- for(let i=0;i<4;i++)sphere(neck,[0,.12+i*.18,.28+i*.025],[.22,.13,.08],M.bright);
- const head=group(neck,[0,.90,.30]);sphere(head,[0,.06,0],[.32,.29,.43],M.ivory);sphere(head,[0,.02,.35],[.23,.17,.39],M.ivory);sphere(head,[0,.13,.34],[.24,.10,.29],M.gold);sphere(head,[0,.05,.62],[.16,.10,.12],M.ivory);
- const jaw=group(head,[0,-.13,.14]);sphere(jaw,[0,-.03,.22],[.21,.09,.35],M.ivory);sphere(jaw,[0,.045,.21],[.16,.025,.27],M.black);
+ const skin={color:[.69,.75,.83],metal:.34,emit:0,detail:1};
+ const pearl={color:[.86,.89,.93],metal:.44,emit:0,detail:1};
+ const dark={color:[.15,.22,.33],metal:.38,emit:0,detail:1};
+ const gold={color:[.68,.42,.15],metal:.9,emit:0,detail:3};
+ const pale={color:[.94,.76,.38],metal:.82,emit:0,detail:3};
+ const sail={color:[.11,.29,.49],metal:.16,emit:.025,detail:2};
+ const sailLight={color:[.18,.39,.60],metal:.19,emit:.025,detail:2};
+ const glow={color:[.18,.75,1],metal:.18,emit:.65,detail:3};
+ const tooth={color:[.92,.88,.76],metal:.12,emit:0,detail:3};
+ sculpt(body,[[0,-.04,-1.03,.035,.035],[0,0,-.73,.43,.38],[0,.01,-.19,.55,.49],[0,.05,.38,.55,.57],[0,.13,.77,.40,.48],[0,.15,.96,.04,.05]],skin,32,28);
+ // Overlapping sternum plates, separated by dark joints.
+ sculpt(body,[[0,-.29,-.65,.025,.02],[0,-.36,-.28,.34,.15],[0,-.34,.27,.39,.21],[0,-.19,.67,.32,.27],[0,-.04,.89,.07,.07]],dark);
+ for(let i=0;i<8;i++){const z=-.49+i*.16,w=.26+.10*Math.sin(i/7*PI);sphere(body,[0,-.40+i*.016,z],[w,.105,.115],i%3===0?gold:pearl,[-.10,0,0])}
+ const chest=group(body,[0,.12,.65]);
+ sculpt(chest,[[0,-.26,-.24,.15,.12],[0,-.04,-.05,.44,.34],[0,.24,.02,.43,.37],[0,.49,.06,.23,.23],[0,.57,.07,.03,.03]],pearl);
  for(const side of [-1,1]){
-  sphere(head,[side*.265,.12,.17],[.065,.055,.10],M.eye);sphere(head,[side*.30,.20,.14],[.065,.065,.17],M.bright);
-  for(let i=0;i<4;i++){cone(jaw,[side*.13,.08,.15+i*.105],[.037,.10,.037],M.teeth);cone(head,[side*.14,-.095,.20+i*.1],[.034,.095,.034],M.teeth,[0,0,PI])}
-  rod(head,[side*.22,.23,-.16],[side*.31,.53,-.42],.105,M.gold,true);
-  rod(head,[side*.25,.23,-.06],[side*.51,.36,-.15],.083,M.bright,true);
-  rod(head,[side*.25,-.02,-.16],[side*.54,-.01,-.41],.12,M.gold,true);
+  curve(chest,[[side*.37,.38,.05,.055],[side*.34,.16,.28,.075],[side*.22,-.06,.40,.065],[side*.07,-.24,.36,.008]],gold);
+  for(let i=0;i<3;i++)sculpt(body,[[side*.35,.27,.46-i*.39,.04,.025],[side*.51,.20,.34-i*.39,.16,.085],[side*.50,.06,.13-i*.39,.12,.06],[side*.40,-.01,-.02-i*.39,.005,.005]],i===0?gold:pearl,12,12);
  }
- rod(head,[0,.27,-.23],[0,.49,-.50],.10,M.bright,true);
- const wings=[];
+ sculpt(chest,[[0,-.17,.39,.015,.015],[0,.05,.45,.16,.065],[0,.26,.38,.12,.055],[0,.32,.33,.005,.005]],gold);
+ sculpt(chest,[[0,-.07,.46,.005,.005],[0,.07,.49,.078,.04],[0,.23,.42,.005,.005]],glow,10,12);
+ const neck=group(chest,[0,.39,.03]);
+ sculpt(neck,[[0,-.14,-.02,.25,.25],[0,.14,-.08,.32,.29],[0,.43,-.04,.28,.25],[0,.68,.11,.235,.22],[0,.9,.30,.21,.19],[0,1.03,.38,.12,.12]],skin,30,26);
+ for(let i=0;i<6;i++){const t=i/5;sphere(neck,[0,.04+t*.73,.20+t*.16],[.235-t*.065,.075,.09],i%2?pearl:gold,[-.30,0,0])}
+ const head=group(neck,[0,.90,.30]);
+ // Wedge-shaped skull and elongated muzzle, not separate balls.
+ sculpt(head,[[0,.11,-.39,.015,.015],[0,.13,-.25,.25,.24],[0,.12,-.06,.32,.26],[0,.08,.19,.25,.19],[0,.025,.43,.18,.11],[0,.035,.64,.135,.077],[0,.04,.73,.02,.025]],pearl,32,28);
+ sculpt(head,[[0,-.04,.16,.14,.035],[0,-.055,.42,.17,.04],[0,-.027,.69,.10,.03],[0,-.01,.73,.02,.01]],dark,16,16);
+ const jaw=group(head,[0,-.12,.08]);
+ sculpt(jaw,[[0,-.025,-.03,.19,.07],[0,-.055,.17,.21,.095],[0,-.05,.37,.16,.072],[0,-.015,.58,.11,.045],[0,0,.64,.014,.014]],skin,20,20);
  for(const side of [-1,1]){
-  const wing=group(body,[side*.43,.25,-.1]),tip=group(wing,[side*1.03,.97,-.11]);wings.push({wing,tip,side});
-  const a=[0,0,0],b=[side*.50,.75,.03],c=[side*1.03,.97,-.11],d=[side*.65,.05,-.90],e=[side*.14,-.14,-.63];
-  tri(wing,a,b,d,M.blue);tri(wing,b,c,d,M.blue);tri(wing,a,d,e,M.navy);
-  rod(wing,a,b,.095,M.ivory);rod(wing,b,c,.076,M.gold);rod(wing,a,d,.037,M.bright);rod(wing,a,e,.035,M.gold);
-  const pts=[[0,0,0],[side*.67,.13,-.25],[side*1.29,-.16,-.58],[side*.86,-.54,-1.02],[side*.26,-.67,-.85],[-side*.38,-.92,-.78]];
-  for(let i=1;i<pts.length-1;i++){tri(tip,pts[0],pts[i],pts[i+1],i%2?M.blue:M.cyan);rod(tip,pts[0],pts[i],i===1?.061:.034,M.gold,true)}
-  rod(tip,pts[0],pts[5],.043,M.ivory,true);
-  for(let i=1;i<pts.length-1;i++)rod(tip,pts[i],pts[i+1],.018,M.bright);
+  // Recessed eyes, narrow brow and swept cheek ridges.
+  sphere(head,[side*.267,.15,.12],[.065,.070,.126],dark,[0,side*.18,0]);
+  sphere(head,[side*.309,.15,.145],[.027,.035,.075],glow,[0,side*.18,0]);
+  sphere(head,[side*.323,.151,.16],[.011,.029,.014],M.black);
+  sculpt(head,[[side*.13,.26,.36,.013,.012],[side*.235,.255,.17,.085,.055],[side*.32,.24,-.035,.10,.064],[side*.33,.19,-.22,.014,.012]],gold,18,16);
+  sculpt(head,[[side*.12,-.01,.49,.018,.02],[side*.24,.01,.16,.075,.065],[side*.32,.03,-.12,.12,.085],[side*.41,.12,-.42,.006,.007]],skin,20,16);
+  sphere(head,[side*.14,.072,.63],[.04,.024,.044],dark,[0,side*.25,0]);
+  curve(head,[[side*.20,.28,-.19,.105],[side*.29,.44,-.31,.088],[side*.39,.57,-.52,.052],[side*.43,.71,-.68,.022],[side*.38,.86,-.76,.003]],gold,26,16);
+  curve(head,[[side*.25,.15,-.20,.085],[side*.43,.19,-.33,.056],[side*.56,.29,-.46,.025],[side*.60,.40,-.62,.003]],pale);
+  curve(head,[[side*.25,-.035,-.15,.09],[side*.41,-.09,-.30,.055],[side*.48,-.04,-.49,.004]],gold);
+  for(let i=0;i<5;i++){const z=.14+i*.083;curve(head,[[side*(.18-i*.013),-.06,z,.028],[side*(.17-i*.012),-.13-(i===1?.03:0),z+.025,.003]],tooth,5,8);curve(jaw,[[side*(.16-i*.012),.005,z,.021],[side*(.15-i*.012),.055,z+.02,.003]],tooth,5,8)}
+ }
+ curve(head,[[0,.29,-.17,.083],[0,.41,-.29,.061],[0,.54,-.48,.004]],pale);
+ // Curved wing membranes: each bay has a scalloped edge and raised ribs.
+ const wings=[];
+ function membrane(g,a,b,c,material){
+  surface(g,9,12,(u,v)=>{
+   const edge=a.map((p,i)=>mix(b[i],c[i],v));
+   const scallop=.21*Math.sin(v*PI);
+   const p=a.map((q,i)=>mix(q,edge[i],u*(1-scallop)));
+   p[1]+=.14*Math.sin(u*PI)*Math.sin(v*PI);return p;
+  },material);
+ }
+ for(const side of [-1,1]){
+  const wing=group(body,[side*.43,.25,-.10]),tip=group(wing,[side*1.03,.97,-.11]);wings.push({wing,tip,side});
+  const shoulder=[0,0,0],elbow=[side*.50,.75,.03],joint=[side*1.03,.97,-.11],inner=[side*.14,-.24,-.81],mid=[side*.69,.03,-1.0];
+  membrane(wing,shoulder,elbow,mid,sail);membrane(wing,elbow,joint,mid,sailLight);membrane(wing,shoulder,mid,inner,sail);
+  curve(wing,[[...shoulder,.14],[side*.23,.43,.07,.105],[...elbow,.083],[...joint,.065]],skin,20,16);
+  curve(wing,[[...shoulder,.048],[side*.29,.10,-.44,.038],[...mid,.005]],gold);
+  curve(wing,[[...shoulder,.040],[side*.14,-.10,-.38,.023],[...inner,.003]],gold);
+  const pts=[[side*.45,.45,-.08],[side*1.12,.30,-.34],[side*1.53,-.01,-.72],[side*1.10,-.41,-1.18],[side*.48,-.62,-1.08],[-side*.34,-.94,-.87]];
+  const o=[0,0,0];
+  for(let i=0;i<pts.length-1;i++)membrane(tip,o,pts[i],pts[i+1],i%2?sailLight:sail);
+  for(let i=0;i<pts.length;i++){const p=pts[i];curve(tip,[[0,0,0,i===0?.066:.045],[p[0]*.45,p[1]*.6+.06,p[2]*.42,.035],[p[0]*.77,p[1]*.88+.04,p[2]*.76,.018],[...p,.003]],i<2?pale:gold,16,10)}
+  curve(tip,[[0,0,0,.075],[side*.11,.14,.05,.055],[side*.23,.31,.06,.003]],pale,10,12);
  }
  const legs=[];
  for(const side of [-1,1])for(const front of [-1,1]){
-  const hip=group(body,[side*.46,-.20,front*.62]),knee=group(hip,[side*.13,-.45,front*.08]);legs.push({hip,knee,side,front});
-  sphere(hip,[side*.06,-.18,front*.05],[.21,.33,.23],M.ivory);sphere(hip,[side*.18,-.18,front*.05],[.10,.23,.16],M.gold);
-  rod(knee,[0,0,0],[-side*.03,-.35,.12],.11,M.ivory);sphere(knee,[0,-.36,.18],[.16,.12,.24],M.gold);
-  for(let i=-1;i<=1;i++)rod(knee,[i*.085,-.36,.28],[i*.12,-.40,.49],.045,M.bright,true);
+  const hip=group(body,[side*.42,-.19,front*.62]),knee=group(hip,[side*.15,-.45,front*.08]);legs.push({hip,knee,side,front});
+  sculpt(hip,[[0,.08,0,.13,.15],[side*.05,-.10,-front*.04,.23,.22],[side*.14,-.31,front*.03,.15,.14],[side*.15,-.47,front*.08,.11,.11]],skin,18,20);
+  sculpt(hip,[[side*.12,-.04,.03,.02,.02],[side*.23,-.16,.06,.12,.065],[side*.21,-.31,.09,.07,.035],[side*.14,-.39,.10,.006,.006]],gold,14,14);
+  sculpt(knee,[[0,.06,0,.11,.11],[0,-.11,-.045,.13,.12],[-side*.035,-.28,.055,.09,.09],[0,-.39,.15,.12,.10]],pearl,18,18);
+  sculpt(knee,[[0,-.36,.06,.09,.065],[0,-.40,.22,.16,.095],[0,-.40,.34,.12,.06]],skin,12,16);
+  for(let i=-1;i<=1;i++){curve(knee,[[i*.084,-.40,.23,.063],[i*.12,-.405,.34,.052],[i*.13,-.42,.46,.034]],skin,10,12);curve(knee,[[i*.13,-.41,.42,.046],[i*.14,-.43,.52,.025],[i*.14,-.47,.58,.003]],pale,10,10)}
  }
- let tail=group(body,[0,-.05,-.86]);const tails=[];
- for(let i=0;i<7;i++){const len=.35-i*.023;tails.push(tail);sphere(tail,[0,0,-len*.44],[.23-i*.023,.20-i*.020,len*.66],M.ivory);rod(tail,[0,.13-i*.012,-.11],[0,.32-i*.022,-.26],.075-i*.007,M.gold,true);tail=group(tail,[0,-.025,-len])}
- for(let i=0;i<6;i++)rod(body,[0,.44,-.68+i*.22],[0,.72,-.78+i*.22],.095,M.gold,true);
- const mouth=group(jaw,[0,.04,.48]);
+ let tail=group(body,[0,-.03,-.85]);const tails=[];
+ for(let i=0;i<7;i++){const len=.35-i*.021,r=.21-i*.024,next=Math.max(.016,r-.024);tails.push(tail);
+  sculpt(tail,[[0,0,.045,r*1.03,r*.85],[0,-.01,-len*.44,(r+next)*.5,r*.80],[0,-.025,-len-.035,next,next*.85]],skin,10,16);
+  curve(tail,[[0,r*.65,-.08,r*.44],[0,r*1.36,-len*.55,r*.29],[0,r*1.70,-len*.94,.003]],gold,10,10);
+  tail=group(tail,[0,-.025,-len]);
+ }
+ for(let i=0;i<6;i++){const z=-.69+i*.23;curve(body,[[0,.36,z,.10],[0,.57,z-.09,.073],[0,.78,z-.22,.004]],i%2?gold:pale,14,12)}
+ for(let i=0;i<3;i++){curve(neck,[[0,.18+i*.23,-.23+i*.02,.062],[0,.28+i*.23,-.36+i*.04,.042],[0,.44+i*.23,-.45+i*.08,.003]],gold)}
+ const mouth=group(jaw,[0,.04,.56]);
  return {root,body,neck,head,jaw,wings,legs,tails,marker:mouth,kind:'dragon'};
 }
 function makeLion(){
@@ -99,7 +173,7 @@ function pose(model,t,phase,dir=1){
  const idle=Math.sin(t*7),attack=phase==='attack'?clamp(t,0,1):0,wind=phase==='attack'?Math.sin(attack*PI):0;
  if(model.kind==='dragon'){
  const m=model;m.body.p[1]=1.05+idle*.035;m.body.r[0]=-.05-wind*.16;m.neck.r[0]=-.08+wind*.22;m.head.r[0]=.04-wind*.12;m.jaw.r[0]=.08+(phase==='attack'?.58*Math.sin(Math.min(1,attack*1.6)*PI*.85):.06);
- for(const w of m.wings){w.wing.r[2]=w.side*(.12+Math.sin(t*8)*.22-wind*.38);w.wing.r[1]=w.side*(.08+wind*.12);w.tip.r[2]=w.side*(Math.sin(t*8+.6)*.20+wind*.15)}
+ for(const w of m.wings){w.wing.r[2]=w.side*(.12+Math.sin(t*5)*.11-wind*.38);w.wing.r[1]=w.side*(.08+wind*.12);w.tip.r[2]=w.side*(Math.sin(t*5+.6)*.10+wind*.15)}
  for(const l of m.legs){l.hip.r[0]=l.front*.12+wind*.15;l.knee.r[0]=-.12+wind*.16}
  m.tails.forEach((g,i)=>{g.r[1]=Math.sin(t*5-i*.43)*.13;g.r[0]=-.04+Math.sin(t*4-i*.38)*.06});
  }else{
@@ -111,20 +185,21 @@ function pose(model,t,phase,dir=1){
 function geometry(type){
  const vertices=[],push=(p,n)=>vertices.push(...p,...n);
  function triangle(a,b,c,na,nb,nc){const n=norm(cross(sub(b,a),sub(c,a)));push(a,na||n);push(b,nb||n);push(c,nc||n)}
+ if(typeof type==='object'&&type.data)return type.data;
  if(typeof type==='object'){const [a,b,c]=type.tri;triangle(a,b,c);triangle(c,b,a)}
  else if(type==='sphere'){const n=16,m=12,point=(i,j)=>{const a=i*PI*2/n,b=j*PI/m;return [Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a)]};for(let j=0;j<m;j++)for(let i=0;i<n;i++){const a=point(i,j),b=point(i+1,j),c=point(i+1,j+1),d=point(i,j+1);triangle(a,b,c,a,b,c);triangle(a,c,d,a,c,d)}}
  else if(type==='box'){const a=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]];for(const [i,j,k,l] of [[0,3,2,1],[4,5,6,7],[0,4,7,3],[1,2,6,5],[0,1,5,4],[3,7,6,2]]){triangle(a[i],a[j],a[k]);triangle(a[i],a[k],a[l])}}
  else{const n=12,top=type==='cone'?.04:.82;for(let i=0;i<n;i++){const a=i*2*PI/n,b=(i+1)*2*PI/n,p=[Math.cos(a),-.5,Math.sin(a)],q=[Math.cos(b),-.5,Math.sin(b)],r=[top*Math.cos(b),.5,top*Math.sin(b)],s=[top*Math.cos(a),.5,top*Math.sin(a)];triangle(p,s,r);triangle(p,r,q);triangle([0,-.5,0],p,q);triangle([0,.5,0],r,s)}}
  return new Float32Array(vertices);
 }
-const vertex='attribute vec3 aPos,aNormal;uniform mat4 uModel,uVP;uniform mat3 uNormal;varying vec3 vN,vP;void main(){vec4 w=uModel*vec4(aPos,1.);vP=w.xyz;vN=normalize(uNormal*aNormal);gl_Position=uVP*w;}';
-const fragment='precision mediump float;varying vec3 vN,vP;uniform vec3 uColor,uEye;uniform float uMetal,uEmit;void main(){vec3 n=normalize(vN),v=normalize(uEye-vP),l=normalize(vec3(-.5,.85,.7)),l2=normalize(vec3(.85,.28,-.45));float d=max(dot(n,l),0.),d2=max(dot(n,l2),0.),rim=pow(1.-max(dot(n,v),0.),2.5);float sp=pow(max(dot(n,normalize(l+v)),0.),mix(13.,45.,uMetal));vec3 col=uColor*(.29+.79*d+.28*d2)+vec3(1.,.88,.62)*sp*(.12+.72*uMetal)+vec3(.27,.53,.95)*rim*.30+uColor*uEmit*.65;gl_FragColor=vec4(clamp(col,0.,1.),1.);}';
+const vertex='attribute vec3 aPos,aNormal;uniform mat4 uModel,uVP;uniform mat3 uNormal;varying vec3 vN,vP,vLocal;void main(){vLocal=aPos;vec4 w=uModel*vec4(aPos,1.);vP=w.xyz;vN=normalize(uNormal*aNormal);gl_Position=uVP*w;}';
+const fragment='precision mediump float;varying vec3 vN,vP,vLocal;uniform vec3 uColor,uEye;uniform float uMetal,uEmit,uDetail;void main(){vec3 n=normalize(vN),v=normalize(uEye-vP),l=normalize(vec3(-.5,.85,.7)),l2=normalize(vec3(.85,.28,-.45));float d=max(dot(n,l),0.),d2=max(dot(n,l2),0.),rim=pow(1.-max(dot(n,v),0.),2.5);float sp=pow(max(dot(n,normalize(l+v)),0.),mix(13.,45.,uMetal));vec3 col=uColor*(.29+.79*d+.28*d2)+vec3(1.,.88,.62)*sp*(.12+.72*uMetal)+vec3(.27,.53,.95)*rim*.30+uColor*uEmit*.65;if(uDetail>.5){if(dot(n,v)<0.)n=-n;vec3 p=vLocal;vec3 w=pow(abs(n),vec3(4.));w/=max(.001,w.x+w.y+w.z);vec2 a=p.yz*18.,b=p.xz*18.,c=p.xy*18.;a.x+=floor(a.y)*.5;b.x+=floor(b.y)*.5;c.x+=floor(c.y)*.5;float scales=dot(w,vec3(length((fract(a)-.5)*vec2(1.,.79)),length((fract(b)-.5)*vec2(1.,.79)),length((fract(c)-.5)*vec2(1.,.79))));float pattern=1.;if(uDetail<1.5)pattern=.80+.20*(1.-smoothstep(.35,.52,scales));else if(uDetail<2.5)pattern=.85+.15*sin(p.x*19.+sin(p.z*8.)*2.);vec3 key=normalize(vec3(-.45,.78,.62)),fill=normalize(vec3(.70,.40,-.60)),halfv=normalize(key+v);float k=max(dot(n,key),0.),f=max(dot(n,fill),0.),nv=max(dot(n,v),0.),h=max(dot(n,halfv),0.);float shine=pow(h,mix(18.,76.,uMetal));float broad=pow(h,8.);vec3 fres=mix(vec3(.045),uColor,uMetal);fres+=(1.-fres)*pow(1.-nv,5.);vec3 ambient=mix(vec3(.10,.12,.17),vec3(.27,.31,.38),n.y*.5+.5);vec3 base=uColor*pattern;col=base*(ambient+k*vec3(.85,.79,.70)+f*vec3(.18,.34,.50))*(1.-uMetal*.35)+fres*(shine*1.8+broad*.25)+vec3(.19,.39,.66)*pow(1.-nv,3.)*.26+base*uEmit;col=col/(col+vec3(.65));col=pow(max(col,vec3(0.)),vec3(.78));}gl_FragColor=vec4(clamp(col,0.,1.),1.);}';
 function normalMatrix(m){const a=[m[0],m[1],m[2]],b=[m[4],m[5],m[6]],c=[m[8],m[9],m[10]],x=cross(b,c),y=cross(c,a),z=cross(a,b),d=dot(a,x)||1;return [...x,...y,...z].map(v=>v/d)}
 function renderer(canvas){
  const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:true,depth:true,powerPreference:'low-power'});if(!gl)throw Error('WebGL unavailable');
  const compile=(kind,src)=>{const sh=gl.createShader(kind);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(sh));return sh};
  const vs=compile(gl.VERTEX_SHADER,vertex),fs=compile(gl.FRAGMENT_SHADER,fragment),p=gl.createProgram();gl.attachShader(p,vs);gl.attachShader(p,fs);gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));
- const pos=gl.getAttribLocation(p,'aPos'),nor=gl.getAttribLocation(p,'aNormal'),u={};for(const k of ['uModel','uVP','uNormal','uColor','uEye','uMetal','uEmit'])u[k]=gl.getUniformLocation(p,k);
+ const pos=gl.getAttribLocation(p,'aPos'),nor=gl.getAttribLocation(p,'aNormal'),u={};for(const k of ['uModel','uVP','uNormal','uColor','uEye','uMetal','uEmit','uDetail'])u[k]=gl.getUniformLocation(p,k);
  const cache=new Map();
  function get(g){if(cache.has(g))return cache.get(g);const data=geometry(g),buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);const v={buf,count:data.length/6};cache.set(g,v);return v}
  let marker=null;
@@ -134,7 +209,7 @@ function renderer(canvas){
   const vp=mul(persp(35*PI/180,canvas.width/canvas.height,.1,30),look(eye,at));gl.uniformMatrix4fv(u.uVP,false,vp);gl.uniform3fv(u.uEye,eye);
   gl.enableVertexAttribArray(pos);gl.enableVertexAttribArray(nor);
   function visit(n,parent){const m=mul(parent,n.basis||trs(n.p,n.r,n.s));if(n===model.marker){const q=transform(m,[0,0,0]);marker=transform(vp,q.slice(0,3))}
-   if(n.mesh){const g=get(n.mesh);gl.bindBuffer(gl.ARRAY_BUFFER,g.buf);gl.vertexAttribPointer(pos,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(nor,3,gl.FLOAT,false,24,12);gl.uniformMatrix4fv(u.uModel,false,m);gl.uniformMatrix3fv(u.uNormal,false,normalMatrix(m));gl.uniform3fv(u.uColor,n.m.color);gl.uniform1f(u.uMetal,n.m.metal);gl.uniform1f(u.uEmit,n.m.emit);gl.drawArrays(gl.TRIANGLES,0,g.count)}
+   if(n.mesh){const g=get(n.mesh);gl.bindBuffer(gl.ARRAY_BUFFER,g.buf);gl.vertexAttribPointer(pos,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(nor,3,gl.FLOAT,false,24,12);gl.uniformMatrix4fv(u.uModel,false,m);gl.uniformMatrix3fv(u.uNormal,false,normalMatrix(m));gl.uniform3fv(u.uColor,n.m.color);gl.uniform1f(u.uMetal,n.m.metal);gl.uniform1f(u.uEmit,n.m.emit);gl.uniform1f(u.uDetail,n.m.detail||0);gl.drawArrays(gl.TRIANGLES,0,g.count)}
    for(const c of n.children)visit(c,m);
   }
   visit(model.root,I());return marker&&marker[3]>0?[marker[0]/marker[3]*.5+.5,.5-marker[1]/marker[3]*.5]:[.5,.4];
@@ -145,7 +220,7 @@ let active=false;
 async function play(opts){
  if(active||!opts||!['dragon','lion'].includes(opts.kind))return false;
  const canvas=document.createElement('canvas');canvas.className='ad530-webgl';canvas.setAttribute('aria-hidden','true');
- const size=Math.round(Math.min(innerWidth*.88,innerHeight*.66,460)),scale=Math.min(devicePixelRatio||1,1.5);if(size<130)return false;
+ const size=Math.round(Math.min(innerWidth*.88,innerHeight*.66,460)),scale=Math.min(devicePixelRatio||1,opts.kind==='dragon'?2:1.5);if(size<130)return false;
  canvas.width=Math.round(size*scale);canvas.height=Math.round(size*scale);canvas.style.width=size+'px';canvas.style.height=size+'px';
  const sx=opts.sx,sy=opts.sy,tx=opts.tx,ty=opts.ty,dx=tx-sx,dy=ty-sy;
  const cx=clamp(sx+dx*.22,size*.5,innerWidth-size*.5),cy=clamp(sy+dy*.22,size*.5,innerHeight-size*.5);
@@ -154,7 +229,7 @@ async function play(opts){
  active=true;
  try{
   r=renderer(canvas);model=opts.kind==='dragon'?makeDragon():makeLion();const dir=dx<0?-1:1;
-  const eye=opts.kind==='dragon'?[4.4*dir,2.95,6.6]:[3.3*dir,2.25,5.9],at=opts.kind==='dragon'?[0,1.3,-.25]:[0,1.56,0];
+  const eye=opts.kind==='dragon'?[4.5*dir,3.10,7.9]:[3.3*dir,2.25,5.9],at=opts.kind==='dragon'?[0,1.40,-.32]:[0,1.56,0];
   model.root.r[1]=dir*.16;pose(model,0,'idle',dir);marker=r.render(model,eye,at);
   document.body.append(canvas);opts.onAppear?.();
   const t0=performance.now(),duration=1050;
