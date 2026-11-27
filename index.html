@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261127-cinematic-vfx-v527">
+<meta name="arcane-build" content="20261127-battle-flow-v528">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5848,9 +5848,40 @@ main.ad525-attack-busy{pointer-events:none!important}
 @keyframes ad527-grave{0%{opacity:0;transform:scale(.9)}28%{opacity:1}100%{opacity:0;transform:scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.ad527-cinema,.ad527-vignette,.ad527-source-outline,.ad527-impact-echo,.ad527-ember{display:none!important}}
 </style>
+<style id="arcane-battle-flow-528">
+.ad528-card-ghost{z-index:2147483013;overflow:visible;will-change:transform;transform-origin:center}
+.ad528-card-ghost>.field-card{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;transform:none!important;animation:none!important;box-shadow:0 6px 16px #02040bbb,0 0 9px var(--energy)!important;box-sizing:border-box!important}
+.ad528-card-ghost .field-card-front,.ad528-card-ghost .arcane-card-335{width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;margin:0!important;transform:none!important}
+.ad528-target-mark{z-index:2147483009;opacity:0;animation:ad528-mark .78s ease-out both}
+.ad528-target-mark>i{position:absolute;width:15%;height:19%;border-color:var(--energy);border-style:solid;border-width:0;filter:drop-shadow(0 0 3px var(--energy))}
+.ad528-target-mark>i:nth-child(1){left:-3px;top:-3px;border-top-width:2px;border-left-width:2px}
+.ad528-target-mark>i:nth-child(2){right:-3px;top:-3px;border-top-width:2px;border-right-width:2px}
+.ad528-target-mark>i:nth-child(3){left:-3px;bottom:-3px;border-bottom-width:2px;border-left-width:2px}
+.ad528-target-mark>i:nth-child(4){right:-3px;bottom:-3px;border-bottom-width:2px;border-right-width:2px}
+.ad528-hitstop{z-index:2147483014;inset:0;background:radial-gradient(ellipse at var(--x) var(--y),#fff1c321 0%,transparent 23%);animation:ad528-hitstop .13s ease-out both}
+.ad528-impact-slash{width:120px;height:7px;margin:-3px 0 0 -60px;border-radius:100%;background:linear-gradient(90deg,transparent,var(--energy),var(--core) 49%,var(--energy) 68%,transparent);box-shadow:0 0 14px var(--energy);animation:ad528-slash .25s cubic-bezier(.08,.7,.2,1) both}
+.ad528-hurt{animation:ad528-recoil .30s cubic-bezier(.17,.8,.25,1) both}
+.ad528-essence{z-index:2147483011;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:radial-gradient(circle,#fff 5%,var(--core) 25%,var(--energy) 48%,transparent 74%);box-shadow:0 0 14px var(--energy);will-change:transform,opacity}
+.ad528-essence:after{content:"";position:absolute;inset:-5px;border:1px solid var(--energy);border-radius:50%;opacity:.55}
+.ad528-grave-pulse{border:1px solid var(--core);border-radius:8px;box-shadow:0 0 16px var(--energy),inset 0 0 10px var(--energy);animation:ad528-grave .38s ease-out both}
+.ad528-heavy-number strong{font-size:clamp(38px,10vw,62px);color:#fff2cf;text-shadow:0 2px 0 #7e2814,0 4px 12px #160500,0 0 18px #ff5e2a}
+.ad528-heavy-number small{color:#ffdcad;letter-spacing:.18em}
+.ad528-card-crack{animation:ad528-crack .44s ease-out both}
+.ad526-piece{animation-name:ad528-piece;animation-duration:.61s}
+.ad526-intact{animation:ad528-intact .23s ease-out both}
+@keyframes ad528-mark{0%{opacity:0;transform:scale(1.13)}20%,65%{opacity:.9;transform:scale(1)}100%{opacity:0}}
+@keyframes ad528-hitstop{from{opacity:1}to{opacity:0}}
+@keyframes ad528-slash{0%{transform:rotate(var(--angle)) scaleX(.1);opacity:1}35%{transform:rotate(var(--angle)) scaleX(1.25);opacity:.95}100%{transform:rotate(var(--angle)) scaleX(1.55) scaleY(.1);opacity:0}}
+@keyframes ad528-recoil{0%{translate:0 0;filter:brightness(1)}23%{translate:var(--recoil-x) var(--recoil-y);filter:brightness(1.8)}45%{translate:var(--recoil-x) var(--recoil-y);filter:brightness(1.12)}100%{translate:0 0;filter:brightness(1)}}
+@keyframes ad528-crack{0%{opacity:0}25%,54%{opacity:1}100%{opacity:0}}
+@keyframes ad528-piece{0%,32%{transform:translate(0,0) rotate(0) scale(1);opacity:1}63%{opacity:.94}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--angle)) scale(.55);opacity:0}}
+@keyframes ad528-intact{0%,70%{opacity:1}100%{opacity:0}}
+@keyframes ad528-grave{0%{opacity:.9;transform:scale(.88)}35%{opacity:1;transform:scale(1.08)}100%{opacity:0;transform:scale(1.16)}}
+@media(prefers-reduced-motion:reduce){.ad528-card-ghost,.ad528-target-mark,.ad528-hitstop,.ad528-impact-slash,.ad528-essence,.ad528-grave-pulse{display:none!important}.ad528-hurt{animation:none!important}}
+</style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.27</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.28</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7088,36 +7119,87 @@ function ad526Energy(sx,sy,tx,ty,palette,defending,direct){
  const cleanup=setTimeout(()=>canvas.remove(),total+100);
  requestAnimationFrame(now=>{try{frame(now)}catch(e){clearTimeout(cleanup);canvas.remove()}});return true;
 }
+/* 5.28 — staged physical attack motion, local hit pause and graveyard essence. */
+var ad528DestroyedAt=-1000;
+function ad528Ghost(zone,palette){
+ const card=zone?.querySelector('.field-card'),r=ad525Rect(card);if(!r||!card||!card.animate)return null;
+ const n=ad525Node('ad528-card-ghost',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},1800,palette);
+ const g=card.cloneNode(true);g.removeAttribute('id');g.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));g.querySelectorAll('img').forEach(x=>x.loading='eager');n.append(g);
+ if(!n.animate){n.remove();return null}
+ const vis=card.style.visibility;card.style.visibility='hidden';
+ return {n,r,restore(){card.style.visibility=vis;n.remove()}};
+}
+function ad528Animate(node,frames,options){try{return node?.animate?.(frames,options)||null}catch(e){return null}}
+function ad528Mark(r,palette){
+ const m=ad525Node('ad528-target-mark',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},820,palette);
+ for(let i=0;i<4;i++)m.append(document.createElement('i'));
+}
+function ad528Impact(tx,ty,dx,dy,palette,defending,direct,melee,target){
+ const n=ad525Node('ad528-hitstop',{},140,palette);n.style.setProperty('--x',tx+'px');n.style.setProperty('--y',ty+'px');
+ const impact=defending?['shield','#8acaff','#edfbff']:palette;
+ if(melee&&!defending){const slash=ad525Node('ad528-impact-slash',{left:tx+'px',top:ty+'px'},280,impact);slash.style.setProperty('--angle',(Math.atan2(dy,dx)*180/Math.PI+72)+'deg')}
+ ad525Node('ad527-impact-echo',{left:tx+'px',top:ty+'px'},380,impact);
+ target.style.setProperty('--recoil-x',Math.max(-8,Math.min(8,dx/Math.max(1,Math.hypot(dx,dy))*7))+'px');target.style.setProperty('--recoil-y',Math.max(-8,Math.min(8,dy/Math.max(1,Math.hypot(dx,dy))*7))+'px');
+ ad525Class(target,'ad528-hurt',310);ad527Camera(direct);
+}
+function ad528Grave(r,owner,palette){
+ const target=()=>ad525Rect($(owner==='opponent'?'oppGraveZone':'myGraveZone'));
+ if(ad525Reduced())return;
+ setTimeout(()=>{
+ try{const g=target();if(!g)return;const x=r.left+r.width/2,y=r.top+r.height/2,dx=g.left+g.width/2-x,dy=g.top+g.height/2-y;
+ const n=ad525Node('ad528-essence',{left:x+'px',top:y+'px'},430,palette);
+ ad528Animate(n,[{transform:'translate(0,0) scale(.5)',opacity:0},{transform:'translate('+dx*.28+'px,'+(dy*.28-18)+'px) scale(1.2)',opacity:1,offset:.3},{transform:'translate('+dx+'px,'+dy+'px) scale(.25)',opacity:.8}],{duration:380,easing:'cubic-bezier(.4,.1,.7,1)',fill:'forwards'});
+ setTimeout(()=>{const q=target();if(q)ad525Node('ad528-grave-pulse',{left:q.left+'px',top:q.top+'px',width:q.width+'px',height:q.height+'px'},390,palette)},370);
+ }catch(e){}
+ },320)
+}
 async function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥',attackingCard=null,defending=false){
+ let ghost=null,motion=null;
  try{
  const source=attackingCard||(fromType==='myMon'?myMon:oppMon)[fromIndex];
- const fromZone=ad525Zone(fromType,fromIndex),from=ad525Rect(fromZone);if(!from)return;
+ const fromZone=ad525Zone(fromType,fromIndex),from=ad525Rect(fromZone?.querySelector('.field-card')||fromZone);if(!from)return;
  const palette=ad525Element(source),sx=from.left+from.width/2,sy=from.top+from.height/2;
  if(fromType===toType){ad525Impact(sx,sy,palette);return}
- const direct=toIndex<0,target=direct?$(toType==='oppMon'?'oppLP':'myLP'):ad525Zone(toType,toIndex),to=ad525Rect(target);if(!to)return;
+ const direct=toIndex<0,target=direct?$(toType==='oppMon'?'oppLP':'myLP'):ad525Zone(toType,toIndex),to=ad525Rect(direct?target:target?.querySelector('.field-card')||target);if(!to)return;
  const tx=to.left+to.width/2,ty=to.top+to.height/2,dx=tx-sx,dy=ty-sy,dist=Math.hypot(dx,dy)||1;
  if(ad525Reduced()){ad525Impact(tx,ty,palette,defending);ad527Sound(defending?'shield':'impact',palette[0]);await ad525Wait(80);return}
  const cinematic=ad527Signature(source,fromZone,palette);if(cinematic)await ad525Wait(680);
+ // Physical warriors and beasts close the distance; magic and ranged monsters fire from their own zone.
+ const melee=!direct&&/krieger|ritter|bestie|ungeheuer|warrior|beast/i.test(String(source?.race||'')+' '+String(source?.name||''))&&!/magier|priester|drache|phoenix|phönix|schütze|lanzen/i.test(source?.name||'');
+ ad528Mark(to,palette);
+ const strength=Number(source?.level)>=7?1.18:1;
  ad527Focus(sx,sy,tx,ty,fromZone,palette);ad527Sound('charge',palette[0]);
- ad525Node('ad526-charge',{left:sx+'px',top:sy+'px'},210,palette);
- fromZone.style.setProperty('--push-x',dx/dist*11+'px');fromZone.style.setProperty('--push-y',dy/dist*11+'px');ad525Class(fromZone,'ad525-attacker',430);
- await ad525Wait(90);
+ ghost=ad528Ghost(fromZone,palette);
+ const reach=melee?Math.min(dist*.70,Math.max(45,dist-to.width*.6)):Math.min(24,dist*.15);
+ const ax=dx/dist*reach,ay=dy/dist*reach;
+ if(ghost){
+ motion=ad528Animate(ghost.n,[{transform:'translate(0,0) scale(1)'},{transform:'translate('+(-dx/dist*7)+'px,'+(-dy/dist*7)+'px) scale('+1.10*strength+')',offset:.27},{transform:'translate('+ax+'px,'+ay+'px) scale('+1.06*strength+')',offset:.77},{transform:'translate('+ax+'px,'+ay+'px) scale('+1.06*strength+')'}],{duration:460,easing:'cubic-bezier(.3,.06,.22,1)',fill:'forwards'});
+ }
+ ad525Node('ad526-charge',{left:sx+'px',top:sy+'px'},170,palette);
+ await ad525Wait(130);
  ad527Sound('travel',palette[0]);
- if(!ad526Energy(sx,sy,tx,ty,palette,defending,direct)){
- const trail=ad525Node('ad525-'+palette[0],{left:sx+'px',top:sy+'px',width:dist+'px',height:'1px',transform:'rotate('+Math.atan2(dy,dx)+'rad)',transformOrigin:'0 50%'},370,palette);trail.style.setProperty('--distance',dist+'px');const line=document.createElement('div');line.className='ad525-line';const shot=document.createElement('div');shot.className='ad525-projectile';trail.append(line,shot);
+ const px=melee?sx+ax*.68:sx+dx/dist*7,py=melee?sy+ay*.68:sy+dy/dist*7;
+ if(!ad526Energy(px,py,tx,ty,palette,defending,direct)){
+ const trail=ad525Node('ad525-'+palette[0],{left:px+'px',top:py+'px',width:Math.hypot(tx-px,ty-py)+'px',height:'1px',transform:'rotate('+Math.atan2(ty-py,tx-px)+'rad)',transformOrigin:'0 50%'},370,palette);trail.style.setProperty('--distance',Math.hypot(tx-px,ty-py)+'px');const line=document.createElement('div');line.className='ad525-line';const shot=document.createElement('div');shot.className='ad525-projectile';trail.append(line,shot);
  }
  await ad525Wait(320);
- ad527Sound(defending?'shield':'impact',palette[0]);ad527Camera(direct);
- ad525Node('ad527-impact-echo',{left:tx+'px',top:ty+'px'},380,defending?['shield','#91c8ff','#edfaff']:palette);
- ad525Class(target,'ad525-target',250);ad525Hold(350);
- await ad525Wait(45);
+ ad527Sound(defending?'shield':'impact',palette[0]);ad528Impact(tx,ty,dx,dy,palette,defending,direct,melee,target);
+ // Hit-stop: keep the attacking card in its contact pose before applying the game result.
+ if(motion)try{motion.pause();motion.currentTime=450}catch(e){}
+ ad525Hold(470);await ad525Wait(105);
+ if(ghost){
+ const back=ad528Animate(ghost.n,[{transform:'translate('+ax+'px,'+ay+'px) scale('+1.06*strength+')'},{transform:'translate(0,0) scale(1)'}],{duration:150,easing:'cubic-bezier(.18,.75,.32,1)',fill:'forwards'});
+ if(back){motion?.cancel();await ad525Wait(150)}
+ }
  }catch(e){console.warn('Battle VFX skipped',e)}
+ finally{if(ghost){try{motion?.cancel()}catch(e){}ghost.restore()}}
 }
+
 function monsterDestructionFx(card,owner){
  try{
  const boardId=owner==='opponent'?'oppMon':'myMon',cards=owner==='opponent'?oppMon:myMon,index=cards.indexOf(card);if(index<0)return;
  const zone=ad525Zone(boardId,index),original=zone?.querySelector('.field-card'),r=ad525Rect(original||zone);if(!original||!r)return;
- const palette=ad525Element(card),shell=ad525Node('ad526-shatter',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},630,palette);
+ const palette=ad525Element(card),shell=ad525Node('ad526-shatter',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},690,palette);ad528DestroyedAt=performance.now();
  function clone(){const g=original.cloneNode(true);g.removeAttribute('id');g.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));g.querySelectorAll('img').forEach(x=>{x.loading='eager';if(x.currentSrc)x.src=x.currentSrc});return g}
  const intact=document.createElement('div');intact.className='ad526-intact';intact.append(clone());shell.append(intact);
  // Six interlocking polygons reuse the exact same card face instead of generic colored rectangles.
@@ -7132,11 +7214,11 @@ function monsterDestructionFx(card,owner){
  if(!ad525Reduced())for(const [i,[polygon,x,y]] of pieces.entries()){
  const shard=document.createElement('div');shard.className='ad526-piece';shard.style.clipPath='polygon('+polygon+')';shard.style.setProperty('--origin','50% 50%');shard.style.setProperty('--dx',x*(r.width*.62+14)+'px');shard.style.setProperty('--dy',y*(r.height*.65+16)+'px');shard.style.setProperty('--angle',((i%2?1:-1)*(12+i*7))+'deg');shard.append(clone());shell.append(shard);
  }
- const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('preserveAspectRatio','none');svg.classList.add('ad525-cracks');
+ const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('preserveAspectRatio','none');svg.classList.add('ad525-cracks','ad528-card-crack');
  const crack=document.createElementNS(ns,'path');crack.setAttribute('d','M38 0 L48 43 L0 30 M48 43 L100 36 M48 43 L30 68 L0 77 M30 68 L52 100 M48 43 L65 62 L100 72');crack.setAttribute('fill','none');crack.setAttribute('stroke','#fff8e4');crack.setAttribute('stroke-width','1.5');svg.append(crack);shell.append(svg);
  const flash=document.createElement('div');flash.className='ad526-flash';shell.append(flash);
  ad527Sound('shatter',palette[0]);if(!ad525Reduced())for(let i=0;i<14;i++){const p=document.createElement('i');p.className='ad527-ember';const a=i*2.39996;p.style.setProperty('--dx',Math.cos(a)*(25+i*3)+'px');p.style.setProperty('--dy',Math.sin(a)*(22+i*3)+'px');p.style.setProperty('--angle',i*33+'deg');shell.append(p)}
- setTimeout(()=>{const g=ad525Rect($(owner==='opponent'?'oppGraveZone':'myGraveZone'));if(g)ad525Node('ad527-grave-light',{left:g.left+'px',top:g.top+'px',width:g.width+'px',height:g.height+'px'},400,palette)},500);ad525Hold(650);
+ if(!card.resonance)ad528Grave(r,owner,palette);ad525Hold(700);
  }catch(e){console.warn('Destruction VFX skipped',e)}
 }
 
@@ -7148,14 +7230,14 @@ function ad525RenderLP(id,value,damage){
  if(state.frame)cancelAnimationFrame(state.frame);
  state.end=end;
  if(!damage||ad525Reduced()){state.value=end;target.textContent=end+' LP';return}
- const start=state.value,t0=performance.now();ad525Hold(470);
- function tick(now){const p=Math.min(1,(now-t0)/450);state.value=Math.round(start+(end-start)*(1-Math.pow(1-p,2)));target.textContent=state.value+' LP';if(p<1)state.frame=requestAnimationFrame(tick);else{state.frame=0;state.value=end}}
+ const start=state.value,delay=performance.now()-ad528DestroyedAt<90?190:0,t0=performance.now()+delay;ad525Hold(470+delay);
+ function tick(now){const p=Math.max(0,Math.min(1,(now-t0)/450));state.value=Math.round(start+(end-start)*(1-Math.pow(1-p,2)));target.textContent=state.value+' LP';if(p<1)state.frame=requestAnimationFrame(tick);else{state.frame=0;state.value=end}}
  state.frame=requestAnimationFrame(tick);
 }
 function showCombatNumber(id,amount){
  if(amount<=0)return;const target=$(id),r=ad525Rect(target);if(!r)return;ad527Sound('lp');
  const x=Math.max(65,Math.min(innerWidth-65,r.left+r.width/2)),y=r.top<90?Math.min(innerHeight-75,r.bottom+6):Math.max(12,r.top-48);
- const n=ad525Node('ad526-damage-badge',{left:x+'px',top:y+'px'},800);const value=document.createElement('strong');value.textContent='−'+amount;const label=document.createElement('small');label.textContent='LP SCHADEN';n.append(value,label);
+ const n=ad525Node('ad526-damage-badge'+(amount>=1000?' ad528-heavy-number':''),{left:x+'px',top:y+'px'},800);const value=document.createElement('strong');value.textContent='−'+amount;const label=document.createElement('small');label.textContent=amount>=1500?'SCHWERER TREFFER':'LP SCHADEN';n.append(value,label);
  const hud=ad525Rect(target.closest('.duel-lp-hud')||target);if(hud){const wrap=ad525Node('',{left:hud.left+'px',top:hud.top+'px',width:hud.width+'px',height:hud.height+'px'},480);const rim=document.createElement('div');rim.className='ad526-hit-hud';wrap.append(rim)}
  ad525Class(target,'ad525-lp-hit',330);
  if(!ad525Reduced())ad525Node('ad526-vignette',{},470);
@@ -7680,8 +7762,9 @@ function render(){
  arcaneFastGrid490('oppMon',oppMon);
  arcaneFastGrid490('oppSpell',oppSpell);
  ad525RenderLP('myLP',myLP,lostMy);ad525RenderLP('oppLP',oppLP,lostOpp);$('turn').textContent=turn;
- if(lostMy)showCombatNumber('myLP',lostMy);
- if(lostOpp)showCombatNumber('oppLP',lostOpp);
+ const damageDelay=!ad525Reduced()&&performance.now()-ad528DestroyedAt<90?190:0;
+ if(lostMy){if(damageDelay){ad525Hold(780+damageDelay);setTimeout(()=>showCombatNumber('myLP',lostMy),damageDelay)}else showCombatNumber('myLP',lostMy)}
+ if(lostOpp){if(damageDelay){ad525Hold(780+damageDelay);setTimeout(()=>showCombatNumber('oppLP',lostOpp),damageDelay)}else showCombatNumber('oppLP',lostOpp)}
  syncDuelOutcome();
 }
 /* v4.14 – Outcome safeguard for asynchronous attacks and other LP changes. */
@@ -7979,7 +8062,7 @@ async function directAttackFromSwipe(monsterIndex,emptyZoneIndex){
  attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;
  oppLP=Math.max(0,oppLP-damage);
  chosenMonster=-1;chosenTarget=-1;
- render();await ad525Wait(570);
+ render();await ad525Wait(680);
  log(attacker.name+" greift durch die leere gegnerische Monsterzone direkt an: "+damage+" Schaden! Der Gegner hat noch "+oppLP+" LP.");
  if(oppLP<=0)log("Du hast das Testduell gewonnen!");
  }finally{arcaneOpponentAttackBusy492=false;document.querySelector('main')?.classList.remove('ad525-attack-busy');}
@@ -8167,7 +8250,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelReflectAttack367=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
  }else if(c.name==='Löwenmut-Schild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
-$("attack").onclick=async()=>{if(arcaneOpponentAttackBusy492)return;arcaneOpponentAttackBusy492=true;document.querySelector("main")?.classList.add("ad525-attack-busy");try{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if((await ch3DefenseTrap(attacker))||(await activateForestDefenseTrap514())||(await activateEldricTrap432())||(await activateAstraTrap417())||(await activateRivenTrap415())||(await activateSeraphineTrap411())||(await activateNoctisTrap408())||(await activateVarekTrap405())||(await activateElaraDefenseTrap401())||(await activateLeonDefenseTrap363())){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(myLP<=0||oppLP<=0)return;if(!(target>=0&&oppMon[target])&&oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}await playBattleFx('myMon',attackFrom,'oppMon',target>=0&&oppMon[target]?target:-1,'💥',attacker,!!defenderWasDefense);if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();await ad525Wait(570);if(oppLP<=0)log('Du hast das Testduell gewonnen!')}finally{arcaneOpponentAttackBusy492=false;document.querySelector('main')?.classList.remove('ad525-attack-busy');}};
+$("attack").onclick=async()=>{if(arcaneOpponentAttackBusy492)return;arcaneOpponentAttackBusy492=true;document.querySelector("main")?.classList.add("ad525-attack-busy");try{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if((await ch3DefenseTrap(attacker))||(await activateForestDefenseTrap514())||(await activateEldricTrap432())||(await activateAstraTrap417())||(await activateRivenTrap415())||(await activateSeraphineTrap411())||(await activateNoctisTrap408())||(await activateVarekTrap405())||(await activateElaraDefenseTrap401())||(await activateLeonDefenseTrap363())){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(myLP<=0||oppLP<=0)return;if(!(target>=0&&oppMon[target])&&oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}await playBattleFx('myMon',attackFrom,'oppMon',target>=0&&oppMon[target]?target:-1,'💥',attacker,!!defenderWasDefense);if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();await ad525Wait(680);if(oppLP<=0)log('Du hast das Testduell gewonnen!')}finally{arcaneOpponentAttackBusy492=false;document.querySelector('main')?.classList.remove('ad525-attack-busy');}};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
 
 let trapDecisionPending205=false;
@@ -8577,7 +8660,7 @@ async function opponentTurn(drawOnStart=true,showOpening=true){
    if(crystalShield){crystalShield=false;log("Dein Kristallschild blockiert den direkten KI-Angriff!");}
    else{myLP=Math.max(0,myLP-effectiveAtk(a));log("Die KI greift direkt an! Du verlierst "+effectiveAtk(a)+" LP.");}
    a.attacksThisTurn=1;
-   render();await ad525Wait(570);
+   render();await ad525Wait(680);
    if(myLP<=0||oppLP<=0)break;
    continue;
   }
@@ -8598,7 +8681,7 @@ async function opponentTurn(drawOnStart=true,showOpening=true){
   }else if(effectiveAtk(a)<effectiveAtk(d)){const damage=effectiveAtk(d)-effectiveAtk(a);sendToGraveyard(a,"opponent");oppMon[entry.i]=null;oppLP=Math.max(0,oppLP-damage);log("Dein "+d.name+" ist stärker und besiegt das angreifende KI-Monster! Der Gegner verliert "+damage+" LP.");}
   else{sendToGraveyard(a,"opponent");sendToGraveyard(d);oppMon[entry.i]=null;myMon[di]=null;log("Beide Monster werden im Kampf zerstört!");}
   a.attacksThisTurn=1;
-  render();await ad525Wait(570);
+  render();await ad525Wait(680);
   if(myLP<=0||oppLP<=0)break;
  }
  render();aiFxQueue=[];
