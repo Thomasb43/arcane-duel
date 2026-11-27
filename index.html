@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261127-premium-vfx-v526">
+<meta name="arcane-build" content="20261127-cinematic-vfx-v527">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5817,9 +5817,40 @@ main.ad525-attack-busy{pointer-events:none!important}
 @keyframes ad526-sigil{0%{transform:scale(.5) rotate(-35deg);opacity:0}30%{opacity:1}100%{transform:scale(1.2) rotate(35deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){.ad526-piece,.ad526-intact,.ad526-flash,.ad526-damage-badge,.ad526-hit-hud,.ad526-trap-sigil{animation-duration:100ms!important}}
 </style>
+
+<style id="arcane-cinematic-vfx-527">
+.ad527-cinema{position:fixed;inset:0;pointer-events:none;z-index:2147483012;overflow:hidden;background:#0307118c;animation:ad527-cinema .66s both}
+.ad527-panel{position:absolute;left:0;right:0;top:50%;height:clamp(150px,29vh,235px);transform:translateY(-50%);overflow:hidden;background:#070c1e;border-block:1px solid var(--energy);box-shadow:0 0 30px #000b,0 0 20px var(--energy);animation:ad527-panel .66s cubic-bezier(.2,.8,.2,1) both}
+.ad527-art{position:absolute;inset:0 0 0 26%;overflow:hidden;mask-image:linear-gradient(90deg,transparent 0%,black 37%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,black 37%);animation:ad527-art .66s ease-out both}
+.ad527-art img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 34%!important;filter:saturate(1.05) contrast(1.08);transform:none!important}
+.ad527-panel:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080d20 0%,#080d20d0 20%,#080d2040 60%,transparent),linear-gradient(0deg,#02050ac0,transparent 37%,transparent 73%,#02050a44)}
+.ad527-caption{position:absolute;z-index:2;left:7%;right:19%;top:50%;transform:translateY(-50%);text-shadow:0 3px 12px #02040e;animation:ad527-title .66s ease-out both}
+.ad527-caption small{display:block;color:var(--energy);font:800 9px/1.5 system-ui,sans-serif;letter-spacing:.28em;text-transform:uppercase}
+.ad527-caption strong{display:block;color:#fff4db;font:700 clamp(19px,5.5vw,36px)/1.08 Georgia,serif;letter-spacing:-.02em;margin:7px 0}
+.ad527-caption span{display:block;color:#d4d9e8;font:600 clamp(10px,2.4vw,14px)/1.25 system-ui,sans-serif}
+.ad527-caption i{display:block;width:70px;height:2px;margin:9px 0;background:linear-gradient(90deg,var(--energy),transparent)}
+.ad527-vignette{inset:0;background:radial-gradient(ellipse at var(--fx-x) var(--fx-y),transparent 16%,#03071420 48%,#01030a96 100%);animation:ad527-focus .60s ease-out both}
+.ad527-source-outline{border:1px solid var(--energy);border-radius:8px;box-shadow:0 0 8px var(--energy),inset 0 0 10px var(--energy);animation:ad527-outline .33s ease-out both}
+.ad527-impact-echo{width:128px;height:128px;margin:-64px 0 0 -64px;border:1px solid var(--core);border-radius:50%;box-shadow:0 0 12px var(--energy);animation:ad527-echo .36s ease-out both}
+.ad527-ember{position:absolute;top:50%;left:50%;width:3px;height:7px;border-radius:60%;background:var(--core);box-shadow:0 0 5px var(--energy);animation:ad527-ember .58s .10s ease-out both}
+.ad527-grave-light{border:1px solid var(--energy);border-radius:8px;box-shadow:0 0 18px var(--energy);animation:ad527-grave .38s ease-out both}
+#ad527Sound{min-width:24px;min-height:24px;display:inline-grid;place-items:center;flex:none;padding:2px 4px!important;border:1px solid #aa926760;border-radius:5px;background:#111b2c;color:#ffe0a6;cursor:pointer;line-height:1!important;touch-action:manipulation}
+#ad527Sound svg{width:15px;height:15px;display:block}
+#ad527Sound[aria-pressed=false]{opacity:.55}
+@keyframes ad527-cinema{0%,100%{opacity:0}12%,78%{opacity:1}}
+@keyframes ad527-panel{0%{clip-path:inset(48% 0);opacity:0}17%,79%{clip-path:inset(0);opacity:1}100%{clip-path:inset(48% 0);opacity:0}}
+@keyframes ad527-art{from{transform:translateX(6%) scale(1.12)}to{transform:translateX(-1%) scale(1.02)}}
+@keyframes ad527-title{0%{transform:translate(-18px,-50%);opacity:0}22%,78%{transform:translate(0,-50%);opacity:1}100%{opacity:0}}
+@keyframes ad527-focus{0%,100%{opacity:0}25%,64%{opacity:1}}
+@keyframes ad527-outline{0%{opacity:0;transform:scale(1.07)}35%{opacity:1}100%{opacity:0;transform:scale(.97)}}
+@keyframes ad527-echo{from{opacity:.9;transform:scale(.18)}to{opacity:0;transform:scale(1.55)}}
+@keyframes ad527-ember{0%{opacity:0;transform:translate(0,0)}20%{opacity:.9}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--angle)) scale(.15)}}
+@keyframes ad527-grave{0%{opacity:0;transform:scale(.9)}28%{opacity:1}100%{opacity:0;transform:scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.ad527-cinema,.ad527-vignette,.ad527-source-outline,.ad527-impact-echo,.ad527-ember{display:none!important}}
+</style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.26</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.27</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -6947,6 +6978,71 @@ function ad525Impact(x,y,palette,defending=false){
  const burst=ad525Node('ad525-burst',pos,380,colors);
  if(!ad525Reduced())for(let i=0;i<8;i++){const p=document.createElement('i');p.className='ad525-spark';p.style.setProperty('--angle',(i*45+13)+'deg');burst.append(p)}
 }
+/* v5.27: original procedural sound design and signature cut-ins using the existing card artwork. */
+var ad527Audio=null,ad527Noise=null,ad527Master=null,ad527Seen=new Set(),ad527Enabled=true,ad527LastSound={};
+try{ad527Enabled=localStorage.getItem('arcane-duel-sound-v527')!=='off'}catch(e){}
+function ad527Unlock(){
+ try{
+ if(!ad527Enabled)return;
+ if(!ad527Audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ad527Audio=new AC();ad527Master=ad527Audio.createGain();ad527Master.gain.value=.28;ad527Master.connect(ad527Audio.destination);ad527Noise=ad527Audio.createBuffer(1,Math.floor(ad527Audio.sampleRate*.65),ad527Audio.sampleRate);const data=ad527Noise.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1}
+ if(ad527Audio.state==='suspended')ad527Audio.resume().catch(()=>{});
+ }catch(e){}
+}
+document.addEventListener('pointerdown',ad527Unlock,{passive:true,capture:true});
+document.addEventListener('keydown',ad527Unlock,{passive:true,capture:true});
+function ad527Sound(type,element='light'){
+ try{
+ const c=ad527Audio;if(!ad527Enabled||!c||c.state!=='running'||!ad527Master)return;
+ const t=c.currentTime;if(t-(ad527LastSound[type]??-10)<.055)return;ad527LastSound[type]=t;
+ function tone(f1,f2,d,amp,kind='sine',delay=0){
+ const o=c.createOscillator(),g=c.createGain(),start=t+delay;o.type=kind;o.frequency.setValueAtTime(f1,start);o.frequency.exponentialRampToValueAtTime(Math.max(20,f2),start+d);g.gain.setValueAtTime(.0001,start);g.gain.exponentialRampToValueAtTime(amp,start+.012);g.gain.exponentialRampToValueAtTime(.0001,start+d);o.connect(g);g.connect(ad527Master);o.start(start);o.stop(start+d+.02);
+ }
+ function noise(d,amp,from,to,kind='bandpass',delay=0){
+ const src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain(),start=t+delay;src.buffer=ad527Noise;f.type=kind;f.Q.value=.7;f.frequency.setValueAtTime(from,start);f.frequency.exponentialRampToValueAtTime(to,start+d);g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(amp,start+.012);g.gain.exponentialRampToValueAtTime(.0001,start+d);src.connect(f);f.connect(g);g.connect(ad527Master);src.start(start);src.stop(start+d+.02);
+ }
+ if(type==='charge'){tone(90,240,.16,.12,'triangle');noise(.16,.12,350,2400)}
+ if(type==='travel'){
+ const profile={fire:[1100,280,130,62],water:[2100,450,180,90],wind:[500,3200,210,150],earth:[650,120,100,38],shadow:[420,110,87,38],electric:[3400,750,220,72],light:[780,2700,260,125]}[element]||[780,1600,180,80];
+ noise(.29,.28,profile[0],profile[1]);tone(profile[2],profile[3],.29,.15,'triangle');
+ }
+ if(type==='impact'){tone(104,38,.22,.52);noise(.22,.38,2100,150,'lowpass');tone(275,67,.11,.13,'triangle')}
+ if(type==='shield'){tone(560,280,.18,.18,'triangle');tone(870,620,.20,.10,'sine');noise(.12,.14,3400,1200)}
+ if(type==='shatter'){noise(.12,.32,5300,1500,'highpass');for(let i=0;i<4;i++){tone(1300+i*430,600+i*170,.12,.07,'triangle',i*.047);noise(.10,.09,5000-i*650,1100,'bandpass',i*.047)}}
+ if(type==='lp'){tone(145,62,.24,.22);tone(72,40,.28,.13);noise(.10,.10,650,160)}
+ if(type==='trap'){tone(300,620,.23,.10,'triangle');tone(450,900,.29,.07,'sine',.04);noise(.18,.12,750,2800)}
+ if(type==='signature'){tone(73,147,.45,.20,'triangle');tone(147,196,.40,.09,'sine',.07);tone(220,294,.30,.08,'sine',.14);noise(.36,.14,380,1700)}
+ }catch(e){}
+}
+function ad527InstallSound(){
+ const hud=document.querySelector('.turn-hud');if(!hud||document.getElementById('ad527Sound'))return;
+ const b=document.createElement('button');b.id='ad527Sound';b.type='button';
+ function paint(){b.setAttribute('aria-pressed',String(ad527Enabled));b.setAttribute('aria-label',ad527Enabled?'Kampfgeräusche ausschalten':'Kampfgeräusche einschalten');b.title=ad527Enabled?'Ton aus':'Ton an';b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z"/>'+(ad527Enabled?'<path d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/>':'<path d="m16 9 5 6m0-6-5 6"/>')+'</svg>'}
+ b.onclick=e=>{e.stopPropagation();ad527Enabled=!ad527Enabled;try{localStorage.setItem('arcane-duel-sound-v527',ad527Enabled?'on':'off')}catch(e){}if(ad527Master&&ad527Audio)ad527Master.gain.setTargetAtTime(ad527Enabled?.28:0,ad527Audio.currentTime,.015);if(ad527Enabled)ad527Unlock();paint()};paint();hud.append(b);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ad527InstallSound,{once:true});else ad527InstallSound();
+function ad527Signature(card,zone,palette){
+ try{
+ if(ad525Reduced()||!card||card.faceDown||ad527Seen.size>=4||ad527Seen.has(card.name))return false;
+ const titles={'Arkaner Lichtdrache':'Licht des ersten Siegels','König der Löwenarena':'Zorn der goldenen Arena','Solarius, Fürst der Sonnenglut':'Sonneninferno','Zephyron, Klinge des ewigen Sturms':'Klinge des Himmels'};
+ const title=titles[card.name];if(!title&&!(Number(card.level)>=7&&Number(card.atk)>=2400))return false;
+ const img=zone?.querySelector('.arcane-card-art-335 img');if(!img||!img.complete||!img.naturalWidth)return false;
+ const node=ad525Node('ad527-cinema',{},680,palette),panel=document.createElement('div'),art=document.createElement('div'),caption=document.createElement('div');panel.className='ad527-panel';art.className='ad527-art';caption.className='ad527-caption';
+ const face=img.cloneNode(false);face.removeAttribute('id');face.removeAttribute('onerror');face.removeAttribute('onload');face.removeAttribute('style');face.src=img.currentSrc||img.src;art.append(face);
+ const eyebrow=document.createElement('small');eyebrow.textContent=title?'SIGNATURANGRIFF':'BOSSANGRIFF';const heading=document.createElement('strong');heading.textContent=title||card.name;const divider=document.createElement('i');const label=document.createElement('span');label.textContent=title?card.name:'Stufe '+card.level+' · '+(card.element||'Arkan');
+ caption.append(eyebrow,heading,divider,label);panel.append(art,caption);node.append(panel);ad527Seen.add(card.name);ad527Sound('signature');return true;
+ }catch(e){return false}
+}
+function ad527Focus(sx,sy,tx,ty,zone,palette){
+ if(ad525Reduced())return;
+ const node=ad525Node('ad527-vignette',{},620,palette);node.style.setProperty('--fx-x',((sx+tx)/2)+'px');node.style.setProperty('--fx-y',((sy+ty)/2)+'px');
+ const r=ad525Rect(zone?.querySelector('.field-card')||zone);if(r)ad525Node('ad527-source-outline',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},340,palette);
+}
+function ad527Camera(direct){
+ if(ad525Reduced())return;
+ const stage=document.querySelector('.arena-stage');if(!stage?.animate)return;
+ try{stage.animate([{translate:'0 0'},{translate:direct?'2px -2px':'1px -1px',offset:.17},{translate:direct?'-2px 1px':'-1px 1px',offset:.35},{translate:'1px 0',offset:.57},{translate:'0 0'}],{duration:190,easing:'ease-out'})}catch(e){}
+}
+
 /* v5.26: bounded canvas energy effects, actual card fragments, restrained damage feedback. */
 function ad526Energy(sx,sy,tx,ty,palette,defending,direct){
  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{alpha:true});if(!ctx)return false;
@@ -7000,14 +7096,19 @@ async function playBattleFx(fromType,fromIndex,toType,toIndex,emoji='💥',attac
  if(fromType===toType){ad525Impact(sx,sy,palette);return}
  const direct=toIndex<0,target=direct?$(toType==='oppMon'?'oppLP':'myLP'):ad525Zone(toType,toIndex),to=ad525Rect(target);if(!to)return;
  const tx=to.left+to.width/2,ty=to.top+to.height/2,dx=tx-sx,dy=ty-sy,dist=Math.hypot(dx,dy)||1;
- if(ad525Reduced()){ad525Impact(tx,ty,palette,defending);await ad525Wait(80);return}
+ if(ad525Reduced()){ad525Impact(tx,ty,palette,defending);ad527Sound(defending?'shield':'impact',palette[0]);await ad525Wait(80);return}
+ const cinematic=ad527Signature(source,fromZone,palette);if(cinematic)await ad525Wait(680);
+ ad527Focus(sx,sy,tx,ty,fromZone,palette);ad527Sound('charge',palette[0]);
  ad525Node('ad526-charge',{left:sx+'px',top:sy+'px'},210,palette);
  fromZone.style.setProperty('--push-x',dx/dist*11+'px');fromZone.style.setProperty('--push-y',dy/dist*11+'px');ad525Class(fromZone,'ad525-attacker',430);
  await ad525Wait(90);
+ ad527Sound('travel',palette[0]);
  if(!ad526Energy(sx,sy,tx,ty,palette,defending,direct)){
  const trail=ad525Node('ad525-'+palette[0],{left:sx+'px',top:sy+'px',width:dist+'px',height:'1px',transform:'rotate('+Math.atan2(dy,dx)+'rad)',transformOrigin:'0 50%'},370,palette);trail.style.setProperty('--distance',dist+'px');const line=document.createElement('div');line.className='ad525-line';const shot=document.createElement('div');shot.className='ad525-projectile';trail.append(line,shot);
  }
  await ad525Wait(320);
+ ad527Sound(defending?'shield':'impact',palette[0]);ad527Camera(direct);
+ ad525Node('ad527-impact-echo',{left:tx+'px',top:ty+'px'},380,defending?['shield','#91c8ff','#edfaff']:palette);
  ad525Class(target,'ad525-target',250);ad525Hold(350);
  await ad525Wait(45);
  }catch(e){console.warn('Battle VFX skipped',e)}
@@ -7033,11 +7134,13 @@ function monsterDestructionFx(card,owner){
  }
  const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('preserveAspectRatio','none');svg.classList.add('ad525-cracks');
  const crack=document.createElementNS(ns,'path');crack.setAttribute('d','M38 0 L48 43 L0 30 M48 43 L100 36 M48 43 L30 68 L0 77 M30 68 L52 100 M48 43 L65 62 L100 72');crack.setAttribute('fill','none');crack.setAttribute('stroke','#fff8e4');crack.setAttribute('stroke-width','1.5');svg.append(crack);shell.append(svg);
- const flash=document.createElement('div');flash.className='ad526-flash';shell.append(flash);ad525Hold(620);
+ const flash=document.createElement('div');flash.className='ad526-flash';shell.append(flash);
+ ad527Sound('shatter',palette[0]);if(!ad525Reduced())for(let i=0;i<14;i++){const p=document.createElement('i');p.className='ad527-ember';const a=i*2.39996;p.style.setProperty('--dx',Math.cos(a)*(25+i*3)+'px');p.style.setProperty('--dy',Math.sin(a)*(22+i*3)+'px');p.style.setProperty('--angle',i*33+'deg');shell.append(p)}
+ setTimeout(()=>{const g=ad525Rect($(owner==='opponent'?'oppGraveZone':'myGraveZone'));if(g)ad525Node('ad527-grave-light',{left:g.left+'px',top:g.top+'px',width:g.width+'px',height:g.height+'px'},400,palette)},500);ad525Hold(650);
  }catch(e){console.warn('Destruction VFX skipped',e)}
 }
 
-function ad525TrapPulse(type,index){try{const r=ad525Rect(ad525Zone(type,index));if(r){ad525Node('ad525-trap-aura',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},500,['trap','#bc8bfa','#f6dcff']);if(!ad525Reduced())ad525Node('ad526-trap-sigil',{left:(r.left+r.width/2)+'px',top:(r.top+r.height/2)+'px'},500)}}catch(e){}}
+function ad525TrapPulse(type,index){try{ad527Sound('trap');const r=ad525Rect(ad525Zone(type,index));if(r){ad525Node('ad525-trap-aura',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},500,['trap','#bc8bfa','#f6dcff']);if(!ad525Reduced())ad525Node('ad526-trap-sigil',{left:(r.left+r.width/2)+'px',top:(r.top+r.height/2)+'px'},500)}}catch(e){}}
 function ad525OwnTrap(card){try{if(card?.kind!=='trap')return;const i=mySpell.indexOf(card);if(i<0)return;const r=ad525Rect(ad525Zone('mySpell',i));if(!r)return;const n=ad525Node('ad525-player-flip',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},480);const face=document.createElement('div');face.innerHTML=renderArcaneCard335({...card,faceDown:false},{size:'field'});face.querySelectorAll('img').forEach(x=>x.loading='eager');n.append(face);ad525TrapPulse('mySpell',i)}catch(e){}}
 function ad525RenderLP(id,value,damage){
  const target=$(id);if(!target)return;const end=Math.max(0,value),state=ad525LPStates[id]||(ad525LPStates[id]={value:Math.max(0,parseInt(target.textContent,10)||0),end:null,frame:0});
@@ -7050,7 +7153,7 @@ function ad525RenderLP(id,value,damage){
  state.frame=requestAnimationFrame(tick);
 }
 function showCombatNumber(id,amount){
- if(amount<=0)return;const target=$(id),r=ad525Rect(target);if(!r)return;
+ if(amount<=0)return;const target=$(id),r=ad525Rect(target);if(!r)return;ad527Sound('lp');
  const x=Math.max(65,Math.min(innerWidth-65,r.left+r.width/2)),y=r.top<90?Math.min(innerHeight-75,r.bottom+6):Math.max(12,r.top-48);
  const n=ad525Node('ad526-damage-badge',{left:x+'px',top:y+'px'},800);const value=document.createElement('strong');value.textContent='−'+amount;const label=document.createElement('small');label.textContent='LP SCHADEN';n.append(value,label);
  const hud=ad525Rect(target.closest('.duel-lp-hud')||target);if(hud){const wrap=ad525Node('',{left:hud.left+'px',top:hud.top+'px',width:hud.width+'px',height:hud.height+'px'},480);const rim=document.createElement('div');rim.className='ad526-hit-hud';wrap.append(rim)}
