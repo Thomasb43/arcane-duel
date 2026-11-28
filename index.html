@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261128-finishing-v535">
+<meta name="arcane-build" content="20261128-rock-audio-v536">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5945,9 +5945,14 @@ main.ad525-attack-busy{pointer-events:none!important}
 @keyframes ad535-banner{0%{opacity:0;transform:translate(-50%,-50%) scale(.91)}17%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.035)}}
 @media(prefers-reduced-motion:reduce){.ad535-finale{display:none!important}}
 </style>
+<style id="arcane-audio-v536">
+#ad536MusicToggle{min-width:24px;min-height:24px;display:inline-grid;place-items:center;flex:none;padding:2px 4px!important;border:1px solid #aa926760;border-radius:5px;background:#111b2c;color:#ffe0a6;cursor:pointer}
+#ad536MusicToggle svg{width:15px;height:15px;display:block}
+#ad536MusicToggle[aria-pressed=false]{opacity:.55}
+</style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.35</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.36</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7080,8 +7085,7 @@ var ad527Audio=null,ad527Noise=null,ad527Master=null,ad527Seen=new Set(),ad527En
 try{ad527Enabled=localStorage.getItem('arcane-duel-sound-v527')!=='off'}catch(e){}
 function ad527Unlock(){
  try{
- if(!ad527Enabled)return;
- if(!ad527Audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ad527Audio=new AC();ad527Master=ad527Audio.createGain();ad527Master.gain.value=.28;ad527Master.connect(ad527Audio.destination);ad527Noise=ad527Audio.createBuffer(1,Math.floor(ad527Audio.sampleRate*.65),ad527Audio.sampleRate);const data=ad527Noise.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1}
+ if(!ad527Audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ad527Audio=new AC();ad527Master=ad527Audio.createGain();ad527Master.gain.value=ad527Enabled?.28:0;ad527Master.connect(ad527Audio.destination);ad527Noise=ad527Audio.createBuffer(1,Math.floor(ad527Audio.sampleRate*.65),ad527Audio.sampleRate);const data=ad527Noise.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1}
  if(ad527Audio.state==='suspended')ad527Audio.resume().catch(()=>{});
  }catch(e){}
 }
@@ -7090,7 +7094,7 @@ document.addEventListener('keydown',ad527Unlock,{passive:true,capture:true});
 function ad527Sound(type,element='light'){
  try{
  const c=ad527Audio;if(!ad527Enabled||!c||c.state!=='running'||!ad527Master)return;
- const t=c.currentTime;if(t-(ad527LastSound[type]??-10)<.055)return;ad527LastSound[type]=t;
+ const t=c.currentTime;if(t-(ad527LastSound[type]??-10)<.055)return;ad527LastSound[type]=t;ad536Music.duck(type);
  function tone(f1,f2,d,amp,kind='sine',delay=0){
  const o=c.createOscillator(),g=c.createGain(),start=t+delay;o.type=kind;o.frequency.setValueAtTime(f1,start);o.frequency.exponentialRampToValueAtTime(Math.max(20,f2),start+d);g.gain.setValueAtTime(.0001,start);g.gain.exponentialRampToValueAtTime(amp,start+.012);g.gain.exponentialRampToValueAtTime(.0001,start+d);o.connect(g);g.connect(ad527Master);o.start(start);o.stop(start+d+.02);
  }
@@ -7102,12 +7106,14 @@ function ad527Sound(type,element='light'){
  const profile={fire:[1100,280,130,62],water:[2100,450,180,90],wind:[500,3200,210,150],earth:[650,120,100,38],shadow:[420,110,87,38],electric:[3400,750,220,72],light:[780,2700,260,125]}[element]||[780,1600,180,80];
  noise(.29,.28,profile[0],profile[1]);tone(profile[2],profile[3],.29,.15,'triangle');
  }
- if(type==='impact'){tone(104,38,.22,.52);noise(.22,.38,2100,150,'lowpass');tone(275,67,.11,.13,'triangle')}
+ if(type==='impact'){tone(104,38,.22,.52);noise(.22,.38,2100,150,'lowpass');tone(275,67,.11,.13,'triangle');tone(62,31,.31,.16,'sine');noise(.08,.14,4200,680,'bandpass')}
  if(type==='shield'){tone(560,280,.18,.18,'triangle');tone(870,620,.20,.10,'sine');noise(.12,.14,3400,1200)}
  if(type==='shatter'){noise(.12,.32,5300,1500,'highpass');for(let i=0;i<4;i++){tone(1300+i*430,600+i*170,.12,.07,'triangle',i*.047);noise(.10,.09,5000-i*650,1100,'bandpass',i*.047)}}
  if(type==='lp'){tone(145,62,.24,.22);tone(72,40,.28,.13);noise(.10,.10,650,160)}
  if(type==='trap'){tone(300,620,.23,.10,'triangle');tone(450,900,.29,.07,'sine',.04);noise(.18,.12,750,2800)}
- if(type==='signature'){tone(73,147,.45,.20,'triangle');tone(147,196,.40,.09,'sine',.07);tone(220,294,.30,.08,'sine',.14);noise(.36,.14,380,1700)}
+ if(type==='signature'){tone(73,147,.45,.20,'triangle');tone(147,196,.40,.09,'sine',.07);tone(220,294,.30,.08,'sine',.14);noise(.36,.14,380,1700);tone(48,31,.46,.12,'sine')}
+ if(type==='victory'){for(const [f,d] of [[164.81,0],[196,.13],[246.94,.26],[329.63,.40]]){tone(f,f,.50,.13,'triangle',d);tone(f*2,f*2,.34,.06,'sine',d)}noise(.30,.14,3300,900,'highpass',.40)}
+ if(type==='defeat'){tone(130.81,65.41,.7,.14,'triangle');tone(98,49,.7,.11,'sine',.10);noise(.35,.07,1100,150,'lowpass')}
  }catch(e){}
 }
 function ad527InstallSound(){
@@ -7117,6 +7123,61 @@ function ad527InstallSound(){
  b.onclick=e=>{e.stopPropagation();ad527Enabled=!ad527Enabled;try{localStorage.setItem('arcane-duel-sound-v527',ad527Enabled?'on':'off')}catch(e){}if(ad527Master&&ad527Audio)ad527Master.gain.setTargetAtTime(ad527Enabled?.28:0,ad527Audio.currentTime,.015);if(ad527Enabled)ad527Unlock();paint()};paint();hud.append(b);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ad527InstallSound,{once:true});else ad527InstallSound();
+/* v5.36: Arcane Siege — original rock soundtrack. */
+const ad536Music=(()=>{
+ const key='arcane-duel-music-v536',files=['artwork/audio/arcane-siege-riff.wav','artwork/audio/arcane-siege-chorus.wav'];
+ let enabled=true,armed=false,buffer=null,loading=null,bus=null,voice=null,button=null,retryAfter=0,duckUntil=0,duckLevel=1,lastGain=-1,hasOutcome=false;
+ try{enabled=localStorage.getItem(key)!=='off'}catch(e){}
+ function visible(id){const e=document.getElementById(id);return !!e&&!e.hidden&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).visibility!=='hidden'}
+ function inDuel(){
+  if(!enabled||!armed||document.hidden||!visible('arcaneReturnMenu307')||visible('arcaneHome307')||visible('arcaneStory357')||visible('arcaneIntro308')||visible('arcaneCoinToss485')||visible('duelOutcome306'))return false;
+  return (myLP>0&&oppLP>0)||performance.now()<ad525BusyUntil;
+ }
+ function paint(){
+  if(!button)return;button.setAttribute('aria-pressed',String(enabled));button.setAttribute('aria-label',enabled?'Rockmusik ausschalten':'Rockmusik einschalten');button.title=enabled?'Rockmusik aus':'Rockmusik an';
+  button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13M9 10l12-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="18" cy="16" rx="3" ry="2"/>'+(enabled?'':'<path d="M3 3l18 18"/>')+'</svg>';
+ }
+ function stop(){const v=voice;voice=null;if(!v)return;try{const t=ad527Audio.currentTime;v.g.gain.cancelScheduledValues(t);v.g.gain.setTargetAtTime(0,t,.035);v.src.stop(t+.16)}catch(e){try{v.src.disconnect();v.g.disconnect()}catch(_){}}}
+ function load(){
+  if(buffer||loading||!ad527Audio||performance.now()<retryAfter)return;
+  const c=ad527Audio;
+  loading=Promise.all(files.map(async f=>{const r=await fetch(f+'?v=536',{cache:'force-cache'});if(!r.ok)throw Error('Soundtrack '+r.status);return c.decodeAudioData(await r.arrayBuffer())})).then(parts=>{
+   if(parts.some(p=>p.sampleRate!==parts[0].sampleRate))throw Error('Music sample rate');
+   const joined=c.createBuffer(2,parts.reduce((n,p)=>n+p.length,0),parts[0].sampleRate);
+   let offset=0;for(const p of parts){for(let ch=0;ch<2;ch++)joined.getChannelData(ch).set(p.getChannelData(Math.min(ch,p.numberOfChannels-1)),offset);offset+=p.length}buffer=joined;
+  }).catch(e=>{retryAfter=performance.now()+15000;console.warn('Music unavailable',e)}).finally(()=>{loading=null});
+ }
+ function mix(){
+  if(!bus||!ad527Audio)return;
+  const movie=!!document.querySelector('.ad531-summon-film[open]'),finishing=!!document.querySelector('.ad535-finale'),level=movie?.075:finishing?.23:performance.now()<duckUntil?duckLevel:1;
+  const v=.62*level;if(v!==lastGain){lastGain=v;bus.gain.setTargetAtTime(v,ad527Audio.currentTime,level<1?.04:.17)}
+ }
+ function tick(){
+  try{
+   if(!inDuel()||hasOutcome){stop();return}
+   const c=ad527Audio;if(!c||c.state!=='running')return;
+   if(!buffer){load();return}
+   if(!bus){bus=c.createGain();bus.gain.value=.62;bus.connect(c.destination)}mix();if(voice)return;
+   const src=c.createBufferSource(),g=c.createGain();src.buffer=buffer;src.loop=true;src.connect(g);g.connect(bus);g.gain.value=0;
+   const v={src,g};voice=v;src.onended=()=>{try{src.disconnect();g.disconnect()}catch(e){}if(voice===v)voice=null};
+   g.gain.setTargetAtTime(1,c.currentTime,.11);src.start();
+  }catch(e){stop()}
+ }
+ function gesture(){if(!enabled)return;armed=true;ad527Unlock();tick()}
+ function duck(type){if(!voice)return;const now=performance.now();if(type==='signature'){duckUntil=Math.max(duckUntil,now+650);duckLevel=.36}else if(type==='impact'||type==='shatter'||type==='shield'){duckUntil=Math.max(duckUntil,now+240);duckLevel=.58}mix()}
+ function outcome(won,draw){if(hasOutcome)return;hasOutcome=true;stop();if(!draw)ad527Sound(won?'victory':'defeat')}
+ function reset(){hasOutcome=false}
+ function install(){
+  const hud=document.querySelector('.turn-hud');if(!hud||button)return;button=document.createElement('button');button.type='button';button.id='ad536MusicToggle';
+  button.addEventListener('click',e=>{e.stopPropagation();enabled=!enabled;try{localStorage.setItem(key,enabled?'on':'off')}catch(_){}paint();if(enabled)gesture();else stop()});paint();hud.append(button);
+ }
+ document.addEventListener('pointerdown',gesture,{passive:true,capture:true});document.addEventListener('keydown',gesture,{capture:true});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else tick()});window.addEventListener('pagehide',stop);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+ setInterval(tick,250);
+ return {duck,outcome,reset};
+})();
+
 function ad527Signature(card,zone,palette){
  try{
  if(ad525Reduced()||!card||card.faceDown||ad527Seen.size>=4||ad527Seen.has(card.name))return false;
@@ -7933,12 +7994,13 @@ function syncDuelOutcome(){
  if(finished)window.arcaneCoinToss485?.resetAfterDuel?.();
  let panel=document.getElementById('duelOutcome306');
  if(!finished){
-   ad535Finished=false;
+   ad535Finished=false;ad536Music.reset();
    if(panel)panel.remove();
    return;
  }
  const draw=myLP<=0&&oppLP<=0;
  const won=oppLP<=0&&myLP>0;
+ ad536Music.outcome(won,draw);
  if(!panel){
    panel=document.createElement('div');
    panel.id='duelOutcome306';
