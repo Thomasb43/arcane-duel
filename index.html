@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10152b">
-<meta name="arcane-build" content="20261128-signature-summon-v532">
+<meta name="arcane-build" content="20261128-spell-trap-v533">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>Arcane Duel – Testarena</title>
 <style>
 :root{color-scheme:dark;--gold:#e9c879;--panel:#1b2340;--line:#59658a}
@@ -5916,9 +5916,21 @@ main.ad525-attack-busy{pointer-events:none!important}
 .ad531-summon-film video{display:block;width:100%;height:100%;object-fit:contain;background:#080e1a}
 .ad531-summon-skip{position:absolute;right:max(15px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));padding:10px 15px;border:1px solid #d6ba7780;border-radius:20px;background:#0a1225bb;color:#fff4d5;font:600 13px system-ui;cursor:pointer}
 </style>
+<style id="arcane-spell-v533">
+.ad533-cast{position:fixed;inset:0;pointer-events:none;z-index:2147483030;overflow:hidden;isolation:isolate}
+.ad533-cast canvas{width:100%;height:100%;display:block}
+.ad533-card{position:absolute;perspective:900px;transform-origin:center;filter:drop-shadow(0 0 12px var(--cast-color));animation:ad533-card-rise .78s cubic-bezier(.2,.7,.25,1) both;pointer-events:none}
+.ad533-card .arcane-card-335,.ad533-card .field-card-front{width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;margin:0!important;transform:none!important}
+.ad533-label{position:absolute;left:50%;top:clamp(12px,10vh,70px);transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;padding:8px 18px 10px;background:linear-gradient(90deg,transparent,#0b1429eb 20%,#0b1429eb 80%,transparent);color:#fff7e6;text-shadow:0 2px 6px #000;animation:ad533-label .8s ease both}
+.ad533-label small{display:block;color:var(--cast-color);font:800 9px system-ui;letter-spacing:.23em;text-transform:uppercase}
+.ad533-label strong{display:block;font:800 clamp(14px,3vw,20px) system-ui;margin-top:3px}
+@keyframes ad533-card-rise{0%{opacity:0;transform:scale(.88) translateY(3px)}20%{opacity:1;transform:scale(1.13) translateY(-9px)}55%{opacity:1;transform:scale(1.06) translateY(-5px)}100%{opacity:0;transform:scale(1) translateY(0)}}
+@keyframes ad533-label{0%{opacity:0;transform:translate(-50%,-6px)}17%,72%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-3px)}}
+@media(prefers-reduced-motion:reduce){.ad533-cast{display:none!important}}
+</style>
 </head>
 <body>
-<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.32</small></div></header>
+<header><div class="brand"><h1>ARCANE DUEL</h1><small>TESTARENA · VERSION 5.33</small></div></header>
 <div id="updateNotice">Neue Version verfügbar <button id="reloadUpdate" type="button">↻ Aktualisieren</button></div>
 <main>
 <div class="cathedral-ambience" aria-hidden="true"><div class="cathedral-rays"></div><div class="cathedral-mist"></div><div class="cathedral-sparks"></div><div class="cathedral-glow"></div></div>
@@ -7326,8 +7338,94 @@ function monsterDestructionFx(card,owner){
  }catch(e){console.warn('Destruction VFX skipped',e)}
 }
 
+/* v5.33: visual-only spell and trap presentation. */
+const ad533Profiles={
+ heal:['Heilung','#6ee6ac','#e9fff0'],boost:['Verstärkung','#f5bd65','#fff5d5'],
+ shield:['Schutz','#75c8ff','#e1faff'],destroy:['Zerstörung','#ff775c','#fff0bc'],
+ draw:['Kartenziehen','#aeb5ff','#f2efff'],revive:['Wiederbelebung','#8ce9cb','#f2fffc'],
+ drain:['Lebensentzug','#b98aff','#f4e3ff'],fire:['Effektschaden','#ff9850','#fff2c4'],
+ frost:['Eiszauber','#a1eaff','#f0ffff'],trap:['Falleneffekt','#c6a1ff','#f8e9ff'],
+ spell:['Zaubereffekt','#78b8ff','#edf7ff']
+};
+function ad533Classify(card){
+ const n=String(card?.name||'').toLowerCase(),fx=String(card?.effectText||'').toLowerCase();
+ if(/kristallraub|lebensentzug/.test(n))return 'drain';
+ if(/frostpanzer|runenbarriere|schild|barriere|lichtreflexion|siege(lgegenstoß|ls$)/.test(n))return 'shield';
+ if(/zerstörungsstrahl|magischer durchbruch|arkaner sturm/.test(n))return 'destroy';
+ if(/heilende quelle|doppelter segen|lebensfunke|heldenbrüllen/.test(n))return 'heal';
+ if(/arkaner segen|mut der löwen|goldene arena|kampf der arena|siegelöffnung/.test(n))return 'boost';
+ if(/runenwissen|wissensstrom|ernte|schicksalsrad/.test(n))return 'draw';
+ if(/geisterruf|löwenruf|seelenbergung/.test(n))return 'revive';
+ if(/eisiger rückstoß/.test(n))return 'frost';
+ if(/flammenstoß|drachenatem|glutwall|seelenfunke|sternenregen|funkenregen/.test(n))return 'fire';
+ if(/zerstör/.test(fx))return 'destroy';
+ if(/annullier|verhinder|schütz|schutz|def.*\+|\+\d+\s*def/.test(fx))return 'shield';
+ if(/wiederbeleb|vom friedhof.*(beschw|zurück)/.test(fx))return 'revive';
+ if(/erhältst.*lp|erhält.*lp|heilt/.test(fx))return 'heal';
+ if(/\+\d+\s*atk|atk.*erhöh/.test(fx))return 'boost';
+ if(/zieh/.test(fx))return 'draw';
+ if(/verliert.*lp|lp schaden/.test(fx))return 'fire';
+ return card?.kind==='trap'?'trap':'spell';
+}
+function ad533Center(el){const r=el?.getBoundingClientRect();return r&&r.width>0&&r.height>0?{x:r.left+r.width/2,y:r.top+r.height/2,w:r.width,h:r.height}:null}
+let ad533Running=null;
+function ad533Cast(card,owner='player',source=null,target=null,{showCard=true,showLabel=true}={}){
+ try{
+ if(!card||ad525Reduced()||ad531SummonActive||document.hidden)return;
+ if(ad533Running)ad533Running();
+ const type=ad533Classify(card),[title,color,core]=ad533Profiles[type],w=innerWidth,h=innerHeight;
+ const src=source||{x:w*.5,y:h*(owner==='player'?.74:.26)};
+ const dst=target||src;
+ const root=document.createElement('div');root.className='ad533-cast';root.setAttribute('aria-hidden','true');root.style.setProperty('--cast-color',color);
+ const canvas=document.createElement('canvas'),dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.ceil(w*dpr);canvas.height=Math.ceil(h*dpr);root.append(canvas);
+ const ctx=canvas.getContext('2d');if(!ctx)return;ctx.scale(dpr,dpr);
+ if(showCard&&source?.w&&source?.h){const ghost=document.createElement('div');ghost.className='ad533-card';Object.assign(ghost.style,{left:(src.x-src.w/2)+'px',top:(src.y-src.h/2)+'px',width:src.w+'px',height:src.h+'px'});ghost.innerHTML=renderArcaneCard335({...card,faceDown:false},{size:'field'});ghost.querySelectorAll('img').forEach(im=>im.loading='eager');root.append(ghost)}
+ if(showLabel){const label=document.createElement('div');label.className='ad533-label';const small=document.createElement('small'),strong=document.createElement('strong');small.textContent=(card.kind==='trap'?'Falle · ':'Zauber · ')+title;strong.textContent=card.name;label.append(small,strong);root.append(label)}
+ document.body.append(root);let raf=0,stopped=false,timeout=0;
+ function stop(){if(stopped)return;stopped=true;cancelAnimationFrame(raf);clearTimeout(timeout);root.remove();if(ad533Running===stop)ad533Running=null}
+ ad533Running=stop;timeout=setTimeout(stop,1050);
+ const start=performance.now(),duration=780,R=Math.max(26,Math.min(w,h)*.13),TAU=2*Math.PI;
+ const rand=i=>{const x=Math.sin(i*437.13+34.2)*43758.5453;return x-Math.floor(x)};
+ function line(points,c,width,alpha){if(alpha<=0)return;ctx.globalAlpha=Math.min(1,alpha);ctx.strokeStyle=c;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.stroke()}
+ function ring(x,y,r,alpha,angle=0,ellipse=.68){if(r<1||alpha<=0)return;ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.scale(1,ellipse);ctx.globalAlpha=Math.min(1,alpha);ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,r,0,TAU);ctx.stroke();ctx.lineWidth=.8;ctx.strokeStyle=core;ctx.beginPath();ctx.arc(0,0,r*.86,0,TAU);ctx.stroke();for(let i=0;i<12;i++){const a=i*TAU/12;ctx.beginPath();ctx.moveTo(Math.cos(a)*r*.88,Math.sin(a)*r*.88);ctx.lineTo(Math.cos(a)*r*1.04,Math.sin(a)*r*1.04);ctx.stroke()}ctx.restore()}
+ function glow(x,y,r,a){if(r<1||a<=0)return;ctx.globalAlpha=Math.min(1,a);const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,core+'ce');g.addColorStop(.25,color+'6e');g.addColorStop(1,color+'00');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)}
+ function frame(now){
+ if(stopped)return;const p=Math.min(1,(now-start)/duration),q=Math.max(0,Math.min(1,(p-.22)/.46)),hit=Math.max(0,(p-.48)/.52),fade=Math.sin(Math.PI*p);
+ ctx.clearRect(0,0,w,h);ctx.globalCompositeOperation='lighter';
+ ring(src.x,src.y,R*(.45+p*.85),fade*.68,p*1.2);glow(src.x,src.y,R*1.35,fade*.32);
+ const traveling=Math.hypot(src.x-dst.x,src.y-dst.y)>10;
+ if(traveling&&q>0&&q<1){
+  const px=src.x+(dst.x-src.x)*q,py=src.y+(dst.y-src.y)*q-Math.sin(q*Math.PI)*18;
+  for(let k=0;k<3;k++){const pts=[];for(let i=0;i<18;i++){let t=Math.max(0,q-i*.025);pts.push([src.x+(dst.x-src.x)*t+Math.sin(i*.65+k*2+p*12)*3,src.y+(dst.y-src.y)*t-Math.sin(t*Math.PI)*18])}line(pts,k===0?core:color,k===0?2.3:5,Math.sin(q*Math.PI)*.68)}
+  glow(px,py,R*.55,.85);
+ }
+ if(hit>0){const f=Math.sin(hit*Math.PI),rad=R*(.55+hit*1.2);glow(dst.x,dst.y,R*(1+hit*.3),f*.62);
+  if(type==='shield'){for(let k=0;k<3;k++){const a=k*TAU/3+p;const pts=[];for(let j=0;j<=6;j++){const v=j*TAU/6+a;pts.push([dst.x+Math.cos(v)*R*(.7+k*.14),dst.y+Math.sin(v)*R*(.7+k*.14)])}line(pts,k===0?core:color,2,f*.8)}}
+  else if(type==='destroy'||type==='fire'){ring(dst.x,dst.y,rad,(1-hit)*.85,0,1);for(let i=0;i<9;i++){const a=i*TAU/9+p;line([[dst.x,dst.y],[dst.x+Math.cos(a)*rad,dst.y+Math.sin(a)*rad]],color,2,(1-hit)*.6)}}
+  else if(type==='draw'){for(let i=0;i<3;i++){const x=dst.x+(i-1)*R*.4,y=dst.y-R*hit*.9;ctx.globalAlpha=f*.65;ctx.strokeStyle=core;ctx.lineWidth=1.6;ctx.strokeRect(x-7,y-10,14,20)}}
+  else {ring(dst.x,dst.y,rad,f*.8,-p, type==='heal'?.5:.8);ring(dst.x,dst.y-R*hit*.8,rad*.66,f*.5,p)}
+  for(let i=0;i<34;i++){const a=rand(i)*TAU,rr=rad*(.2+rand(i+40)*.8)*hit;let x=dst.x+Math.cos(a)*rr,y=dst.y+Math.sin(a)*rr;if(type==='heal'||type==='boost'||type==='revive')y-=hit*R*.85;ctx.globalAlpha=(1-hit)*(.45+rand(i+75)*.5);ctx.fillStyle=i%3?color:core;ctx.beginPath();ctx.arc(x,y,1+rand(i+80)*1.8,0,TAU);ctx.fill()}
+ }
+ ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';if(p>=1)stop();else raf=requestAnimationFrame(frame);
+ }
+ if(card.kind==='spell'){ad527Sound('charge');setTimeout(()=>{if(!stopped)ad527Sound(type==='shield'?'shield':'travel',type==='fire'?'fire':type==='frost'?'water':type==='drain'?'shadow':'light')},170)}
+ if(showLabel)ad525Hold(800);raf=requestAnimationFrame(frame);
+ }catch(e){console.warn('Spell presentation skipped',e)}
+}
+function ad533Snapshot(){return {myLP,oppLP,hand:hand.length,my:myMon.map((c,i)=>c?{c,i,a:effectiveAtk(c),d:effectiveDef(c)}:null),opp:oppMon.map((c,i)=>c?{c,i,a:effectiveAtk(c),d:effectiveDef(c)}:null)}}
+function ad533ResolvedTarget(before,card){
+ const type=ad533Classify(card);
+ if(type==='heal'||(myLP>before.myLP&&oppLP===before.oppLP))return ad533Center($('myLP'));
+ if(oppLP<before.oppLP)return ad533Center($('oppLP'));
+ for(const [key,arr,id] of [['my',myMon,'myMon'],['opp',oppMon,'oppMon']]){
+  for(let i=0;i<arr.length;i++){const b=before[key][i],c=arr[i];if((b&&b.c!==c)||(!b&&c)||(b&&c&&(b.a!==effectiveAtk(c)||b.d!==effectiveDef(c))))return ad533Center(ad525Zone(id,i))}
+ }
+ if(type==='draw'||hand.length>before.hand)return ad533Center($('hand'));
+ return null;
+}
+
 function ad525TrapPulse(type,index){try{ad527Sound('trap');const r=ad525Rect(ad525Zone(type,index));if(r){ad525Node('ad525-trap-aura',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},500,['trap','#bc8bfa','#f6dcff']);if(!ad525Reduced())ad525Node('ad526-trap-sigil',{left:(r.left+r.width/2)+'px',top:(r.top+r.height/2)+'px'},500)}}catch(e){}}
-function ad525OwnTrap(card){try{if(card?.kind!=='trap')return;const i=mySpell.indexOf(card);if(i<0)return;const r=ad525Rect(ad525Zone('mySpell',i));if(!r)return;const n=ad525Node('ad525-player-flip',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},480);const face=document.createElement('div');face.innerHTML=renderArcaneCard335({...card,faceDown:false},{size:'field'});face.querySelectorAll('img').forEach(x=>x.loading='eager');n.append(face);ad525TrapPulse('mySpell',i)}catch(e){}}
+function ad525OwnTrap(card,target=null){try{if(card?.kind!=='trap')return;const i=mySpell.indexOf(card);if(i<0)return;const r=ad525Rect(ad525Zone('mySpell',i));if(!r)return;const n=ad525Node('ad525-player-flip',{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'},480);const face=document.createElement('div');face.innerHTML=renderArcaneCard335({...card,faceDown:false},{size:'field'});face.querySelectorAll('img').forEach(x=>x.loading='eager');n.append(face);ad525TrapPulse('mySpell',i);ad533Cast(card,'player',ad533Center(ad525Zone('mySpell',i)),target,{showCard:false})}catch(e){}}
 function ad525RenderLP(id,value,damage){
  const target=$(id);if(!target)return;const end=Math.max(0,value),state=ad525LPStates[id]||(ad525LPStates[id]={value:Math.max(0,parseInt(target.textContent,10)||0),end:null,frame:0});
  if(state.end===end)return;
@@ -7973,10 +8071,10 @@ let pendingBlessingZone=-1;
 $("myMon").addEventListener('click',e=>{const choice=e.target.closest("[data-zone-choice]");if(choice){e.stopPropagation();finishSwipeSummon(choice.dataset.zoneChoice);return;}let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(pendingBlessingZone>=0){if(!myMon[i]||myMon[i].faceDown){log('Wähle ein offenes eigenes Monster als Ziel.');return;}const blessing=mySpell[pendingBlessingZone];if(!blessing||!['Arkaner Segen','Frostpanzer','Mut der Löwen','Goldene Arena','Kampf der Arena','Licht des Siegels','Siegelöffnung','Runenbarriere'].includes(blessing.name)){pendingBlessingZone=-1;return;}if(blessing.name==='Licht des Siegels'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+600;log("✨ Licht des Siegels: +600 DEF.");}
  else if(blessing.name==='Runenbarriere'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+700;log("🛡️ Runenbarriere: +700 DEF.");}
  else if(blessing.name==='Siegelöffnung'){if(!myMon[i].name.includes('Siegel')){log("Siegelöffnung benötigt ein Siegelmonster.");return;}myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+500;log("🔮 Siegelöffnung: +500 ATK.");}
- else if(blessing.name==='Mut der Löwen'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('🦁 Mut der Löwen: '+myMon[i].name+' erhält +600 ATK.');}else if(blessing.name==='Kampf der Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+500;log('⚔️ Kampf der Arena: '+myMon[i].name+' erhält +500 ATK.');}else if(blessing.name==='Goldene Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+300;log('🏟️ Goldene Arena: '+myMon[i].name+' erhält +300 ATK.');}else if(blessing.name==='Frostpanzer'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+700;log('🧊 Frostpanzer: '+myMon[i].name+' erhält +700 DEF bis zum Ende des Zuges.');}else{myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('✨ Arkaner Segen: '+myMon[i].name+' erhält +600 ATK bis zum Ende des Zuges.');}ad525OwnTrap(blessing);sendToGraveyard(blessing);mySpell[pendingBlessingZone]=null;pendingBlessingZone=-1;chosenSpell=-1;render();return;}if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){const c=hand[selected];if(c)playMonsterChoice493(c,selected,i);return}if(myMon[i]){chosenMonster=i;const c=myMon[i];if(!c.faceDown)showCardInfo(c,"monster",c.effectText&&['Flammendrache','Frostwächter','Schattenwolf','Arkaner Lichtdrache'].includes(c.name)&&c.effectUsedTurn!==turn?()=>{chosenMonster=i;$("effect").click();}:null);else log("Verdecktes Monster ausgewählt.");}}); 
+ else if(blessing.name==='Mut der Löwen'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('🦁 Mut der Löwen: '+myMon[i].name+' erhält +600 ATK.');}else if(blessing.name==='Kampf der Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+500;log('⚔️ Kampf der Arena: '+myMon[i].name+' erhält +500 ATK.');}else if(blessing.name==='Goldene Arena'){myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+300;log('🏟️ Goldene Arena: '+myMon[i].name+' erhält +300 ATK.');}else if(blessing.name==='Frostpanzer'){myMon[i].tempDefBonus=(myMon[i].tempDefBonus||0)+700;log('🧊 Frostpanzer: '+myMon[i].name+' erhält +700 DEF bis zum Ende des Zuges.');}else{myMon[i].tempAtkBonus=(myMon[i].tempAtkBonus||0)+600;log('✨ Arkaner Segen: '+myMon[i].name+' erhält +600 ATK bis zum Ende des Zuges.');}if(blessing.kind==='spell')ad533Cast(blessing,'player',ad533Center(ad525Zone('mySpell',pendingBlessingZone)),ad533Center(ad525Zone('myMon',i)));else ad525OwnTrap(blessing,ad533Center(ad525Zone('myMon',i)));sendToGraveyard(blessing);mySpell[pendingBlessingZone]=null;pendingBlessingZone=-1;chosenSpell=-1;render();return;}if(pendingTribute){if(!myMon[i])return;const at=pendingTribute.selected.indexOf(i);if(at>=0)pendingTribute.selected.splice(at,1);else if(pendingTribute.selected.length<pendingTribute.required)pendingTribute.selected.push(i);render();if(pendingTribute&&pendingTribute.selected.length===pendingTribute.required){completeTributeSummon();}return;}if(e.target.closest('[data-zone-action="monster"]')){chosenMonster=i;$("effect").click();return}if(pendingPlacement==="monster"&&!isMainPhase()){log("Monster können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='monster'&&!myMon[i]){const c=hand[selected];if(c)playMonsterChoice493(c,selected,i);return}if(myMon[i]){chosenMonster=i;const c=myMon[i];if(!c.faceDown)showCardInfo(c,"monster",c.effectText&&['Flammendrache','Frostwächter','Schattenwolf','Arkaner Lichtdrache'].includes(c.name)&&c.effectUsedTurn!==turn?()=>{chosenMonster=i;$("effect").click();}:null);else log("Verdecktes Monster ausgewählt.");}}); 
 $("mySpell").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;let i=+z.dataset.index;if(e.target.closest('[data-zone-action="spell"]')){chosenSpell=i;$("activate").click();return}if(pendingPlacement==="spell"&&!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase platziert werden.");return}if(pendingPlacement==='spell'&&!mySpell[i]){const c=hand[selected];if(c)playSpellChoice493(c,selected,i);return}if(mySpell[i]){chosenSpell=i;const c=mySpell[i];showCardInfo(c,"spell",()=>{chosenSpell=i;$("activate").click();});}}); 
 let pendingDestructionZone=-1;
-$("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;const idx=+z.dataset.index;if(pendingDestructionZone>=0){if(!oppMon[idx]){log('Wähle ein gegnerisches Monster.');return;}const spell=mySpell[pendingDestructionZone];if(!spell||spell.name!=='Arkaner Zerstörungsstrahl'){pendingDestructionZone=-1;return;}const target=oppMon[idx];sendToGraveyard(target,'opponent');oppMon[idx]=null;sendToGraveyard(spell);mySpell[pendingDestructionZone]=null;pendingDestructionZone=-1;chosenSpell=-1;log('💥 Arkaner Zerstörungsstrahl zerstört '+target.name+'!');render();animateZone('oppMon',idx,'drop-impact');return;}if(oppMon[idx]){const card=oppMon[idx];chosenTarget=idx;render();log('Angriffsziel ausgewählt: '+(card.faceDown?'verdecktes Monster':card.name)+'.');if(!card.faceDown)showOpponentPreview364(card);else log('Verdeckte Karten bleiben geheim, bis sie aufgedeckt werden.')}});
+$("oppMon").addEventListener('click',e=>{let z=e.target.closest('[data-index]');if(!z)return;const idx=+z.dataset.index;if(pendingDestructionZone>=0){if(!oppMon[idx]){log('Wähle ein gegnerisches Monster.');return;}const spell=mySpell[pendingDestructionZone];if(!spell||spell.name!=='Arkaner Zerstörungsstrahl'){pendingDestructionZone=-1;return;}const target=oppMon[idx];ad533Cast(spell,'player',ad533Center(ad525Zone('mySpell',pendingDestructionZone)),ad533Center(ad525Zone('oppMon',idx)));sendToGraveyard(target,'opponent');oppMon[idx]=null;sendToGraveyard(spell);mySpell[pendingDestructionZone]=null;pendingDestructionZone=-1;chosenSpell=-1;log('💥 Arkaner Zerstörungsstrahl zerstört '+target.name+'!');render();animateZone('oppMon',idx,'drop-impact');return;}if(oppMon[idx]){const card=oppMon[idx];chosenTarget=idx;render();log('Angriffsziel ausgewählt: '+(card.faceDown?'verdecktes Monster':card.name)+'.');if(!card.faceDown)showOpponentPreview364(card);else log('Verdeckte Karten bleiben geheim, bis sie aufgedeckt werden.')}});
 // Bereits aufgedeckte gegnerische Zauber-/Fallenkarten antippen und lesen.
 $("oppSpell").addEventListener('click',e=>{
  const z=e.target.closest('[data-index]');if(!z)return;
@@ -8370,7 +8468,7 @@ $("summon").onclick=()=>summonMonster('attack');
 $("defend").onclick=()=>summonMonster('defense');
 $("position").onclick=()=>{if(!isMainPhase()){log("Die Position kann nur in einer Hauptphase gewechselt werden.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Feld an.');return}let c=myMon[chosenMonster];if(c.position==='defense'){c.position='attack';c.faceDown=false;log(c.name+' wechselt in den offenen Angriffsmodus.')}else{c.position='defense';c.faceDown=false;log(c.name+' wechselt in die offene Verteidigungsposition.')}chosenMonster=-1;render()};
 $("effect").onclick=()=>{if(!isMainPhase()){log("Monstereffekte können in einer Hauptphase aktiviert werden.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Wähle zuerst ein eigenes Monster aus.');return}let c=myMon[chosenMonster];if(c.faceDown){log('Ein verdecktes Monster kann seinen Effekt nicht aktivieren. Es muss zuerst aufgedeckt werden.');return}if(c.effectUsedTurn===turn){log('Der Effekt dieses Monsters wurde in diesem Zug bereits verwendet.');return}if(!c.effectText){log('Dieses Monster besitzt keinen aktivierbaren Effekt.');return}if(c.name==='Arkaner Lichtdrache'){c.tempAtkBonus=(c.tempAtkBonus||0)+500;c.effectUsedTurn=turn;render();showMonsterEffectFx(chosenMonster,c);log('🐉 Arkaner Lichtdrache: +500 ATK bis zum Ende deines Zuges!');return}if(c.name==='Flammendrache'){c.tempAtkBonus=500;c.effectUsedTurn=turn;render();showMonsterEffectFx(chosenMonster,c);log('Flammendrache aktiviert seinen Effekt: +500 ATK bis zum Ende deines Zuges!');return}if(c.name==='Frostwächter'){c.tempDefBonus=500;c.effectUsedTurn=turn;render();showMonsterEffectFx(chosenMonster,c);log('Frostwächter aktiviert seinen Effekt: +500 DEF bis zum Ende deines Zuges!');return}if(c.name==='Schattenwolf'){c.tempAtkBonus=400;c.maxAttacksPerTurn=2;c.effectUsedTurn=turn;render();showMonsterEffectFx(chosenMonster,c);log('Schattenwolf aktiviert seinen Effekt: +400 ATK und darf in diesem Zug bis zu zweimal angreifen!');return}log('Dieses Monster besitzt in der aktuellen Testversion noch keinen aktivierbaren Effekt.')};
-$("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase aktiviert werden.");return}if(chosenSpell<0||!mySpell[chosenSpell]){log('Wähle zuerst eine gesetzte Zauber- oder Fallenkarte auf deinem Feld.');return}let c=mySpell[chosenSpell];if(c.kind==='spell'){if(c.name==='Licht des Siegels'||c.name==='Siegelöffnung'){
+$("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase aktiviert werden.");return}if(chosenSpell<0||!mySpell[chosenSpell]){log('Wähle zuerst eine gesetzte Zauber- oder Fallenkarte auf deinem Feld.');return}let c=mySpell[chosenSpell];const ad533Before=ad533Snapshot(),ad533Source=ad533Center(ad525Zone('mySpell',chosenSpell));if(c.kind==='spell'){if(c.name==='Licht des Siegels'||c.name==='Siegelöffnung'){
   if(!myMon.some(m=>m&&!m.faceDown&&(c.name!=='Siegelöffnung'||m.name.includes('Siegel')))){log(c.name+': Kein geeignetes offenes Monster.');return;}
   pendingBlessingZone=chosenSpell;log(c.name+': Tippe auf das gewünschte eigene Monster.');render();return;
  }else if(c.name==='Runenwissen'){
@@ -8396,7 +8494,7 @@ $("activate").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur
   kaelNegateAttack367=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log("⚡ Siegelgegenstoß: Der nächste Angriff wird annulliert.");
  }else if(c.name==='Lichtreflexion'){
   kaelReflectAttack367=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log("🌠 Lichtreflexion: Das nächste angreifende Monster verliert 500 ATK.");
- }else if(c.name==='Löwenmut-Schild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
+ }else if(c.name==='Löwenmut-Schild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🛡️ Löwenmut-Schild schützt dich vor dem nächsten Kampfschaden.')}else if(c.name==='Glutwall'){oppLP=Math.max(0,oppLP-300);ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🔥 Glutwall: Gegner verliert 300 LP.')}else if(c.name==='Heldenbrüllen'){myLP+=500;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('🦁 Heldenbrüllen: Du erhältst 500 LP.')}else if(c.name==='Kampf der Arena'){if(!myMon.some(m=>m&&!m.faceDown)){log('Kampf der Arena benötigt ein offenes eigenes Monster.');return;}pendingBlessingZone=chosenSpell;log('⚔️ Kampf der Arena: Wähle ein eigenes Monster für +500 ATK.');render();return;}else if(c.name==='Kristallschild'){crystalShield=true;ad525OwnTrap(c);sendToGraveyard(c);mySpell[chosenSpell]=null;log('Kristallschild aktiviert! Der nächste Kampfschaden an deinen Lebenspunkten wird verhindert.')}else{log('Diese Falle hat noch keinen programmierten Effekt.');return}}if(c.kind==='spell'&&mySpell[chosenSpell]!==c)ad533Cast(c,'player',ad533Source,ad533ResolvedTarget(ad533Before,c));chosenSpell=-1;render();if(oppLP<=0)log('Du hast das Testduell gewonnen!')};
 $("set").onclick=()=>{if(!isMainPhase()){log("Zauber und Fallen können nur in einer Hauptphase gesetzt werden.");return}if(selected<0||!hand[selected]||hand[selected].kind==='monster'){log('Wähle zuerst eine Zauber- oder Fallenkarte.');return}if(!mySpell.some(x=>!x)){log('Alle Zauber- und Fallenzonen sind belegt.');return}pendingPlacement='spell';render();log('Tippe jetzt auf eine freie Zauber- oder Fallenzone deiner Wahl.');};
 $("attack").onclick=async()=>{if(arcaneOpponentAttackBusy492)return;arcaneOpponentAttackBusy492=true;document.querySelector("main")?.classList.add("ad525-attack-busy");try{if(phase==="main1"){phase="battle";render()}if(phase!=="battle"){log("Angriffe sind nur in deiner Kampfphase möglich.");return}if(chosenMonster<0||!myMon[chosenMonster]){log('Tippe zuerst eines deiner Monster auf dem Spielfeld an.');return}let attackFrom=chosenMonster,attackTo=chosenTarget;let attacker=myMon[chosenMonster],attackerAtk=effectiveAtk(attacker);if((attacker.attacksThisTurn||0)>=(attacker.maxAttacksPerTurn||1)){log('Dieses Monster hat seine erlaubte Anzahl an Angriffen in diesem Zug bereits ausgeführt.');return}if(attacker.position==='defense'){log('Ein Monster in Verteidigungsposition kann nicht angreifen.');return}if(attacker.varekLockedUntil>=turn){log('⛓️ Schattenketten sperren den Angriff.');return}if((await ch3DefenseTrap(attacker))||(await activateForestDefenseTrap514())||(await activateEldricTrap432())||(await activateAstraTrap417())||(await activateRivenTrap415())||(await activateSeraphineTrap411())||(await activateNoctisTrap408())||(await activateVarekTrap405())||(await activateElaraDefenseTrap401())||(await activateLeonDefenseTrap363())){attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();return;}let target=chosenTarget;const defenderWasDefense=target>=0&&oppMon[target]&&oppMon[target].position==='defense';if(myLP<=0||oppLP<=0)return;if(!(target>=0&&oppMon[target])&&oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}await playBattleFx('myMon',attackFrom,'oppMon',target>=0&&oppMon[target]?target:-1,'💥',attacker,!!defenderWasDefense);if(target>=0&&oppMon[target]){let defender=oppMon[target];if(defender.faceDown){defender.faceDown=false;triggerMonsterEvent(defender,'flip','opponent',target);log('Das verdeckte Monster wird aufgedeckt!')}if(defender.position==='defense'){if(attackerAtk>effectiveDef(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;log(attacker.name+' zerstört das verteidigende Monster!')}else if(attackerAtk<effectiveDef(defender)){if(crystalShield){crystalShield=false;log('Kristallschild verhindert den Kampfschaden vollständig!')}else{myLP=Math.max(0,myLP-(effectiveDef(defender)-attackerAtk));log(attacker.name+' prallt an der Verteidigung ab. Du verlierst '+(effectiveDef(defender)-attackerAtk)+' LP.')}}else{log('Der Angriff wird abgewehrt. Beide Monster bleiben liegen.')}}else if(attackerAtk>effectiveAtk(defender)){sendToGraveyard(defender,"opponent");oppMon[target]=null;if(attacker.varekFx==="wolf")attacker.tempAtkBonus=(attacker.tempAtkBonus||0)+200;oppLP-=attackerAtk-effectiveAtk(defender);log(attacker.name+' besiegt '+defender.name+'! Gegner verliert '+(attackerAtk-effectiveAtk(defender))+' LP.')}else if(attackerAtk<effectiveAtk(defender)){sendToGraveyard(attacker);myMon[chosenMonster]=null;if(crystalShield){crystalShield=false;log('Dein Monster wurde besiegt, aber Kristallschild verhindert den Kampfschaden!')}else{myLP-=effectiveAtk(defender)-attackerAtk;log(attacker.name+' wurde von '+defender.name+' besiegt!')}}else{sendToGraveyard(defender,"opponent");sendToGraveyard(attacker);oppMon[target]=null;myMon[chosenMonster]=null;log('Beide Monster wurden zerstört!')}}else if(oppMon.some(Boolean)){log('Wähle zuerst genau das gegnerische Monster aus, das du angreifen möchtest.');return}else{oppLP-=attackerAtk;log(attacker.name+' greift direkt an: '+attackerAtk+' Schaden!')}attacker.attacksThisTurn=(attacker.attacksThisTurn||0)+1;chosenMonster=-1;chosenTarget=-1;render();await ad525Wait(680);if(oppLP<=0)log('Du hast das Testduell gewonnen!')}finally{arcaneOpponentAttackBusy492=false;document.querySelector('main')?.classList.remove('ad525-attack-busy');}};
 // The battle phase starts automatically when a monster is swiped to the opponent side.
@@ -8926,6 +9024,7 @@ async function arcaneAiPlay491(card,label='Gegner aktiviert'){
  if(face)node.append(heading,face);else node.append(heading);
  node.querySelectorAll('img').forEach(img=>{img.loading='eager';img.decoding='async'});
  document.body.appendChild(node);
+ if(card.kind==='spell'||card.kind==='trap')ad533Cast(card,'opponent',ad533Center(node),null,{showCard:false,showLabel:false});
  try{await arcaneOpeningWait489(arcaneOpeningReduced489()?250:950)}
  finally{node.remove()}
 }
